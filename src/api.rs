@@ -764,79 +764,176 @@ define_display_traits!(
 // FORK: storage-generic arithmetic.
 //
 // The quantity-op interfaces above used to be emitted once per concrete storage
-// type. They are now emitted ONCE, generically over `Storage`, so downstream
-// numeric types (autodiff duals, fixed-point, intervals) work without touching
-// this crate again — and so functions generic over their scalar typecheck.
-// Only the scalar-on-the-left impls (`f64 * Quantity`) remain per-type: with a
-// generic storage parameter in Self position they would violate E0210.
+// type, from a closed list of primitives. They are now emitted ONCE, generically
+// over a `Storage` trait, so downstream numeric types (autodiff duals,
+// fixed-point, intervals) work without touching this crate again — and so
+// functions generic over their scalar type typecheck.
+//
+// Only the scalar-on-the-LEFT impls (`f64 * Quantity`) remain per-concrete-type,
+// up in the per-type generators: with a generic storage parameter in `Self`
+// position they would violate E0210.
+//
+// The const-generic parameter bundles the interface macros expect are enormous
+// and identical at nearly every call site, so they are written exactly once, in
+// the two `emit_*` macros below. Each emission is then a single line naming only
+// what actually varies: which interface, and the operator/method/trait triple.
 // ============================================================================
 
-/// The op surface a numeric type must have for `Quantity<…, T>` arithmetic.
-/// Blanket-implemented: any type with the right ops is a Storage automatically.
-pub trait Storage:
-    Copy
-    + PartialEq
-    + PartialOrd
-    + core::ops::Add<Output = Self>
-    + core::ops::Sub<Output = Self>
-    + core::ops::Mul<Output = Self>
-    + core::ops::Div<Output = Self>
-    + core::ops::Rem<Output = Self>
-    + core::ops::AddAssign
-    + core::ops::SubAssign
-    + core::ops::MulAssign
-    + core::ops::DivAssign
-    + core::ops::RemAssign
-{
+/// Declare `Storage` and its blanket impl from a single bound list.
+///
+/// `Self` resolves correctly in both positions (in the `impl`, `Self` is `T`), so
+/// the op surface is written once rather than kept manually in sync twice.
+macro_rules! define_storage_trait {
+    ($($bound:tt)*) => {
+        /// The op surface a numeric type must have to be used as `Quantity` storage.
+        ///
+        /// Blanket-implemented: any type with these ops is a `Storage` automatically,
+        /// with no opt-in required from the type's owner.
+        pub trait Storage: $($bound)* {}
+
+        impl<T> Storage for T where T: $($bound)* {}
+    };
 }
 
-impl<T> Storage for T where
-    T: Copy
+define_storage_trait!(
+    Copy
         + PartialEq
         + PartialOrd
-        + core::ops::Add<Output = T>
-        + core::ops::Sub<Output = T>
-        + core::ops::Mul<Output = T>
-        + core::ops::Div<Output = T>
-        + core::ops::Rem<Output = T>
+        + core::ops::Add<Output = Self>
+        + core::ops::Sub<Output = Self>
+        + core::ops::Mul<Output = Self>
+        + core::ops::Div<Output = Self>
+        + core::ops::Rem<Output = Self>
         + core::ops::AddAssign
         + core::ops::SubAssign
         + core::ops::MulAssign
         + core::ops::DivAssign
         + core::ops::RemAssign
-{
+);
+
+/// Invoke an interface macro over the **single-dimension, single-scale** parameter
+/// bundle — the shape used by every op that leaves the dimension unchanged
+/// (quantity∘scalar, add/sub/rem, comparisons, negation).
+///
+/// `$storage_bound` is spelled at the call site because negation needs
+/// `Storage + Neg` while everything else needs plain `Storage`.
+macro_rules! emit_dimension_preserving {
+    ($mac:ident, ($($storage_bound:tt)*) $(, $($rest:tt)*)?) => {
+        $crate::$mac!(
+            (
+                STORAGE: $($storage_bound)*,
+                const MASS_EXPONENT: i16,
+                const LENGTH_EXPONENT: i16,
+                const TIME_EXPONENT: i16,
+                const CURRENT_EXPONENT: i16,
+                const TEMPERATURE_EXPONENT: i16,
+                const AMOUNT_EXPONENT: i16,
+                const LUMINOSITY_EXPONENT: i16,
+                const ANGLE_EXPONENT: i16,
+                const SCALE_P2: i16,
+                const SCALE_P3: i16,
+                const SCALE_P5: i16,
+                const SCALE_PI: i16,
+                Brand,
+            )
+            $(, $($rest)*)?
+        );
+    };
+    // Convenience arm: the plain `Storage` bound, which is every case but negation.
+    ($mac:ident $(, $($rest:tt)*)?) => {
+        emit_dimension_preserving!($mac, (crate::api::Storage) $(, $($rest)*)?);
+    };
 }
 
-// --- quantity ∘ scalar (scalar on the right) ---------------------------------
-crate::quantity_scalar_mul_div_interface!((STORAGE: crate::api::Storage, const MASS_EXPONENT: i16, const LENGTH_EXPONENT: i16, const TIME_EXPONENT: i16, const CURRENT_EXPONENT: i16, const TEMPERATURE_EXPONENT: i16, const AMOUNT_EXPONENT: i16, const LUMINOSITY_EXPONENT: i16, const ANGLE_EXPONENT: i16, const SCALE_P2: i16, const SCALE_P3: i16, const SCALE_P5: i16, const SCALE_PI: i16, Brand,), *, mul, Mul, STORAGE);
-crate::quantity_scalar_mul_div_interface!((STORAGE: crate::api::Storage, const MASS_EXPONENT: i16, const LENGTH_EXPONENT: i16, const TIME_EXPONENT: i16, const CURRENT_EXPONENT: i16, const TEMPERATURE_EXPONENT: i16, const AMOUNT_EXPONENT: i16, const LUMINOSITY_EXPONENT: i16, const ANGLE_EXPONENT: i16, const SCALE_P2: i16, const SCALE_P3: i16, const SCALE_P5: i16, const SCALE_PI: i16, Brand,), /, div, Div, STORAGE);
-crate::quantity_scalar_mul_div_interface!((STORAGE: crate::api::Storage, const MASS_EXPONENT: i16, const LENGTH_EXPONENT: i16, const TIME_EXPONENT: i16, const CURRENT_EXPONENT: i16, const TEMPERATURE_EXPONENT: i16, const AMOUNT_EXPONENT: i16, const LUMINOSITY_EXPONENT: i16, const ANGLE_EXPONENT: i16, const SCALE_P2: i16, const SCALE_P3: i16, const SCALE_P5: i16, const SCALE_PI: i16, Brand,), %, rem, Rem, STORAGE);
-crate::quantity_scalar_mul_div_assign_interface!((STORAGE: crate::api::Storage, const MASS_EXPONENT: i16, const LENGTH_EXPONENT: i16, const TIME_EXPONENT: i16, const CURRENT_EXPONENT: i16, const TEMPERATURE_EXPONENT: i16, const AMOUNT_EXPONENT: i16, const LUMINOSITY_EXPONENT: i16, const ANGLE_EXPONENT: i16, const SCALE_P2: i16, const SCALE_P3: i16, const SCALE_P5: i16, const SCALE_PI: i16, Brand,), *=, mul_assign, MulAssign, STORAGE);
-crate::quantity_scalar_mul_div_assign_interface!((STORAGE: crate::api::Storage, const MASS_EXPONENT: i16, const LENGTH_EXPONENT: i16, const TIME_EXPONENT: i16, const CURRENT_EXPONENT: i16, const TEMPERATURE_EXPONENT: i16, const AMOUNT_EXPONENT: i16, const LUMINOSITY_EXPONENT: i16, const ANGLE_EXPONENT: i16, const SCALE_P2: i16, const SCALE_P3: i16, const SCALE_P5: i16, const SCALE_PI: i16, Brand,), /=, div_assign, DivAssign, STORAGE);
-crate::quantity_scalar_mul_div_assign_interface!((STORAGE: crate::api::Storage, const MASS_EXPONENT: i16, const LENGTH_EXPONENT: i16, const TIME_EXPONENT: i16, const CURRENT_EXPONENT: i16, const TEMPERATURE_EXPONENT: i16, const AMOUNT_EXPONENT: i16, const LUMINOSITY_EXPONENT: i16, const ANGLE_EXPONENT: i16, const SCALE_P2: i16, const SCALE_P3: i16, const SCALE_P5: i16, const SCALE_PI: i16, Brand,), %=, rem_assign, RemAssign, STORAGE);
+/// Emit one **dimension-combining** op (multiplication or division).
+///
+/// These need two independent dimension/scale bundles plus a where-clause pinning
+/// each output exponent to the corresponding input pair. Multiplication and
+/// division differ *only* in whether that pinning is `Add` or `Sub`, so both are
+/// generated from this one body: `$dim_op` is the type-level exponent operation,
+/// `$op` the value-level operator, and `$log_op` the scale-exponent operator.
+macro_rules! emit_dimension_combining {
+    ($op:tt, $log_op:tt, $fn:ident, $Trait:ident, $dim_op:ident) => {
+        $crate::quantity_quantity_mul_div_interface!(
+            (
+                STORAGE: crate::api::Storage,
+                const MASS_EXPONENT: i16,
+                const LENGTH_EXPONENT: i16,
+                const TIME_EXPONENT: i16,
+                const CURRENT_EXPONENT: i16,
+                const TEMPERATURE_EXPONENT: i16,
+                const AMOUNT_EXPONENT: i16,
+                const LUMINOSITY_EXPONENT: i16,
+                const ANGLE_EXPONENT: i16,
+                const SCALE_P2: i16,
+                const SCALE_P3: i16,
+                const SCALE_P5: i16,
+                const SCALE_PI: i16,
+                const MASS_EXPONENT_1: i16, const MASS_EXPONENT_2: i16,
+                const LENGTH_EXPONENT_1: i16, const LENGTH_EXPONENT_2: i16,
+                const TIME_EXPONENT_1: i16, const TIME_EXPONENT_2: i16,
+                const CURRENT_EXPONENT_1: i16, const CURRENT_EXPONENT_2: i16,
+                const TEMPERATURE_EXPONENT_1: i16, const TEMPERATURE_EXPONENT_2: i16,
+                const AMOUNT_EXPONENT_1: i16, const AMOUNT_EXPONENT_2: i16,
+                const LUMINOSITY_EXPONENT_1: i16, const LUMINOSITY_EXPONENT_2: i16,
+                const ANGLE_EXPONENT_1: i16, const ANGLE_EXPONENT_2: i16,
+                const SCALE_P2_1: i16, const SCALE_P3_1: i16, const SCALE_P5_1: i16, const SCALE_PI_1: i16,
+                const SCALE_P2_2: i16, const SCALE_P3_2: i16, const SCALE_P5_2: i16, const SCALE_PI_2: i16,
+                Brand,
+            ),
+            (
+                N<MASS_EXPONENT_1>: core::ops::$dim_op<N<MASS_EXPONENT_2>, Output = N<MASS_EXPONENT>>,
+                N<LENGTH_EXPONENT_1>: core::ops::$dim_op<N<LENGTH_EXPONENT_2>, Output = N<LENGTH_EXPONENT>>,
+                N<TIME_EXPONENT_1>: core::ops::$dim_op<N<TIME_EXPONENT_2>, Output = N<TIME_EXPONENT>>,
+                N<CURRENT_EXPONENT_1>: core::ops::$dim_op<N<CURRENT_EXPONENT_2>, Output = N<CURRENT_EXPONENT>>,
+                N<TEMPERATURE_EXPONENT_1>: core::ops::$dim_op<N<TEMPERATURE_EXPONENT_2>, Output = N<TEMPERATURE_EXPONENT>>,
+                N<AMOUNT_EXPONENT_1>: core::ops::$dim_op<N<AMOUNT_EXPONENT_2>, Output = N<AMOUNT_EXPONENT>>,
+                N<LUMINOSITY_EXPONENT_1>: core::ops::$dim_op<N<LUMINOSITY_EXPONENT_2>, Output = N<LUMINOSITY_EXPONENT>>,
+                N<ANGLE_EXPONENT_1>: core::ops::$dim_op<N<ANGLE_EXPONENT_2>, Output = N<ANGLE_EXPONENT>>,
+                N<SCALE_P2_1>: core::ops::$dim_op<N<SCALE_P2_2>, Output = N<SCALE_P2>>,
+                N<SCALE_P3_1>: core::ops::$dim_op<N<SCALE_P3_2>, Output = N<SCALE_P3>>,
+                N<SCALE_P5_1>: core::ops::$dim_op<N<SCALE_P5_2>, Output = N<SCALE_P5>>,
+                N<SCALE_PI_1>: core::ops::$dim_op<N<SCALE_PI_2>, Output = N<SCALE_PI>>
+            ),
+            $op, $log_op, $fn, $Trait, STORAGE, rescale_unused
+        );
+    };
+}
 
-// --- unary negation (only for storage types that have Neg) -------------------
-crate::quantity_neg_interface!((STORAGE: crate::api::Storage + core::ops::Neg<Output = STORAGE>, const MASS_EXPONENT: i16, const LENGTH_EXPONENT: i16, const TIME_EXPONENT: i16, const CURRENT_EXPONENT: i16, const TEMPERATURE_EXPONENT: i16, const AMOUNT_EXPONENT: i16, const LUMINOSITY_EXPONENT: i16, const ANGLE_EXPONENT: i16, const SCALE_P2: i16, const SCALE_P3: i16, const SCALE_P5: i16, const SCALE_PI: i16, Brand,), STORAGE);
+// The `rescale_unused` argument above and below is a placeholder: these interfaces
+// take a rescale function only for their scale-converting arms, and every arm
+// emitted here is scale-strict, so no rescale is ever performed.
+
+// --- quantity ∘ scalar (scalar on the right) ---------------------------------
+emit_dimension_preserving!(quantity_scalar_mul_div_interface, *, mul, Mul, STORAGE);
+emit_dimension_preserving!(quantity_scalar_mul_div_interface, /, div, Div, STORAGE);
+emit_dimension_preserving!(quantity_scalar_mul_div_interface, %, rem, Rem, STORAGE);
+emit_dimension_preserving!(quantity_scalar_mul_div_assign_interface, *=, mul_assign, MulAssign, STORAGE);
+emit_dimension_preserving!(quantity_scalar_mul_div_assign_interface, /=, div_assign, DivAssign, STORAGE);
+emit_dimension_preserving!(quantity_scalar_mul_div_assign_interface, %=, rem_assign, RemAssign, STORAGE);
+
+// --- unary negation (the one case needing a bound beyond `Storage`) ----------
+emit_dimension_preserving!(
+    quantity_neg_interface,
+    (crate::api::Storage + core::ops::Neg<Output = STORAGE>),
+    STORAGE
+);
 
 // --- quantity ∘ quantity: add/sub/rem (scale-strict) --------------------------
-crate::quantity_quantity_add_sub_interface!((STORAGE: crate::api::Storage, const MASS_EXPONENT: i16, const LENGTH_EXPONENT: i16, const TIME_EXPONENT: i16, const CURRENT_EXPONENT: i16, const TEMPERATURE_EXPONENT: i16, const AMOUNT_EXPONENT: i16, const LUMINOSITY_EXPONENT: i16, const ANGLE_EXPONENT: i16, const SCALE_P2: i16, const SCALE_P3: i16, const SCALE_P5: i16, const SCALE_PI: i16, Brand,), +, add, Add, STORAGE, rescale_unused);
-crate::quantity_quantity_add_sub_interface!((STORAGE: crate::api::Storage, const MASS_EXPONENT: i16, const LENGTH_EXPONENT: i16, const TIME_EXPONENT: i16, const CURRENT_EXPONENT: i16, const TEMPERATURE_EXPONENT: i16, const AMOUNT_EXPONENT: i16, const LUMINOSITY_EXPONENT: i16, const ANGLE_EXPONENT: i16, const SCALE_P2: i16, const SCALE_P3: i16, const SCALE_P5: i16, const SCALE_PI: i16, Brand,), -, sub, Sub, STORAGE, rescale_unused);
-crate::quantity_quantity_add_sub_interface!((STORAGE: crate::api::Storage, const MASS_EXPONENT: i16, const LENGTH_EXPONENT: i16, const TIME_EXPONENT: i16, const CURRENT_EXPONENT: i16, const TEMPERATURE_EXPONENT: i16, const AMOUNT_EXPONENT: i16, const LUMINOSITY_EXPONENT: i16, const ANGLE_EXPONENT: i16, const SCALE_P2: i16, const SCALE_P3: i16, const SCALE_P5: i16, const SCALE_PI: i16, Brand,), %, rem, Rem, STORAGE, rescale_unused);
-crate::quantity_quantity_add_sub_assign_interface!((STORAGE: crate::api::Storage, const MASS_EXPONENT: i16, const LENGTH_EXPONENT: i16, const TIME_EXPONENT: i16, const CURRENT_EXPONENT: i16, const TEMPERATURE_EXPONENT: i16, const AMOUNT_EXPONENT: i16, const LUMINOSITY_EXPONENT: i16, const ANGLE_EXPONENT: i16, const SCALE_P2: i16, const SCALE_P3: i16, const SCALE_P5: i16, const SCALE_PI: i16, Brand,), +=, add_assign, AddAssign, STORAGE, rescale_unused);
-crate::quantity_quantity_add_sub_assign_interface!((STORAGE: crate::api::Storage, const MASS_EXPONENT: i16, const LENGTH_EXPONENT: i16, const TIME_EXPONENT: i16, const CURRENT_EXPONENT: i16, const TEMPERATURE_EXPONENT: i16, const AMOUNT_EXPONENT: i16, const LUMINOSITY_EXPONENT: i16, const ANGLE_EXPONENT: i16, const SCALE_P2: i16, const SCALE_P3: i16, const SCALE_P5: i16, const SCALE_PI: i16, Brand,), -=, sub_assign, SubAssign, STORAGE, rescale_unused);
-crate::quantity_quantity_add_sub_assign_interface!((STORAGE: crate::api::Storage, const MASS_EXPONENT: i16, const LENGTH_EXPONENT: i16, const TIME_EXPONENT: i16, const CURRENT_EXPONENT: i16, const TEMPERATURE_EXPONENT: i16, const AMOUNT_EXPONENT: i16, const LUMINOSITY_EXPONENT: i16, const ANGLE_EXPONENT: i16, const SCALE_P2: i16, const SCALE_P3: i16, const SCALE_P5: i16, const SCALE_PI: i16, Brand,), %=, rem_assign, RemAssign, STORAGE, rescale_unused);
+emit_dimension_preserving!(quantity_quantity_add_sub_interface, +, add, Add, STORAGE, rescale_unused);
+emit_dimension_preserving!(quantity_quantity_add_sub_interface, -, sub, Sub, STORAGE, rescale_unused);
+emit_dimension_preserving!(quantity_quantity_add_sub_interface, %, rem, Rem, STORAGE, rescale_unused);
+emit_dimension_preserving!(quantity_quantity_add_sub_assign_interface, +=, add_assign, AddAssign, STORAGE, rescale_unused);
+emit_dimension_preserving!(quantity_quantity_add_sub_assign_interface, -=, sub_assign, SubAssign, STORAGE, rescale_unused);
+emit_dimension_preserving!(quantity_quantity_add_sub_assign_interface, %=, rem_assign, RemAssign, STORAGE, rescale_unused);
 
 // --- quantity ∘ quantity: comparison (scale-strict) ---------------------------
-crate::quantity_quantity_partial_ord_interface!((STORAGE: crate::api::Storage, const MASS_EXPONENT: i16, const LENGTH_EXPONENT: i16, const TIME_EXPONENT: i16, const CURRENT_EXPONENT: i16, const TEMPERATURE_EXPONENT: i16, const AMOUNT_EXPONENT: i16, const LUMINOSITY_EXPONENT: i16, const ANGLE_EXPONENT: i16, const SCALE_P2: i16, const SCALE_P3: i16, const SCALE_P5: i16, const SCALE_PI: i16, Brand,), STORAGE, rescale_unused);
+emit_dimension_preserving!(
+    quantity_quantity_partial_ord_interface,
+    STORAGE,
+    rescale_unused
+);
 
 // --- quantity ∘ quantity: mul/div (dimension-combining) -----------------------
-crate::quantity_quantity_mul_div_interface!(
-    (STORAGE: crate::api::Storage, const MASS_EXPONENT: i16, const LENGTH_EXPONENT: i16, const TIME_EXPONENT: i16, const CURRENT_EXPONENT: i16, const TEMPERATURE_EXPONENT: i16, const AMOUNT_EXPONENT: i16, const LUMINOSITY_EXPONENT: i16, const ANGLE_EXPONENT: i16, const SCALE_P2: i16, const SCALE_P3: i16, const SCALE_P5: i16, const SCALE_PI: i16, const MASS_EXPONENT_1: i16, const MASS_EXPONENT_2: i16, const LENGTH_EXPONENT_1: i16, const LENGTH_EXPONENT_2: i16, const TIME_EXPONENT_1: i16, const TIME_EXPONENT_2: i16, const CURRENT_EXPONENT_1: i16, const CURRENT_EXPONENT_2: i16, const TEMPERATURE_EXPONENT_1: i16, const TEMPERATURE_EXPONENT_2: i16, const AMOUNT_EXPONENT_1: i16, const AMOUNT_EXPONENT_2: i16, const LUMINOSITY_EXPONENT_1: i16, const LUMINOSITY_EXPONENT_2: i16, const ANGLE_EXPONENT_1: i16, const ANGLE_EXPONENT_2: i16, const SCALE_P2_1: i16, const SCALE_P3_1: i16, const SCALE_P5_1: i16, const SCALE_PI_1: i16, const SCALE_P2_2: i16, const SCALE_P3_2: i16, const SCALE_P5_2: i16, const SCALE_PI_2: i16, Brand,),
-    (N<MASS_EXPONENT_1>: core::ops::Add<N<MASS_EXPONENT_2>, Output = N<MASS_EXPONENT>>, N<LENGTH_EXPONENT_1>: core::ops::Add<N<LENGTH_EXPONENT_2>, Output = N<LENGTH_EXPONENT>>, N<TIME_EXPONENT_1>: core::ops::Add<N<TIME_EXPONENT_2>, Output = N<TIME_EXPONENT>>, N<CURRENT_EXPONENT_1>: core::ops::Add<N<CURRENT_EXPONENT_2>, Output = N<CURRENT_EXPONENT>>, N<TEMPERATURE_EXPONENT_1>: core::ops::Add<N<TEMPERATURE_EXPONENT_2>, Output = N<TEMPERATURE_EXPONENT>>, N<AMOUNT_EXPONENT_1>: core::ops::Add<N<AMOUNT_EXPONENT_2>, Output = N<AMOUNT_EXPONENT>>, N<LUMINOSITY_EXPONENT_1>: core::ops::Add<N<LUMINOSITY_EXPONENT_2>, Output = N<LUMINOSITY_EXPONENT>>, N<ANGLE_EXPONENT_1>: core::ops::Add<N<ANGLE_EXPONENT_2>, Output = N<ANGLE_EXPONENT>>, N<SCALE_P2_1>: core::ops::Add<N<SCALE_P2_2>, Output = N<SCALE_P2>>, N<SCALE_P3_1>: core::ops::Add<N<SCALE_P3_2>, Output = N<SCALE_P3>>, N<SCALE_P5_1>: core::ops::Add<N<SCALE_P5_2>, Output = N<SCALE_P5>>, N<SCALE_PI_1>: core::ops::Add<N<SCALE_PI_2>, Output = N<SCALE_PI>>),
-    *, +, mul, Mul, STORAGE, rescale_unused
-);
-crate::quantity_quantity_mul_div_interface!(
-    (STORAGE: crate::api::Storage, const MASS_EXPONENT: i16, const LENGTH_EXPONENT: i16, const TIME_EXPONENT: i16, const CURRENT_EXPONENT: i16, const TEMPERATURE_EXPONENT: i16, const AMOUNT_EXPONENT: i16, const LUMINOSITY_EXPONENT: i16, const ANGLE_EXPONENT: i16, const SCALE_P2: i16, const SCALE_P3: i16, const SCALE_P5: i16, const SCALE_PI: i16, const MASS_EXPONENT_1: i16, const MASS_EXPONENT_2: i16, const LENGTH_EXPONENT_1: i16, const LENGTH_EXPONENT_2: i16, const TIME_EXPONENT_1: i16, const TIME_EXPONENT_2: i16, const CURRENT_EXPONENT_1: i16, const CURRENT_EXPONENT_2: i16, const TEMPERATURE_EXPONENT_1: i16, const TEMPERATURE_EXPONENT_2: i16, const AMOUNT_EXPONENT_1: i16, const AMOUNT_EXPONENT_2: i16, const LUMINOSITY_EXPONENT_1: i16, const LUMINOSITY_EXPONENT_2: i16, const ANGLE_EXPONENT_1: i16, const ANGLE_EXPONENT_2: i16, const SCALE_P2_1: i16, const SCALE_P3_1: i16, const SCALE_P5_1: i16, const SCALE_PI_1: i16, const SCALE_P2_2: i16, const SCALE_P3_2: i16, const SCALE_P5_2: i16, const SCALE_PI_2: i16, Brand,),
-    (N<MASS_EXPONENT_1>: core::ops::Sub<N<MASS_EXPONENT_2>, Output = N<MASS_EXPONENT>>, N<LENGTH_EXPONENT_1>: core::ops::Sub<N<LENGTH_EXPONENT_2>, Output = N<LENGTH_EXPONENT>>, N<TIME_EXPONENT_1>: core::ops::Sub<N<TIME_EXPONENT_2>, Output = N<TIME_EXPONENT>>, N<CURRENT_EXPONENT_1>: core::ops::Sub<N<CURRENT_EXPONENT_2>, Output = N<CURRENT_EXPONENT>>, N<TEMPERATURE_EXPONENT_1>: core::ops::Sub<N<TEMPERATURE_EXPONENT_2>, Output = N<TEMPERATURE_EXPONENT>>, N<AMOUNT_EXPONENT_1>: core::ops::Sub<N<AMOUNT_EXPONENT_2>, Output = N<AMOUNT_EXPONENT>>, N<LUMINOSITY_EXPONENT_1>: core::ops::Sub<N<LUMINOSITY_EXPONENT_2>, Output = N<LUMINOSITY_EXPONENT>>, N<ANGLE_EXPONENT_1>: core::ops::Sub<N<ANGLE_EXPONENT_2>, Output = N<ANGLE_EXPONENT>>, N<SCALE_P2_1>: core::ops::Sub<N<SCALE_P2_2>, Output = N<SCALE_P2>>, N<SCALE_P3_1>: core::ops::Sub<N<SCALE_P3_2>, Output = N<SCALE_P3>>, N<SCALE_P5_1>: core::ops::Sub<N<SCALE_P5_2>, Output = N<SCALE_P5>>, N<SCALE_PI_1>: core::ops::Sub<N<SCALE_PI_2>, Output = N<SCALE_PI>>),
-    /, -, div, Div, STORAGE, rescale_unused
-);
+emit_dimension_combining!(*, +, mul, Mul, Add);
+emit_dimension_combining!(/, -, div, Div, Sub);
