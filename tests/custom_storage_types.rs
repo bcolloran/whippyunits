@@ -1,13 +1,15 @@
 //! Quantity arithmetic over storage types this crate has never heard of.
 //!
-//! The point of making the op impls generic over `Storage` is that a downstream
+//! The point of making the op impls storage-generic is that a downstream
 //! numeric type — an autodiff dual, an interval, a fixed-point value — can be used
 //! as quantity storage without this crate being changed. These tests pin that
 //! property, and in particular pin the *granularity* of it: a storage type that is
 //! missing one operation must lose only that operation, not the whole arithmetic
 //! surface. (Requiring the full surface up front would mean a type with no
 //! meaningful remainder — normal for intervals and dual numbers — could not be used
-//! for quantity addition either.)
+//! for quantity addition either.) There is no global bound at all, not even `Copy`
+//! or `PartialEq`: nothing generated copies or compares the stored value, so a
+//! heap-backed or arbitrary-precision scalar is not excluded either.
 //!
 //! The negative half of that property — that `%` on a `Rem`-less storage type is
 //! still correctly rejected — is not asserted here, because a `trybuild` case would
@@ -83,4 +85,23 @@ fn dimension_combining_ops_work_for_a_custom_storage_type() {
 
     let area: unit!(m ^ 2, NoRem) = d * d;
     assert_eq!(area.unsafe_value, NoRem(100.0));
+}
+
+/// A storage type that is neither `Copy` nor `PartialEq` — the shape of a
+/// heap-backed or arbitrary-precision scalar — and implements only `Add`.
+#[derive(Clone, Debug)]
+struct HeapBacked(Vec<u8>, f64);
+
+impl core::ops::Add for HeapBacked {
+    type Output = Self;
+    fn add(self, rhs: Self) -> Self {
+        HeapBacked(self.0, self.1 + rhs.1)
+    }
+}
+
+#[test]
+fn a_non_copy_storage_type_can_still_add() {
+    let a = <unit!(m, HeapBacked)>::from_raw_value(HeapBacked(vec![1], 3.0));
+    let b = <unit!(m, HeapBacked)>::from_raw_value(HeapBacked(vec![2], 4.0));
+    assert_eq!((a + b).unsafe_value.1, 7.0);
 }

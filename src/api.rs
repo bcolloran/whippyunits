@@ -764,10 +764,17 @@ define_display_traits!(
 // FORK: storage-generic arithmetic.
 //
 // The quantity-op interfaces above used to be emitted once per concrete storage
-// type, from a closed list of primitives. They are now emitted ONCE, generically
-// over a `Storage` trait, so downstream numeric types (autodiff duals,
-// fixed-point, intervals) work without touching this crate again — and so
+// type, from a closed list of primitives. They are now emitted ONCE, generic over
+// the storage type, so downstream numeric types (autodiff duals, fixed-point,
+// intervals, heap-backed bignums) work without touching this crate again — and so
 // functions generic over their scalar type typecheck.
+//
+// There is deliberately no `Storage` trait and no blanket global bound. Each impl
+// requires exactly the one operation it uses, so a storage type supports precisely
+// the operations it can support: a scalar with no meaningful remainder still gets
+// addition, and one that is not `Copy` (arbitrary-precision, heap-backed) is not
+// shut out of arithmetic entirely. Nothing generated here copies or compares the
+// stored value, so those bounds would have excluded types for no benefit.
 //
 // Only the scalar-on-the-LEFT impls (`f64 * Quantity`) remain per-concrete-type,
 // up in the per-type generators: with a generic storage parameter in `Self`
@@ -779,29 +786,6 @@ define_display_traits!(
 // what actually varies: which interface, and the operator/method/trait triple.
 // ============================================================================
 
-/// Declare `Storage` and its blanket impl from a single bound list.
-///
-/// `Self` resolves correctly in both positions (in the `impl`, `Self` is `T`), so
-/// the op surface is written once rather than kept manually in sync twice.
-macro_rules! define_storage_trait {
-    ($($bound:tt)*) => {
-        /// The op surface a numeric type must have to be used as `Quantity` storage.
-        ///
-        /// Blanket-implemented: any type with these ops is a `Storage` automatically,
-        /// with no opt-in required from the type's owner.
-        pub trait Storage: $($bound)* {}
-
-        impl<T> Storage for T where T: $($bound)* {}
-    };
-}
-
-// Deliberately minimal: only what EVERY quantity impl needs regardless of which
-// operation it is. Each op's own requirement (`Mul`, `AddAssign`, `Neg`, …) is
-// attached to that impl alone, below — so a storage type missing one operation
-// loses only that operation. Requiring the whole arithmetic surface up front would
-// mean a scalar with no meaningful remainder (common for interval and dual-number
-// types) could not be used for quantity *addition* either.
-define_storage_trait!(Copy + PartialEq);
 
 /// Invoke an interface macro over the **single-dimension, single-scale** parameter
 /// bundle — the shape used by every op that leaves the dimension unchanged
@@ -818,13 +802,13 @@ define_storage_trait!(Copy + PartialEq);
 macro_rules! emit_dimension_preserving {
     (value_op: $mac:ident, $op:tt, $fn:ident, $Trait:ident $(, $($rest:tt)*)?) => {
         emit_dimension_preserving!(
-            bound: (crate::api::Storage + core::ops::$Trait<Output = STORAGE>),
+            bound: (core::ops::$Trait<Output = STORAGE>),
             $mac, $op, $fn, $Trait $(, $($rest)*)?
         );
     };
     (assign_op: $mac:ident, $op:tt, $fn:ident, $Trait:ident $(, $($rest:tt)*)?) => {
         emit_dimension_preserving!(
-            bound: (crate::api::Storage + core::ops::$Trait),
+            bound: (core::ops::$Trait),
             $mac, $op, $fn, $Trait $(, $($rest)*)?
         );
     };
@@ -863,7 +847,7 @@ macro_rules! emit_dimension_combining {
     ($op:tt, $log_op:tt, $fn:ident, $Trait:ident, $dim_op:ident) => {
         $crate::quantity_quantity_mul_div_interface!(
             (
-                STORAGE: crate::api::Storage + core::ops::$Trait<Output = STORAGE>,
+                STORAGE: core::ops::$Trait<Output = STORAGE>,
                 const MASS_EXPONENT: i16,
                 const LENGTH_EXPONENT: i16,
                 const TIME_EXPONENT: i16,
@@ -923,7 +907,7 @@ macro_rules! emit_dimension_combining {
     ($op:tt, $log_op:tt, $fn:ident, $Trait:ident, $dim_op:ident) => {
         $crate::quantity_quantity_mul_div_interface!(
             (
-                STORAGE: crate::api::Storage + core::ops::$Trait<Output = STORAGE>,
+                STORAGE: core::ops::$Trait<Output = STORAGE>,
                 const MASS_EXPONENT_1: i16, const MASS_EXPONENT_2: i16,
                 const LENGTH_EXPONENT_1: i16, const LENGTH_EXPONENT_2: i16,
                 const TIME_EXPONENT_1: i16, const TIME_EXPONENT_2: i16,
@@ -967,9 +951,9 @@ emit_dimension_preserving!(assign_op: quantity_scalar_mul_div_assign_interface, 
 emit_dimension_preserving!(assign_op: quantity_scalar_mul_div_assign_interface, /=, div_assign, DivAssign, STORAGE);
 emit_dimension_preserving!(assign_op: quantity_scalar_mul_div_assign_interface, %=, rem_assign, RemAssign, STORAGE);
 
-// --- unary negation (the one case needing a bound beyond `Storage`) ----------
+// --- unary negation (no `$Trait` argument to derive the bound from) ----------
 emit_dimension_preserving!(
-    bound: (crate::api::Storage + core::ops::Neg<Output = STORAGE>),
+    bound: (core::ops::Neg<Output = STORAGE>),
     quantity_neg_interface,
     STORAGE
 );
@@ -984,7 +968,7 @@ emit_dimension_preserving!(assign_op: quantity_quantity_add_sub_assign_interface
 
 // --- quantity ∘ quantity: comparison (scale-strict) ---------------------------
 emit_dimension_preserving!(
-    bound: (crate::api::Storage + PartialOrd),
+    bound: (PartialOrd),
     quantity_quantity_partial_ord_interface,
     STORAGE,
     rescale_unused
