@@ -415,6 +415,19 @@ pub struct Quantity<Scale, Dimension, T = f64, Brand = ()> {
     _phantom: core::marker::PhantomData<fn() -> (Scale, Dimension, Brand)>,
 }
 
+// FORK: fully-generic constructor. The inherent `new` below is only defined for the
+// structured Scale<…>/Dimension<…> form; downstream abstractions that handle
+// projectively-known quantity types (vector wrappers, storage shims) need to build
+// a Quantity whose Scale/Dimension are opaque type parameters.
+impl<Scale, Dimension, T, Brand> Quantity<Scale, Dimension, T, Brand> {
+    pub const fn from_raw_value(unsafe_value: T) -> Self {
+        Self {
+            unsafe_value,
+            _phantom: core::marker::PhantomData,
+        }
+    }
+}
+
 impl<Scale, Dimension, T, Brand> Copy for Quantity<Scale, Dimension, T, Brand>
 where
     Scale: Clone,
