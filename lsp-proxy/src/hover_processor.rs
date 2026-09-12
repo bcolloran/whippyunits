@@ -28,55 +28,35 @@ impl HoverProcessor {
     pub fn improve_hover_content(&self, mut hover: HoverContent) -> HoverContent {
         match &mut hover.contents {
             HoverContents::Single(item) => {
-                let original_text = item.value.clone();
-                // Apply transformations in sequence, but only if they haven't been applied already
-                let mut processed_text = item.value.clone();
-
-                // Only apply trait signature transformation if not already processed
-                if !processed_text.contains("impl Add for")
-                    && !processed_text.contains("impl Sub for")
-                    && !processed_text.contains("impl Mul<")
-                    && !processed_text.contains("impl Div<")
-                {
-                    processed_text = self.transform_add_trait_signature(&processed_text);
-                }
-
-                // Always apply type conversion as the final step
-                processed_text = self.unit_formatter.format_types_with_original(
-                    &processed_text,
-                    &self.display_config,
-                    &original_text,
-                );
-
-                item.value = processed_text;
+                item.value = self.improve_hover_text(&item.value);
             }
             HoverContents::Multiple(items) => {
                 for item in items {
-                    let original_text = item.value.clone();
-                    // Apply transformations in sequence, but only if they haven't been applied already
-                    let mut processed_text = item.value.clone();
-
-                    // Only apply trait signature transformation if not already processed
-                    if !processed_text.contains("impl Add for")
-                        && !processed_text.contains("impl Sub for")
-                        && !processed_text.contains("impl Mul<")
-                        && !processed_text.contains("impl Div<")
-                    {
-                        processed_text = self.transform_add_trait_signature(&processed_text);
-                    }
-
-                    // Always apply type conversion as the final step
-                    processed_text = self.unit_formatter.format_types_with_original(
-                        &processed_text,
-                        &self.display_config,
-                        &original_text,
-                    );
-
-                    item.value = processed_text;
+                    item.value = self.improve_hover_text(&item.value);
                 }
             }
         }
         hover
+    }
+
+    /// Improve the markdown of a single hover entry: simplify trait signatures,
+    /// then format the whippyunits types.
+    pub fn improve_hover_text(&self, text: &str) -> String {
+        // Apply transformations in sequence, but only if they haven't been applied already
+        let mut processed_text = text.to_string();
+
+        // Only apply trait signature transformation if not already processed
+        if !processed_text.contains("impl Add for")
+            && !processed_text.contains("impl Sub for")
+            && !processed_text.contains("impl Mul<")
+            && !processed_text.contains("impl Div<")
+        {
+            processed_text = self.transform_add_trait_signature(&processed_text);
+        }
+
+        // Always apply type conversion as the final step
+        self.unit_formatter
+            .format_types_with_original(&processed_text, &self.display_config, text)
     }
 
     /// Transform the Add/Sub/Mul/Div trait implementation signatures to be more readable

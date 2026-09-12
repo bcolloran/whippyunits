@@ -165,10 +165,7 @@ impl InlayHintProcessor {
             None => ("", full.as_str()),
         };
 
-        let pretty_type = self
-            .formatter
-            .format_types_inlay_hint(type_text, &self.display_config);
-        let pretty_type = self.prune_inlay_hint_exponents(&pretty_type);
+        let pretty_type = self.format_inlay_type(type_text);
 
         // Preserve the first available location so go-to-definition still works.
         let location = label_array
@@ -187,6 +184,15 @@ impl InlayHintProcessor {
 
         *label_array = new_label;
         Ok(())
+    }
+
+    /// Pretty-print inlay-hint type text: every `Quantity<Unit<…>>` and bare
+    /// `Unit<Scale…>` is rewritten in place, in compact form with `^1` exponents pruned.
+    pub fn format_inlay_type(&self, type_text: &str) -> String {
+        let pretty_type = self
+            .formatter
+            .format_types_inlay_hint(type_text, &self.display_config);
+        self.prune_inlay_hint_exponents(&pretty_type)
     }
 
     /// Add a qty! macro text edit to the hint
@@ -277,8 +283,14 @@ impl InlayHintProcessor {
             }
         }
 
+        Ok(self.unit_macro_annotation(&pretty_type))
+    }
+
+    /// Build the `: qty!(...)` annotation for a pretty-printed label such as
+    /// `Quantity<mm, i32>` (the text inserted when a type hint is double-clicked).
+    pub fn unit_macro_annotation(&self, pretty_type: &str) -> String {
         // Extract the datatype suffix if present
-        let (unit_part, datatype) = self.extract_unit_and_datatype(&pretty_type);
+        let (unit_part, datatype) = self.extract_unit_and_datatype(pretty_type);
 
         // Generate the appropriate qty! macro format based on datatype
         let unit_macro = if datatype == "f64" {
@@ -290,7 +302,7 @@ impl InlayHintProcessor {
         };
 
         // Return just the type annotation with the qty! macro
-        Ok(format!(": {}", unit_macro))
+        format!(": {}", unit_macro)
     }
 
     /// Extract unit part and datatype from a pretty-printed type with suffix

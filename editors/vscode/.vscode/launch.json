@@ -1,0 +1,15 @@
+{
+  // Open the editors/vscode folder in VS Code and press F5: launches a second
+  // VS Code ("Extension Development Host") with this extension loaded from source.
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run whippyunits extension",
+      "type": "extensionHost",
+      "request": "launch",
+      "args": ["--extensionDevelopmentPath=${workspaceFolder}"],
+      "outFiles": ["${workspaceFolder}/out/**/*.js"],
+      "preLaunchTask": "npm: compile"
+    }
+  ]
+}

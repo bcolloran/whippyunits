@@ -1,0 +1,22 @@
+{
+  "name": "whippyunits",
+  "image": "mcr.microsoft.com/devcontainers/rust:1-1-bookworm",
+  "features": {
+    // Node is only needed to build the VS Code extension below
+    "ghcr.io/devcontainers/features/node:1": { "version": "22" }
+  },
+  // Build the VS Code extension before VS Code attaches. This has to be
+  // onCreateCommand (or updateContentCommand): VS Code waits for those before
+  // installing extensions, but not for postCreateCommand, and the .vsix listed
+  // below must exist by then.
+  "onCreateCommand": "cd editors/vscode && npm ci && npm run package",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "rust-lang.rust-analyzer",
+        // A path to a .vsix works here as well as a Marketplace id
+        "${containerWorkspaceFolder}/editors/vscode/whippyunits-vscode.vsix"
+      ]
+    }
+  }
+}

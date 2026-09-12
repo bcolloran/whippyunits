@@ -1,5 +1,7 @@
 # WhippyUnits LSP Proxy Setup Guide
 
+> **VS Code users:** the extension in [`editors/vscode`](editors/vscode/README.md) does everything below without a proxy binary, and it works in dev containers. The proxy remains the way to go for other editors.
+
 This guide shows how to set up the WhippyUnits LSP Proxy to get improved hover information in VS Code.
 
 ## What It Does

@@ -26,3 +26,8 @@ settings.json
 
 .vscode
 .vscode/*
+# VS Code extension (editors/vscode) build outputs
+editors/vscode/wasm
+*.vsix
+# ...but keep the extension's debug launch config
+!editors/vscode/.vscode

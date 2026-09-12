@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- **editors/vscode**: A VS Code extension that rewrites whippyunits types in rust-analyzer hovers, inlay hints and diagnostics by hooking into the rust-analyzer extension's language client — no proxy binary to install, and it works in dev containers. The formatting runs through a WebAssembly build of the lsp-proxy formatting code (`editors/vscode/formatter-wasm`)
+- A `.devcontainer` for this repository that builds and installs the extension
+
+### Changed
+
+- **lsp-proxy**: Binary-only dependencies (tokio etc.) now sit behind a default `bin` feature so the formatting library builds for wasm32; `HoverProcessor::improve_hover_text`, `InlayHintProcessor::format_inlay_type` / `unit_macro_annotation` and `inlay_hint_processor::find_quantity_span` expose the individual text-level formatting steps
+
 ## [0.3.0]
 
 ### Added

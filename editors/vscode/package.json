@@ -1,0 +1,117 @@
+{
+  "name": "whippyunits-vscode",
+  "displayName": "whippyunits",
+  "description": "Readable whippyunits types in rust-analyzer hovers, inlay hints and diagnostics",
+  "version": "0.3.0",
+  "publisher": "whippyunits",
+  "license": "MIT OR Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/WhippyUnits/whippyunits-rs",
+    "directory": "editors/vscode"
+  },
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Other"
+  ],
+  "keywords": [
+    "rust",
+    "units",
+    "whippyunits",
+    "rust-analyzer"
+  ],
+  "extensionKind": [
+    "workspace"
+  ],
+  "extensionDependencies": [
+    "rust-lang.rust-analyzer"
+  ],
+  "activationEvents": [
+    "onLanguage:rust"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "whippyunits.showMenu",
+        "title": "Show Menu",
+        "category": "whippyunits"
+      },
+      {
+        "command": "whippyunits.toggle",
+        "title": "Toggle Type Rewriting",
+        "category": "whippyunits"
+      },
+      {
+        "command": "whippyunits.showLog",
+        "title": "Show Log",
+        "category": "whippyunits"
+      },
+      {
+        "command": "whippyunits.rehook",
+        "title": "Re-apply rust-analyzer Hooks",
+        "category": "whippyunits"
+      }
+    ],
+    "configuration": {
+      "title": "whippyunits",
+      "properties": {
+        "whippyunits.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Rewrite whippyunits `Quantity<...>` types in rust-analyzer output into readable units."
+        },
+        "whippyunits.verbose": {
+          "type": "boolean",
+          "default": false,
+          "description": "Show the full dimension and scale breakdown in hovers and diagnostics instead of the compact unit symbol. Inlay hints are always compact."
+        },
+        "whippyunits.includeRaw": {
+          "type": "boolean",
+          "default": false,
+          "description": "Also show the original `Quantity<...>` type in hovers, in a Raw section."
+        },
+        "whippyunits.rewrite.hover": {
+          "type": "boolean",
+          "default": true,
+          "description": "Rewrite types in hover tooltips."
+        },
+        "whippyunits.rewrite.inlayHints": {
+          "type": "boolean",
+          "default": true,
+          "description": "Rewrite types in inlay hints."
+        },
+        "whippyunits.rewrite.diagnostics": {
+          "type": "boolean",
+          "default": true,
+          "description": "Rewrite types in diagnostic messages (the Problems panel and squiggle tooltips)."
+        },
+        "whippyunits.inlayHints.doubleClickInsertsUnitMacro": {
+          "type": "boolean",
+          "default": true,
+          "description": "Double-clicking a rewritten type hint inserts a `qty!(...)` annotation instead of the raw `Quantity<...>` type."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build:wasm": "wasm-pack build formatter-wasm --release --target nodejs --out-dir ../wasm --out-name whippyunits_formatter",
+    "compile": "tsc -p ./",
+    "build": "npm run build:wasm && npm run compile",
+    "watch": "tsc -watch -p ./",
+    "test": "npm run compile && node --test \"out/test/**/*.test.js\"",
+    "package": "npm run build && vsce package --no-dependencies -o whippyunits-vscode.vsix",
+    "vscode:prepublish": "npm run build"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/vscode": "^1.90.0",
+    "@vscode/vsce": "^3.0.0",
+    "typescript": "^5.0.0",
+    "vscode-languageclient": "^9.0.0",
+    "wasm-pack": "^0.13.0"
+  }
+}
