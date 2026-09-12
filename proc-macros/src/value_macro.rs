@@ -7,7 +7,9 @@ use whippyunits_core::{
     calculate_unit_conversion_factors, get_unit_info, Dimension, EvaluationMode, UnitExpr,
 };
 
-use crate::utils::shared_utils::{generate_unit_documentation_for_expr, validate_known_units};
+use crate::utils::shared_utils::{
+    exponent_tokens, generate_unit_documentation_for_expr, validate_known_units,
+};
 
 /// Input for the value! macro
 /// Syntax: value!(quantity, unit_expr) or value!(quantity, unit_expr, type) or value!(quantity, unit_expr, type, brand)
@@ -73,22 +75,9 @@ impl ValueMacroInput {
         // Evaluate unit expression with tolerant mode (allows nonstorage units)
         let result = self.unit_expr.evaluate_with_mode(EvaluationMode::Tolerant);
 
-        let (mass_exp, length_exp, time_exp, current_exp, temp_exp, amount_exp, lum_exp, angle_exp) = (
-            result.dimension_exponents.0[0],
-            result.dimension_exponents.0[1],
-            result.dimension_exponents.0[2],
-            result.dimension_exponents.0[3],
-            result.dimension_exponents.0[4],
-            result.dimension_exponents.0[5],
-            result.dimension_exponents.0[6],
-            result.dimension_exponents.0[7],
-        );
-        let (p2, p3, p5, pi) = (
-            result.scale_exponents.0[0],
-            result.scale_exponents.0[1],
-            result.scale_exponents.0[2],
-            result.scale_exponents.0[3],
-        );
+        let [mass_exp, length_exp, time_exp, current_exp, temp_exp, amount_exp, lum_exp, angle_exp] =
+            result.dimension_exponents.0.map(exponent_tokens);
+        let [p2, p3, p5, pi] = result.scale_exponents.0.map(exponent_tokens);
 
         // Determine the storage type and rescale function
         let (storage_type_ty, rescale_fn) = if let Some(ref ty) = self.storage_type {

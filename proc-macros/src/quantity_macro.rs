@@ -5,7 +5,9 @@ use syn::token::Comma;
 use syn::{Expr, Type};
 use whippyunits_core::{calculate_unit_conversion_factors, get_unit_info, Dimension, UnitExpr};
 
-use crate::utils::shared_utils::{generate_unit_documentation_for_expr, validate_known_units};
+use crate::utils::shared_utils::{
+    exponent_tokens, generate_unit_documentation_for_expr, validate_known_units,
+};
 
 /// Input for the quantity macro
 pub struct QuantityMacroInput {
@@ -149,22 +151,9 @@ impl QuantityMacroInput {
             .evaluate_with_mode(whippyunits_core::EvaluationMode::Tolerant);
         let (conversion_factor, affine_offset) = calculate_unit_conversion_factors(&self.unit_expr);
 
-        let (mass_exp, length_exp, time_exp, current_exp, temp_exp, amount_exp, lum_exp, angle_exp) = (
-            result.dimension_exponents.0[0],
-            result.dimension_exponents.0[1],
-            result.dimension_exponents.0[2],
-            result.dimension_exponents.0[3],
-            result.dimension_exponents.0[4],
-            result.dimension_exponents.0[5],
-            result.dimension_exponents.0[6],
-            result.dimension_exponents.0[7],
-        );
-        let (p2, p3, p5, pi) = (
-            result.scale_exponents.0[0],
-            result.scale_exponents.0[1],
-            result.scale_exponents.0[2],
-            result.scale_exponents.0[3],
-        );
+        let [mass_exp, length_exp, time_exp, current_exp, temp_exp, amount_exp, lum_exp, angle_exp] =
+            result.dimension_exponents.0.map(exponent_tokens);
+        let [p2, p3, p5, pi] = result.scale_exponents.0.map(exponent_tokens);
 
         let storage_type_ty = self
             .storage_type

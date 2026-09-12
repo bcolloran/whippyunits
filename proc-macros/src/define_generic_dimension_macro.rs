@@ -7,6 +7,7 @@ use syn::{Ident, LitInt, Token};
 use whippyunits_core::Dimension;
 
 use crate::utils::dimension_suggestions::find_similar_dimensions;
+use crate::utils::shared_utils::exponent_tokens;
 
 // Parse dimension expressions like "Length / Time", "L / T", or "Mass * Length^2 / Time^2", "M * L^2 / T^2"
 pub enum DimensionExpr {
@@ -257,6 +258,18 @@ impl DefineGenericDimensionInput {
         angle_exp: i16,
     ) -> TokenStream {
         let trait_name = &self.trait_name;
+        let [mass_exp, length_exp, time_exp, current_exp, temp_exp, amount_exp, lum_exp, angle_exp] =
+            [
+                mass_exp,
+                length_exp,
+                time_exp,
+                current_exp,
+                temp_exp,
+                amount_exp,
+                lum_exp,
+                angle_exp,
+            ]
+            .map(exponent_tokens);
 
         // For simplicity, we'll use 0 for all scale parameters
         // In a more sophisticated implementation, we could determine scale parameters based on the dimensions

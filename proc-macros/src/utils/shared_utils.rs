@@ -455,3 +455,19 @@ pub fn validate_known_units(unit_expr: &UnitExpr) -> Option<TokenStream> {
 
     None
 }
+
+/// Tokens for a const-generic exponent argument, e.g. the `-1` in `_T<-1>`.
+///
+/// `quote!` renders a negative `i16` as one `-1i16` literal token. rustc is
+/// fine with that, but rust-analyzer's proc-macro path loses the sign and
+/// treats the argument as unknown, so its hovers show `Dimension<_M, _L<1>>`
+/// for `m / s`. Emitting `-` and the magnitude as separate tokens, as the
+/// lexer would produce them from source, sidesteps that.
+pub fn exponent_tokens(exp: i16) -> TokenStream {
+    let magnitude = proc_macro2::Literal::u16_unsuffixed(exp.unsigned_abs());
+    if exp < 0 {
+        quote!(-#magnitude)
+    } else {
+        quote!(#magnitude)
+    }
+}

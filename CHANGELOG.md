@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- **proc-macros**: Negative const-generic exponents are now emitted as `-` followed by the literal instead of quote!'s single `-1i16` token, which rust-analyzer's proc-macro path mis-reads as the parameter's default. Its hovers and inlay hints showed `Dimension<_M, _L<1>>` for `quantity!(…, m / s)` and `unit!(m / s)`, dropped the scale of prefixed units like `mm`, and failed to resolve default declarators such as `2.0.newtons()` at all. rustc was never affected
+
 ## [0.2.6] - 2026-07-13
 
 ### Added

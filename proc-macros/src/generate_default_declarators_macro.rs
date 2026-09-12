@@ -3,7 +3,7 @@ use quote::quote;
 use syn::parse::{Parse, ParseStream};
 use syn::Ident;
 
-use crate::utils::shared_utils::{generate_scale_name, is_valid_identifier};
+use crate::utils::shared_utils::{exponent_tokens, generate_scale_name, is_valid_identifier};
 
 /// Unit type classification
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -165,6 +165,7 @@ impl DefaultDeclaratorsInput {
                     let scale_name = generate_scale_name("", unit.name);
                     let scale_name_ident = syn::parse_str::<Ident>(&scale_name).unwrap();
 
+                    let [p2, p3, p5, pi] = [p2, p3, p5, pi].map(exponent_tokens);
                     scale_definitions.push(quote! {
                         (#scale_name_ident, #fn_name_ident, #p2, #p3, #p5, #pi)
                     });
@@ -193,6 +194,7 @@ impl DefaultDeclaratorsInput {
                     let fn_name_ident = syn::parse_str::<Ident>(&fn_name).unwrap();
                     let conversion_factor = unit.conversion_factor;
 
+                    let [p2, p3, p5, pi] = [p2, p3, p5, pi].map(exponent_tokens);
                     scale_definitions.push(quote! {
                         (#fn_name_ident, #conversion_factor, #p2, #p3, #p5, #pi)
                     });
@@ -263,6 +265,7 @@ impl DefaultDeclaratorsInput {
                     let conversion_factor = unit.conversion_factor;
                     let affine_offset = unit.affine_offset;
 
+                    let [p2, p3, p5, pi] = [p2, p3, p5, pi].map(exponent_tokens);
                     scale_definitions.push(quote! {
                         (#fn_name_ident, #conversion_factor, #affine_offset, #p2, #p3, #p5, #pi)
                     });
@@ -363,6 +366,8 @@ impl DefaultDeclaratorsInput {
                 let base_scale_name_ident = syn::parse_str::<Ident>(&base_scale_name).unwrap();
                 let base_fn_name_ident = syn::parse_str::<Ident>(&base_fn_name).unwrap();
 
+                let [base_p2, base_p3, base_p5, base_pi] =
+                    [base_p2, base_p3, base_p5, base_pi].map(exponent_tokens);
                 scale_definitions.push(quote! {
                     (#base_scale_name_ident, #base_fn_name_ident, #base_p2, #base_p3, #base_p5, #base_pi)
                 });
@@ -392,6 +397,7 @@ impl DefaultDeclaratorsInput {
                     let scale_name_ident = syn::parse_str::<Ident>(&scale_name).unwrap();
                     let fn_name_ident = syn::parse_str::<Ident>(&fn_name).unwrap();
 
+                    let [p2, p3, p5, pi] = [p2, p3, p5, pi].map(exponent_tokens);
                     scale_definitions.push(quote! {
                         (#scale_name_ident, #fn_name_ident, #p2, #p3, #p5, #pi)
                     });
@@ -411,8 +417,10 @@ impl DefaultDeclaratorsInput {
                     let fn_name = whippyunits_core::make_plural(unit.name);
                     let fn_name_ident = syn::parse_str::<Ident>(&fn_name).unwrap();
 
+                    let [p2_tokens, p3_tokens, p5_tokens, pi_tokens] =
+                        [p2, p3, p5, pi].map(exponent_tokens);
                     scale_definitions.push(quote! {
-                        (#scale_name_ident, #fn_name_ident, #p2, #p3, #p5, #pi)
+                        (#scale_name_ident, #fn_name_ident, #p2_tokens, #p3_tokens, #p5_tokens, #pi_tokens)
                     });
 
                     // Generate prefixed versions of this compound unit
@@ -433,6 +441,9 @@ impl DefaultDeclaratorsInput {
                         let prefixed_fn_name_ident =
                             syn::parse_str::<Ident>(&prefixed_fn_name).unwrap();
 
+                        let [prefixed_p2, prefixed_p3, prefixed_p5, prefixed_pi] =
+                            [prefixed_p2, prefixed_p3, prefixed_p5, prefixed_pi]
+                                .map(exponent_tokens);
                         scale_definitions.push(quote! {
                             (#prefixed_scale_name_ident, #prefixed_fn_name_ident, #prefixed_p2, #prefixed_p3, #prefixed_p5, #prefixed_pi)
                         });
@@ -757,6 +768,18 @@ impl DefaultDeclaratorsInput {
         trait_ident: &Ident,
         scale_definitions: &[TokenStream],
     ) -> TokenStream {
+        let [mass_exp, length_exp, time_exp, current_exp, temperature_exp, amount_exp, luminosity_exp, angle_exp] =
+            [
+                mass_exp,
+                length_exp,
+                time_exp,
+                current_exp,
+                temperature_exp,
+                amount_exp,
+                luminosity_exp,
+                angle_exp,
+            ]
+            .map(exponent_tokens);
         quote! {
             define_quantity!(
                 #mass_exp,
@@ -787,6 +810,18 @@ impl DefaultDeclaratorsInput {
         trait_ident: &Ident,
         scale_definitions: &[TokenStream],
     ) -> TokenStream {
+        let [mass_exp, length_exp, time_exp, current_exp, temperature_exp, amount_exp, luminosity_exp, angle_exp] =
+            [
+                mass_exp,
+                length_exp,
+                time_exp,
+                current_exp,
+                temperature_exp,
+                amount_exp,
+                luminosity_exp,
+                angle_exp,
+            ]
+            .map(exponent_tokens);
         quote! {
             define_nonstorage_quantity!(
                 #mass_exp,
@@ -818,6 +853,18 @@ impl DefaultDeclaratorsInput {
         storage_scale_ident: &Ident,
         scale_definitions: &[TokenStream],
     ) -> TokenStream {
+        let [mass_exp, length_exp, time_exp, current_exp, temperature_exp, amount_exp, luminosity_exp, angle_exp] =
+            [
+                mass_exp,
+                length_exp,
+                time_exp,
+                current_exp,
+                temperature_exp,
+                amount_exp,
+                luminosity_exp,
+                angle_exp,
+            ]
+            .map(exponent_tokens);
         quote! {
             define_affine_quantity!(
                 #mass_exp,
@@ -849,6 +896,18 @@ impl DefaultDeclaratorsInput {
         trait_ident: &Ident,
         scale_definitions: &[TokenStream],
     ) -> TokenStream {
+        let [mass_exp, length_exp, time_exp, current_exp, temperature_exp, amount_exp, luminosity_exp, angle_exp] =
+            [
+                mass_exp,
+                length_exp,
+                time_exp,
+                current_exp,
+                temperature_exp,
+                amount_exp,
+                luminosity_exp,
+                angle_exp,
+            ]
+            .map(exponent_tokens);
         quote! {
             define_nonstorage_affine_quantity!(
                 #mass_exp,
@@ -888,10 +947,23 @@ impl DefaultDeclaratorsInput {
         let mut impl_f64_methods = Vec::new();
         let mut impl_i32_methods = Vec::new();
         let mut impl_i64_methods = Vec::new();
+        let [mass_exp, length_exp, time_exp, current_exp, temperature_exp, amount_exp, luminosity_exp, angle_exp] =
+            [
+                mass_exp,
+                length_exp,
+                time_exp,
+                current_exp,
+                temperature_exp,
+                amount_exp,
+                luminosity_exp,
+                angle_exp,
+            ]
+            .map(exponent_tokens);
 
         for (fn_name_ident, conversion_factor, p2, p3, p5, pi, storage_unit_name) in
             unit_definitions
         {
+            let [p2, p3, p5, pi] = [*p2, *p3, *p5, *pi].map(exponent_tokens);
             let doc_string = format!(
                 "Storage unit: **{}**<br>Conversion factor: **{}**",
                 storage_unit_name, conversion_factor
@@ -939,7 +1011,6 @@ impl DefaultDeclaratorsInput {
                     crate::quantity::Quantity::<crate::quantity::Scale<crate::quantity::_2<#p2>, crate::quantity::_3<#p3>, crate::quantity::_5<#p5>, crate::quantity::_Pi<#pi>>, crate::quantity::Dimension<crate::quantity::_M<#mass_exp>, crate::quantity::_L<#length_exp>, crate::quantity::_T<#time_exp>, crate::quantity::_I<#current_exp>, crate::quantity::_Θ<#temperature_exp>, crate::quantity::_N<#amount_exp>, crate::quantity::_J<#luminosity_exp>, crate::quantity::_A<#angle_exp>>, i64>::new((self as f64 * #conversion_factor) as i64)
                 }
             });
-
         }
 
         quote! {
