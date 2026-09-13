@@ -15,6 +15,7 @@ rust-analyzer itself is untouched: the extension hooks into the rust-analyzer ex
 
 - The [rust-analyzer extension](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer). It is declared as a dependency, so VS Code installs it automatically.
 - VS Code 1.90 or later.
+- A toolchain rust-analyzer's bundled server can work with. rust-analyzer only supports proc-macro servers from roughly the last year of toolchains; if the workspace's `rust-toolchain.toml` pins something older, the extension shows a "toolchain too old" warning and no proc macro expands. Move the pin, or give rust-analyzer its own toolchain with the workspace setting `"rust-analyzer.server.extraEnv": { "RUSTUP_TOOLCHAIN": "stable" }` (in a dev container, under `customizations.vscode.settings`). Don't take the warning's other suggestion — switching to the toolchain's *own* rust-analyzer — for an old toolchain: that server predates fixes whippyunits needs.
 
 ## Install
 
