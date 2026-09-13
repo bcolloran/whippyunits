@@ -463,6 +463,17 @@ where
 }
 
 impl<U, T, Brand> Quantity<U, T, Brand> {
+    /// FORK: fully-generic constructor. The inherent `new` further down is only
+    /// defined for the structured `Unit<Scale<…>, Dimension<…>>` form; downstream
+    /// abstractions that handle projectively-known quantity types (vector wrappers,
+    /// storage shims) need to build a Quantity whose unit is an opaque type parameter.
+    pub const fn from_raw_value(unsafe_value: T) -> Self {
+        Self {
+            unsafe_value,
+            _phantom: core::marker::PhantomData,
+        }
+    }
+
     /// Reinterprets a reference to a raw value as a reference to a `Quantity`.
     ///
     /// Sound because `Quantity` is `#[repr(transparent)]` over its value field,

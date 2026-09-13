@@ -214,64 +214,15 @@ macro_rules! _define_arithmetic_signed {
             $T
         );
 
-        $crate::quantity_scalar_mul_div_interface!(($($single_dimension_single_scale_params)*), *, mul, Mul, $T);
-        $crate::quantity_scalar_mul_div_interface!(($($single_dimension_single_scale_params)*), /, div, Div, $T);
-
-        $crate::quantity_scalar_mul_div_assign_interface!(($($single_dimension_single_scale_params)*), *=, mul_assign, MulAssign, $T);
-        $crate::quantity_scalar_mul_div_assign_interface!(($($single_dimension_single_scale_params)*), /=, div_assign, DivAssign, $T);
-
         // unary operations (only for signed types)
-        $crate::quantity_neg_interface!(($($single_dimension_single_scale_params)*), $T);
 
         // quantity-quantity arithmetic operations
-        $crate::quantity_quantity_add_sub_interface!(
-            ($($single_dimension_single_scale_params)*),
-            +, add, Add, $T, $rescale_fn
-        );
-        $crate::quantity_quantity_add_sub_interface!(
-            ($($single_dimension_single_scale_params)*),
-            -, sub, Sub, $T, $rescale_fn
-        );
-
-        $crate::quantity_quantity_add_sub_assign_interface!(
-            ($($single_dimension_single_scale_params)*),
-            +=, add_assign, AddAssign, $T, $rescale_fn
-        );
-        $crate::quantity_quantity_add_sub_assign_interface!(
-            ($($single_dimension_single_scale_params)*),
-            -=, sub_assign, SubAssign, $T, $rescale_fn
-        );
 
         // quantity-quantity remainder (scale-strict, same as add/sub)
-        $crate::quantity_quantity_add_sub_interface!(
-            ($($single_dimension_single_scale_params)*),
-            %, rem, Rem, $T, $rescale_fn
-        );
-        $crate::quantity_quantity_add_sub_assign_interface!(
-            ($($single_dimension_single_scale_params)*),
-            %=, rem_assign, RemAssign, $T, $rescale_fn
-        );
 
         // quantity-scalar remainder
-        $crate::quantity_scalar_mul_div_interface!(($($single_dimension_single_scale_params)*), %, rem, Rem, $T);
-        $crate::quantity_scalar_mul_div_assign_interface!(($($single_dimension_single_scale_params)*), %=, rem_assign, RemAssign, $T);
-
-        $crate::quantity_quantity_mul_div_interface!(
-            ($($multiple_dimension_multiple_scale_params)*),
-            ($($mul_output_dimension_where_clauses)*),
-            *, +, mul, Mul, $T, $rescale_fn
-        );
-        $crate::quantity_quantity_mul_div_interface!(
-            ($($multiple_dimension_multiple_scale_params)*),
-            ($($div_output_dimension_where_clauses)*),
-            /, -, div, Div, $T, $rescale_fn
-        );
 
         // quantity-quantity comparison operations (scale-strict)
-        $crate::quantity_quantity_partial_ord_interface!(
-            ($($single_dimension_single_scale_params)*),
-            $T, $rescale_fn
-        );
     };
 }
 
@@ -293,60 +244,12 @@ macro_rules! _define_arithmetic {
             $T
         );
 
-        $crate::quantity_scalar_mul_div_interface!(($($single_dimension_single_scale_params)*), *, mul, Mul, $T);
-        $crate::quantity_scalar_mul_div_interface!(($($single_dimension_single_scale_params)*), /, div, Div, $T);
-
-        $crate::quantity_scalar_mul_div_assign_interface!(($($single_dimension_single_scale_params)*), *=, mul_assign, MulAssign, $T);
-        $crate::quantity_scalar_mul_div_assign_interface!(($($single_dimension_single_scale_params)*), /=, div_assign, DivAssign, $T);
-
         // quantity-quantity arithmetic operations
-        $crate::quantity_quantity_add_sub_interface!(
-            ($($single_dimension_single_scale_params)*),
-            +, add, Add, $T, $rescale_fn
-        );
-        $crate::quantity_quantity_add_sub_interface!(
-            ($($single_dimension_single_scale_params)*),
-            -, sub, Sub, $T, $rescale_fn
-        );
-
-        $crate::quantity_quantity_add_sub_assign_interface!(
-            ($($single_dimension_single_scale_params)*),
-            +=, add_assign, AddAssign, $T, $rescale_fn
-        );
-        $crate::quantity_quantity_add_sub_assign_interface!(
-            ($($single_dimension_single_scale_params)*),
-            -=, sub_assign, SubAssign, $T, $rescale_fn
-        );
 
         // quantity-quantity remainder (scale-strict, same as add/sub)
-        $crate::quantity_quantity_add_sub_interface!(
-            ($($single_dimension_single_scale_params)*),
-            %, rem, Rem, $T, $rescale_fn
-        );
-        $crate::quantity_quantity_add_sub_assign_interface!(
-            ($($single_dimension_single_scale_params)*),
-            %=, rem_assign, RemAssign, $T, $rescale_fn
-        );
 
         // quantity-scalar remainder
-        $crate::quantity_scalar_mul_div_interface!(($($single_dimension_single_scale_params)*), %, rem, Rem, $T);
-        $crate::quantity_scalar_mul_div_assign_interface!(($($single_dimension_single_scale_params)*), %=, rem_assign, RemAssign, $T);
-
-        $crate::quantity_quantity_mul_div_interface!(
-            ($($multiple_dimension_multiple_scale_params)*),
-            ($($mul_output_dimension_where_clauses)*),
-            *, +, mul, Mul, $T, $rescale_fn
-        );
-        $crate::quantity_quantity_mul_div_interface!(
-            ($($multiple_dimension_multiple_scale_params)*),
-            ($($div_output_dimension_where_clauses)*),
-            /, -, div, Div, $T, $rescale_fn
-        );
 
         // quantity-quantity comparison operations (scale-strict)
-        $crate::quantity_quantity_partial_ord_interface!(
-            ($($single_dimension_single_scale_params)*),
-            $T, $rescale_fn
-        );
     };
 }

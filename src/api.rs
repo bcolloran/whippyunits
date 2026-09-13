@@ -732,3 +732,172 @@ impl<
         )
     }
 }
+
+// ============================================================================
+// FORK: storage-generic arithmetic.
+//
+// The quantity-op interfaces above used to be emitted once per concrete storage
+// type, from a closed list of primitives. They are now emitted ONCE, generic over
+// the storage type, so downstream numeric types (autodiff duals, fixed-point,
+// intervals, heap-backed bignums) work without touching this crate again — and so
+// functions generic over their scalar type typecheck.
+//
+// There is deliberately no `Storage` trait and no blanket global bound. Each impl
+// requires exactly the one operation it uses, so a storage type supports precisely
+// the operations it can support: a scalar with no meaningful remainder still gets
+// addition, and one that is not `Copy` (arbitrary-precision, heap-backed) is not
+// shut out of arithmetic entirely. Nothing generated here copies or compares the
+// stored value, so those bounds would have excluded types for no benefit.
+//
+// Only the scalar-on-the-LEFT impls (`f64 * Quantity`) remain per-concrete-type,
+// up in the per-type generators: with a generic storage parameter in `Self`
+// position they would violate E0210.
+//
+// The const-generic parameter bundles the interface macros expect are enormous
+// and identical at nearly every call site, so they are written exactly once, in
+// the two `emit_*` macros below. Each emission is then a single line naming only
+// what actually varies: which interface, and the operator/method/trait triple.
+// ============================================================================
+
+
+/// Invoke an interface macro over the **single-dimension, single-scale** parameter
+/// bundle — the shape used by every op that leaves the dimension unchanged
+/// (quantity∘scalar, add/sub/rem, comparisons, negation).
+///
+/// The three prefixes select how the storage bound is derived:
+/// - `value_op:` — the op returns a value, so it needs `$Trait<Output = Self>`;
+/// - `assign_op:` — a compound assignment, whose trait has no `Output`;
+/// - `bound:` — spelled explicitly, for the cases with no `$Trait` argument to
+///   derive from (negation and comparison).
+///
+/// Deriving the bound from the `$Trait` already present at the call site is what
+/// keeps per-op bounds from turning back into per-call-site boilerplate.
+macro_rules! emit_dimension_preserving {
+    (value_op: $mac:ident, $op:tt, $fn:ident, $Trait:ident $(, $($rest:tt)*)?) => {
+        emit_dimension_preserving!(
+            bound: (core::ops::$Trait<Output = STORAGE>),
+            $mac, $op, $fn, $Trait $(, $($rest)*)?
+        );
+    };
+    (assign_op: $mac:ident, $op:tt, $fn:ident, $Trait:ident $(, $($rest:tt)*)?) => {
+        emit_dimension_preserving!(
+            bound: (core::ops::$Trait),
+            $mac, $op, $fn, $Trait $(, $($rest)*)?
+        );
+    };
+    (bound: ($($storage_bound:tt)*), $mac:ident $(, $($rest:tt)*)?) => {
+        $crate::$mac!(
+            (
+                STORAGE: $($storage_bound)*,
+                const MASS_EXPONENT: i16,
+                const LENGTH_EXPONENT: i16,
+                const TIME_EXPONENT: i16,
+                const CURRENT_EXPONENT: i16,
+                const TEMPERATURE_EXPONENT: i16,
+                const AMOUNT_EXPONENT: i16,
+                const LUMINOSITY_EXPONENT: i16,
+                const ANGLE_EXPONENT: i16,
+                const SCALE_P2: i16,
+                const SCALE_P3: i16,
+                const SCALE_P5: i16,
+                const SCALE_PI: i16,
+                Brand,
+            )
+            $(, $($rest)*)?
+        );
+    };
+}
+
+/// Emit one **dimension-combining** op (multiplication or division).
+///
+/// These need two independent dimension/scale bundles plus a where-clause pinning
+/// each output exponent to the corresponding input pair. Multiplication and
+/// division differ *only* in whether that pinning is `Add` or `Sub`, so both are
+/// generated from this one body: `$dim_op` is the type-level exponent operation,
+/// `$op` the value-level operator, and `$log_op` the scale-exponent operator.
+macro_rules! emit_dimension_combining {
+    ($op:tt, $log_op:tt, $fn:ident, $Trait:ident, $dim_op:ident) => {
+        $crate::quantity_quantity_mul_div_interface!(
+            (
+                STORAGE: core::ops::$Trait<Output = STORAGE>,
+                const MASS_EXPONENT: i16,
+                const LENGTH_EXPONENT: i16,
+                const TIME_EXPONENT: i16,
+                const CURRENT_EXPONENT: i16,
+                const TEMPERATURE_EXPONENT: i16,
+                const AMOUNT_EXPONENT: i16,
+                const LUMINOSITY_EXPONENT: i16,
+                const ANGLE_EXPONENT: i16,
+                const SCALE_P2: i16,
+                const SCALE_P3: i16,
+                const SCALE_P5: i16,
+                const SCALE_PI: i16,
+                const MASS_EXPONENT_1: i16, const MASS_EXPONENT_2: i16,
+                const LENGTH_EXPONENT_1: i16, const LENGTH_EXPONENT_2: i16,
+                const TIME_EXPONENT_1: i16, const TIME_EXPONENT_2: i16,
+                const CURRENT_EXPONENT_1: i16, const CURRENT_EXPONENT_2: i16,
+                const TEMPERATURE_EXPONENT_1: i16, const TEMPERATURE_EXPONENT_2: i16,
+                const AMOUNT_EXPONENT_1: i16, const AMOUNT_EXPONENT_2: i16,
+                const LUMINOSITY_EXPONENT_1: i16, const LUMINOSITY_EXPONENT_2: i16,
+                const ANGLE_EXPONENT_1: i16, const ANGLE_EXPONENT_2: i16,
+                const SCALE_P2_1: i16, const SCALE_P3_1: i16, const SCALE_P5_1: i16, const SCALE_PI_1: i16,
+                const SCALE_P2_2: i16, const SCALE_P3_2: i16, const SCALE_P5_2: i16, const SCALE_PI_2: i16,
+                Brand,
+            ),
+            (
+                N<MASS_EXPONENT_1>: core::ops::$dim_op<N<MASS_EXPONENT_2>, Output = N<MASS_EXPONENT>>,
+                N<LENGTH_EXPONENT_1>: core::ops::$dim_op<N<LENGTH_EXPONENT_2>, Output = N<LENGTH_EXPONENT>>,
+                N<TIME_EXPONENT_1>: core::ops::$dim_op<N<TIME_EXPONENT_2>, Output = N<TIME_EXPONENT>>,
+                N<CURRENT_EXPONENT_1>: core::ops::$dim_op<N<CURRENT_EXPONENT_2>, Output = N<CURRENT_EXPONENT>>,
+                N<TEMPERATURE_EXPONENT_1>: core::ops::$dim_op<N<TEMPERATURE_EXPONENT_2>, Output = N<TEMPERATURE_EXPONENT>>,
+                N<AMOUNT_EXPONENT_1>: core::ops::$dim_op<N<AMOUNT_EXPONENT_2>, Output = N<AMOUNT_EXPONENT>>,
+                N<LUMINOSITY_EXPONENT_1>: core::ops::$dim_op<N<LUMINOSITY_EXPONENT_2>, Output = N<LUMINOSITY_EXPONENT>>,
+                N<ANGLE_EXPONENT_1>: core::ops::$dim_op<N<ANGLE_EXPONENT_2>, Output = N<ANGLE_EXPONENT>>,
+                N<SCALE_P2_1>: core::ops::$dim_op<N<SCALE_P2_2>, Output = N<SCALE_P2>>,
+                N<SCALE_P3_1>: core::ops::$dim_op<N<SCALE_P3_2>, Output = N<SCALE_P3>>,
+                N<SCALE_P5_1>: core::ops::$dim_op<N<SCALE_P5_2>, Output = N<SCALE_P5>>,
+                N<SCALE_PI_1>: core::ops::$dim_op<N<SCALE_PI_2>, Output = N<SCALE_PI>>
+            ),
+            $op, $log_op, $fn, $Trait, STORAGE, rescale_unused
+        );
+    };
+}
+
+// The `rescale_unused` argument above and below is a placeholder: these interfaces
+// take a rescale function only for their scale-converting arms, and every arm
+// emitted here is scale-strict, so no rescale is ever performed.
+
+// --- quantity ∘ scalar (scalar on the right) ---------------------------------
+emit_dimension_preserving!(value_op: quantity_scalar_mul_div_interface, *, mul, Mul, STORAGE);
+emit_dimension_preserving!(value_op: quantity_scalar_mul_div_interface, /, div, Div, STORAGE);
+emit_dimension_preserving!(value_op: quantity_scalar_mul_div_interface, %, rem, Rem, STORAGE);
+emit_dimension_preserving!(assign_op: quantity_scalar_mul_div_assign_interface, *=, mul_assign, MulAssign, STORAGE);
+emit_dimension_preserving!(assign_op: quantity_scalar_mul_div_assign_interface, /=, div_assign, DivAssign, STORAGE);
+emit_dimension_preserving!(assign_op: quantity_scalar_mul_div_assign_interface, %=, rem_assign, RemAssign, STORAGE);
+
+// --- unary negation (no `$Trait` argument to derive the bound from) ----------
+emit_dimension_preserving!(
+    bound: (core::ops::Neg<Output = STORAGE>),
+    quantity_neg_interface,
+    STORAGE
+);
+
+// --- quantity ∘ quantity: add/sub/rem (scale-strict) --------------------------
+emit_dimension_preserving!(value_op: quantity_quantity_add_sub_interface, +, add, Add, STORAGE, rescale_unused);
+emit_dimension_preserving!(value_op: quantity_quantity_add_sub_interface, -, sub, Sub, STORAGE, rescale_unused);
+emit_dimension_preserving!(value_op: quantity_quantity_add_sub_interface, %, rem, Rem, STORAGE, rescale_unused);
+emit_dimension_preserving!(assign_op: quantity_quantity_add_sub_assign_interface, +=, add_assign, AddAssign, STORAGE, rescale_unused);
+emit_dimension_preserving!(assign_op: quantity_quantity_add_sub_assign_interface, -=, sub_assign, SubAssign, STORAGE, rescale_unused);
+emit_dimension_preserving!(assign_op: quantity_quantity_add_sub_assign_interface, %=, rem_assign, RemAssign, STORAGE, rescale_unused);
+
+// --- quantity ∘ quantity: comparison (scale-strict) ---------------------------
+emit_dimension_preserving!(
+    bound: (PartialOrd),
+    quantity_quantity_partial_ord_interface,
+    STORAGE,
+    rescale_unused
+);
+
+// --- quantity ∘ quantity: mul/div (dimension-combining) -----------------------
+emit_dimension_combining!(*, +, mul, Mul, Add);
+emit_dimension_combining!(/, -, div, Div, Sub);
