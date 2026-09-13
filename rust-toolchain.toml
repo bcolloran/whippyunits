@@ -2,4 +2,4 @@
 # Pinned to an exact stable so trybuild UI snapshots don't drift when the
 # host's stable toolchain is updated. Bump this and rebless snapshots together.
 channel = "1.98.1"
-components = ["rustfmt", "clippy"]
+components = ["rustfmt", "clippy", "rust-src"]
