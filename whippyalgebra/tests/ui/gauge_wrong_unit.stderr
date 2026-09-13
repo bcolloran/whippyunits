@@ -1,8 +1,8 @@
 error[E0277]: the gauge tag does not reproduce the uniform block's entry unit
-  --> tests/ui/gauge_wrong_unit.rs:18:16
+  --> tests/ui/gauge_wrong_unit.rs:18:18
    |
 18 |     let _bad = g.gauge::<dims![m, m], dims![m]>();
-   |                ^ this row/column gauge is inconsistent with the block's unit
+   |                  ^^^^^ this row/column gauge is inconsistent with the block's unit
    |
    = help: the trait `GaugeReproduces<whippyalgebra::Unit<whippyunits::quantity::Scale, Dimension<_M, _L<1>, _T<-1>>>>` is not implemented for `whippyalgebra::Unit<whippyunits::quantity::Scale, Dimension>`
    = note: A uniform block carries a single entry unit `U`. Placing it as a mixed block over `<RowDims, ColDims>` requires both lists to be uniform and their entry-unit quotient to equal `U`: `Uniform(RowDims) / Uniform(ColDims) == U`.

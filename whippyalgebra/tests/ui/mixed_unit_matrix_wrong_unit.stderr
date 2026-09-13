@@ -9,8 +9,12 @@ error[E0277]: the trait bound `Quantity<whippyalgebra::Unit<whippyunits::quantit
 20 | |     ];
    | |_____- required by a bound introduced by this call
    |
-   = help: the trait `IntoEntry<whippyalgebra::Unit<whippyunits::quantity::Scale, Dimension<_M, _L<1>, _T<-1>, _I, _Θ, _N, _J, _A>>, f64, ()>` is not implemented for `Quantity<whippyalgebra::Unit<whippyunits::quantity::Scale, Dimension<_M, _L, _T<1>>>>`
-           but trait `IntoEntry<whippyalgebra::Unit<whippyunits::quantity::Scale, Dimension<_M, _L<0>, _T<1>, _I, _Θ, _N, _J, _A>>, f64, ()>` is implemented for it
+help: the trait `IntoEntry<whippyalgebra::Unit<whippyunits::quantity::Scale, Dimension<_M, _L<1>, _T<-1>, _I, _Θ, _N, _J, _A>>, f64, ()>` is not implemented for `Quantity<whippyalgebra::Unit<whippyunits::quantity::Scale, Dimension<_M, _L, _T<1>>>>`
+      but trait `IntoEntry<whippyalgebra::Unit<whippyunits::quantity::Scale, Dimension<_M, _L<0>, _T<1>, _I, _Θ, _N, _J, _A>>, f64, ()>` is implemented for it
+  --> src/entry.rs
+   |
+   | impl<U, T, Brand> IntoEntry<U, T, Brand> for Quantity<U, T, Brand> {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 note: required by a bound in `matrix::construction::<impl MixedUnitMatrix<RowDims, ColDims, Matrix<T, R, C, St>, Brand>>::set`
   --> src/nalgebra/matrix/construction.rs
    |

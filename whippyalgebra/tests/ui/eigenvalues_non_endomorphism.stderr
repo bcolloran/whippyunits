@@ -1,4 +1,4 @@
-error[E0599]: the method `eigenvalues` exists for struct `MixedUnitMatrix<DCons<whippyalgebra::Unit<whippyunits::quantity::Scale, Dimension<_M, _L<1>>>, DCons<whippyalgebra::Unit<whippyunits::quantity::Scale, Dimension<_M, _L, _T<1>>>, DNil>>, DCons<whippyalgebra::Unit<whippyunits::quantity::Scale, Dimension>, DCons<whippyalgebra::Unit<whippyunits::quantity::Scale, Dimension>, DNil>>, Matrix<f64, Const<2>, Const<2>, ArrayStorage<f64, 2, 2>>>`, but its trait bounds were not satisfied
+error[E0599]: the method `eigenvalues` exists for struct `MixedUnitMatrix<DCons<whippyalgebra::Unit<whippyunits::quantity::Scale, Dimension<_M, _L<1>>>, DCons<whippyalgebra::Unit<whippyunits::quantity::Scale, Dimension<_M, _L, _T<1>>>, DNil>>, DCons<whippyalgebra::Unit<whippyunits::quantity::Scale, Dimension>, DCons<whippyalgebra::Unit<whippyunits::quantity::Scale, Dimension>, DNil>>, Matrix<f64, nalgebra::Const<2>, nalgebra::Const<2>, ArrayStorage<f64, 2, 2>>>`, but its trait bounds were not satisfied
   --> tests/ui/eigenvalues_non_endomorphism.rs:17:18
    |
 17 |     let _bad = a.eigenvalues();
