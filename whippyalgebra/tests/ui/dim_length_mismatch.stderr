@@ -7,7 +7,7 @@ error[E0080]: evaluation panicked: row count does not match RowDims length
  ::: src/nalgebra/matrix/construction.rs
   |
   | /             assert!(
-  | |                 RowDims::LEN == R::USIZE,
+  | |                 RowDims::LEN == R::DIM,
   | |                 "row count does not match RowDims length"
   | |             );
   | |_____________- in this macro invocation
@@ -17,7 +17,7 @@ note: erroneous constant encountered
   |
   | /         const {
   | |             assert!(
-  | |                 RowDims::LEN == R::USIZE,
+  | |                 RowDims::LEN == R::DIM,
   | |                 "row count does not match RowDims length"
   | |             );
   | |         }

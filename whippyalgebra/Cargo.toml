@@ -43,7 +43,7 @@ typenum = { version = "1", features = ["const-generics"] }
 # `std` feature). `libm` is always on so `f32`/`f64` satisfy `ComplexField` in
 # `no_std` builds (it is a no-op fallback when `std` is also present); `macros`
 # keeps nalgebra's `matrix!`/`vector!` literal macros available.
-nalgebra = { version = "0.33", optional = true, default-features = false, features = ["macros", "libm"] }
+nalgebra = { version = "0.34", optional = true, default-features = false, features = ["macros", "libm"] }
 # Building a storage-type value from the `f64` scale factor in `rescale_matrix`
 # (via `FromPrimitive::from_f64`); this is nalgebra's own numeric-trait crate, a
 # supertrait of `ComplexField`, so it adds nothing new to the dependency tree.

@@ -337,13 +337,13 @@ where
     pub fn new(inner: nalgebra::Matrix<T, R, C, S>) -> Self {
         const {
             assert!(
-                RowDims::LEN == R::USIZE,
+                RowDims::LEN == R::DIM,
                 "row count does not match RowDims length"
             );
         }
         const {
             assert!(
-                ColDims::LEN == C::USIZE,
+                ColDims::LEN == C::DIM,
                 "column count does not match ColDims length"
             );
         }
