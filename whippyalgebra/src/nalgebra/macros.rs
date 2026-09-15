@@ -237,6 +237,111 @@ macro_rules! __uniform_unit_matrix_row {
     };
 }
 
+/// Names the type of a unit-safe nalgebra column vector of quantities.
+///
+/// `vqty!` is the type-position counterpart to
+/// [`uniform_unit_matrix!`](crate::nalgebra::uniform_unit_matrix) and
+/// [`mixed_unit_matrix!`](crate::nalgebra::mixed_unit_matrix): where `qty!` names
+/// a `Quantity` type, `vqty!` names a vector of them. The length comes first,
+/// then the units, then an optional storage type:
+///
+/// | Invocation                 | Expands to                                                   |
+/// |----------------------------|--------------------------------------------------------------|
+/// | `vqty!(N, unit)`           | `UniformUnitMatrix<unit!(unit), SVector<T, N>>`              |
+/// | `vqty!(N, unit, S)`        | `UniformUnitMatrix<unit!(unit), SVector<S, N>>`              |
+/// | `vqty!(N, [u0, u1, …])`    | `UnitVector<dims![u0, u1, …], Dimensionless, SVector<T, N>>` |
+/// | `vqty!(N, [u0, u1, …], S)` | `UnitVector<dims![u0, u1, …], Dimensionless, SVector<S, N>>` |
+///
+/// - A single unit (any `whippyunits::unit!` expression) names a
+///   [`UniformUnitMatrix`]: every entry shares that unit.
+/// - A bracketed list names a [`UnitVector`] with a dimensionless column, so
+///   entry `i` has unit `u_i`. The list length must equal `N`; a mismatch is a
+///   compile error.
+/// - Without a storage type, the expansion uses `T` as resolved where the macro
+///   is invoked, for use inside items generic over `T`. (`qty!` defaults to
+///   `f64` instead.)
+///
+/// The matrix types take the entry *unit*, not a `Quantity` type, because the
+/// storage type lives in the nalgebra matrix.
+///
+/// ```
+/// use whippyalgebra::dims;
+/// use whippyalgebra::nalgebra::{MixedUnitMatrix, SVector, UniformUnitMatrix, vqty};
+/// use whippyunits::{qty, unit};
+///
+/// struct GenericQuantities<T> {
+///     mass: qty!(kg, T),
+///     velocity: vqty!(2, m / s, T),
+///     // No storage type: the `T` in scope.
+///     masses: vqty!(5, kg),
+///     // Per-entry units: entry 0 is in m/s, entry 1 in kg.
+///     state: vqty!(2, [m / s, kg], T),
+/// }
+///
+/// // The same fields, with the expansions written out.
+/// fn expansions<T>(q: GenericQuantities<T>) {
+///     let _: qty!(kg, T) = q.mass;
+///     let _: UniformUnitMatrix<unit!(m / s), SVector<T, 2>> = q.velocity;
+///     let _: UniformUnitMatrix<unit!(kg), SVector<T, 5>> = q.masses;
+///     let _: MixedUnitMatrix<dims![m / s, kg], dims![1], SVector<T, 2>> = q.state;
+/// }
+/// # let _ = expansions::<f64>;
+/// ```
+#[macro_export]
+#[doc(hidden)]
+macro_rules! __wa_na_vqty {
+    // Internal: a munched unit expression followed by its storage type. The
+    // `@uniform` tag keeps the internal arms unambiguous with the public ones
+    // below (never write it directly).
+    (@uniform $count:expr; [$($u:tt)+] , $storage:ty $(,)?) => {
+        $crate::nalgebra::UniformUnitMatrix<
+            $crate::__reexport::whippyunits::unit!($($u)+),
+            $crate::nalgebra::__backend::SVector<$storage, { $count }>,
+        >
+    };
+    // Internal: a munched unit expression with no storage type, which defaults
+    // to the caller's `T`.
+    (@uniform $count:expr; [$($u:tt)+]) => {
+        $crate::__wa_na_vqty!(@uniform $count; [$($u)+], T)
+    };
+    // Internal: munch one more token into the unit-expression accumulator. Unit
+    // expressions never contain commas, so the first comma ends the unit.
+    (@uniform $count:expr; [$($u:tt)*] $head:tt $($rest:tt)*) => {
+        $crate::__wa_na_vqty!(@uniform $count; [$($u)* $head] $($rest)*)
+    };
+    // Internal: a per-entry unit list and its storage type. The length check
+    // lives in the shape's const argument, so a count that disagrees with the
+    // list fails as soon as the type is used.
+    (@list $count:expr; [$($units:tt)+]; $storage:ty) => {
+        $crate::nalgebra::UnitVector<
+            $crate::dims![$($units)+],
+            $crate::Dimensionless,
+            $crate::nalgebra::__backend::SVector<
+                $storage,
+                {
+                    ::core::assert!(
+                        <$crate::dims![$($units)+] as $crate::DimList>::LEN == $count,
+                        "vqty!: the count does not match the number of units in the list",
+                    );
+                    $count
+                },
+            >,
+        >
+    };
+    // Public: per-entry units, with a storage type.
+    ($count:expr, [$($units:tt)+], $storage:ty $(,)?) => {
+        $crate::__wa_na_vqty!(@list $count; [$($units)+]; $storage)
+    };
+    // Public: per-entry units, storage defaulting to the caller's `T`.
+    ($count:expr, [$($units:tt)+] $(,)?) => {
+        $crate::__wa_na_vqty!(@list $count; [$($units)+]; T)
+    };
+    // Public: one shared unit, with or without a storage type.
+    ($count:expr, $($unit:tt)+) => {
+        $crate::__wa_na_vqty!(@uniform $count; [] $($unit)+)
+    };
+}
+
 /// A zero block for [`block_matrix!`](crate::nalgebra::block_matrix), sized from its
 /// dimension lists.
 ///

@@ -17,7 +17,9 @@
 //!
 //! The [`block_matrix!`], [`mixed_unit_matrix!`], [`uniform_unit_matrix!`],
 //! [`zeros!`], [`gauge!`], and [`unblock_matrix!`] macros offer declarative
-//! syntax for building and destructuring matrices.
+//! syntax for building and destructuring matrices. [`vqty!`] is their
+//! type-position counterpart: it names the type of a uniform or per-entry-unit
+//! column vector, the way `qty!` names a `Quantity`.
 //!
 //! # Generic-code attributes
 //!
@@ -57,7 +59,8 @@ pub use uniform::{UniformUnitMatrix, rescale_uniform_matrix};
 pub use crate::{
     __wa_na_block_matrix as block_matrix, __wa_na_gauge as gauge,
     __wa_na_mixed_unit_matrix as mixed_unit_matrix, __wa_na_unblock_matrix as unblock_matrix,
-    __wa_na_uniform_unit_matrix as uniform_unit_matrix, __wa_na_zeros as zeros,
+    __wa_na_uniform_unit_matrix as uniform_unit_matrix, __wa_na_vqty as vqty,
+    __wa_na_zeros as zeros,
 };
 
 // The `where`-clause–writing attributes. See the module-level "Generic-code
