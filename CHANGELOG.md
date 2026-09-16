@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 - **editors/vscode**: A VS Code extension that rewrites whippyunits types in rust-analyzer hovers, inlay hints and diagnostics by hooking into the rust-analyzer extension's language client — no proxy binary to install, and it works in dev containers. The formatting runs through a WebAssembly build of the lsp-proxy formatting code (`editors/vscode/formatter-wasm`)
 - A `.devcontainer` for this repository that builds and installs the extension
+- `#[expand_units]`: an attribute that expands `unit!`/`qty!` type macros inside an item ahead of its `#[derive]`s, so the built-in derives work on *generic* structs and enums that spell their unit types inline (rustc otherwise rejects those with "`derive` cannot be used on items with type macros"). Must be written above the derives it is meant to help
 
 ### Changed
 

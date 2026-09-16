@@ -1,0 +1,5 @@
+error: `derive` cannot be used on items with type macros
+ --> tests/compile_fail_stable/expand_units_below_derive.rs:6:32
+  |
+6 |     vel: whippyunits::Quantity<whippyunits::unit!(m / s), T>,
+  |                                ^^^^^^^^^^^^^^^^^^^^^^^^^

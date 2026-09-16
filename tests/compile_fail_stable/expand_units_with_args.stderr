@@ -1,0 +1,5 @@
+error: `#[expand_units]` takes no arguments
+ --> tests/compile_fail_stable/expand_units_with_args.rs:3:16
+  |
+3 | #[expand_units(recursive)]
+  |                ^^^^^^^^^

@@ -14,6 +14,7 @@ mod define_generic_dimension_macro;
 mod define_literals_macro;
 mod define_local_quantity_macro;
 mod define_unit_declarators_macro;
+mod expand_units_macro;
 mod generate_all_dimensionless_cross_type_macro;
 mod generate_all_radian_erasures_macro;
 mod generate_default_declarators_macro;
@@ -134,6 +135,41 @@ pub fn proc_unit(input: TokenStream) -> TokenStream {
 pub fn proc_qty(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as unit_macro::UnitMacroInput);
     input.expand_quantity().into()
+}
+
+/// Expands `unit!`/`qty!` type macros inside an item ahead of its `#[derive]`s.
+///
+/// Rust's built-in derives (`Clone`, `Copy`, `Debug`, `Default`, `PartialEq`, …)
+/// refuse to run on a *generic* item whose field types contain a macro call,
+/// because the derive has to inspect those types to work out the bounds its
+/// impl needs and cannot see through an unexpanded macro:
+///
+/// ```text
+/// error: `derive` cannot be used on items with type macros
+/// ```
+///
+/// Placing `#[expand_units]` *above* the derives rewrites every `unit!` and
+/// `qty!` call in a type position into the type it would expand to, so the
+/// derives only ever see ordinary types:
+///
+/// ```rust,ignore
+/// use whippyunits::{expand_units, qty, unit, Quantity};
+///
+/// #[expand_units]
+/// #[derive(Default, Clone, Copy, PartialEq)]
+/// struct State<T> {
+///     pos: Quantity<unit!(m), T>,
+///     vel: qty!(m / s, T),
+/// }
+/// ```
+///
+/// Attribute macros expand top to bottom, so the attribute must be written above
+/// every derive it is meant to help. It matches macro calls by name (`unit`/`qty`
+/// as the last path segment), rewrites them wherever they occur in the item,
+/// including nested inside other generics, and takes no arguments.
+#[proc_macro_attribute]
+pub fn expand_units(attr: TokenStream, item: TokenStream) -> TokenStream {
+    expand_units_macro::expand(attr.into(), item.into()).into()
 }
 
 /// Creates a `Quantity` from a value and unit expression.

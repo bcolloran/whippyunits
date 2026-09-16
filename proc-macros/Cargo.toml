@@ -18,5 +18,5 @@ proc-macro-crate = "3"
 proc-macro2 = "1.0"
 quote = "1.0"
 strsim = "0.11"
-syn = { version = "2.0", features = ["full"] }
+syn = { version = "2.0", features = ["full", "visit-mut"] }
 whippyunits-core = { path = "../whippyunits-core", version = "0.3.0" }

@@ -98,23 +98,33 @@ impl UnitMacroInput {
     /// Expands `unit!(...)` to a bare [`Unit`] type. Any storage/brand arguments
     /// are ignored: a `Unit` carries only scale and dimension.
     pub fn expand_unit(self) -> TokenStream {
-        let (unit_type, doc_structs) = match self.evaluate_unit() {
-            Ok(pair) => pair,
-            Err(err) => return err,
-        };
+        self.try_expand_unit().unwrap_or_else(|err| err)
+    }
+
+    /// [`expand_unit`](Self::expand_unit), but with the failure `compile_error!`
+    /// stream returned as an `Err`, for callers that need to tell the two apart
+    /// (see `expand_units_macro`).
+    pub fn try_expand_unit(self) -> std::result::Result<TokenStream, TokenStream> {
+        let (unit_type, doc_structs) = self.evaluate_unit()?;
 
         let wu = whippyunits_path();
-        quote! {
+        Ok(quote! {
             <#wu::Helper<{
                 #doc_structs
                 0
             }, #unit_type> as #wu::GetSecondGeneric>::Type
-        }
+        })
     }
 
     /// Expands `qty!(...)` to a concrete [`Quantity`] type wrapping the unit,
     /// using the supplied storage type (default `f64`) and brand (default `()`).
     pub fn expand_quantity(self) -> TokenStream {
+        self.try_expand_quantity().unwrap_or_else(|err| err)
+    }
+
+    /// [`expand_quantity`](Self::expand_quantity), but with the failure
+    /// `compile_error!` stream returned as an `Err` (see `expand_units_macro`).
+    pub fn try_expand_quantity(self) -> std::result::Result<TokenStream, TokenStream> {
         // Use the specified storage type or default to f64
         let storage_type = self
             .storage_type
@@ -127,10 +137,7 @@ impl UnitMacroInput {
             .clone()
             .unwrap_or_else(|| syn::parse_str::<Type>("()").unwrap());
 
-        let (unit_type, doc_structs) = match self.evaluate_unit() {
-            Ok(pair) => pair,
-            Err(err) => return err,
-        };
+        let (unit_type, doc_structs) = self.evaluate_unit()?;
 
         let wu = whippyunits_path();
         let quantity_type = quote! {
@@ -141,11 +148,11 @@ impl UnitMacroInput {
             >
         };
 
-        quote! {
+        Ok(quote! {
             <#wu::Helper<{
                 #doc_structs
                 0
             }, #quantity_type> as #wu::GetSecondGeneric>::Type
-        }
+        })
     }
 }

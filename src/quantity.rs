@@ -430,6 +430,52 @@ where
 {
 }
 
+// The remaining "core" traits follow `Copy` above in being blanket over the
+// phantom parameters: `_phantom` is a `PhantomData<fn() -> _>`, which satisfies
+// every one of these unconditionally, so only the storage type `T` carries a
+// real obligation. Deriving them instead would bound `U` and `Brand` needlessly
+// (and, for `Default`, incorrectly - the phantom parameters are never
+// constructed).
+
+// A default quantity is a zero-valued quantity. This is unambiguous here because
+// zero is the additive identity of every *storage* unit: affine units (°C, °F)
+// are converted to their linear storage unit at declaration time, so a
+// `Quantity` never holds an offset-bearing value whose zero would be arbitrary.
+impl<U, T, Brand> Default for Quantity<U, T, Brand>
+where
+    T: Default,
+{
+    fn default() -> Self {
+        Self {
+            unsafe_value: T::default(),
+            _phantom: core::marker::PhantomData,
+        }
+    }
+}
+
+// `Eq` mirrors the derived `PartialEq`, which compares `unsafe_value` and the
+// (always-equal) phantom field; the `U`/`Brand` bounds are those the derive
+// imposes on the `PartialEq` supertrait, not obligations of `Eq` itself.
+impl<U, T, Brand> Eq for Quantity<U, T, Brand>
+where
+    U: PartialEq,
+    T: Eq,
+    Brand: PartialEq,
+{
+}
+
+// Hashing the storage value alone keeps the `Hash`/`Eq` contract: two quantities
+// compare equal exactly when their values do (the phantom field is a ZST that is
+// equal to itself), so equal quantities hash equally.
+impl<U, T, Brand> core::hash::Hash for Quantity<U, T, Brand>
+where
+    T: core::hash::Hash,
+{
+    fn hash<H: core::hash::Hasher>(&self, state: &mut H) {
+        self.unsafe_value.hash(state);
+    }
+}
+
 // `Quantity` is a `#[repr(transparent)]` newtype over its storage type `T` (plus
 // zero-sized phantom markers), so bytemuck's transparent-wrapper and plain-old-
 // data traits apply. Implementing them centralizes the layout-safety argument
@@ -936,9 +982,10 @@ impl<
 
         // Fallback to dimension symbol if no unit found
         if let Some(dimension) = Dimension::find_dimension_by_exponents(source_dimensions)
-            && let Some(symbol) = dimension.symbol {
-                return symbol;
-            }
+            && let Some(symbol) = dimension.symbol
+        {
+            return symbol;
+        }
 
         // Final fallback
         "unknown unit"

@@ -323,6 +323,57 @@ pub use whippyunits_proc_macros::proc_unit as unit;
 #[doc(inline)]
 pub use whippyunits_proc_macros::proc_qty as qty;
 
+/// Expands [`unit!`](crate::unit!)/[`qty!`](crate::qty!) type macros inside an
+/// item ahead of its `#[derive]`s.
+///
+/// Rust's built-in derives (`Clone`, `Copy`, `Debug`, `Default`, `PartialEq`, …)
+/// refuse to run on a *generic* item whose field types contain a macro call,
+/// because the derive has to inspect those types to work out the bounds its
+/// impl needs and cannot see through an unexpanded macro:
+///
+/// ```text
+/// error: `derive` cannot be used on items with type macros
+/// ```
+///
+/// Non-generic items are unaffected, as is any field typed through a type
+/// alias. Placing `#[expand_units]` *above* the derives rewrites every `unit!`
+/// and `qty!` call in a type position into the type it would expand to, so the
+/// derives only ever see ordinary types:
+///
+/// ```rust
+/// use whippyunits::{expand_units, qty, quantity, unit, Quantity};
+///
+/// #[expand_units]
+/// #[derive(Default, Clone, Copy, PartialEq)]
+/// struct State<T> {
+///     pos: Quantity<unit!(m), T>,
+///     vel: qty!(m / s, T),
+/// }
+///
+/// let at_rest = State::<f32>::default();
+/// let moving = State { vel: quantity!(2.0, m / s, f32), ..at_rest };
+/// assert!(moving != at_rest);
+/// ```
+///
+/// ## Ordering
+///
+/// Attribute macros expand top to bottom, so `#[expand_units]` must be written
+/// above every `#[derive(...)]` it is meant to help. Written below them, the
+/// derives still see the macro calls and the error stands.
+///
+/// ## What is rewritten
+///
+/// Every macro call in a type position whose path ends in `unit` or `qty`
+/// (`qty!(m)` and `whippyunits::qty!(m)` alike; a renamed import such as
+/// `use whippyunits::qty as q` is *not* recognised), wherever it appears in the
+/// item: directly as a field type, or nested inside other generics such as
+/// `Option<qty!(m)>` or `Quantity<unit!(m), T>`. The result is exactly the type
+/// the standalone macro produces. Macros in expression position (`quantity!`,
+/// `value!`, …) are left alone. The attribute takes no arguments and may be
+/// applied to any item.
+#[doc(inline)]
+pub use whippyunits_proc_macros::expand_units;
+
 /// Creates a [Quantity] from a value and unit expression.
 ///
 /// This macro supports both storage and nonstorage units. For nonstorage units,
