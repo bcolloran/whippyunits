@@ -3,8 +3,8 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import * as vscode from "vscode";
 import { Formatter } from "../formatter";
-import { Rewriter } from "../rewrite";
-import { DEFAULT_SETTINGS, EXTENSION_ROOT, HOVER_ENERGY, RAW_LENGTH } from "./fixtures";
+import { Rewriter, qtyMacroArgs, replaceUnresolvedQuantities } from "../rewrite";
+import { DEFAULT_SETTINGS, EXTENSION_ROOT, FIELD_HOVER, FIELD_LINE, HOVER_ENERGY, RAW_LENGTH, fakeDocument } from "./fixtures";
 
 const formatter = Formatter.load(EXTENSION_ROOT, DEFAULT_SETTINGS);
 
@@ -112,4 +112,43 @@ test("diagnostics: copies keep the prototype and extra fields; originals stay un
   assert.match(rewritten.message, /expected Quantity<m, f64>/);
   assert.equal(original.message, message);
   assert.equal(untouched, plain);
+});
+
+test("hover on a qty! field: the declared type's {const} exponent is recovered from the source line", () => {
+  const rewriter = new Rewriter(formatter, { ...DEFAULT_SETTINGS });
+  const markdown = new vscode.MarkdownString(FIELD_HOVER);
+
+  rewriter.hover(new vscode.Hover([markdown]), fakeDocument(FIELD_LINE), new vscode.Position(30, 8));
+
+  assert.equal(markdown.value, "```rust\npub vel32: Quantity<(m·s⁻¹), f32>\n```");
+});
+
+test("hover on a qty! field without a document context keeps the honest unknown exponent", () => {
+  const rewriter = new Rewriter(formatter, { ...DEFAULT_SETTINGS });
+  const markdown = new vscode.MarkdownString(FIELD_HOVER);
+
+  rewriter.hover(new vscode.Hover([markdown]));
+
+  assert.equal(markdown.value, "```rust\npub vel32: Quantity<(m·sˀ), f32>\n```");
+});
+
+test("hover: a line without qty! leaves an unknown exponent alone", () => {
+  const rewriter = new Rewriter(formatter, { ...DEFAULT_SETTINGS });
+  const markdown = new vscode.MarkdownString(FIELD_HOVER);
+
+  rewriter.hover(new vscode.Hover([markdown]), fakeDocument("    pub vel32: Velocity<f32>,"), new vscode.Position(0, 0));
+
+  assert.match(markdown.value, /m·sˀ/);
+});
+
+test("qtyMacroArgs and replaceUnresolvedQuantities", () => {
+  assert.equal(qtyMacroArgs("    pub v: qty!(m / s, f32),"), "m / s, f32");
+  assert.equal(qtyMacroArgs("let x: whippyunits::qty!( m ) = y;"), " m ");
+  assert.equal(qtyMacroArgs("    pub v: vqty!(m / s, f32),"), undefined, "vqty! has a different argument shape");
+  assert.equal(qtyMacroArgs("no macro here"), undefined);
+  assert.equal(qtyMacroArgs("qty!(unbalanced"), undefined);
+  assert.equal(
+    replaceUnresolvedQuantities("a: Quantity<(m·sˀ), f32>, b: Quantity<m, f64>", "Quantity<(m·s⁻¹), f32>"),
+    "a: Quantity<(m·s⁻¹), f32>, b: Quantity<m, f64>",
+  );
 });

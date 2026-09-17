@@ -1119,3 +1119,32 @@ let ratio: Quantity<Unit<Scale<_2<3>, _3<0>, _5<3>, _Pi<0>>, Dimension>>, f64> =
     println!("Detection result for hover JSON: {}", detected);
     assert!(detected, "Hover JSON should be detected");
 }
+
+#[test]
+fn test_collapse_lift_trace_wrapper() {
+    use crate::unit_formatter::collapse_lift_trace;
+
+    // rust-analyzer's hover on a `qty!(m / s, f32)` struct field
+    let field = "pub vel32: <Helper<{const}, Quantity<Unit<Scale<_2<0>, _3<0>, _5<0>, _Pi<0>>, Dimension<_M<0>, _L<1>, _T<{const}>, _I<0>, _Θ<0>, _N<0>, _J<0>, _A<0>>>, f32, ()>> as GetSecondGeneric>::Type";
+    assert_eq!(
+        collapse_lift_trace(field),
+        "pub vel32: Quantity<Unit<Scale<_2<0>, _3<0>, _5<0>, _Pi<0>>, Dimension<_M<0>, _L<1>, _T<{const}>, _I<0>, _Θ<0>, _N<0>, _J<0>, _A<0>>>, f32, ()>"
+    );
+
+    // Fully qualified paths and a real const block, as rustc might print it
+    let qualified = "<whippyunits::Helper<{ type m = Meter; 0 }, Quantity<Unit<Scale, Dimension<_M, _L<1>>>>> as whippyunits::GetSecondGeneric>::Type";
+    assert_eq!(collapse_lift_trace(qualified), "Quantity<Unit<Scale, Dimension<_M, _L<1>>>>");
+
+    // Two wrappers in one text, and text without any wrapper
+    let two = "(<Helper<{const}, A<B>> as GetSecondGeneric>::Type, <Helper<{const}, C> as GetSecondGeneric>::Type)";
+    assert_eq!(collapse_lift_trace(two), "(A<B>, C)");
+    assert_eq!(collapse_lift_trace("Helper<T> is unrelated"), "Helper<T> is unrelated");
+
+    // The full formatting path sees through the wrapper
+    let converter = UnitFormatter::new();
+    let formatted = converter.format_types(field, &crate::DisplayConfig::default());
+    assert!(!formatted.contains("Helper"), "{formatted}");
+    assert!(!formatted.contains("GetSecondGeneric"), "{formatted}");
+    assert!(formatted.starts_with("pub vel32: Quantity<"), "{formatted}");
+    assert!(formatted.contains("f32"), "storage type must survive the {{const}} exponent: {formatted}");
+}

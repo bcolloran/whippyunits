@@ -1243,7 +1243,11 @@ dependencies = [
 name = "whippyunits-formatter-wasm"
 version = "0.3.0"
 dependencies = [
+ "quote",
+ "syn 2.0.108",
  "wasm-bindgen",
+ "whippyunits",
+ "whippyunits-core",
  "whippyunits-lsp-proxy",
 ]
 

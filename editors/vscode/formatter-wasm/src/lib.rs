@@ -5,7 +5,11 @@
 //! `whippyunits-pretty` CLI. Everything here is text in, text out; the
 //! extension does the surgery on VS Code's hover/inlay-hint objects itself.
 
+use quote::ToTokens;
+use syn::parse::{Parse, ParseStream};
 use wasm_bindgen::prelude::*;
+use whippyunits::print::prettyprint::pretty_print_quantity_type;
+use whippyunits_core::UnitExpr;
 use whippyunits_lsp_proxy::{
     hover_processor::HoverProcessor,
     inlay_hint_processor::InlayHintProcessor,
@@ -20,6 +24,7 @@ pub struct Formatter {
     inlay: InlayHintProcessor,
     text: UnitFormatter,
     text_config: DisplayConfig,
+    verbose: bool,
 }
 
 #[wasm_bindgen]
@@ -48,6 +53,7 @@ impl Formatter {
             inlay: InlayHintProcessor::with_config(inlay_config),
             text: UnitFormatter::new(),
             text_config,
+            verbose,
         }
     }
 
@@ -71,6 +77,64 @@ impl Formatter {
     /// `Quantity<mm, i32>`, used as the hint's double-click text edit.
     pub fn unit_macro_annotation(&self, pretty_type: &str) -> String {
         self.inlay.unit_macro_annotation(pretty_type)
+    }
+
+    /// The pretty type a `qty!(…)` invocation denotes, computed from the text
+    /// between its parentheses (`m / s`, `kg * m / s ^ 2, f32`, `m, f64, Brand`)
+    /// with the same parser the macro uses. `undefined` if it doesn't parse.
+    ///
+    /// rust-analyzer's hover on a struct field shows the *declared* type, in
+    /// which negative exponents appear only as `{const}`; the source line still
+    /// has the unit expression, so the extension can recover the type from it.
+    pub fn format_qty_macro(&self, args: &str) -> Option<String> {
+        let parsed: QtyArgs = syn::parse_str(args).ok()?;
+        let result = parsed.unit.evaluate();
+        let storage = parsed
+            .storage
+            .map(|ty| ty.to_token_stream().to_string())
+            .unwrap_or_else(|| "f64".to_string());
+        let brand = parsed
+            .brand
+            .map(|ty| ty.to_token_stream().to_string())
+            .filter(|brand| brand != "()");
+        let pretty = pretty_print_quantity_type(
+            result.dimension_exponents,
+            result.scale_exponents,
+            &storage,
+            self.verbose,
+            false,
+            brand.as_deref(),
+        );
+        // `?` is the pretty-printer's "wholly unresolved" answer — nothing better than the raw text
+        (pretty != "?").then_some(pretty)
+    }
+}
+
+/// The argument list of `qty!`: a unit expression, then optional storage and brand types.
+struct QtyArgs {
+    unit: UnitExpr,
+    storage: Option<syn::Type>,
+    brand: Option<syn::Type>,
+}
+
+impl Parse for QtyArgs {
+    fn parse(input: ParseStream) -> syn::Result<Self> {
+        let unit: UnitExpr = input.parse()?;
+        let mut storage = None;
+        let mut brand = None;
+        if input.peek(syn::Token![,]) {
+            input.parse::<syn::Token![,]>()?;
+            storage = Some(input.parse()?);
+            if input.peek(syn::Token![,]) {
+                input.parse::<syn::Token![,]>()?;
+                brand = Some(input.parse()?);
+            }
+        }
+        Ok(QtyArgs {
+            unit,
+            storage,
+            brand,
+        })
     }
 }
 

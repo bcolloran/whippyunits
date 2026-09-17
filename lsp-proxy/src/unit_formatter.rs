@@ -188,7 +188,9 @@ impl UnitFormatter {
         unicode: bool,
         is_inlay_hint: bool,
     ) -> String {
-        let mut result = text.to_string();
+        // rust-analyzer renders const blocks in declared types as `{const}`, which no
+        // Rust parser accepts; `_` parses and is already read as an unresolved exponent.
+        let mut result = collapse_lift_trace(text).replace("{const}", "_");
         if result.contains("Quantity<Unit<") && result.contains("Scale") {
             result = self.format_quantity_pass(&result, verbose, unicode, is_inlay_hint);
         }
@@ -1386,4 +1388,103 @@ struct QuantityParams {
     scale: ScaleExponents,
     generic_type: String,
     brand: Option<String>,
+}
+
+/// Strip the lift-trace wrapper `qty!` expands to in type position.
+///
+/// `qty!(m / s)` becomes `<Helper<{ …doc shadows…; 0 }, Quantity<…>> as GetSecondGeneric>::Type`
+/// so the unit identifiers get hover docs and go-to-definition; the projection
+/// normalizes to the inner `Quantity<…>`. rustc shows the normalized type, but
+/// rust-analyzer's hover on a struct *field* shows the declared type verbatim, with
+/// the const block rendered as `{const}`. This reduces every such wrapper (optionally
+/// `whippyunits::`-qualified) to its inner type; anything not matching the exact
+/// shape is left untouched.
+pub fn collapse_lift_trace(text: &str) -> String {
+    const HELPER: &str = "Helper<";
+    const PROJECTION: &str = " as GetSecondGeneric>::Type";
+    const QUALIFIED_PROJECTION: &str = " as whippyunits::GetSecondGeneric>::Type";
+
+    let mut result = text.to_string();
+    let mut search_from = 0;
+    while let Some(rel) = result[search_from..].find(HELPER) {
+        let helper_at = search_from + rel;
+        let after_helper = helper_at + HELPER.len();
+        search_from = after_helper;
+
+        // The wrapper starts at the `<` before `Helper` / `whippyunits::Helper`
+        let before = &result[..helper_at];
+        let start = if before.ends_with("<whippyunits::") {
+            helper_at - "<whippyunits::".len()
+        } else if before.ends_with('<') {
+            helper_at - 1
+        } else {
+            continue;
+        };
+
+        // First argument: a brace-delimited const block such as `{const}` or `{ ...; 0 }`
+        let bytes = result.as_bytes();
+        let mut i = after_helper;
+        while i < bytes.len() && bytes[i] == b' ' {
+            i += 1;
+        }
+        if i >= bytes.len() || bytes[i] != b'{' {
+            continue;
+        }
+        let mut depth = 0i32;
+        let mut block_end = None;
+        for (j, &b) in bytes.iter().enumerate().skip(i) {
+            match b {
+                b'{' => depth += 1,
+                b'}' => {
+                    depth -= 1;
+                    if depth == 0 {
+                        block_end = Some(j + 1);
+                        break;
+                    }
+                }
+                _ => {}
+            }
+        }
+        let Some(mut i) = block_end else { continue };
+        if !result[i..].starts_with(',') {
+            continue;
+        }
+        i += 1;
+        while i < bytes.len() && bytes[i] == b' ' {
+            i += 1;
+        }
+
+        // Second argument: the wrapped type, up to the `>` that closes `Helper<`
+        let inner_start = i;
+        let mut depth = 0i32;
+        let mut inner_end = None;
+        for (j, &b) in bytes.iter().enumerate().skip(inner_start) {
+            match b {
+                b'<' => depth += 1,
+                b'>' => {
+                    if depth == 0 {
+                        inner_end = Some(j);
+                        break;
+                    }
+                    depth -= 1;
+                }
+                _ => {}
+            }
+        }
+        let Some(inner_end) = inner_end else { continue };
+        let after_close = inner_end + 1;
+        let projection_len = if result[after_close..].starts_with(PROJECTION) {
+            PROJECTION.len()
+        } else if result[after_close..].starts_with(QUALIFIED_PROJECTION) {
+            QUALIFIED_PROJECTION.len()
+        } else {
+            continue;
+        };
+
+        let inner = result[inner_start..inner_end].to_string();
+        result.replace_range(start..after_close + projection_len, &inner);
+        // Rescan from the start of the replacement in case wrappers were nested
+        search_from = start;
+    }
+    result
 }

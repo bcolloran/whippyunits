@@ -12,6 +12,7 @@ interface WasmFormatter {
   format_text(text: string): string;
   format_inlay_type(typeText: string): string;
   unit_macro_annotation(prettyType: string): string;
+  format_qty_macro(args: string): string | undefined;
   free(): void;
 }
 
@@ -66,5 +67,10 @@ export class Formatter {
 
   unitMacroAnnotation(prettyType: string): string {
     return this.inner.unit_macro_annotation(prettyType);
+  }
+
+  /** The pretty type denoted by the arguments of a `qty!(…)` invocation, if they parse. */
+  formatQtyMacro(args: string): string | undefined {
+    return this.inner.format_qty_macro(args);
   }
 }

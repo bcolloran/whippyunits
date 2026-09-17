@@ -35,3 +35,13 @@ export const fakeLog = {
 export function tick(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+/** rust-analyzer's hover on `pub vel32: qty!(m / s, f32)`: the declared type, wrapper and `{const}` included. */
+export const FIELD_HOVER =
+  "```rust\npub vel32: <Helper<{const}, Quantity<Unit<Scale<_2<0>, _3<0>, _5<0>, _Pi<0>>, Dimension<_M<0>, _L<1>, _T<{const}>, _I<0>, _Θ<0>, _N<0>, _J<0>, _A<0>>>, f32, ()>> as GetSecondGeneric>::Type\n```";
+export const FIELD_LINE = "    pub vel32: qty!(m / s, f32),";
+
+/** Just enough of a TextDocument for `Rewriter.hover`. */
+export function fakeDocument(line: string): vscode.TextDocument {
+  return { lineAt: () => ({ text: line }) } as unknown as vscode.TextDocument;
+}

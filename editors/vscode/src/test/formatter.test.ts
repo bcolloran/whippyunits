@@ -2,7 +2,7 @@ import "./setup";
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { Formatter } from "../formatter";
-import { DEFAULT_SETTINGS, EXTENSION_ROOT, HOVER_ENERGY, RAW_ENERGY, RAW_LENGTH } from "./fixtures";
+import { DEFAULT_SETTINGS, EXTENSION_ROOT, FIELD_HOVER, HOVER_ENERGY, RAW_ENERGY, RAW_LENGTH } from "./fixtures";
 
 test("loads the wasm build and formats a hover like the proxy does", () => {
   const formatter = Formatter.load(EXTENSION_ROOT, DEFAULT_SETTINGS);
@@ -40,4 +40,19 @@ test("formatText rewrites every type in a diagnostic message", () => {
   const formatter = Formatter.load(EXTENSION_ROOT, DEFAULT_SETTINGS);
   const out = formatter.formatText(`mismatched types: expected ${RAW_LENGTH}, found ${RAW_ENERGY}`);
   assert.match(out, /expected Quantity<m, f64>, found Quantity<J, f64>/);
+});
+
+test("formatQtyMacro computes the type from a qty! invocation's arguments", () => {
+  const formatter = Formatter.load(EXTENSION_ROOT, DEFAULT_SETTINGS);
+  assert.equal(formatter.formatQtyMacro("m / s, f32"), "Quantity<(m·s⁻¹), f32>");
+  assert.equal(formatter.formatQtyMacro("kg * m / s ^ 2"), "Quantity<N, f64>");
+  assert.equal(formatter.formatQtyMacro("m, f64, MyBrand"), "Quantity<m, f64, MyBrand>");
+  assert.equal(formatter.formatQtyMacro("not a unit expression ((("), undefined);
+});
+
+test("formatHover sees through the qty! lift-trace wrapper", () => {
+  const formatter = Formatter.load(EXTENSION_ROOT, DEFAULT_SETTINGS);
+  const out = formatter.formatHover(FIELD_HOVER);
+  assert.doesNotMatch(out, /Helper|GetSecondGeneric/);
+  assert.match(out, /^```rust\npub vel32: Quantity<\(m·sˀ\), f32>\n```$/);
 });

@@ -2,6 +2,9 @@ import * as vscode from "vscode";
 import type { Settings } from "./config";
 import type { Formatter } from "./formatter";
 
+/** What the formatter prints for an exponent it could not read (e.g. rust-analyzer's `{const}`). */
+const UNKNOWN_EXPONENT = "ˀ";
+
 /**
  * Rewrites the VS Code objects rust-analyzer's middleware hands back.
  *
@@ -14,11 +17,24 @@ export class Rewriter {
     public settings: Settings,
   ) {}
 
-  hover<T extends vscode.Hover | null | undefined>(hover: T): T {
+  /**
+   * `document`/`position` are where the hover was requested. They let a hover
+   * on a struct field recover from rust-analyzer showing the *declared* type,
+   * in which negative exponents appear only as `{const}`: the `qty!(…)` on that
+   * source line still says what the type is.
+   */
+  hover<T extends vscode.Hover | null | undefined>(
+    hover: T,
+    document?: vscode.TextDocument,
+    position?: vscode.Position,
+  ): T {
     if (!hover || !this.settings.enabled || !this.settings.rewriteHover) {
       return hover;
     }
     hover.contents = hover.contents.map((item) => this.hoverItem(item));
+    if (document && position) {
+      this.recoverFromSource(hover, document.lineAt(position.line).text);
+    }
     return hover;
   }
 
@@ -39,6 +55,25 @@ export class Rewriter {
       item.value = this.formatter.formatHover(item.value);
     }
     return item;
+  }
+
+  /** Replaces `Quantity<…>` types with an unknown exponent by the type the line's `qty!(…)` denotes. */
+  private recoverFromSource(hover: vscode.Hover, line: string): void {
+    const args = qtyMacroArgs(line);
+    if (args === undefined) {
+      return;
+    }
+    let pretty: string | undefined;
+    for (const item of hover.contents) {
+      if (typeof item === "string" || !item.value.includes(UNKNOWN_EXPONENT)) {
+        continue;
+      }
+      pretty ??= this.formatter.formatQtyMacro(args);
+      if (pretty === undefined) {
+        return;
+      }
+      item.value = replaceUnresolvedQuantities(item.value, pretty);
+    }
   }
 
   inlayHints<T extends vscode.InlayHint[] | null | undefined>(hints: T): T {
@@ -139,5 +174,51 @@ export class Rewriter {
 
   private text(text: string): string {
     return this.formatter.containsQuantity(text) ? this.formatter.formatText(text) : text;
+  }
+}
+
+/** The text between the parentheses of the first `qty!(…)` on a line, if there is one. */
+export function qtyMacroArgs(line: string): string | undefined {
+  const match = /(?<![A-Za-z0-9_])qty!\s*\(/.exec(line);
+  if (!match) {
+    return undefined;
+  }
+  const start = match.index + match[0].length;
+  let depth = 1;
+  for (let i = start; i < line.length; i++) {
+    if (line[i] === "(") {
+      depth++;
+    } else if (line[i] === ")" && --depth === 0) {
+      return line.slice(start, i);
+    }
+  }
+  return undefined;
+}
+
+/** Replaces every `Quantity<…>` whose text contains an unknown exponent with `pretty`. */
+export function replaceUnresolvedQuantities(text: string, pretty: string): string {
+  let result = "";
+  let from = 0;
+  for (;;) {
+    const start = text.indexOf("Quantity<", from);
+    if (start < 0) {
+      return result + text.slice(from);
+    }
+    let depth = 0;
+    let end = -1;
+    for (let i = start + "Quantity".length; i < text.length; i++) {
+      if (text[i] === "<") {
+        depth++;
+      } else if (text[i] === ">" && --depth === 0) {
+        end = i + 1;
+        break;
+      }
+    }
+    if (end < 0) {
+      return result + text.slice(from);
+    }
+    const span = text.slice(start, end);
+    result += text.slice(from, start) + (span.includes(UNKNOWN_EXPONENT) ? pretty : span);
+    from = end;
   }
 }
