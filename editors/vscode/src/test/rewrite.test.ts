@@ -120,7 +120,8 @@ test("hover on a qty! field: the declared type's {const} exponent is recovered f
 
   rewriter.hover(new vscode.Hover([markdown]), fakeDocument(FIELD_LINE), new vscode.Position(30, 8));
 
-  assert.equal(markdown.value, "```rust\npub vel32: Quantity<(m·s⁻¹), f32>\n```");
+  assert.match(markdown.value, /```rust\npub vel32: Quantity<\(m·s⁻¹\), f32>\n```/);
+  assert.doesNotMatch(markdown.value, /ˀ|Helper/);
 });
 
 test("hover on a qty! field without a document context keeps the honest unknown exponent", () => {
@@ -129,7 +130,7 @@ test("hover on a qty! field without a document context keeps the honest unknown 
 
   rewriter.hover(new vscode.Hover([markdown]));
 
-  assert.equal(markdown.value, "```rust\npub vel32: Quantity<(m·sˀ), f32>\n```");
+  assert.match(markdown.value, /```rust\npub vel32: Quantity<\(m·sˀ\), f32>\n```/);
 });
 
 test("hover: a line without qty! leaves an unknown exponent alone", () => {

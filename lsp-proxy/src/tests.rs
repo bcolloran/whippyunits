@@ -1,4 +1,4 @@
-use crate::{inlay_hint_processor, quantity_detection, unit_formatter::UnitFormatter, LspProxy};
+use crate::{hover_processor::HoverProcessor, inlay_hint_processor, quantity_detection, unit_formatter::UnitFormatter, LspProxy};
 use serde_json::json;
 
 #[test]
@@ -1147,4 +1147,22 @@ fn test_collapse_lift_trace_wrapper() {
     assert!(!formatted.contains("GetSecondGeneric"), "{formatted}");
     assert!(formatted.starts_with("pub vel32: Quantity<"), "{formatted}");
     assert!(formatted.contains("f32"), "storage type must survive the {{const}} exponent: {formatted}");
+}
+
+
+#[test]
+fn test_hover_with_two_code_blocks_formats_the_second() {
+    // rust-analyzer's hover on a struct field: the owner's path, then the field
+    let hover = "```rust\ndeclarators::TestNoGeneric\n```\n\n```rust\npub vel: <Helper<{const}, Quantity<Unit<Scale<_2<0>, _3<0>, _5<0>, _Pi<0>>, Dimension<_M<0>, _L<1>, _T<{const}>, _I<0>, _Θ<0>, _N<0>, _J<0>, _A<0>>>, f64, ()>> as GetSecondGeneric>::Type\n```\n\n---\nsize = 8, align = 0x8, offset = 0x0, no Drop";
+    let processor = HoverProcessor::new(crate::DisplayConfig::default());
+    let out = processor.improve_hover_text(hover);
+    assert!(out.starts_with("```rust\ndeclarators::TestNoGeneric\n```\n\n```rust\npub vel: Quantity<"), "{out}");
+    assert!(!out.contains("Helper"), "{out}");
+    assert!(out.ends_with("no Drop"), "{out}");
+
+    // With include_raw the Raw section lands after the last block, before the separator
+    let raw_config = crate::DisplayConfig { include_raw: true, ..Default::default() };
+    let out = HoverProcessor::new(raw_config).improve_hover_text(hover);
+    assert!(out.contains("```\n\n---\nRaw:\n\n```rust\n"), "{out}");
+    assert!(out.ends_with("---\nsize = 8, align = 0x8, offset = 0x0, no Drop"), "{out}");
 }

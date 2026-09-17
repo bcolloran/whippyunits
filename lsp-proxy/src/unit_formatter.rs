@@ -98,76 +98,62 @@ impl UnitFormatter {
             return self.format_quantity_types(text, config.verbose, config.unicode, false);
         }
 
-        // Work within the existing markdown structure
-        // Find the first code block and replace its content
-        // Use `text` (which may have been pre-transformed, e.g. trait simplification)
-        // rather than `original_text` so earlier transformations aren't discarded.
-        if let Some(code_start) = text.find("```rust") {
-            let after_code_start = &text[code_start + 7..]; // Skip "```rust"
-            if let Some(code_end) = after_code_start.find("```") {
-                let code_content = &after_code_start[..code_end];
+        // Work within the existing markdown structure: rewrite the contents of every
+        // ```rust block. rust-analyzer's hovers carry one block for a `let`, but two for
+        // a struct field (the owner's path, then the field), and the type may sit in any
+        // of them. Use `text` (which may have been pre-transformed, e.g. trait
+        // simplification) rather than `original_text` so earlier transformations aren't
+        // discarded; `original_text`'s blocks only feed the Raw section.
+        let original_blocks = code_blocks(original_text);
+        let mut result = String::new();
+        let mut rest = text;
+        let mut raw_type = String::new();
+        let mut index = 0;
+        while let Some(code_start) = rest.find("```rust") {
+            let after_open = code_start + "```rust".len();
+            let Some(rel_close) = rest[after_open..].find("```") else {
+                break;
+            };
+            let code_content = &rest[after_open..after_open + rel_close];
+            let formatted_content =
+                self.format_quantity_types(code_content, config.verbose, config.unicode, false);
 
-                // Format the code content
-                let formatted_content =
-                    self.format_quantity_types(code_content, config.verbose, config.unicode, false);
-
-                // Check if we actually transformed anything (compare against original)
-                let original_code_content = original_text
-                    .find("```rust")
-                    .and_then(|s| {
-                        let after = &original_text[s + 7..];
-                        after.find("```").map(|e| &after[..e])
-                    });
-                let was_transformed = original_code_content
-                    .is_none_or(|orig| formatted_content != orig);
-
-                // Extract raw type from the original code content if we transformed it
-                let raw_type = if was_transformed && config.include_raw {
-                    original_code_content
-                        .map(|c| self.extract_raw_type_from_hover(c))
-                        .unwrap_or_default()
-                } else {
-                    String::new()
-                };
-
-                // Replace the content in the existing code block
-                let before_code = &text[..code_start + 7]; // Include "```rust"
-                let after_code_block = &after_code_start[code_end + 3..]; // Skip closing ```
-
-                let result = if !raw_type.is_empty() {
-                    // Insert raw section after the first --- separator
-                    if let Some(separator_pos) = after_code_block.find("---") {
-                        let after_separator = &after_code_block[separator_pos..];
-                        format!(
-                            "{}\n{}\n```\n\n---\nRaw:\n\n```rust\n{}\n```\n{}",
-                            before_code,
-                            formatted_content.trim(),
-                            raw_type,
-                            after_separator
-                        )
-                    } else {
-                        format!(
-                            "{}\n{}\n```\n\n---\nRaw:\n\n```rust\n{}\n```\n",
-                            before_code,
-                            formatted_content.trim(),
-                            raw_type
-                        )
-                    }
-                } else {
-                    format!(
-                        "{}\n{}\n```{}",
-                        before_code,
-                        formatted_content.trim(),
-                        after_code_block
-                    )
-                };
-
-                return result;
+            // Extract the raw type from the first block we actually transformed
+            let original_code_content = original_blocks.get(index).copied();
+            let was_transformed =
+                original_code_content.is_none_or(|orig| formatted_content != orig);
+            if raw_type.is_empty() && was_transformed && config.include_raw {
+                raw_type = original_code_content
+                    .map(|c| self.extract_raw_type_from_hover(c))
+                    .unwrap_or_default();
             }
+
+            result.push_str(&rest[..after_open]);
+            result.push('\n');
+            result.push_str(formatted_content.trim());
+            result.push('\n');
+            rest = &rest[after_open + rel_close..]; // starts at the closing ```
+            index += 1;
         }
 
-        // Fallback to normal formatting if we can't parse the markdown structure
-        self.format_quantity_types(text, config.verbose, config.unicode, false)
+        if index == 0 {
+            // No code block: format the text as a whole
+            return self.format_quantity_types(text, config.verbose, config.unicode, false);
+        }
+
+        if raw_type.is_empty() {
+            result.push_str(rest);
+            return result;
+        }
+
+        // Insert the Raw section right after the last block, before the first --- separator
+        let after_code_block = &rest["```".len()..];
+        result.push_str("```");
+        result.push_str(&format!("\n\n---\nRaw:\n\n```rust\n{}\n```\n", raw_type));
+        if let Some(separator_pos) = after_code_block.find("---") {
+            result.push_str(&after_code_block[separator_pos..]);
+        }
+        result
     }
 
     /// Format whippyunits types for inlay hints (compact format)
@@ -1487,4 +1473,20 @@ pub fn collapse_lift_trace(text: &str) -> String {
         search_from = start;
     }
     result
+}
+
+
+/// The contents of every ```rust block in a markdown text, in order.
+fn code_blocks(text: &str) -> Vec<&str> {
+    let mut blocks = Vec::new();
+    let mut rest = text;
+    while let Some(start) = rest.find("```rust") {
+        let after_open = start + "```rust".len();
+        let Some(rel_close) = rest[after_open..].find("```") else {
+            break;
+        };
+        blocks.push(&rest[after_open..after_open + rel_close]);
+        rest = &rest[after_open + rel_close + "```".len()..];
+    }
+    blocks
 }

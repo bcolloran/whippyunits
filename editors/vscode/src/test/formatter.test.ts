@@ -54,5 +54,8 @@ test("formatHover sees through the qty! lift-trace wrapper", () => {
   const formatter = Formatter.load(EXTENSION_ROOT, DEFAULT_SETTINGS);
   const out = formatter.formatHover(FIELD_HOVER);
   assert.doesNotMatch(out, /Helper|GetSecondGeneric/);
-  assert.match(out, /^```rust\npub vel32: Quantity<\(m·sˀ\), f32>\n```$/);
+  assert.equal(
+    out,
+    "```rust\ndeclarators::TestNoGeneric\n```\n\n```rust\npub vel32: Quantity<(m·sˀ), f32>\n```\n\n---\nsize = 4, align = 0x4, offset = 0xC, no Drop",
+  );
 });
