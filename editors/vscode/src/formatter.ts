@@ -12,7 +12,7 @@ interface WasmFormatter {
   format_text(text: string): string;
   format_inlay_type(typeText: string): string;
   unit_macro_annotation(prettyType: string): string;
-  format_qty_macro(args: string): string | undefined;
+  unit_label(unitExpr: string): string | undefined;
   free(): void;
 }
 
@@ -69,8 +69,8 @@ export class Formatter {
     return this.inner.unit_macro_annotation(prettyType);
   }
 
-  /** The pretty type denoted by the arguments of a `qty!(…)` invocation, if they parse. */
-  formatQtyMacro(args: string): string | undefined {
-    return this.inner.format_qty_macro(args);
+  /** The label the formatter prints for a unit expression (`m / s` → `(m·s⁻¹)`), if it parses. */
+  unitLabel(unitExpr: string): string | undefined {
+    return this.inner.unit_label(unitExpr);
   }
 }

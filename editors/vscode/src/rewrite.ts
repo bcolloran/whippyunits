@@ -57,22 +57,27 @@ export class Rewriter {
     return item;
   }
 
-  /** Replaces `Quantity<…>` types with an unknown exponent by the type the line's `qty!(…)` denotes. */
+  /**
+   * Replaces every unit label with an unknown exponent (`(m·sˀ)`) by the label the
+   * line's `qty!(…)`/`vqty!(…)` denotes. One macro per line is assumed: every
+   * unknown label in the hover — the field type, a matrix's entry unit, the
+   * unit-matrix trace — comes from that one unit expression.
+   */
   private recoverFromSource(hover: vscode.Hover, line: string): void {
-    const args = qtyMacroArgs(line);
-    if (args === undefined) {
+    const unitExpr = macroUnitExpr(line);
+    if (unitExpr === undefined) {
       return;
     }
-    let pretty: string | undefined;
+    let label: string | undefined;
     for (const item of hover.contents) {
       if (typeof item === "string" || !item.value.includes(UNKNOWN_EXPONENT)) {
         continue;
       }
-      pretty ??= this.formatter.formatQtyMacro(args);
-      if (pretty === undefined) {
+      label ??= this.formatter.unitLabel(unitExpr);
+      if (label === undefined) {
         return;
       }
-      item.value = replaceUnresolvedQuantities(item.value, pretty);
+      item.value = replaceUnknownUnitLabels(item.value, label);
     }
   }
 
@@ -177,48 +182,37 @@ export class Rewriter {
   }
 }
 
-/** The text between the parentheses of the first `qty!(…)` on a line, if there is one. */
-export function qtyMacroArgs(line: string): string | undefined {
-  const match = /(?<![A-Za-z0-9_])qty!\s*\(/.exec(line);
+/**
+ * The unit expression of the first `qty!(…)` or `vqty!(…)` on a line, if any:
+ * `qty!(unit[, storage[, brand]])` and `vqty!(count, unit[, storage])`. A `vqty!`
+ * with a bracketed per-entry unit list has no single unit and yields nothing.
+ */
+export function macroUnitExpr(line: string): string | undefined {
+  const match = /(?<![A-Za-z0-9_])(v?qty)!\s*\(/.exec(line);
   if (!match) {
     return undefined;
   }
   const start = match.index + match[0].length;
   let depth = 1;
+  let end = -1;
   for (let i = start; i < line.length; i++) {
     if (line[i] === "(") {
       depth++;
     } else if (line[i] === ")" && --depth === 0) {
-      return line.slice(start, i);
+      end = i;
+      break;
     }
   }
-  return undefined;
+  if (end < 0) {
+    return undefined;
+  }
+  // Unit expressions never contain commas, so top-level commas separate the arguments
+  const args = line.slice(start, end).split(",");
+  const unit = (match[1] === "vqty" ? args[1] : args[0])?.trim();
+  return unit && !unit.startsWith("[") ? unit : undefined;
 }
 
-/** Replaces every `Quantity<…>` whose text contains an unknown exponent with `pretty`. */
-export function replaceUnresolvedQuantities(text: string, pretty: string): string {
-  let result = "";
-  let from = 0;
-  for (;;) {
-    const start = text.indexOf("Quantity<", from);
-    if (start < 0) {
-      return result + text.slice(from);
-    }
-    let depth = 0;
-    let end = -1;
-    for (let i = start + "Quantity".length; i < text.length; i++) {
-      if (text[i] === "<") {
-        depth++;
-      } else if (text[i] === ">" && --depth === 0) {
-        end = i + 1;
-        break;
-      }
-    }
-    if (end < 0) {
-      return result + text.slice(from);
-    }
-    const span = text.slice(start, end);
-    result += text.slice(from, start) + (span.includes(UNKNOWN_EXPONENT) ? pretty : span);
-    from = end;
-  }
+/** Replaces every unit label containing an unknown exponent — `(m·sˀ)`, `sˀ` — with `label`. */
+export function replaceUnknownUnitLabels(text: string, label: string): string {
+  return text.replace(/\([^()]*ˀ[^()]*\)|[^\s<>,()[\]]*ˀ[^\s<>,()[\]]*/g, label);
 }

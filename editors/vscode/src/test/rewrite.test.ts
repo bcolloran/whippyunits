@@ -3,8 +3,18 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import * as vscode from "vscode";
 import { Formatter } from "../formatter";
-import { Rewriter, qtyMacroArgs, replaceUnresolvedQuantities } from "../rewrite";
-import { DEFAULT_SETTINGS, EXTENSION_ROOT, FIELD_HOVER, FIELD_LINE, HOVER_ENERGY, RAW_LENGTH, fakeDocument } from "./fixtures";
+import { Rewriter, macroUnitExpr, replaceUnknownUnitLabels } from "../rewrite";
+import {
+  DEFAULT_SETTINGS,
+  EXTENSION_ROOT,
+  FIELD_HOVER,
+  FIELD_LINE,
+  HOVER_ENERGY,
+  RAW_LENGTH,
+  VECTOR_FIELD_HOVER,
+  VECTOR_FIELD_LINE,
+  fakeDocument,
+} from "./fixtures";
 
 const formatter = Formatter.load(EXTENSION_ROOT, DEFAULT_SETTINGS);
 
@@ -142,14 +152,26 @@ test("hover: a line without qty! leaves an unknown exponent alone", () => {
   assert.match(markdown.value, /m·sˀ/);
 });
 
-test("qtyMacroArgs and replaceUnresolvedQuantities", () => {
-  assert.equal(qtyMacroArgs("    pub v: qty!(m / s, f32),"), "m / s, f32");
-  assert.equal(qtyMacroArgs("let x: whippyunits::qty!( m ) = y;"), " m ");
-  assert.equal(qtyMacroArgs("    pub v: vqty!(m / s, f32),"), undefined, "vqty! has a different argument shape");
-  assert.equal(qtyMacroArgs("no macro here"), undefined);
-  assert.equal(qtyMacroArgs("qty!(unbalanced"), undefined);
+test("hover on a vqty! field: label, nalgebra alias and the unit-matrix trace all resolve", () => {
+  const rewriter = new Rewriter(formatter, { ...DEFAULT_SETTINGS });
+  const markdown = new vscode.MarkdownString(VECTOR_FIELD_HOVER);
+
+  rewriter.hover(new vscode.Hover([markdown]), fakeDocument(VECTOR_FIELD_LINE), new vscode.Position(35, 8));
+
+  assert.match(markdown.value, /```rust\npub acc: UniformUnitMatrix<\(m·s⁻²\), Vector2<T>>\n```/);
+  assert.match(markdown.value, /```text\n\[\(m·s⁻²\)\]\n\[\(m·s⁻²\)\]\n```/);
+  assert.doesNotMatch(markdown.value, /ˀ|Helper|ArrayStorage/);
+});
+
+test("macroUnitExpr and replaceUnknownUnitLabels", () => {
+  assert.equal(macroUnitExpr("    pub v: qty!(m / s, f32),"), "m / s");
+  assert.equal(macroUnitExpr("let x: whippyunits::qty!( m ) = y;"), "m");
+  assert.equal(macroUnitExpr("    pub acc: vqty!(2, m / s ^ 2, T),"), "m / s ^ 2");
+  assert.equal(macroUnitExpr("    pub acc: vqty!(2, [m, s], T),"), undefined, "per-entry unit lists have no single unit");
+  assert.equal(macroUnitExpr("no macro here"), undefined);
+  assert.equal(macroUnitExpr("qty!(unbalanced"), undefined);
   assert.equal(
-    replaceUnresolvedQuantities("a: Quantity<(m·sˀ), f32>, b: Quantity<m, f64>", "Quantity<(m·s⁻¹), f32>"),
-    "a: Quantity<(m·s⁻¹), f32>, b: Quantity<m, f64>",
+    replaceUnknownUnitLabels("a: Quantity<(m·sˀ), f32>, [(m·sˀ)], b: Quantity<m, f64>, c: sˀ", "(m·s⁻¹)"),
+    "a: Quantity<(m·s⁻¹), f32>, [(m·s⁻¹)], b: Quantity<m, f64>, c: (m·s⁻¹)",
   );
 });

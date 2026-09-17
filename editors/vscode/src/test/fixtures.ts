@@ -47,3 +47,9 @@ export const FIELD_LINE = "    pub vel32: qty!(m / s, f32),";
 export function fakeDocument(line: string): vscode.TextDocument {
   return { lineAt: () => ({ text: line }) } as unknown as vscode.TextDocument;
 }
+
+
+/** rust-analyzer's hover on `pub acc: vqty!(2, m / s ^ 2, T)`: a 2-vector of accelerations, storage generic. */
+export const VECTOR_FIELD_HOVER =
+  "```rust\nblock_roundtrip::Test\n```\n\n```rust\npub acc: UniformUnitMatrix<<Helper<{const}, Unit<Scale<_2<0>, _3<0>, _5<0>, _Pi<0>>, Dimension<_M<0>, _L<1>, _T<{const}>, _I<0>, _Θ<0>, _N<0>, _J<0>, _A<0>>>> as GetSecondGeneric>::Type, Matrix<T, Const<2>, Const<1>, ArrayStorage<T, 2, 1>>, ()>\n```\n\n---\nno Drop";
+export const VECTOR_FIELD_LINE = "    pub acc: vqty!(2, m / s ^ 2, T),";

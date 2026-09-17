@@ -668,10 +668,10 @@ fn test_dcons_collapse_hover() {
         "dim lists should render as bracketed arrays, got: {}",
         result
     );
-    // The M parameter (nalgebra Matrix<…>) must be preserved verbatim.
+    // The M parameter (nalgebra Matrix<…>) is folded into its alias.
     assert!(
-        result.contains("Matrix<f64, Const<2>, Const<1>, ArrayStorage<f64, 2, 1>>"),
-        "backing matrix type should be preserved, got: {}",
+        result.contains("Vector2<f64>"),
+        "backing matrix type should read as its nalgebra alias, got: {}",
         result
     );
     // The trailing default `()` brand should be elided.
@@ -691,7 +691,7 @@ fn test_unit_matrix_trace_diagram() {
 
     // The prettified type is unchanged, followed by a fenced trace diagram.
     assert!(
-        out.contains("MixedUnitMatrix<[(m·s⁻¹), (m·s⁻²)], [s, 1], Matrix<"),
+        out.contains("MixedUnitMatrix<[(m·s⁻¹), (m·s⁻²)], [s, 1], Matrix2<f64>>"),
         "type line missing/incorrect: {out}"
     );
     assert!(out.contains("```text"), "trace should be a fenced block: {out}");
@@ -1165,4 +1165,41 @@ fn test_hover_with_two_code_blocks_formats_the_second() {
     let out = HoverProcessor::new(raw_config).improve_hover_text(hover);
     assert!(out.contains("```\n\n---\nRaw:\n\n```rust\n"), "{out}");
     assert!(out.ends_with("---\nsize = 8, align = 0x8, offset = 0x0, no Drop"), "{out}");
+}
+
+
+#[test]
+fn test_nalgebra_aliases_are_folded_back() {
+    let converter = UnitFormatter::new();
+    let config = crate::DisplayConfig::default();
+    let cases = [
+        ("Matrix<T, Const<2>, Const<1>, ArrayStorage<T, 2, 1>>", "Vector2<T>"),
+        ("Matrix<f64, Const<1>, Const<4>, ArrayStorage<f64, 1, 4>>", "RowVector4<f64>"),
+        ("Matrix<f64, nalgebra::Const<3>, nalgebra::Const<3>, ArrayStorage<f64, 3, 3>>", "Matrix3<f64>"),
+        ("nalgebra::Matrix<f64, Const<2>, Const<3>, nalgebra::ArrayStorage<f64, 2, 3>>", "Matrix2x3<f64>"),
+        ("Matrix<f64, Const<7>, Const<1>, ArrayStorage<f64, 7, 1>>", "SVector<f64, 7>"),
+        ("Matrix<f64, Const<8>, Const<9>, ArrayStorage<f64, 8, 9>>", "SMatrix<f64, 8, 9>"),
+        ("Matrix<f64, Dyn, Dyn, VecStorage<f64, Dyn, Dyn>>", "DMatrix<f64>"),
+        ("Matrix<f64, Dyn, Const<1>, VecStorage<f64, Dyn, Const<1>>>", "DVector<f64>"),
+        // Not a shape nalgebra names: left alone
+        ("Matrix<f64, Const<2>, Const<2>, ViewStorage<f64, Const<2>, Const<2>, Const<1>, Const<2>>>", "Matrix<f64, Const<2>, Const<2>, ViewStorage<f64, Const<2>, Const<2>, Const<1>, Const<2>>>"),
+    ];
+    for (input, expected) in cases {
+        // Wrap in a unit type so the formatter runs its passes
+        let text = format!("UniformUnitMatrix<Unit<Scale, Dimension<_M, _L<1>>>, {input}, ()>");
+        let out = converter.format_types(&text, &config);
+        assert_eq!(out, format!("UniformUnitMatrix<m, {expected}>"), "for {input}");
+    }
+}
+
+#[test]
+fn test_field_hover_of_a_uniform_matrix_puts_the_trace_after_the_field() {
+    // rust-analyzer's hover on `pub acc: vqty!(2, m / s ^ 2, T)`: owner path, then the field
+    let hover = "```rust\nblock_roundtrip::Test\n```\n\n```rust\npub acc: UniformUnitMatrix<<Helper<{const}, Unit<Scale<_2<0>, _3<0>, _5<0>, _Pi<0>>, Dimension<_M<0>, _L<1>, _T<{const}>, _I<0>, _Θ<0>, _N<0>, _J<0>, _A<0>>>> as GetSecondGeneric>::Type, Matrix<T, Const<2>, Const<1>, ArrayStorage<T, 2, 1>>, ()>\n```\n\n---\nno Drop";
+    let out = HoverProcessor::new(crate::DisplayConfig::default()).improve_hover_text(hover);
+    assert!(
+        out.starts_with("```rust\nblock_roundtrip::Test\n```\n\n```rust\npub acc: UniformUnitMatrix<(m·sˀ), Vector2<T>>\n```\n\n```text\n"),
+        "{out}"
+    );
+    assert!(out.ends_with("---\nno Drop"), "{out}");
 }

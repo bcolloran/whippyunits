@@ -62,25 +62,35 @@ impl UnitFormatter {
     ) -> String {
         let base = self.format_types_with_original_impl(text, config, original_text);
         match self.unit_matrix_trace(original_text) {
-            Some(trace) => Self::insert_after_first_code_block(&base, &trace),
+            Some(trace) => Self::insert_after_last_code_block(&base, &trace),
             None => base,
         }
     }
 
     /// Insert a fenced `text` block containing `trace` immediately after the
-    /// first fenced code block of `base` (i.e. right after the prettified type,
-    /// and before any `Raw:` section). Falls back to appending if no code block
-    /// is found.
-    fn insert_after_first_code_block(base: &str, trace: &str) -> String {
+    /// last fenced code block of `base` — right after the prettified type
+    /// (rust-analyzer's field hovers put the owner's path in a first block and
+    /// the field in a second), and before any `Raw:` section. Falls back to
+    /// appending if no code block is found.
+    fn insert_after_last_code_block(base: &str, trace: &str) -> String {
         let block = format!("\n\n```text\n{trace}\n```");
-        if let Some(start) = base.find("```rust") {
-            let after_open = start + "```rust".len();
-            if let Some(rel_close) = base[after_open..].find("```") {
-                let close_end = after_open + rel_close + "```".len();
-                return format!("{}{}{}", &base[..close_end], block, &base[close_end..]);
-            }
+        // The Raw section is a code block too; the trace belongs before it
+        let limit = base.find("---\nRaw:").unwrap_or(base.len());
+        let mut close_end = None;
+        let mut search = 0;
+        while let Some(rel) = base[search..limit].find("```rust") {
+            let after_open = search + rel + "```rust".len();
+            let Some(rel_close) = base[after_open..limit].find("```") else {
+                break;
+            };
+            let end = after_open + rel_close + "```".len();
+            close_end = Some(end);
+            search = end;
         }
-        format!("{base}{block}")
+        match close_end {
+            Some(end) => format!("{}{}{}", &base[..end], block, &base[end..]),
+            None => format!("{base}{block}"),
+        }
     }
 
     fn format_types_with_original_impl(
@@ -190,14 +200,19 @@ impl UnitFormatter {
         // Drop a trailing default `, ()` brand from `MixedUnitMatrix<…>` so unbranded
         // matrices read as `MixedUnitMatrix<[…], […], Matrix<…>>`.
         result = self.strip_default_brand(&result);
+        // Fold nalgebra's expanded storage types back into their aliases
+        // (`Matrix<T, Const<2>, Const<1>, ArrayStorage<T, 2, 1>>` -> `Vector2<T>`).
+        result = self.collapse_nalgebra_aliases(&result);
         result
     }
 
-    /// Remove a trailing default brand (`, ()`) from every `MixedUnitMatrix<…>` in
-    /// `text`. `Brand` is the last, defaulted (`()`) type parameter, so an
-    /// unbranded matrix carries a redundant `()` we elide from the display.
+    /// Remove a trailing default brand (`, ()`) from every `MixedUnitMatrix<…>` and
+    /// `UniformUnitMatrix<…>` in `text`. `Brand` is the last, defaulted (`()`) type
+    /// parameter, so an unbranded matrix carries a redundant `()` we elide from the
+    /// display.
     fn strip_default_brand(&self, text: &str) -> String {
-        if !text.contains("MixedUnitMatrix<") {
+        const MATRIX_TYPES: [&str; 2] = ["MixedUnitMatrix<", "UniformUnitMatrix<"];
+        if !MATRIX_TYPES.iter().any(|name| text.contains(name)) {
             return text.to_string();
         }
 
@@ -206,11 +221,14 @@ impl UnitFormatter {
         let mut i = 0;
 
         while i < text.len() {
-            if text[i..].starts_with("MixedUnitMatrix<") && Self::is_ident_boundary(text, i) {
-                let lt = i + 15; // byte index of the '<' after "MixedUnitMatrix"
+            let matrix_type = MATRIX_TYPES
+                .iter()
+                .find(|name| text[i..].starts_with(*name) && Self::is_ident_boundary(text, i));
+            if let Some(name) = matrix_type {
+                let lt = i + name.len() - 1; // byte index of the '<'
                 if let Some(gt) = Self::find_matching_angle(bytes, lt) {
                     if let Some(new_inner) = self.drop_trailing_unit_brand(&text[lt + 1..gt]) {
-                        result.push_str("MixedUnitMatrix<");
+                        result.push_str(name);
                         result.push_str(&new_inner);
                         result.push('>');
                         i = gt + 1;
@@ -226,6 +244,80 @@ impl UnitFormatter {
         }
 
         result
+    }
+
+    /// Fold nalgebra's fully expanded matrix type back into the alias a user would
+    /// write. rust-analyzer prints `Matrix<T, Const<2>, Const<1>, ArrayStorage<T, 2, 1>>`
+    /// for a `Vector2<T>`; faithful, but unreadable inside a `UniformUnitMatrix<…>`.
+    /// Only the shapes nalgebra names are folded (`Vector2`, `Matrix2x3`, `SVector`,
+    /// `DMatrix`, …); views and custom storage are left as they are.
+    fn collapse_nalgebra_aliases(&self, text: &str) -> String {
+        if !text.contains("Matrix<") {
+            return text.to_string();
+        }
+
+        let bytes = text.as_bytes();
+        let mut result = String::new();
+        let mut i = 0;
+
+        while i < text.len() {
+            if text[i..].starts_with("Matrix<") && Self::is_ident_boundary(text, i) {
+                let lt = i + "Matrix".len();
+                if let Some(gt) = Self::find_matching_angle(bytes, lt) {
+                    if let Some(alias) = Self::nalgebra_alias(&text[lt + 1..gt]) {
+                        // The qualifier, if any, was already copied over; the alias is unqualified
+                        if result.ends_with("nalgebra::") {
+                            result.truncate(result.len() - "nalgebra::".len());
+                        }
+                        result.push_str(&alias);
+                        i = gt + 1;
+                        continue;
+                    }
+                }
+            }
+
+            let ch = text[i..].chars().next().unwrap();
+            let len = ch.len_utf8();
+            result.push_str(&text[i..i + len]);
+            i += len;
+        }
+
+        result
+    }
+
+    /// The nalgebra alias for the arguments of `Matrix<T, R, C, S>`, if it has one.
+    fn nalgebra_alias(args: &str) -> Option<String> {
+        let args = Self::split_top_level(args);
+        if args.len() != 4 {
+            return None;
+        }
+        let scalar = args[0].trim();
+        let rows = MatrixDim::parse(args[1])?;
+        let cols = MatrixDim::parse(args[2])?;
+        let storage = args[3].trim().trim_start_matches("nalgebra::");
+        if !(storage.starts_with("ArrayStorage<") || storage.starts_with("VecStorage<")) {
+            return None;
+        }
+
+        use MatrixDim::{Dyn, Fixed};
+        let alias = match (rows, cols) {
+            (Fixed(r), Fixed(c)) if r <= 6 && c <= 6 => match (r, c) {
+                (r, 1) => format!("Vector{r}<{scalar}>"),
+                (1, c) => format!("RowVector{c}<{scalar}>"),
+                (r, c) if r == c => format!("Matrix{r}<{scalar}>"),
+                (r, c) => format!("Matrix{r}x{c}<{scalar}>"),
+            },
+            (Fixed(r), Fixed(1)) => format!("SVector<{scalar}, {r}>"),
+            (Fixed(1), Fixed(c)) => format!("RowSVector<{scalar}, {c}>"),
+            (Fixed(r), Fixed(c)) => format!("SMatrix<{scalar}, {r}, {c}>"),
+            (Dyn, Dyn) => format!("DMatrix<{scalar}>"),
+            (Dyn, Fixed(1)) => format!("DVector<{scalar}>"),
+            (Fixed(1), Dyn) => format!("RowDVector<{scalar}>"),
+            (Dyn, Fixed(c)) if c <= 6 => format!("MatrixXx{c}<{scalar}>"),
+            (Fixed(r), Dyn) if r <= 6 => format!("Matrix{r}xX<{scalar}>"),
+            _ => return None,
+        };
+        Some(alias)
     }
 
     /// Build a values-free diagram of the first concrete unit matrix in `text`:
@@ -1489,4 +1581,22 @@ fn code_blocks(text: &str) -> Vec<&str> {
         rest = &rest[after_open + rel_close + "```".len()..];
     }
     blocks
+}
+
+
+/// A nalgebra matrix dimension argument: `Const<N>` or `Dyn`.
+enum MatrixDim {
+    Fixed(usize),
+    Dyn,
+}
+
+impl MatrixDim {
+    fn parse(arg: &str) -> Option<Self> {
+        let arg = arg.trim().trim_start_matches("nalgebra::");
+        if arg == "Dyn" || arg == "Dynamic" {
+            return Some(MatrixDim::Dyn);
+        }
+        let n = arg.strip_prefix("Const<")?.strip_suffix('>')?.trim();
+        n.parse().ok().map(MatrixDim::Fixed)
+    }
 }
