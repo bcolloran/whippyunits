@@ -1,0 +1,76 @@
+{
+  "server": "rust-analyzer 0.3.3049-standalone (installed VS Code extension)",
+  "measurement": "Direct LSP, separate minimal Cargo consumers of the optimized branch, two fresh server starts per configuration",
+  "configuration": {
+    "checkOnSave": false,
+    "cargo.allTargets": false,
+    "procMacro.enable": true,
+    "cachePriming.enable": true
+  },
+  "notes": [
+    "Cargo artifacts and filesystem caches are warm; these are fresh analyzer processes, not cold-machine startup measurements.",
+    "Neither the VS Code UI nor the whippyunits formatter extension participated.",
+    "The full configuration enables std, all-units, literals. Dynamics enables std, units-dynamics. Neither enables serde.",
+    "The test contains two scalar functions using unit macros, constructors, and dynamics arithmetic. It does not reproduce the complete workspace or a generic nalgebra-heavy application.",
+    "Ready means experimental/serverStatus reported quiescent after indexing.",
+    "Unit-method completions were absent in both headless configurations. Completion timings are excluded from claims."
+  ],
+  "runs": [
+    {
+      "configuration": "full",
+      "run": 1,
+      "indexing_ready_seconds": 46.931560138997156,
+      "hover_request_ms": [
+        565.9487460070523,
+        0.5608500068774447,
+        0.28589999419637024,
+        0.26330001128371805,
+        0.33912999788299203,
+        0.32207099138759077
+      ],
+      "resolved_hover": "\n```rust\nlet velocity: Quantity<Unit<Scale, Dimension<_M, _L<1>, _T<-1>>>>\n```\n\n---\n\nsize = 8, align = 0x8, no Drop"
+    },
+    {
+      "configuration": "dynamics",
+      "run": 1,
+      "indexing_ready_seconds": 27.270385951997014,
+      "hover_request_ms": [
+        564.8401969956467,
+        0.39736999315209687,
+        0.5361499934224412,
+        0.30471000354737043,
+        0.2501499984646216,
+        0.25679000827949494
+      ],
+      "resolved_hover": "\n```rust\nlet velocity: Quantity<Unit<Scale, Dimension<_M, _L<1>, _T<-1>>>>\n```\n\n---\n\nsize = 8, align = 0x8, no Drop"
+    },
+    {
+      "configuration": "full",
+      "run": 2,
+      "indexing_ready_seconds": 47.39382283300802,
+      "hover_request_ms": [
+        544.2920259956736,
+        0.6256299966480583,
+        0.4014000005554408,
+        0.3421700093895197,
+        0.32451999140903354,
+        0.3277100040577352
+      ],
+      "resolved_hover": "\n```rust\nlet velocity: Quantity<Unit<Scale, Dimension<_M, _L<1>, _T<-1>>>>\n```\n\n---\n\nsize = 8, align = 0x8, no Drop"
+    },
+    {
+      "configuration": "dynamics",
+      "run": 2,
+      "indexing_ready_seconds": 26.58475855299912,
+      "hover_request_ms": [
+        544.7780660033459,
+        0.38907000271137804,
+        0.2905200090026483,
+        0.301649997709319,
+        0.28936000308021903,
+        0.32403999648522586
+      ],
+      "resolved_hover": "\n```rust\nlet velocity: Quantity<Unit<Scale, Dimension<_M, _L<1>, _T<-1>>>>\n```\n\n---\n\nsize = 8, align = 0x8, no Drop"
+    }
+  ]
+}
