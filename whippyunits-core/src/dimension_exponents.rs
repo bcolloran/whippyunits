@@ -473,14 +473,14 @@ macro_rules! __exponents_impl_op {
             const ANGLE_EXP2: i16,
         > $op<__exponents!(@rhs)> for __exponents!(@lhs)
 where
-    N<MASS_EXP1>: Add<N<MASS_EXP2>, Output = N<MASS_EXP>>,
-    N<LENGTH_EXP1>: Add<N<LENGTH_EXP2>, Output = N<LENGTH_EXP>>,
-    N<TIME_EXP1>: Add<N<TIME_EXP2>, Output = N<TIME_EXP>>,
-    N<CURRENT_EXP1>: Add<N<CURRENT_EXP2>, Output = N<CURRENT_EXP>>,
-    N<TEMPERATURE_EXP1>: Add<N<TEMPERATURE_EXP2>, Output = N<TEMPERATURE_EXP>>,
-    N<AMOUNT_EXP1>: Add<N<AMOUNT_EXP2>, Output = N<AMOUNT_EXP>>,
-    N<LUMINOSITY_EXP1>: Add<N<LUMINOSITY_EXP2>, Output = N<LUMINOSITY_EXP>>,
-    N<ANGLE_EXP1>: Add<N<ANGLE_EXP2>, Output = N<ANGLE_EXP>>,
+    N<MASS_EXP1>: $op<N<MASS_EXP2>, Output = N<MASS_EXP>>,
+    N<LENGTH_EXP1>: $op<N<LENGTH_EXP2>, Output = N<LENGTH_EXP>>,
+    N<TIME_EXP1>: $op<N<TIME_EXP2>, Output = N<TIME_EXP>>,
+    N<CURRENT_EXP1>: $op<N<CURRENT_EXP2>, Output = N<CURRENT_EXP>>,
+    N<TEMPERATURE_EXP1>: $op<N<TEMPERATURE_EXP2>, Output = N<TEMPERATURE_EXP>>,
+    N<AMOUNT_EXP1>: $op<N<AMOUNT_EXP2>, Output = N<AMOUNT_EXP>>,
+    N<LUMINOSITY_EXP1>: $op<N<LUMINOSITY_EXP2>, Output = N<LUMINOSITY_EXP>>,
+    N<ANGLE_EXP1>: $op<N<ANGLE_EXP2>, Output = N<ANGLE_EXP>>,
 {
             $($t)*
         }
@@ -548,6 +548,53 @@ mod tests {
 
         let exp = exp + <dimension_exponents!([0, 0, 2, 0, 0, 0, 0, 0])>::new();
         assert_eq!(format!("{}", exp.value()), "L^1 * T^2");
+    }
+
+    #[test]
+    fn type_exponents_add_all_axes() {
+        type Left = dimension_exponents!([1, -2, 3, -4, 5, -6, 7, -8]);
+        type Right = dimension_exponents!([-2, 3, -4, 5, -6, 7, -8, 9]);
+        type Expected = dimension_exponents!([-1, 1, -1, 1, -1, 1, -1, 1]);
+
+        let result: Expected = Left::new() + Right::new();
+
+        assert_eq!(
+            result.value(),
+            DynDimensionExponents([-1, 1, -1, 1, -1, 1, -1, 1])
+        );
+    }
+
+    #[test]
+    fn type_exponents_subtract_all_axes() {
+        type Left = dimension_exponents!([1, -2, 3, -4, 5, -6, 7, -8]);
+        type Right = dimension_exponents!([-2, 3, -4, 5, -6, 7, -8, 9]);
+        type Expected = dimension_exponents!([3, -5, 7, -9, 11, -13, 15, -17]);
+
+        let result: Expected = Left::new() - Right::new();
+
+        assert_eq!(
+            result.value(),
+            DynDimensionExponents([3, -5, 7, -9, 11, -13, 15, -17])
+        );
+    }
+
+    #[test]
+    fn type_exponents_subtract_self_to_zero() {
+        let result: Zero = Length::new() - Length::new();
+
+        assert!(result.is_zero());
+    }
+
+    #[test]
+    fn type_exponents_subtract_to_negative_power() {
+        type Velocity = dimension_exponents!([0, 1, -1, 0, 0, 0, 0, 0]);
+
+        let result: Velocity = Length::new() - Time::new();
+
+        assert_eq!(
+            result.value(),
+            DynDimensionExponents([0, 1, -1, 0, 0, 0, 0, 0])
+        );
     }
 
     #[test]
