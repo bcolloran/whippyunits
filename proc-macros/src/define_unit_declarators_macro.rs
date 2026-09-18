@@ -526,8 +526,18 @@ impl DefineBaseUnitsInput {
                 });
             }
 
-            // Note: Additional units (like Celsius, Fahrenheit, etc.) are not included in the base dimensions
-            // They would need to be handled separately, just like in generate_default_declarators_macro.rs
+            // Keep the two dynamics conversion constructors in local storage
+            // namespaces too, using the same selection as the default catalog.
+            for unit in dimension.units.iter().filter(|unit| {
+                matches!(unit.name, "tick" | "degree")
+                    && crate::utils::catalog::entry_enabled(unit, None)
+            }) {
+                let scale_name =
+                    syn::parse_str::<Ident>(&generate_scale_name("", unit.name)).unwrap();
+                let fn_name =
+                    syn::parse_str::<Ident>(&whippyunits_core::make_plural(unit.name)).unwrap();
+                scale_definitions.push(quote! { (#scale_name, #fn_name) });
+            }
 
             // Generate the trait definition and implementations
             let mut trait_methods = Vec::new();

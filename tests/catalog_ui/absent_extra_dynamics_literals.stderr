@@ -1,0 +1,37 @@
+error[E0432]: unresolved imports `whippyunits::default_declarators::literals::float::A`, `whippyunits::default_declarators::literals::float::K`, `whippyunits::default_declarators::literals::float::L`, `whippyunits::default_declarators::literals::float::g`, `whippyunits::default_declarators::literals::float::min`, `whippyunits::default_declarators::literals::float::mm`
+ --> tests/catalog_ui/absent_extra_dynamics_literals.rs:1:57
+  |
+1 | use whippyunits::default_declarators::literals::float::{A, K, L, g, min, mm};
+  |                                                         ^  ^  ^  ^  ^^^  ^^ no `mm` in `default_declarators::literals::float`
+  |                                                         |  |  |  |  |
+  |                                                         |  |  |  |  no `min` in `default_declarators::literals::float`
+  |                                                         |  |  |  no `g` in `default_declarators::literals::float`
+  |                                                         |  |  no `L` in `default_declarators::literals::float`
+  |                                                         |  no `K` in `default_declarators::literals::float`
+  |                                                         no `A` in `default_declarators::literals::float`
+  |
+help: a similar name exists in the module
+  |
+1 - use whippyunits::default_declarators::literals::float::{A, K, L, g, min, mm};
+1 + use whippyunits::default_declarators::literals::float::{J, K, L, g, min, mm};
+  |
+help: a similar name exists in the module
+  |
+1 - use whippyunits::default_declarators::literals::float::{A, K, L, g, min, mm};
+1 + use whippyunits::default_declarators::literals::float::{A, J, L, g, min, mm};
+  |
+help: a similar name exists in the module
+  |
+1 - use whippyunits::default_declarators::literals::float::{A, K, L, g, min, mm};
+1 + use whippyunits::default_declarators::literals::float::{A, K, J, g, min, mm};
+  |
+help: a similar name exists in the module
+  |
+1 - use whippyunits::default_declarators::literals::float::{A, K, L, g, min, mm};
+1 + use whippyunits::default_declarators::literals::float::{A, K, L, J, min, mm};
+  |
+help: a similar name exists in the module
+  |
+1 - use whippyunits::default_declarators::literals::float::{A, K, L, g, min, mm};
+1 + use whippyunits::default_declarators::literals::float::{A, K, L, g, min, Nm};
+  |

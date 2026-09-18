@@ -19,7 +19,7 @@ fn scale_type_to_actual_unit_symbol(scale_type: &str) -> Option<String> {
 
     // Try to find a unit that matches the scale type name directly
     for unit in Unit::BASES.iter() {
-        if unit.name == scale_type {
+        if unit.name.eq_ignore_ascii_case(scale_type) {
             return Some(unit.symbols[0].to_string());
         }
     }
@@ -27,7 +27,7 @@ fn scale_type_to_actual_unit_symbol(scale_type: &str) -> Option<String> {
     // Try to find in all dimensions
     for dimension in Dimension::ALL {
         for unit in dimension.units {
-            if unit.name == scale_type {
+            if unit.name.eq_ignore_ascii_case(scale_type) {
                 return Some(unit.symbols[0].to_string());
             }
         }

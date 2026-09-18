@@ -21,5 +21,15 @@ include!("photometric.rs");
 #[cfg(all(feature = "units-thermal"))]
 include!("thermal.rs");
 
-#[cfg(all(feature = "units-si-dynamics", not(feature = "units-dynamics")))]
+#[cfg(all(
+    feature = "units-si-dynamics",
+    not(feature = "units-dynamics"),
+    not(feature = "units-dynamics-conversions")
+))]
 include!("si_dynamics.rs");
+
+#[cfg(all(
+    feature = "units-dynamics-conversions",
+    not(feature = "units-dynamics")
+))]
+include!("dynamics_conversions.rs");

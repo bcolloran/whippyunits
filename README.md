@@ -446,6 +446,7 @@ WhippyUnits works on **stable Rust**, using a typenum-based polyfill for compile
 | `all-units` | Yes | Enables every generated unit catalog below |
 | `units-dynamics` | Via `all-units` | Mass, length, time, angle, and their derived units, including force, energy, power, pressure, and density |
 | `units-si-dynamics` | No | Coherent SI dynamics constructors and aliases only: kg, m, s, rad, Hz, N, J, Nm, W, Pa |
+| `units-dynamics-conversions` | No | The coherent dynamics catalog plus degrees and fixed 60 Hz ticks |
 | `units-electrical` | Via `all-units` | Electrical and magnetic units; includes dynamics |
 | `units-thermal` | Via `all-units` | Temperature units, including affine conversions; includes dynamics |
 | `units-chemical` | Via `all-units` | Amount-of-substance units; includes dynamics |
@@ -473,6 +474,19 @@ This option trims generated declarations; it does not change quantity types
 or disable conversions. Catalog features are additive: enabling the broader
 `units-dynamics` or `all-units` restores their larger catalogs. `whippyalgebra`
 forwards `units-si-dynamics` too.
+
+For dynamics with degrees and a fixed 60 Hz time step, use
+`features = ["std", "units-dynamics-conversions"]` with `default-features = false`.
+This adds only `Degree`/`.degrees()` and `Tick`/`.ticks()` to the ten coherent
+constructors. **One `tick` always means exactly 1/60 of an SI second**; it does
+not mean an arbitrary clock tick or a configurable simulation step. The DSL
+spellings are `tick` and `deg` (or `degree`); for example,
+`value!(quantity!(60.0, tick), s)` is `1.0`, and `m / tick ^ 2` converts to
+`m / s ^ 2` normally. Add `literals` for suffixes such as `60.0tick` and `360.0deg`.
+The profile does not add other prefixes, minutes, imperial units, or electrical
+and temperature constructors. Those units remain usable through the DSL.
+`whippyalgebra` forwards this profile too. Catalog features combine additively,
+so a dependency requesting a broader catalog still enables it.
 
 This configuration uses the reduced exponent bridge. Add `"wide-exponents"`
 if intermediate dimension or scale exponents exceed 32 in magnitude. This is

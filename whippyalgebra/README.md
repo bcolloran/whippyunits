@@ -73,6 +73,8 @@ default `std` feature is off. The features are additive:
 | `nalgebra` | Yes | The nalgebra backend adapter. |
 | `all-units` | Yes | All whippyunits constructor and type-alias catalogs. |
 | `units-dynamics` | via `all-units` | Dynamics constructors and aliases; includes mass, length, time, angle, and derived units. |
+| `units-si-dynamics` | No | Only the ten coherent SI dynamics constructors and aliases. |
+| `units-dynamics-conversions` | No | Coherent SI dynamics plus degrees and fixed 60 Hz ticks (one tick is exactly 1/60 second). |
 | `units-electrical`, `units-thermal`, `units-chemical`, `units-photometric` | via `all-units` | Additional whippyunits catalogs; each includes dynamics. |
 | `literals` | Yes | Custom literal suffix macros for the selected catalogs. |
 

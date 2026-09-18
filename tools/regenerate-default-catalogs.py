@@ -21,14 +21,15 @@ def main():
     env.setdefault("CARGO_TARGET_DIR", str(root / "target/catalog-regeneration"))
     with tempfile.TemporaryDirectory(prefix="whippyunits-catalog-") as scratch:
         generated = Path(scratch)
-        for mode, features in [("full", "all-units"), ("coherent", "units-si-dynamics")]:
+        for mode, features in [("full", "all-units"), ("coherent", "units-si-dynamics"),
+                               ("conversions", "units-dynamics-conversions")]:
             env.update(WHIPPY_CATALOG_OUT=str(generated), WHIPPY_CATALOG_MODE=mode)
             subprocess.run([
                 "cargo", "test", "--locked", "-p", "whippyunits-proc-macros", "--lib",
                 "--no-default-features", "--features", features, "export_default_catalog",
                 "--", "--ignored", "--nocapture",
             ], cwd=root, env=env, check=True)
-        required = {"mod.rs", "si_dynamics.rs"}
+        required = {"mod.rs", "si_dynamics.rs", "dynamics_conversions.rs"}
         missing = sorted(name for name in required if not (generated / name).is_file())
         if missing:
             parser.exit(1, "Catalog export did not produce required files: " + ", ".join(missing) + "\nNo checked-in files were changed.\n")

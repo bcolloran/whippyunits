@@ -1,7 +1,7 @@
 use proc_macro2::TokenStream;
 use quote::quote;
-use syn::Ident;
 use syn::parse::{Parse, ParseStream};
+use syn::Ident;
 
 use crate::utils::shared_utils::{generate_scale_name, is_valid_identifier};
 
@@ -683,7 +683,7 @@ impl DefaultDeclaratorsInput {
         use whippyunits_core::{
             dimension_exponents::DynDimensionExponents,
             scale_exponents::ScaleExponents,
-            storage_unit::{UnitLiteralConfig, generate_unit_literal},
+            storage_unit::{generate_unit_literal, UnitLiteralConfig},
         };
 
         // Create scale exponents from the parameters
@@ -786,16 +786,25 @@ impl DefaultDeclaratorsInput {
         let scale_p3: Vec<_> = rows.iter().map(|row| &row.elems[3]).collect();
         let scale_p5: Vec<_> = rows.iter().map(|row| &row.elems[4]).collect();
         let scale_pi: Vec<_> = rows.iter().map(|row| &row.elems[5]).collect();
+        let scale_docs: Vec<_> = scale_name.iter().map(|name| {
+            if matches!(name, syn::Expr::Path(path) if path.path.is_ident("Tick")) {
+                quote!(#[doc = "A fixed 60 Hz tick: exactly 1/60 of an SI second, not an arbitrary clock tick."])
+            } else {
+                TokenStream::new()
+            }
+        }).collect();
         quote! {
         // Generate the trait definition (generic over storage type)
         pub trait #trait_name<T = f64> {
             #(
+                #scale_docs
                 fn #fn_name(self) -> #scale_name<T>;
             )*
         }
 
         // Generate the type definitions (generic with f64 default)
         #(
+            #scale_docs
             pub type #scale_name<T = f64> = Quantity<
                 Unit<Scale<_2<#scale_p2>, _3<#scale_p3>, _5<#scale_p5>, _Pi<#scale_pi>>,
                 Dimension<_M<#mass_exp>, _L<#length_exp>, _T<#time_exp>, _I<#current_exp>, _Θ<#temperature_exp>, _N<#amount_exp>, _J<#luminosity_exp>, _A<#angle_exp>>>,

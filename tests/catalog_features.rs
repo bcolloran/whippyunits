@@ -312,8 +312,133 @@ fn coherent_literals_keep_kilogram_and_named_derived_units() {
 #[test]
 fn coherent_catalog_omits_noncoherent_declarators() {
     let cases = trybuild::TestCases::new();
+    #[cfg(not(feature = "units-dynamics-conversions"))]
     cases.compile_fail("tests/catalog_ui/absent_noncoherent.rs");
+    #[cfg(feature = "units-dynamics-conversions")]
+    cases.compile_fail("tests/catalog_ui/absent_extra_dynamics.rs");
     cases.compile_fail("tests/catalog_ui/absent_noncoherent_namespaces.rs");
-    #[cfg(feature = "literals")]
+    #[cfg(all(feature = "literals", not(feature = "units-dynamics-conversions")))]
     cases.compile_fail("tests/catalog_ui/absent_noncoherent_literals.rs");
+    #[cfg(all(feature = "literals", feature = "units-dynamics-conversions"))]
+    cases.compile_fail("tests/catalog_ui/absent_extra_dynamics_literals.rs");
+}
+
+// These expressions must work with every catalog choice, including no catalog.
+#[test]
+fn fixed_60_hz_ticks_and_degrees_support_composed_dsl_conversions() {
+    let duration: qty!(tick) = quantity!(60.0, tick);
+    assert_eq!(value!(duration, s), 1.0);
+    let round_trip: qty!(tick) = whippyunits::api::rescale(quantity!(1.0, s));
+    assert_eq!(round_trip.unsafe_value, 60.0);
+    let angle: qty!(deg) = quantity!(360.0, degree);
+    assert!((value!(angle, rad) - core::f64::consts::TAU).abs() < 1e-12);
+
+    let velocity: qty!(m / tick) = quantity!(2.0, m / tick);
+    let acceleration: qty!(m / tick ^ 2) = quantity!(3.0, m / tick ^ 2);
+    assert_eq!(value!(velocity, m / s), 120.0);
+    assert_eq!(value!(acceleration, m / s ^ 2), 10800.0);
+    let velocity_si: qty!(m / s) = whippyunits::api::rescale(velocity);
+    let acceleration_si: qty!(m / s ^ 2) = whippyunits::api::rescale(acceleration);
+    assert_eq!(velocity_si.unsafe_value, 120.0);
+    assert_eq!(acceleration_si.unsafe_value, 10800.0);
+    let recovered: qty!(m / tick) = whippyunits::api::rescale(velocity_si);
+    assert_eq!(recovered.unsafe_value, 2.0);
+}
+
+// Tick and Degree may also be local storage scales even when their optional
+// convenience aliases are disabled.
+whippyunits::define_unit_declarators!(
+    tick_storage,
+    TickBrand,
+    Kilogram,
+    Meter,
+    Tick,
+    Ampere,
+    Kelvin,
+    Mole,
+    Candela,
+    Degree
+);
+
+#[test]
+fn tick_and_degree_local_storage_is_independent_of_catalog_selection() {
+    let duration: qty!(tick, f64, tick_storage::TickBrand) = tick_storage::quantity!(1.0, s);
+    let angle: qty!(deg, f64, tick_storage::TickBrand) =
+        tick_storage::quantity!(core::f64::consts::TAU, rad);
+    let speed: qty!(m / tick, f64, tick_storage::TickBrand) = tick_storage::quantity!(120.0, m / s);
+    assert_eq!(duration.unsafe_value, 60.0);
+    assert!((angle.unsafe_value - 360.0).abs() < 1e-10);
+    assert_eq!(speed.unsafe_value, 2.0);
+}
+
+#[cfg(any(feature = "units-dynamics", feature = "units-dynamics-conversions"))]
+#[test]
+fn dynamics_conversion_constructors_preserve_scales_and_brands() {
+    {
+        use whippyunits::default_declarators::*;
+        let duration: Tick = 60.0.ticks();
+        let angle: Degree = 360.0.degrees();
+        assert_eq!(value!(duration, s), 1.0);
+        assert!((value!(angle, rad) - core::f64::consts::TAU).abs() < 1e-12);
+    }
+    {
+        use local_catalog::*;
+        let duration: qty!(s, f64, LocalBrand) = 60.0.ticks();
+        let angle: qty!(rad, f64, LocalBrand) = 360.0.degrees();
+        assert_eq!(duration.unsafe_value, 1.0);
+        assert!((angle.unsafe_value - core::f64::consts::TAU).abs() < 1e-12);
+    }
+    {
+        use branded_catalog::*;
+        let duration: qty!(tick, f64, Brand) = 60.0.ticks();
+        let angle: qty!(deg, f64, Brand) = 360.0.degrees();
+        assert_eq!(duration.unsafe_value, 60.0);
+        assert_eq!(angle.unsafe_value, 360.0);
+    }
+    {
+        use tick_storage::*;
+        let duration: qty!(tick, f64, TickBrand) = 1.0.seconds();
+        let angle: qty!(deg, f64, TickBrand) = core::f64::consts::TAU.radians();
+        assert_eq!(duration.unsafe_value, 60.0);
+        assert!((angle.unsafe_value - 360.0).abs() < 1e-10);
+    }
+}
+
+#[cfg(all(
+    feature = "literals",
+    any(feature = "units-dynamics", feature = "units-dynamics-conversions")
+))]
+#[culit::culit(whippyunits::default_declarators::literals)]
+#[test]
+fn dynamics_conversion_literals_preserve_storage_scales() {
+    let duration: qty!(tick) = 60.0tick;
+    let angle: qty!(deg) = 360.0deg;
+    assert_eq!(value!(duration, s), 1.0);
+    assert!((value!(angle, rad) - core::f64::consts::TAU).abs() < 1e-12);
+}
+
+#[cfg(all(
+    feature = "literals",
+    any(feature = "units-dynamics", feature = "units-dynamics-conversions")
+))]
+#[culit::culit(local_catalog::literals)]
+#[test]
+fn local_conversion_literals_preserve_rescaling() {
+    let duration: qty!(s, f64, local_catalog::LocalBrand) = 60.0tick;
+    let angle: qty!(rad, f64, local_catalog::LocalBrand) = 360.0deg;
+    assert_eq!(duration.unsafe_value, 1.0);
+    assert!((angle.unsafe_value - core::f64::consts::TAU).abs() < 1e-12);
+}
+
+#[cfg(all(
+    feature = "literals",
+    any(feature = "units-dynamics", feature = "units-dynamics-conversions")
+))]
+#[culit::culit(branded_catalog::literals)]
+#[test]
+fn branded_conversion_literals_preserve_scales() {
+    let duration: qty!(tick, f64, branded_catalog::Brand) = 60.0tick;
+    let angle: qty!(deg, f64, branded_catalog::Brand) = 360.0deg;
+    assert_eq!(duration.unsafe_value, 60.0);
+    assert_eq!(angle.unsafe_value, 360.0);
 }

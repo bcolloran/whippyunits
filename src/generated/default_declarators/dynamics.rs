@@ -3338,6 +3338,8 @@ pub trait MetricTime<T = f64> {
     fn yottaseconds(self) -> Yottasecond<T>;
     fn ronnaseconds(self) -> Ronnasecond<T>;
     fn quettaseconds(self) -> Quettasecond<T>;
+    #[doc = "A fixed 60 Hz tick: exactly 1/60 of an SI second, not an arbitrary clock tick."]
+    fn ticks(self) -> Tick<T>;
     fn minutes(self) -> Minute<T>;
     fn quectominutes(self) -> Quectominute<T>;
     fn rontominutes(self) -> Rontominute<T>;
@@ -3610,6 +3612,14 @@ pub type Ronnasecond<T = f64> = Quantity<
 pub type Quettasecond<T = f64> = Quantity<
     Unit<
         Scale<_2<30i16>, _3<0i16>, _5<30i16>, _Pi<0i16>>,
+        Dimension<_M<0i16>, _L<0i16>, _T<1i16>, _I<0i16>, _Θ<0i16>, _N<0i16>, _J<0i16>, _A<0i16>>,
+    >,
+    T,
+>;
+#[doc = "A fixed 60 Hz tick: exactly 1/60 of an SI second, not an arbitrary clock tick."]
+pub type Tick<T = f64> = Quantity<
+    Unit<
+        Scale<_2<-2i16>, _3<-1i16>, _5<-1i16>, _Pi<0i16>>,
         Dimension<_M<0i16>, _L<0i16>, _T<1i16>, _I<0i16>, _Θ<0i16>, _N<0i16>, _J<0i16>, _A<0i16>>,
     >,
     T,
@@ -4751,6 +4761,24 @@ impl MetricTime for f64 {
         Quantity::<
             Unit<
                 Scale<_2<30i16>, _3<0i16>, _5<30i16>, _Pi<0i16>>,
+                Dimension<
+                    _M<0i16>,
+                    _L<0i16>,
+                    _T<1i16>,
+                    _I<0i16>,
+                    _Θ<0i16>,
+                    _N<0i16>,
+                    _J<0i16>,
+                    _A<0i16>,
+                >,
+            >,
+            f64,
+        >::new(self)
+    }
+    fn ticks(self) -> Tick {
+        Quantity::<
+            Unit<
+                Scale<_2<-2i16>, _3<-1i16>, _5<-1i16>, _Pi<0i16>>,
                 Dimension<
                     _M<0i16>,
                     _L<0i16>,
@@ -7003,6 +7031,24 @@ impl MetricTime<i32> for i32 {
         Quantity::<
             Unit<
                 Scale<_2<30i16>, _3<0i16>, _5<30i16>, _Pi<0i16>>,
+                Dimension<
+                    _M<0i16>,
+                    _L<0i16>,
+                    _T<1i16>,
+                    _I<0i16>,
+                    _Θ<0i16>,
+                    _N<0i16>,
+                    _J<0i16>,
+                    _A<0i16>,
+                >,
+            >,
+            i32,
+        >::new(self)
+    }
+    fn ticks(self) -> Tick<i32> {
+        Quantity::<
+            Unit<
+                Scale<_2<-2i16>, _3<-1i16>, _5<-1i16>, _Pi<0i16>>,
                 Dimension<
                     _M<0i16>,
                     _L<0i16>,

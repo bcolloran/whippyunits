@@ -89,8 +89,8 @@ fn features(dim: [i16; 8]) -> Vec<&'static str> {
     result
 }
 
-/// Invoked twice by tools/regenerate-default-catalogs.py, once with all unit
-/// families and once with the coherent dynamics selection. It is ignored during
+/// Invoked by tools/regenerate-default-catalogs.py for the full catalog and both
+/// lean dynamics selections. It is ignored during
 /// ordinary tests because exporting artifacts is an explicit developer action.
 #[test]
 #[ignore = "developer catalog export; use tools/regenerate-default-catalogs.py"]
@@ -98,7 +98,9 @@ fn export_default_catalog() {
     let output = std::path::PathBuf::from(
         std::env::var_os("WHIPPY_CATALOG_OUT").expect("WHIPPY_CATALOG_OUT"),
     );
-    let coherent = std::env::var("WHIPPY_CATALOG_MODE").unwrap() == "coherent";
+    let mode = std::env::var("WHIPPY_CATALOG_MODE").unwrap();
+    assert!(matches!(mode.as_str(), "full" | "coherent" | "conversions"));
+    let lean = mode != "full";
     let generated = super::DefaultDeclaratorsInput.expand();
     let parsed: syn::File =
         syn::parse2(generated).expect("default catalog emits complete Rust items");
@@ -156,8 +158,13 @@ fn export_default_catalog() {
             ),
         };
         let required = features(dim);
-        let name = if coherent {
-            "si_dynamics".to_owned()
+        let name = if lean {
+            if mode == "conversions" {
+                "dynamics_conversions"
+            } else {
+                "si_dynamics"
+            }
+            .to_owned()
         } else if required.is_empty() {
             "dimensionless".to_owned()
         } else {
@@ -182,7 +189,7 @@ fn export_default_catalog() {
             format!("{header}{tokens}\n"),
         )
         .unwrap();
-        if !coherent {
+        if !lean {
             if !required.is_empty() {
                 index.push_str(&format!(
                     "#[cfg(all({}))]\n",
@@ -196,8 +203,9 @@ fn export_default_catalog() {
             index.push_str(&format!("include!({:?});\n\n", format!("{name}.rs")));
         }
     }
-    if !coherent {
-        index.push_str("#[cfg(all(feature = \"units-si-dynamics\", not(feature = \"units-dynamics\")))]\ninclude!(\"si_dynamics.rs\");\n");
+    if !lean {
+        index.push_str("#[cfg(all(feature = \"units-si-dynamics\", not(feature = \"units-dynamics\"), not(feature = \"units-dynamics-conversions\")))]\ninclude!(\"si_dynamics.rs\");\n\n");
+        index.push_str("#[cfg(all(feature = \"units-dynamics-conversions\", not(feature = \"units-dynamics\")))]\ninclude!(\"dynamics_conversions.rs\");\n");
         std::fs::write(output.join("mod.rs"), index).unwrap();
     }
 }
@@ -215,6 +223,7 @@ fn enabled_meta(meta: &syn::Meta) -> bool {
             match name.value().as_str() {
                 "units-dynamics" => cfg!(feature = "units-dynamics"),
                 "units-si-dynamics" => cfg!(feature = "units-si-dynamics"),
+                "units-dynamics-conversions" => cfg!(feature = "units-dynamics-conversions"),
                 "units-electrical" => cfg!(feature = "units-electrical"),
                 "units-thermal" => cfg!(feature = "units-thermal"),
                 "units-chemical" => cfg!(feature = "units-chemical"),

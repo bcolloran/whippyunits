@@ -65,6 +65,8 @@ all-units = ["units-dynamics", "units-electrical", "units-thermal", "units-chemi
 units-dynamics = ["whippyunits-proc-macros/units-dynamics"]
 # Coherent mechanical conveniences only; broader catalogs remain additive.
 units-si-dynamics = ["whippyunits-proc-macros/units-si-dynamics"]
+# Coherent dynamics plus degrees and fixed 60 Hz ticks, without other prefixes.
+units-dynamics-conversions = ["units-si-dynamics", "whippyunits-proc-macros/units-dynamics-conversions"]
 units-electrical = ["units-dynamics", "whippyunits-proc-macros/units-electrical"]
 units-thermal = ["units-dynamics", "whippyunits-proc-macros/units-thermal"]
 units-chemical = ["units-dynamics", "whippyunits-proc-macros/units-chemical"]

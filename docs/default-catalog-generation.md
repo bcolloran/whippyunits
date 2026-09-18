@@ -12,7 +12,7 @@ python3 tools/regenerate-default-catalogs.py --check
 
 The command requires Python 3 and the pinned Rust toolchain. It invokes a
 developer-only ignored test in the proc-macro crate for the complete catalog
-and the coherent SI dynamics catalog, then formats the results with rustfmt.
+and the two lean dynamics catalogs, then formats the results with rustfmt.
 There is no build script or regeneration during consumer compilation.
 `--check` compares names and contents without modifying the checked-in files.
 
@@ -25,8 +25,11 @@ without compiling the large developer emitters into the proc-macro library.
 Nonmetric groups use sorted keys for deterministic output.
 Generated files are partitioned by the physical axes each declaration requires;
 composite dimensions require every contributing feature. The coherent dynamics
-file is selected only when `units-si-dynamics` is enabled without the broader
-`units-dynamics` catalog. Broader catalog features continue to combine additively.
+file is selected only when `units-si-dynamics` is enabled without either
+`units-dynamics-conversions` or the broader `units-dynamics` catalog. The
+conversion profile selects a separate complete lean snapshot containing the
+same ten coherent constructors plus degrees and fixed 60 Hz ticks; broad
+dynamics takes precedence over both lean snapshots. Broader catalog features continue to combine additively.
 
 A proc-macro unit test compares the parsed generated declarations against the
 selected checked-in declarations for its active features. The catalog feature

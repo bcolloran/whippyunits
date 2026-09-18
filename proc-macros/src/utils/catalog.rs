@@ -19,6 +19,12 @@ fn coherent_dimension_enabled(exponents: &DynDimensionExponents) -> bool {
     cfg!(feature = "units-si-dynamics") && exponents.0[3..7] == [0; 4]
 }
 
+/// The two extra storage scales useful for a fixed-rate dynamics model.
+fn dynamics_conversion_enabled(unit: &Unit) -> bool {
+    cfg!(feature = "units-dynamics-conversions")
+        && (unit == &Unit::TICK.erase() || unit == &Unit::DEGREE.erase())
+}
+
 pub fn dimension_enabled(exponents: &DynDimensionExponents) -> bool {
     broad_dimension_enabled(exponents) || coherent_dimension_enabled(exponents)
 }
@@ -26,15 +32,30 @@ pub fn dimension_enabled(exponents: &DynDimensionExponents) -> bool {
 /// Whether a resolved storage scale can have a generated convenience alias.
 /// The broad catalogs retain their existing scales; the coherent subset only
 /// includes unity scale, even when the spelling has a prefix (kilogram).
+/// The conversion profile also permits the exact degree and fixed-tick scales.
 pub fn scale_enabled(exponents: &DynDimensionExponents, scale: ScaleExponents) -> bool {
     broad_dimension_enabled(exponents)
         || (coherent_dimension_enabled(exponents) && scale == ScaleExponents::IDENTITY)
+        || [Unit::TICK.erase(), Unit::DEGREE.erase()]
+            .iter()
+            .any(|unit| {
+                dynamics_conversion_enabled(unit)
+                    && unit.exponents == *exponents
+                    && unit.scale == scale
+            })
 }
 
 /// Selection shared by default/local/branded declarators and literal suffixes.
 /// Check the resolved scale: neither `Metric` nor `conversion_factor == 1`
 /// alone distinguishes coherent SI units from minutes, degrees, liters, etc.
 pub fn entry_enabled(unit: &Unit, prefix: Option<&SiPrefix>) -> bool {
+    // A tick is the fixed 60 Hz interval, never a new prefix family.
+    if unit.name == "tick" && prefix.is_some() {
+        return false;
+    }
+    if prefix.is_none() && dynamics_conversion_enabled(unit) {
+        return true;
+    }
     if broad_dimension_enabled(&unit.exponents) {
         return true;
     }
@@ -107,7 +128,14 @@ mod tests {
             ),
             (
                 cfg!(feature = "units-dynamics"),
-                &["mm", "kN", "ft", "min", "deg", "L"][..],
+                &["mm", "kN", "ft", "min", "L"][..],
+            ),
+            (
+                cfg!(any(
+                    feature = "units-dynamics",
+                    feature = "units-dynamics-conversions"
+                )),
+                &["deg", "tick"][..],
             ),
             (
                 cfg!(feature = "units-electrical"),
@@ -150,10 +178,13 @@ mod tests {
 
     #[cfg(all(feature = "units-si-dynamics", not(feature = "units-dynamics")))]
     #[test]
-    fn coherent_literal_catalog_has_only_the_ten_selected_spellings() {
+    fn lean_literal_catalog_contains_only_selected_spellings() {
         let mut expected = ["kg", "m", "s", "rad", "Hz", "N", "J", "Nm", "W", "Pa"]
             .map(String::from)
             .to_vec();
+        if cfg!(feature = "units-dynamics-conversions") {
+            expected.extend([String::from("deg"), String::from("tick")]);
+        }
         expected.sort();
         assert_eq!(get_all_unit_symbols_for_literals(), expected);
     }
