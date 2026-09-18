@@ -1,0 +1,296 @@
+{
+  "date": "2026-09-17",
+  "source_commit": "3daafb6",
+  "status": "isolated experimental changes; production Rust sources unchanged",
+  "method": {
+    "toolchain": "rustc 1.98.1",
+    "third_party_dependencies": "warm",
+    "cargo_incremental": false,
+    "samples_per_variant": 3,
+    "order": "interleaved",
+    "root_features": [
+      "std",
+      "units-dynamics"
+    ],
+    "default_features": false,
+    "timing": "wall-clock cargo check including Cargo overhead",
+    "exclusions": [
+      "cold third-party build",
+      "downstream application",
+      "rust-analyzer",
+      "hover and completion",
+      "release runtime performance"
+    ]
+  },
+  "exponent_bridge": {
+    "variants": "Filter forward mappings to +/-limit and reverse mappings to +/-2*limit; leave generic arithmetic unchanged.",
+    "core_rebuild_packages": [
+      "whippyunits-core"
+    ],
+    "library_rebuild_packages": [
+      "whippyunits-core",
+      "whippyunits-proc-macros",
+      "whippyunits"
+    ],
+    "samples": [
+      {
+        "scope": "core",
+        "cycle": 0,
+        "input_limit": 200,
+        "output_limit": 400,
+        "bridge_impls": 1202,
+        "elapsed_seconds": 0.5676004970009672
+      },
+      {
+        "scope": "core",
+        "cycle": 0,
+        "input_limit": 32,
+        "output_limit": 64,
+        "bridge_impls": 194,
+        "elapsed_seconds": 0.3471922309981892
+      },
+      {
+        "scope": "core",
+        "cycle": 0,
+        "input_limit": 16,
+        "output_limit": 32,
+        "bridge_impls": 98,
+        "elapsed_seconds": 0.3373760099930223
+      },
+      {
+        "scope": "core",
+        "cycle": 1,
+        "input_limit": 16,
+        "output_limit": 32,
+        "bridge_impls": 98,
+        "elapsed_seconds": 0.3317873000050895
+      },
+      {
+        "scope": "core",
+        "cycle": 1,
+        "input_limit": 200,
+        "output_limit": 400,
+        "bridge_impls": 1202,
+        "elapsed_seconds": 0.5537076170003274
+      },
+      {
+        "scope": "core",
+        "cycle": 1,
+        "input_limit": 32,
+        "output_limit": 64,
+        "bridge_impls": 194,
+        "elapsed_seconds": 0.3398797400004696
+      },
+      {
+        "scope": "core",
+        "cycle": 2,
+        "input_limit": 32,
+        "output_limit": 64,
+        "bridge_impls": 194,
+        "elapsed_seconds": 0.34171489099389873
+      },
+      {
+        "scope": "core",
+        "cycle": 2,
+        "input_limit": 16,
+        "output_limit": 32,
+        "bridge_impls": 98,
+        "elapsed_seconds": 0.3325808999943547
+      },
+      {
+        "scope": "core",
+        "cycle": 2,
+        "input_limit": 200,
+        "output_limit": 400,
+        "bridge_impls": 1202,
+        "elapsed_seconds": 0.5512806759943487
+      },
+      {
+        "scope": "dynamics_lib",
+        "cycle": 0,
+        "input_limit": 200,
+        "output_limit": 400,
+        "bridge_impls": 1202,
+        "elapsed_seconds": 4.2960091379936785
+      },
+      {
+        "scope": "dynamics_lib",
+        "cycle": 0,
+        "input_limit": 32,
+        "output_limit": 64,
+        "bridge_impls": 194,
+        "elapsed_seconds": 3.9656170689995633
+      },
+      {
+        "scope": "dynamics_lib",
+        "cycle": 0,
+        "input_limit": 16,
+        "output_limit": 32,
+        "bridge_impls": 98,
+        "elapsed_seconds": 3.9420973469968885
+      },
+      {
+        "scope": "dynamics_lib",
+        "cycle": 1,
+        "input_limit": 16,
+        "output_limit": 32,
+        "bridge_impls": 98,
+        "elapsed_seconds": 3.876638154993998
+      },
+      {
+        "scope": "dynamics_lib",
+        "cycle": 1,
+        "input_limit": 200,
+        "output_limit": 400,
+        "bridge_impls": 1202,
+        "elapsed_seconds": 4.372516279996489
+      },
+      {
+        "scope": "dynamics_lib",
+        "cycle": 1,
+        "input_limit": 32,
+        "output_limit": 64,
+        "bridge_impls": 194,
+        "elapsed_seconds": 3.941955407994101
+      },
+      {
+        "scope": "dynamics_lib",
+        "cycle": 2,
+        "input_limit": 32,
+        "output_limit": 64,
+        "bridge_impls": 194,
+        "elapsed_seconds": 4.017968979998841
+      },
+      {
+        "scope": "dynamics_lib",
+        "cycle": 2,
+        "input_limit": 16,
+        "output_limit": 32,
+        "bridge_impls": 98,
+        "elapsed_seconds": 4.005477969010826
+      },
+      {
+        "scope": "dynamics_lib",
+        "cycle": 2,
+        "input_limit": 200,
+        "output_limit": 400,
+        "bridge_impls": 1202,
+        "elapsed_seconds": 4.25759921700228
+      }
+    ]
+  },
+  "rational_powers": {
+    "variant": "Replace the three +/-100 rational unrolled lookup macros with one left-to-right const fn multiplication loop; preserve out-of-range identity fallback.",
+    "root_only_rebuild_packages": [
+      "whippyunits"
+    ],
+    "root_only_samples": [
+      {
+        "variant": "baseline",
+        "cycle": 0,
+        "seconds": 2.360371571005089,
+        "returncode": 0
+      },
+      {
+        "variant": "loop",
+        "cycle": 0,
+        "seconds": 1.4157688620034605,
+        "returncode": 0
+      },
+      {
+        "variant": "loop",
+        "cycle": 1,
+        "seconds": 1.411619452002924,
+        "returncode": 0
+      },
+      {
+        "variant": "baseline",
+        "cycle": 1,
+        "seconds": 2.3817152109986637,
+        "returncode": 0
+      },
+      {
+        "variant": "baseline",
+        "cycle": 2,
+        "seconds": 2.371364400998573,
+        "returncode": 0
+      },
+      {
+        "variant": "loop",
+        "cycle": 2,
+        "seconds": 1.4600723030016525,
+        "returncode": 0
+      }
+    ],
+    "chain_rebuild_packages": [
+      "whippyunits-core",
+      "whippyunits-proc-macros",
+      "whippyunits"
+    ],
+    "chain_samples": [
+      {
+        "variant": "baseline",
+        "cycle": 0,
+        "seconds": 4.08485787200334,
+        "returncode": 0
+      },
+      {
+        "variant": "loop",
+        "cycle": 0,
+        "seconds": 3.3031443979998585,
+        "returncode": 0
+      },
+      {
+        "variant": "loop",
+        "cycle": 1,
+        "seconds": 3.330137069002376,
+        "returncode": 0
+      },
+      {
+        "variant": "baseline",
+        "cycle": 1,
+        "seconds": 4.175147164001828,
+        "returncode": 0
+      },
+      {
+        "variant": "baseline",
+        "cycle": 2,
+        "seconds": 4.407462791990838,
+        "returncode": 0
+      },
+      {
+        "variant": "loop",
+        "cycle": 2,
+        "seconds": 3.340704590009409,
+        "returncode": 0
+      }
+    ],
+    "validation": {
+      "both_variants_passed": true,
+      "representable_and_out_of_range_cases_each": 483,
+      "const_evaluations_each": 2,
+      "limits": "Overflow cases, release behavior, runtime conversion speed, and full regression suite not validated."
+    }
+  },
+  "static_catalog_estimate": {
+    "method": "Parse canonical Unit/Dimension records and mirror generator prefix/storage rules; generated declaration counts, not timing predictions.",
+    "dynamics_constructor_entries": 691,
+    "dynamics_storage_aliases": 650,
+    "dynamics_constructor_bodies": 1423,
+    "coherent_constructor_entries": 10,
+    "coherent_constructor_bodies": 20,
+    "coherent_symbols": [
+      "kg",
+      "m",
+      "s",
+      "rad",
+      "Hz",
+      "N",
+      "J",
+      "Nm",
+      "W",
+      "Pa"
+    ]
+  },
+  "scratch_artifacts": "/tmp/whippyunits-exponent-domain-audit"
+}
