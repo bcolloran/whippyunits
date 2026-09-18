@@ -323,8 +323,8 @@ pub use whippyunits_proc_macros::proc_unit as unit;
 #[doc(inline)]
 pub use whippyunits_proc_macros::proc_qty as qty;
 
-/// Expands [`unit!`](crate::unit!)/[`qty!`](crate::qty!) type macros inside an
-/// item ahead of its `#[derive]`s.
+/// Expands [`unit!`](crate::unit!)/[`qty!`](crate::qty!) and whippyalgebra's
+/// `vqty!` type macros inside an item ahead of its `#[derive]`s.
 ///
 /// Rust's built-in derives (`Clone`, `Copy`, `Debug`, `Default`, `PartialEq`, …)
 /// refuse to run on a *generic* item whose field types contain a macro call,
@@ -363,7 +363,7 @@ pub use whippyunits_proc_macros::proc_qty as qty;
 ///
 /// ## What is rewritten
 ///
-/// Every macro call in a type position whose path ends in `unit` or `qty`
+/// Every macro call in a type position whose path ends in `unit`, `qty`, or `vqty`
 /// (`qty!(m)` and `whippyunits::qty!(m)` alike; a renamed import such as
 /// `use whippyunits::qty as q` is *not* recognised), wherever it appears in the
 /// item: directly as a field type, or nested inside other generics such as
@@ -371,6 +371,11 @@ pub use whippyunits_proc_macros::proc_qty as qty;
 /// the standalone macro produces. Macros in expression position (`quantity!`,
 /// `value!`, …) are left alone. The attribute takes no arguments and may be
 /// applied to any item.
+///
+/// With a dependency on `whippyalgebra`, this also expands its `vqty!` vector
+/// types, including uniform units (`vqty!(3, m / s, T)`) and per-entry units
+/// (`vqty!(2, [m, m / s], T)`). The vector length and optional storage type have
+/// the same meaning as in the standalone macro.
 #[doc(inline)]
 pub use whippyunits_proc_macros::expand_units;
 

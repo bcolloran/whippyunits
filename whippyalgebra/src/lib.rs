@@ -182,6 +182,10 @@ extern crate alloc as alloc_crate;
 #[doc(hidden)]
 mod alloc;
 
+// Attribute expansions use the public crate path inside the library as well
+// as in examples and downstream crates.
+extern crate self as whippyalgebra;
+
 pub mod dims;
 pub mod entry;
 pub mod index;
@@ -208,11 +212,13 @@ pub use uniformity::{CollapseUniform, GaugeReproduces, IsUniform, IsUniformBit, 
 
 // Backend-specific items — the matrix newtypes, their decompositions, the
 // declarative construction macros, and the `generic_matrix`/`generic_block`
-// attributes — are intentionally **not** re-exported at the crate root. They
+// attributes — generally are not re-exported at the crate root. They
 // live under their backend adapter (e.g. [`crate::nalgebra`]) so that multiple
 // backends can be enabled at once without their identically-named types (two
 // `MixedUnitMatrix`es, two `mixed_unit_matrix!`s, …) colliding. Import them from
 // the adapter: `use whippyalgebra::nalgebra::{MixedUnitMatrix, mixed_unit_matrix, …};`.
+// `vqty!` is also exported at the root under its public name: hiding its
+// definition and renaming it at the adapter would suppress IDE completion.
 
 #[doc(hidden)]
 pub mod __reexport {

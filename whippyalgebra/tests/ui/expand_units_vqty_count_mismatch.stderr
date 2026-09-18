@@ -1,0 +1,7 @@
+error[E0080]: evaluation panicked: vqty!: the count does not match the number of units in the list
+ --> tests/ui/expand_units_vqty_count_mismatch.rs:4:1
+  |
+4 | #[whippyunits::expand_units]
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ evaluation of `Bad::{constant#26}` failed here
+  |
+  = note: this error originates in the attribute macro `whippyunits::expand_units` (in Nightly builds, run with -Z macro-backtrace for more info)
