@@ -1,0 +1,72 @@
+{
+  "date": "2026-09-17",
+  "purpose": "diagnostic only; concurrent jobs make timings unsuitable for performance claims",
+  "server_version": "rust-analyzer 0.3.3049-standalone",
+  "source_profile": {
+    "label": "dynamics",
+    "dependency_path": "/tmp/whippyunits-experiments/coherent",
+    "features": [
+      "std",
+      "units-dynamics"
+    ],
+    "default_features": false,
+    "source_sha256": "a732dd559b8e126e3e41be0b8905db0471d752ccefb5b81827430176b94e98b6"
+  },
+  "broad_features": [
+    "std",
+    "units-dynamics"
+  ],
+  "lean_features": [
+    "std",
+    "units-si-dynamics"
+  ],
+  "broad_coherent_methods_present": [],
+  "lean_coherent_methods_present": [
+    "kilograms",
+    "meters",
+    "seconds",
+    "radians"
+  ],
+  "broad_generated_nonstorage_methods_present": [
+    "inches()(as ImperialLength)",
+    "feet()(as ImperialLength)",
+    "weeks()(as MetricTimeNonStorage)",
+    "years()(as MetricTimeNonStorage)"
+  ],
+  "broad_macro_errors": "Expansion had errors:\nunexpected token in input\nunexpected token in input\nunexpected token in input\nunexpected token in input\nunexpected token in input\nunexpected token in input\nexpected Expr\nexpected Expr\nexpected Expr\nexpected Expr\nexpected Expr\nexpected Expr\nexpected Expr\nexpected Expr",
+  "broad_macro_expansion_excerpt": "pub trait$trait_name<T = f64>{}impl $\ntrait_name for f64 {}impl $\ntrait_name<i32>for i32 {}pub trait$trait_name<T = f64>{}impl $\ntrait_name for f64 {}impl $\ntrait_name<i32>for i32 {}pub trait$trait_name<T = f64>{}impl $\ntrait_name for f64 {}impl $\ntrait_name<i32>for i32 {}pub trait MetricTimeNonStorage<T = f64>{\n    fn weeks(self) -> Quantity<Unit<Scale<_2<8i16>, _3<3i16>, _5<3i16>, _Pi<0i16>>, Dimension<_M<0i16>, _L",
+  "metric_length_trait_in_broad_expansion": false,
+  "meters_method_in_broad_expansion": false,
+  "interpretation": "Failure is nested macro expansion parsing, not missing completion-client capabilities or a token-limit diagnostic. Pattern is consistent with the negative Literal bridge problem documented by shared_utils::const_exp; this experiment did not isolate individual emitted tokens.",
+  "raw_broad_expansion": "/tmp/whippyunits-ra-diagnostics/dynamics-expand/01-dynamics.failure-expanded-declarators.json",
+  "pregenerated_validation": {
+    "source_profile": {
+      "label": "pregenerated",
+      "dependency_path": "/tmp/whippyunits-experiments/04-pregenerated-si-check/candidate",
+      "features": [
+        "std",
+        "units-si-dynamics"
+      ],
+      "default_features": false,
+      "source_sha256": "9779693e1d8bea7c56145b51146667d5e7477068f1668b65f6d117ab483b30e4"
+    },
+    "server_version": "rust-analyzer 0.3.3049-standalone",
+    "valid": true,
+    "required_methods": [
+      "meters",
+      "kilograms",
+      "seconds",
+      "radians",
+      "hertzs",
+      "newtons",
+      "joules",
+      "newton_meters",
+      "watts",
+      "pascals"
+    ],
+    "missing_methods": [],
+    "all_required_method_edits_usable": true,
+    "raw_result": "/tmp/whippyunits-ra-diagnostics/pregenerated-all10/01-pregenerated.result.json",
+    "note": "Diagnostic-only run with concurrent compilation; latencies deliberately omitted."
+  }
+}

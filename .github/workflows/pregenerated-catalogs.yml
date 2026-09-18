@@ -1,0 +1,19 @@
+name: Generated default catalogs
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+jobs:
+  generated-default-catalogs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Check deterministic generated catalogs
+        run: python3 tools/regenerate-default-catalogs.py --check
+      - name: Check coherent feature selection against the generator
+        run: cargo test --locked -p whippyunits-proc-macros --lib --no-default-features --features units-si-dynamics checked_in_catalog_matches_active_features

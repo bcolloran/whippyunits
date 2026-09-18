@@ -12,7 +12,7 @@ prototypes are documented in [mks-performance-hypotheses.md](mks-performance-hyp
 | Compact rational power tables | Retained | Rebuild/check median 4.458 s → 3.399 s (23.8% lower); runtime lookup improved in all nine measured cases |
 | Optional narrow exponent bridge | Retained | Rebuild/check median 3.275 s → 3.008 s (8.2% lower); defaults preserve +/-200, reduced builds use +/-32 |
 | Coherent SI dynamics catalog | Retained | Rebuild/check median 3.007 s → 2.114 s (29.7% lower), broad dynamics vs coherent SI conveniences |
-| Pre-generated fixed catalogs | Validating | Compare identical declarations; deterministic developer generation, no build script |
+| Pre-generated fixed catalogs | Retained for editor correctness | Revised checks effectively unchanged: SI 2.159 s → 2.162 s; broad dynamics 3.064 s → 3.079 s. All ten constructor completions verified |
 | Remove phantom trait bounds | Preparing | Clone/Copy/Pod cleanup; preserve derived equality and constant-pattern compatibility |
 | Simplify raw matrix element construction | Queued | Remove redundant twelve-exponent obligations |
 | Improve type-level unit powers | Queued | Preserve intermediate-domain behavior or document deliberate limits |
@@ -81,3 +81,40 @@ selection tests, and the reduced-profile `block_roundtrip` algebra example.
 Negative fixtures cover disabled aliases, default/local/branded methods, and
 literal suffixes. Included tests exercise omitted-unit DSL expansion, inferred
 integer conversions, signed zero, local scales, and branding.
+
+The first pre-generation attempt regressed checks in both profiles: SI
+2.166 s → 2.426 s, broad dynamics 3.081 s → 3.329 s. That version was not
+retained. It compiled four large developer export templates into the normal
+proc-macro library. The revised version builds those templates only during
+developer tests/regeneration and keeps the existing compact procedural entry
+point for compatibility. Raw rejected-attempt measurements:
+[SI](performance-results/04-pregenerated-si-check.json),
+[dynamics](performance-results/04-pregenerated-dynamics-check.json).
+
+Direct Rust Analyzer diagnostics also exposed a functional problem in the
+existing nested catalog macros. Broad dynamics failed to expose `MetricLength`
+and `meters`; lean catalogs exposed base constructors but omitted derived
+constructors with negative dimension exponents. Recursive expansion reported
+`unexpected token in input` / `expected Expr` and left macro placeholders in the
+output. This is consistent with the negative-literal bridge issue already
+documented by `const_exp`, although individual offending tokens have not been
+isolated. Checked-in textual catalogs passed a fresh-server probe for **all ten
+constructor methods**, including `newtons`, `joules`, and `pascals`. Diagnostic
+timings are excluded because other correctness builds overlapped. See
+[recorded evidence](performance-results/04-completion-diagnosis.json).
+
+After excluding developer emitters from ordinary compilation, five interleaved
+samples per variant measured +0.1% SI and +0.5% broad dynamics median check time,
+within the run-to-run spread. This is **not a demonstrated compile-time win**;
+the reason to retain it is reliable constructor visibility in Rust Analyzer and
+ordinary source navigation. The rejected 8–12% regressions are absent in the
+revised measurements. See [SI samples](performance-results/04-revised-si-check.json)
+and [dynamics samples](performance-results/04-revised-dynamics-check.json).
+
+The cost is approximately 1.5 MB of checked-in generated Rust, of which the lean
+catalog selects about 16 KB. Nine feature-selection comparisons, deterministic
+regeneration, default/lean/literal public tests, and full-catalog no_std/no_alloc
+checks pass. The integrated full library/integration suite passed all 145
+tests. Independent comparison verified that the four exported constructor
+templates preserve their original method bodies, numeric casts, and operation
+order. See [regeneration instructions](default-catalog-generation.md).
