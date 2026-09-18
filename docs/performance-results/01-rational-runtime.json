@@ -1,0 +1,480 @@
+{
+  "utc": "2026-09-18T02:37:24.569684+00:00",
+  "elapsed_seconds": 13.636420697002904,
+  "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)",
+  "table_sha256": "f46b0a2dda6a799887e374e7865ea9769caa81912a4f1ff77f65ef6c3ab7f8b8",
+  "profile": "opt-level=3,overflow-checks=off",
+  "method": "Both implementations in same compilation/inlining context; legacy emitted by actual existing pow_lookup proc macro, production table implementation snapshotted verbatim; black-box exponent and return value; five alternating-order samples, 20M calls each. Loop/checksum overhead retained equally.",
+  "rows": [
+    {
+      "base": 2,
+      "distribution": "zero",
+      "repetition": 0,
+      "calls": 20000000,
+      "legacy_ns": 203012166,
+      "table_ns": 57130172,
+      "checksum": "2621460000000"
+    },
+    {
+      "base": 2,
+      "distribution": "zero",
+      "repetition": 1,
+      "calls": 20000000,
+      "legacy_ns": 207626486,
+      "table_ns": 55943482,
+      "checksum": "2621460000000"
+    },
+    {
+      "base": 2,
+      "distribution": "zero",
+      "repetition": 2,
+      "calls": 20000000,
+      "legacy_ns": 207022856,
+      "table_ns": 57372572,
+      "checksum": "2621460000000"
+    },
+    {
+      "base": 2,
+      "distribution": "zero",
+      "repetition": 3,
+      "calls": 20000000,
+      "legacy_ns": 207244616,
+      "table_ns": 55339822,
+      "checksum": "2621460000000"
+    },
+    {
+      "base": 2,
+      "distribution": "zero",
+      "repetition": 4,
+      "calls": 20000000,
+      "legacy_ns": 206723716,
+      "table_ns": 58040882,
+      "checksum": "2621460000000"
+    },
+    {
+      "base": 2,
+      "distribution": "small",
+      "repetition": 0,
+      "calls": 20000000,
+      "legacy_ns": 280062578,
+      "table_ns": 53045682,
+      "checksum": "6740897348822"
+    },
+    {
+      "base": 2,
+      "distribution": "small",
+      "repetition": 1,
+      "calls": 20000000,
+      "legacy_ns": 278387798,
+      "table_ns": 50201781,
+      "checksum": "6740897348822"
+    },
+    {
+      "base": 2,
+      "distribution": "small",
+      "repetition": 2,
+      "calls": 20000000,
+      "legacy_ns": 277894619,
+      "table_ns": 51083831,
+      "checksum": "6740897348822"
+    },
+    {
+      "base": 2,
+      "distribution": "small",
+      "repetition": 3,
+      "calls": 20000000,
+      "legacy_ns": 278310808,
+      "table_ns": 51138522,
+      "checksum": "6740897348822"
+    },
+    {
+      "base": 2,
+      "distribution": "small",
+      "repetition": 4,
+      "calls": 20000000,
+      "legacy_ns": 278094868,
+      "table_ns": 51742342,
+      "checksum": "6740897348822"
+    },
+    {
+      "base": 2,
+      "distribution": "wide",
+      "repetition": 0,
+      "calls": 20000000,
+      "legacy_ns": 317738639,
+      "table_ns": 52363492,
+      "checksum": "1278117396895"
+    },
+    {
+      "base": 2,
+      "distribution": "wide",
+      "repetition": 1,
+      "calls": 20000000,
+      "legacy_ns": 311269280,
+      "table_ns": 50582721,
+      "checksum": "1278117396895"
+    },
+    {
+      "base": 2,
+      "distribution": "wide",
+      "repetition": 2,
+      "calls": 20000000,
+      "legacy_ns": 319721369,
+      "table_ns": 57218302,
+      "checksum": "1278117396895"
+    },
+    {
+      "base": 2,
+      "distribution": "wide",
+      "repetition": 3,
+      "calls": 20000000,
+      "legacy_ns": 311904240,
+      "table_ns": 52775981,
+      "checksum": "1278117396895"
+    },
+    {
+      "base": 2,
+      "distribution": "wide",
+      "repetition": 4,
+      "calls": 20000000,
+      "legacy_ns": 321518469,
+      "table_ns": 54289872,
+      "checksum": "1278117396895"
+    },
+    {
+      "base": 3,
+      "distribution": "zero",
+      "repetition": 0,
+      "calls": 20000000,
+      "legacy_ns": 209342026,
+      "table_ns": 59777652,
+      "checksum": "2621460000000"
+    },
+    {
+      "base": 3,
+      "distribution": "zero",
+      "repetition": 1,
+      "calls": 20000000,
+      "legacy_ns": 208951356,
+      "table_ns": 59137662,
+      "checksum": "2621460000000"
+    },
+    {
+      "base": 3,
+      "distribution": "zero",
+      "repetition": 2,
+      "calls": 20000000,
+      "legacy_ns": 208486386,
+      "table_ns": 60097752,
+      "checksum": "2621460000000"
+    },
+    {
+      "base": 3,
+      "distribution": "zero",
+      "repetition": 3,
+      "calls": 20000000,
+      "legacy_ns": 208564176,
+      "table_ns": 61524082,
+      "checksum": "2621460000000"
+    },
+    {
+      "base": 3,
+      "distribution": "zero",
+      "repetition": 4,
+      "calls": 20000000,
+      "legacy_ns": 208457456,
+      "table_ns": 58779582,
+      "checksum": "2621460000000"
+    },
+    {
+      "base": 3,
+      "distribution": "small",
+      "repetition": 0,
+      "calls": 20000000,
+      "legacy_ns": 214551276,
+      "table_ns": 51728742,
+      "checksum": "16103254959778"
+    },
+    {
+      "base": 3,
+      "distribution": "small",
+      "repetition": 1,
+      "calls": 20000000,
+      "legacy_ns": 211631647,
+      "table_ns": 51520121,
+      "checksum": "16103254959778"
+    },
+    {
+      "base": 3,
+      "distribution": "small",
+      "repetition": 2,
+      "calls": 20000000,
+      "legacy_ns": 214239476,
+      "table_ns": 51819322,
+      "checksum": "16103254959778"
+    },
+    {
+      "base": 3,
+      "distribution": "small",
+      "repetition": 3,
+      "calls": 20000000,
+      "legacy_ns": 213457846,
+      "table_ns": 50533461,
+      "checksum": "16103254959778"
+    },
+    {
+      "base": 3,
+      "distribution": "small",
+      "repetition": 4,
+      "calls": 20000000,
+      "legacy_ns": 216108167,
+      "table_ns": 53388612,
+      "checksum": "16103254959778"
+    },
+    {
+      "base": 3,
+      "distribution": "wide",
+      "repetition": 0,
+      "calls": 20000000,
+      "legacy_ns": 304585929,
+      "table_ns": 48575831,
+      "checksum": "1266093291733471680"
+    },
+    {
+      "base": 3,
+      "distribution": "wide",
+      "repetition": 1,
+      "calls": 20000000,
+      "legacy_ns": 299803798,
+      "table_ns": 49560562,
+      "checksum": "1266093291733471680"
+    },
+    {
+      "base": 3,
+      "distribution": "wide",
+      "repetition": 2,
+      "calls": 20000000,
+      "legacy_ns": 304981390,
+      "table_ns": 50230271,
+      "checksum": "1266093291733471680"
+    },
+    {
+      "base": 3,
+      "distribution": "wide",
+      "repetition": 3,
+      "calls": 20000000,
+      "legacy_ns": 300141858,
+      "table_ns": 50029922,
+      "checksum": "1266093291733471680"
+    },
+    {
+      "base": 3,
+      "distribution": "wide",
+      "repetition": 4,
+      "calls": 20000000,
+      "legacy_ns": 300234519,
+      "table_ns": 50048762,
+      "checksum": "1266093291733471680"
+    },
+    {
+      "base": 5,
+      "distribution": "zero",
+      "repetition": 0,
+      "calls": 20000000,
+      "legacy_ns": 202012646,
+      "table_ns": 58219842,
+      "checksum": "2621460000000"
+    },
+    {
+      "base": 5,
+      "distribution": "zero",
+      "repetition": 1,
+      "calls": 20000000,
+      "legacy_ns": 206418077,
+      "table_ns": 59343161,
+      "checksum": "2621460000000"
+    },
+    {
+      "base": 5,
+      "distribution": "zero",
+      "repetition": 2,
+      "calls": 20000000,
+      "legacy_ns": 201600266,
+      "table_ns": 58482331,
+      "checksum": "2621460000000"
+    },
+    {
+      "base": 5,
+      "distribution": "zero",
+      "repetition": 3,
+      "calls": 20000000,
+      "legacy_ns": 206454316,
+      "table_ns": 59753222,
+      "checksum": "2621460000000"
+    },
+    {
+      "base": 5,
+      "distribution": "zero",
+      "repetition": 4,
+      "calls": 20000000,
+      "legacy_ns": 202064726,
+      "table_ns": 57571442,
+      "checksum": "2621460000000"
+    },
+    {
+      "base": 5,
+      "distribution": "small",
+      "repetition": 0,
+      "calls": 20000000,
+      "legacy_ns": 210268686,
+      "table_ns": 51167282,
+      "checksum": "59544594274604"
+    },
+    {
+      "base": 5,
+      "distribution": "small",
+      "repetition": 1,
+      "calls": 20000000,
+      "legacy_ns": 212381747,
+      "table_ns": 52012751,
+      "checksum": "59544594274604"
+    },
+    {
+      "base": 5,
+      "distribution": "small",
+      "repetition": 2,
+      "calls": 20000000,
+      "legacy_ns": 211301566,
+      "table_ns": 57509762,
+      "checksum": "59544594274604"
+    },
+    {
+      "base": 5,
+      "distribution": "small",
+      "repetition": 3,
+      "calls": 20000000,
+      "legacy_ns": 212415917,
+      "table_ns": 56357301,
+      "checksum": "59544594274604"
+    },
+    {
+      "base": 5,
+      "distribution": "small",
+      "repetition": 4,
+      "calls": 20000000,
+      "legacy_ns": 211594096,
+      "table_ns": 52128962,
+      "checksum": "59544594274604"
+    },
+    {
+      "base": 5,
+      "distribution": "wide",
+      "repetition": 0,
+      "calls": 20000000,
+      "legacy_ns": 293523368,
+      "table_ns": 51007372,
+      "checksum": "2340189950787482632"
+    },
+    {
+      "base": 5,
+      "distribution": "wide",
+      "repetition": 1,
+      "calls": 20000000,
+      "legacy_ns": 305400849,
+      "table_ns": 51886531,
+      "checksum": "2340189950787482632"
+    },
+    {
+      "base": 5,
+      "distribution": "wide",
+      "repetition": 2,
+      "calls": 20000000,
+      "legacy_ns": 294393299,
+      "table_ns": 53293982,
+      "checksum": "2340189950787482632"
+    },
+    {
+      "base": 5,
+      "distribution": "wide",
+      "repetition": 3,
+      "calls": 20000000,
+      "legacy_ns": 302514679,
+      "table_ns": 52063661,
+      "checksum": "2340189950787482632"
+    },
+    {
+      "base": 5,
+      "distribution": "wide",
+      "repetition": 4,
+      "calls": 20000000,
+      "legacy_ns": 294032049,
+      "table_ns": 52449722,
+      "checksum": "2340189950787482632"
+    }
+  ],
+  "summary": [
+    {
+      "base": 2,
+      "distribution": "zero",
+      "legacy_ns_per_call": 10.3511428,
+      "table_ns_per_call": 2.8565086,
+      "table_over_legacy": 0.27596069875492396
+    },
+    {
+      "base": 2,
+      "distribution": "small",
+      "legacy_ns_per_call": 13.9155404,
+      "table_ns_per_call": 2.5569261,
+      "table_over_legacy": 0.18374608721627514
+    },
+    {
+      "base": 2,
+      "distribution": "wide",
+      "legacy_ns_per_call": 15.88693195,
+      "table_ns_per_call": 2.63879905,
+      "table_over_legacy": 0.1660987192684488
+    },
+    {
+      "base": 3,
+      "distribution": "zero",
+      "legacy_ns_per_call": 10.4282088,
+      "table_ns_per_call": 2.9888826,
+      "table_over_legacy": 0.2866151471765698
+    },
+    {
+      "base": 3,
+      "distribution": "small",
+      "legacy_ns_per_call": 10.7119738,
+      "table_ns_per_call": 2.5864371,
+      "table_over_legacy": 0.24145289638404452
+    },
+    {
+      "base": 3,
+      "distribution": "wide",
+      "legacy_ns_per_call": 15.01172595,
+      "table_ns_per_call": 2.5014961,
+      "table_over_legacy": 0.16663614219522838
+    },
+    {
+      "base": 5,
+      "distribution": "zero",
+      "legacy_ns_per_call": 10.1032363,
+      "table_ns_per_call": 2.92411655,
+      "table_over_legacy": 0.2894237512785878
+    },
+    {
+      "base": 5,
+      "distribution": "small",
+      "legacy_ns_per_call": 10.5797048,
+      "table_ns_per_call": 2.6064481,
+      "table_over_legacy": 0.24636302706669094
+    },
+    {
+      "base": 5,
+      "distribution": "wide",
+      "legacy_ns_per_call": 14.71966495,
+      "table_ns_per_call": 2.60318305,
+      "table_over_legacy": 0.1768506999882494
+    }
+  ]
+}

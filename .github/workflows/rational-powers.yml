@@ -1,0 +1,31 @@
+name: Rational power tables
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+jobs:
+  overflow-parity:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        profile: [debug, release]
+        overflow: ["on", "off"]
+    env:
+      RUSTFLAGS: -C overflow-checks=${{ matrix.overflow }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Compare runtime and const behavior with legacy macros
+        shell: bash
+        run: |
+          profile_args=()
+          if [[ '${{ matrix.profile }}' == release ]]; then
+            profile_args+=(--release)
+          fi
+          cargo test --locked -p whippyunits --test rational_power_tables --no-default-features --features std,units-dynamics "${profile_args[@]}"
+          python3 scripts/check_rational_powers.py --overflow-checks '${{ matrix.overflow }}' "${profile_args[@]}"
