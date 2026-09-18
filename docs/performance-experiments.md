@@ -10,7 +10,7 @@ prototypes are documented in [mks-performance-hypotheses.md](mks-performance-hyp
 | Experiment | State | Measurement / decision |
 | --- | --- | --- |
 | Compact rational power tables | Retained | Rebuild/check median 4.458 s → 3.399 s (23.8% lower); runtime lookup improved in all nine measured cases |
-| Optional narrow exponent bridge | Preparing | Defaults preserve +/-200; reduced builds use +/-32 |
+| Optional narrow exponent bridge | Retained | Rebuild/check median 3.275 s → 3.008 s (8.2% lower); defaults preserve +/-200, reduced builds use +/-32 |
 | Coherent SI dynamics catalog | Preparing | Additive lean entry point; preserve existing full catalogs and DSL |
 | Pre-generated fixed catalogs | Queued | Compare identical declarations before changing catalog size |
 | Remove phantom trait bounds | Queued | Preserve layout and numeric behavior |
@@ -53,3 +53,16 @@ three bases and zero/small/wide valid exponent distributions, median times were
 and checksum overhead. Each case used five alternating-order samples of twenty
 million calls per implementation. These are lookup microbenchmarks, not whole
 application speedups. See [runtime samples](performance-results/01-rational-runtime.json).
+
+The exponent experiment compares against `ba13451`, retaining the rational
+tables and the same dynamics catalog in both variants. Disabling default
+features reduces the const/typenum bridge from 1,202 implementations to 194;
+`wide-exponents` restores the original range additively and is enabled by
+default. Type layouts and the arithmetic algorithms are unchanged. The
+selected range applies to both dimension and scale exponents, including every
+intermediate operation; the README documents this constraint. See
+[raw measurements](performance-results/02-exponents-check.json).
+Both profiles passed seven core arithmetic tests and five negative doctests;
+public quantity boundary tests passed (two reduced, three wide), along with the
+reduced dynamics catalog tests. Workspace feature inspection confirms the editor
+helper crates do not accidentally re-enable the wide bridge.

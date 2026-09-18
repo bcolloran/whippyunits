@@ -19,10 +19,12 @@ proc-macro2 = "1.0"
 quote = "1.0"
 strsim = "0.11"
 syn = { version = "2.0", features = ["full", "visit-mut"] }
-whippyunits-core = { path = "../whippyunits-core", version = "0.3.0" }
+whippyunits-core = { path = "../whippyunits-core", version = "0.3.0", default-features = false }
 
 [features]
-default = ["all-units", "literals"]
+# Extend arithmetic inputs from +/-32 to +/-200 without changing quantity types.
+wide-exponents = ["whippyunits-core/wide-exponents"]
+default = ["all-units", "literals", "wide-exponents"]
 all-units = ["units-dynamics", "units-electrical", "units-thermal", "units-chemical", "units-photometric"]
 units-dynamics = []
 units-electrical = ["units-dynamics"]

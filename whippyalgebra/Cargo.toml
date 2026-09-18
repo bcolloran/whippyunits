@@ -11,7 +11,9 @@ categories = ["science", "mathematics"]
 readme = "README.md"
 
 [features]
-default = ["std", "nalgebra", "all-units", "literals"]
+# Extend arithmetic inputs from +/-32 to +/-200 without changing quantity types.
+wide-exponents = ["whippyunits/wide-exponents"]
+default = ["std", "nalgebra", "all-units", "literals", "wide-exponents"]
 # Standard library support. On by default; turning it off makes the crate
 # `#![no_std]`. `std` is additive over `alloc`: it enables everything `alloc`
 # does, plus std-only niceties in the dependency tree (e.g. nalgebra's

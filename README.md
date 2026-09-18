@@ -434,7 +434,7 @@ See `lsp-proxy/README.md` for setup instructions.
 
 ## Requirements
 
-WhippyUnits works on **stable Rust**, using a typenum-based polyfill for compile-time dimensional arithmetic. Dimension and scale exponents are limited to the range -200 to 200.
+WhippyUnits works on **stable Rust**, using a typenum-based polyfill for compile-time dimensional arithmetic. Arithmetic accepts dimension and scale exponents from -200 through 200 by default. Disabling default features reduces this input range to -32 through 32; enable `wide-exponents` to retain the wider range independently of the unit catalogs.
 
 ## Feature Flags
 
@@ -450,6 +450,7 @@ WhippyUnits works on **stable Rust**, using a typenum-based polyfill for compile
 | `units-chemical` | Via `all-units` | Amount-of-substance units; includes dynamics |
 | `units-photometric` | Via `all-units` | Luminous intensity and illuminance units; includes dynamics |
 | `literals` | Yes | Generates custom literal suffix macros for the selected catalogs |
+| `wide-exponents` | Yes | Extends dimension and scale arithmetic inputs from -32…32 to -200…200 |
 
 To compile only the dynamics catalog:
 
@@ -460,6 +461,22 @@ whippyunits = { version = "0.3", default-features = false, features = ["std", "u
 Add `"literals"` if you use suffixes such as `1.0m` with `#[culit::culit(...)]`,
 and `"serde"` if you need serialization. Constructors such as `.meters()` and
 `.newtons()` remain available without `literals`.
+
+This configuration uses the reduced exponent bridge. Add `"wide-exponents"`
+if intermediate dimension or scale exponents exceed 32 in magnitude. This is
+independent of catalog selection: all eight dimension axes and the public
+quantity type remain unchanged, and every unit name remains available in the
+expression DSL. Very small or large prefixes and powers of prefixed units can
+need the wider arithmetic range even when physical dimension powers are small.
+
+Addition and subtraction of exponents can produce values twice the input
+limit (64 or 400). An output outside the input range can be represented, but
+cannot be reused in arithmetic, type-level equality, or square roots.
+Choose a range that accommodates every intermediate exponent, including
+matrix products and determinants; the final unit alone is insufficient.
+`whippyalgebra` forwards `wide-exponents` as well. As with other Cargo features,
+any dependency enabling the wide bridge expands the range for the shared
+crate; it never changes existing quantity types.
 
 Catalog features control generated aliases, constructor methods, and literal
 suffixes, including custom declarator namespaces. The `unit!`, `qty!`,

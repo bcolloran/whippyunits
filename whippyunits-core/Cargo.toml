@@ -9,6 +9,11 @@ description = "Core types and utilities for whippyunits"
 keywords = ["units", "measurement", "dimensional", "type-safety"]
 categories = ["science", "no-std"]
 
+[features]
+default = ["wide-exponents"]
+# The reduced bridge supports input exponents +/-32 and outputs +/-64.
+wide-exponents = []
+
 [dependencies]
 syn = { version = "2.0", features = ["full"] }
 proc-macro2 = "1.0"
