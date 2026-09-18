@@ -1,0 +1,190 @@
+{
+  "scope": "correctness only; no timing claims",
+  "repo": "/tmp/whippyunits-cga/snapshots/baseline",
+  "toolchain": "nightly-2026-09-13",
+  "native": false,
+  "rustc": "rustc 1.100.0-nightly (809936eac 2026-09-12)\nbinary: rustc\ncommit-hash: 809936eac66c547a5127ce1da805f0d3a6789b98\ncommit-date: 2026-09-12\nhost: x86_64-unknown-linux-gnu\nrelease: 1.100.0-nightly\nLLVM version: 23.1.1\n",
+  "environment": {
+    "RUSTUP_TOOLCHAIN": "nightly-2026-09-13",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_TARGET_DIR": "/tmp/whippyunits-cga/validation-target"
+  },
+  "checks": [
+    {
+      "label": "core-narrow",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "--locked",
+        "-j2",
+        "-p",
+        "whippyunits-core",
+        "--lib",
+        "--no-default-features"
+      ],
+      "status": 0,
+      "log": "/tmp/whippyunits-cga/validation/baseline-nightly/core-narrow.log",
+      "test_summaries": [
+        "test result: ok. 26 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+      ]
+    },
+    {
+      "label": "core-wide",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "--locked",
+        "-j2",
+        "-p",
+        "whippyunits-core",
+        "--lib"
+      ],
+      "status": 0,
+      "log": "/tmp/whippyunits-cga/validation/baseline-nightly/core-wide.log",
+      "test_summaries": [
+        "test result: ok. 26 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+      ]
+    },
+    {
+      "label": "quantity",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "--locked",
+        "-j2",
+        "-p",
+        "whippyunits",
+        "--lib",
+        "--test",
+        "custom_storage_types",
+        "--test",
+        "exponent_features",
+        "--test",
+        "phantom_marker_traits",
+        "--test",
+        "catalog_features",
+        "--no-default-features",
+        "--features",
+        "std,units-dynamics-conversions",
+        "--",
+        "--skip",
+        "disabled_catalog_items_are_not_exported",
+        "--skip",
+        "coherent_catalog_omits_noncoherent_declarators"
+      ],
+      "status": 0,
+      "log": "/tmp/whippyunits-cga/validation/baseline-nightly/quantity.log",
+      "test_summaries": [
+        "test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+        "test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s",
+        "test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+        "test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+        "test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+      ]
+    },
+    {
+      "label": "generic-example",
+      "command": [
+        "cargo",
+        "run",
+        "--offline",
+        "--locked",
+        "-j2",
+        "-p",
+        "whippyunits",
+        "--example",
+        "centripetal_acceleration"
+      ],
+      "status": 0,
+      "log": "/tmp/whippyunits-cga/validation/baseline-nightly/generic-example.log",
+      "test_summaries": []
+    },
+    {
+      "label": "algebra",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "--locked",
+        "-j2",
+        "-p",
+        "whippyalgebra",
+        "--lib",
+        "--test",
+        "uniform",
+        "--test",
+        "brands",
+        "--test",
+        "generic_block",
+        "--test",
+        "generic_matrix_uniform",
+        "--test",
+        "operations",
+        "--test",
+        "canonical",
+        "--no-default-features",
+        "--features",
+        "std,nalgebra,units-dynamics-conversions"
+      ],
+      "status": 0,
+      "log": "/tmp/whippyunits-cga/validation/baseline-nightly/algebra.log",
+      "test_summaries": [
+        "test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+        "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+        "test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+        "test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+        "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+        "test result: ok. 53 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+        "test result: ok. 64 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+      ]
+    },
+    {
+      "label": "no-std",
+      "command": [
+        "cargo",
+        "check",
+        "--offline",
+        "--locked",
+        "-j2",
+        "-p",
+        "whippyalgebra",
+        "--lib",
+        "--no-default-features",
+        "--features",
+        "nalgebra,units-dynamics-conversions"
+      ],
+      "status": 0,
+      "log": "/tmp/whippyunits-cga/validation/baseline-nightly/no-std.log",
+      "test_summaries": []
+    },
+    {
+      "label": "runtime-probe",
+      "command": [
+        "cargo",
+        "run",
+        "--offline",
+        "--locked",
+        "-j2",
+        "--manifest-path",
+        "probe/Cargo.toml"
+      ],
+      "status": 0,
+      "log": "/tmp/whippyunits-cga/validation/baseline-nightly/runtime-probe.log",
+      "test_summaries": []
+    }
+  ],
+  "all_passed": true,
+  "status": "complete",
+  "planned_checks": [
+    "core-narrow",
+    "core-wide",
+    "quantity",
+    "generic-example",
+    "algebra",
+    "no-std",
+    "runtime-probe"
+  ]
+}
