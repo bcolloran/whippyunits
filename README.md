@@ -517,7 +517,8 @@ do not imply arbitrary-scale conversion support.
 
 Enable `nightly-gca` alongside the catalog and runtime features you need;
 `whippyalgebra` forwards it. It is opt-in, requires the pinned nightly for the
-whole consumer build, and currently retains typenum booleans and nalgebra's
+whole consumer build (including when using `--all-features`), and currently
+retains typenum booleans and nalgebra's
 independent typenum use. The tested rust-analyzer 0.3.3049 cannot yet infer
 its computed exponents in hovers, so keep this disabled for normal editor use.
 See the [experiment log](docs/cga-experiment-log.md)

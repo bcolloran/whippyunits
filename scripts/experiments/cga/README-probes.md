@@ -92,3 +92,27 @@ harness and exercise it from ordinary external integration-test crates without
 these feature attributes. Isolating the native implementation also avoids
 applying unstable const handling to unrelated unit-catalog code. Removing the
 macroless feature gates does not fix this test-harness crash.
+
+## Minimal editor inference probe
+
+```sh
+python3 scripts/experiments/cga/probe_editor.py \
+  --server /path/to/rust-analyzer \
+  --output /tmp/whippyunits-cga-editor-fresh
+```
+
+The output directory must be fresh or empty. `--toolchain` defaults to the
+pinned nightly. The script copies only the native numeral leaf into a small
+workspace and first requires a successful locked, offline compiler check.
+It then queries four hovers via direct LSP. Exit 0 means all resolve correctly;
+exit 1 records completed requests with incorrect/unknown inference; exit 2
+indicates a compiler/setup/LSP error. There are no latency claims.
+
+On the installed rust-analyzer 0.3.3049, inferred `N::<3> + N::<4>` and
+`N::<9> - N::<2>` both show `N<_>`. An explicitly annotated result and the
+`N::<7>` constructor show `N<7>`. The compiler accepts the whole consumer.
+The annotated control does not demonstrate arithmetic inference; it only
+checks that an explicit numeral type can be represented by the analyzer.
+This reproduces the problem without Quantity, Unit or the unit DSL macros.
+Frozen commands, source hashes and raw hovers are in
+[the minimal editor report](../../../docs/performance-results/14-cga-editor-minimal.json).

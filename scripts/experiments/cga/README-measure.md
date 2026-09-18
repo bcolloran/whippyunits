@@ -11,7 +11,11 @@ report preserves each full lockfile hash and local package records. Inputs are
 never changed. Python 3.11 or later is required for `tomllib`.
 
 If a candidate adds a local crate, prepare its probe and resolve the candidate
-lockfile offline before making the immutable input snapshot. Retain the
+lockfile offline **with the measured feature set enabled** before making the
+immutable input snapshot. For the native candidate, use
+`cargo +nightly-2026-09-13 metadata --offline --manifest-path probe/Cargo.toml
+--features whippyunits/nightly-gca,whippyalgebra/nightly-gca --format-version 1`.
+Retain the
 existing external dependency versions. The harness itself does not update
 lockfiles, and every check still uses `--locked`.
 

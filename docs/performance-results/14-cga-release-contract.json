@@ -1,0 +1,214 @@
+{
+  "scope": "production native exponent release-profile correctness; no timing claim",
+  "cwd": "/tmp/whippyunits-cga/integration-native-leaf/consumer",
+  "environment": {
+    "CARGO_TARGET_DIR": "/tmp/whippyunits-cga/native-release-target",
+    "CARGO_INCREMENTAL": "0"
+  },
+  "commands": [
+    {
+      "name": "native_full_i16",
+      "command": [
+        "cargo",
+        "+nightly-2026-09-13",
+        "run",
+        "--release",
+        "--offline",
+        "--locked",
+        "--bin",
+        "native_full_i16",
+        "--message-format=json",
+        "-j2"
+      ],
+      "expected": "success",
+      "exit_code": 0,
+      "passed": true,
+      "compiler_crash": false,
+      "diagnostics": [],
+      "error_codes": [],
+      "log": "/tmp/whippyunits-cga/native-release-contract/native_full_i16.log",
+      "source_sha256": "017776971e0445b78cb0f76ae291023f19331a03e35f4c788fde6dcdb8624187"
+    },
+    {
+      "name": "add_overflow",
+      "command": [
+        "cargo",
+        "+nightly-2026-09-13",
+        "check",
+        "--release",
+        "--offline",
+        "--locked",
+        "--bin",
+        "add_overflow",
+        "--message-format=json",
+        "-j2"
+      ],
+      "expected": "E0080 overflow rejection",
+      "exit_code": 101,
+      "passed": true,
+      "compiler_crash": false,
+      "diagnostics": [
+        {
+          "rendered": "error[E0080]: attempt to compute `i16::MAX + 1_i16`, which would overflow\n --> /tmp/whippyunits-macro-compile-time/whippyunits-num/src/gca.rs:9:50\n  |\n9 | pub const ADD<const A: i16, const B: i16>: i16 = A + B;\n  |                                                  ^^^^^ evaluation of `whippyunits_core::whippyunits_num::gca::ADD::<i16::MAX, 1>` failed here\n\n",
+          "$message_type": "diagnostic",
+          "children": [],
+          "level": "error",
+          "message": "attempt to compute `i16::MAX + 1_i16`, which would overflow",
+          "spans": [
+            {
+              "byte_end": 352,
+              "byte_start": 347,
+              "column_end": 55,
+              "column_start": 50,
+              "expansion": null,
+              "file_name": "/tmp/whippyunits-macro-compile-time/whippyunits-num/src/gca.rs",
+              "is_primary": true,
+              "label": "evaluation of `whippyunits_core::whippyunits_num::gca::ADD::<i16::MAX, 1>` failed here",
+              "line_end": 9,
+              "line_start": 9,
+              "suggested_replacement": null,
+              "suggestion_applicability": null,
+              "text": [
+                {
+                  "highlight_end": 55,
+                  "highlight_start": 50,
+                  "text": "pub const ADD<const A: i16, const B: i16>: i16 = A + B;"
+                }
+              ]
+            }
+          ],
+          "code": {
+            "code": "E0080",
+            "explanation": "A constant value failed to get evaluated.\n\nErroneous code example:\n\n```compile_fail,E0080\nenum Enum {\n    X = (1 << 500),\n    Y = (1 / 0),\n}\n```\n\nThis error indicates that the compiler was unable to sensibly evaluate a\nconstant expression that had to be evaluated. Attempting to divide by 0\nor causing an integer overflow are two ways to induce this error.\n\nEnsure that the expressions given can be evaluated as the desired integer type.\n\nSee the [Discriminants] section of the Reference for more information about\nsetting custom integer types on enums using the\n[`repr` attribute][repr-attribute].\n\n[discriminants]: https://doc.rust-lang.org/reference/items/enumerations.html#discriminants\n[repr-attribute]: https://doc.rust-lang.org/reference/type-layout.html#representations\n"
+          }
+        }
+      ],
+      "error_codes": [
+        "E0080"
+      ],
+      "log": "/tmp/whippyunits-cga/native-release-contract/add_overflow.log",
+      "source_sha256": "725fac011f1d83f95e4170d0f35a2a7b7aeb3fa13168ce070b09e4199154580a"
+    },
+    {
+      "name": "sub_overflow",
+      "command": [
+        "cargo",
+        "+nightly-2026-09-13",
+        "check",
+        "--release",
+        "--offline",
+        "--locked",
+        "--bin",
+        "sub_overflow",
+        "--message-format=json",
+        "-j2"
+      ],
+      "expected": "E0080 overflow rejection",
+      "exit_code": 101,
+      "passed": true,
+      "compiler_crash": false,
+      "diagnostics": [
+        {
+          "rendered": "error[E0080]: attempt to compute `i16::MIN - 1_i16`, which would overflow\n  --> /tmp/whippyunits-macro-compile-time/whippyunits-num/src/gca.rs:10:50\n   |\n10 | pub const SUB<const A: i16, const B: i16>: i16 = A - B;\n   |                                                  ^^^^^ evaluation of `whippyunits_core::whippyunits_num::gca::SUB::<i16::MIN, 1>` failed here\n\n",
+          "$message_type": "diagnostic",
+          "children": [],
+          "level": "error",
+          "message": "attempt to compute `i16::MIN - 1_i16`, which would overflow",
+          "spans": [
+            {
+              "byte_end": 408,
+              "byte_start": 403,
+              "column_end": 55,
+              "column_start": 50,
+              "expansion": null,
+              "file_name": "/tmp/whippyunits-macro-compile-time/whippyunits-num/src/gca.rs",
+              "is_primary": true,
+              "label": "evaluation of `whippyunits_core::whippyunits_num::gca::SUB::<i16::MIN, 1>` failed here",
+              "line_end": 10,
+              "line_start": 10,
+              "suggested_replacement": null,
+              "suggestion_applicability": null,
+              "text": [
+                {
+                  "highlight_end": 55,
+                  "highlight_start": 50,
+                  "text": "pub const SUB<const A: i16, const B: i16>: i16 = A - B;"
+                }
+              ]
+            }
+          ],
+          "code": {
+            "code": "E0080",
+            "explanation": "A constant value failed to get evaluated.\n\nErroneous code example:\n\n```compile_fail,E0080\nenum Enum {\n    X = (1 << 500),\n    Y = (1 / 0),\n}\n```\n\nThis error indicates that the compiler was unable to sensibly evaluate a\nconstant expression that had to be evaluated. Attempting to divide by 0\nor causing an integer overflow are two ways to induce this error.\n\nEnsure that the expressions given can be evaluated as the desired integer type.\n\nSee the [Discriminants] section of the Reference for more information about\nsetting custom integer types on enums using the\n[`repr` attribute][repr-attribute].\n\n[discriminants]: https://doc.rust-lang.org/reference/items/enumerations.html#discriminants\n[repr-attribute]: https://doc.rust-lang.org/reference/type-layout.html#representations\n"
+          }
+        }
+      ],
+      "error_codes": [
+        "E0080"
+      ],
+      "log": "/tmp/whippyunits-cga/native-release-contract/sub_overflow.log",
+      "source_sha256": "6da210aa6bf3fd94aef60b5bf34e6adae947c336058c1fd7b5e54172fa9cf761"
+    },
+    {
+      "name": "neg_overflow",
+      "command": [
+        "cargo",
+        "+nightly-2026-09-13",
+        "check",
+        "--release",
+        "--offline",
+        "--locked",
+        "--bin",
+        "neg_overflow",
+        "--message-format=json",
+        "-j2"
+      ],
+      "expected": "E0080 overflow rejection",
+      "exit_code": 101,
+      "passed": true,
+      "compiler_crash": false,
+      "diagnostics": [
+        {
+          "rendered": "error[E0080]: attempt to negate `i16::MIN`, which would overflow\n  --> /tmp/whippyunits-macro-compile-time/whippyunits-num/src/gca.rs:11:36\n   |\n11 | pub const NEG<const A: i16>: i16 = -A;\n   |                                    ^^ evaluation of `whippyunits_core::whippyunits_num::gca::NEG::<i16::MIN>` failed here\n\n",
+          "$message_type": "diagnostic",
+          "children": [],
+          "level": "error",
+          "message": "attempt to negate `i16::MIN`, which would overflow",
+          "spans": [
+            {
+              "byte_end": 447,
+              "byte_start": 445,
+              "column_end": 38,
+              "column_start": 36,
+              "expansion": null,
+              "file_name": "/tmp/whippyunits-macro-compile-time/whippyunits-num/src/gca.rs",
+              "is_primary": true,
+              "label": "evaluation of `whippyunits_core::whippyunits_num::gca::NEG::<i16::MIN>` failed here",
+              "line_end": 11,
+              "line_start": 11,
+              "suggested_replacement": null,
+              "suggestion_applicability": null,
+              "text": [
+                {
+                  "highlight_end": 38,
+                  "highlight_start": 36,
+                  "text": "pub const NEG<const A: i16>: i16 = -A;"
+                }
+              ]
+            }
+          ],
+          "code": {
+            "code": "E0080",
+            "explanation": "A constant value failed to get evaluated.\n\nErroneous code example:\n\n```compile_fail,E0080\nenum Enum {\n    X = (1 << 500),\n    Y = (1 / 0),\n}\n```\n\nThis error indicates that the compiler was unable to sensibly evaluate a\nconstant expression that had to be evaluated. Attempting to divide by 0\nor causing an integer overflow are two ways to induce this error.\n\nEnsure that the expressions given can be evaluated as the desired integer type.\n\nSee the [Discriminants] section of the Reference for more information about\nsetting custom integer types on enums using the\n[`repr` attribute][repr-attribute].\n\n[discriminants]: https://doc.rust-lang.org/reference/items/enumerations.html#discriminants\n[repr-attribute]: https://doc.rust-lang.org/reference/type-layout.html#representations\n"
+          }
+        }
+      ],
+      "error_codes": [
+        "E0080"
+      ],
+      "log": "/tmp/whippyunits-cga/native-release-contract/neg_overflow.log",
+      "source_sha256": "927d15daaaca3f7aac3cd6b68749d640af70adf799e73d7024388fd554ec4e18"
+    }
+  ],
+  "passed": true
+}

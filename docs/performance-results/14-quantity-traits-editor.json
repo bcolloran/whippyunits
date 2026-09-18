@@ -1,0 +1,4110 @@
+{
+  "scope": "fresh server, warm Cargo artifacts; direct LSP without editor/formatter",
+  "rss_scope": "Linux rust-analyzer process RSS only; sampled every 50 ms; child processes excluded",
+  "profiles": [
+    {
+      "label": "typenum",
+      "project_path": "/tmp/whippyunits-cga/snapshots/baseline/probe",
+      "dependency_path": "/tmp/whippyunits-cga/snapshots/baseline",
+      "source_sha256": "5982ae41371baa2deac9878a93e856bc3ce60d8489c1c134eb3478a9ffd41ac6",
+      "probe_sha256": "03c96c770cecbe31e0727ec9ad08c16c55bdc7bbc32b6fb95121da8d44367df1"
+    },
+    {
+      "label": "traits",
+      "project_path": "/tmp/whippyunits-cga/snapshots/typenum-traits/probe",
+      "dependency_path": "/tmp/whippyunits-cga/snapshots/typenum-traits",
+      "source_sha256": "8296c9109af3f3bdd3b93cad673d53f0194bc28ae7e4f4cfb75ef421e3c60274",
+      "probe_sha256": "03c96c770cecbe31e0727ec9ad08c16c55bdc7bbc32b6fb95121da8d44367df1"
+    }
+  ],
+  "server": "/home/bc/.vscode/extensions/rust-lang.rust-analyzer-0.3.3049-linux-x64/server/rust-analyzer",
+  "import_style": "glob",
+  "receiver": "variable",
+  "allow_missing_completion": [],
+  "timed_completion_method": "meters",
+  "required_completions": [
+    "meters",
+    "kilograms",
+    "seconds",
+    "radians",
+    "hertzs",
+    "newtons",
+    "joules",
+    "newton_meters",
+    "watts",
+    "pascals",
+    "degrees",
+    "ticks"
+  ],
+  "cargo_warmup": true,
+  "cache_priming": true,
+  "cargo_lock_policy": "Existing project profiles use --locked for warmup and analysis; generated profiles may create a lock during warmup, then analysis uses --locked",
+  "runs": 3,
+  "repeated_requests": 3,
+  "samples": [
+    {
+      "profile": "typenum",
+      "cycle": 1,
+      "valid": true,
+      "completion_status": "verified",
+      "missing_completion_names": [],
+      "primary_completion_valid": true,
+      "completion_validation": {
+        "meters": {
+          "present": true,
+          "item": {
+            "label": "meters()(as MetricLength)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "meters",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "meters()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/baseline/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 2,
+              "for_ref": false,
+              "hash": "1JayFnRPO6jNyioWDPgntdIjH6o="
+            }
+          }
+        },
+        "kilograms": {
+          "present": true,
+          "diagnostic_ms": 48.95101598231122,
+          "item": {
+            "label": "kilograms()(as MetricMass)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "kilograms",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "kilograms()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/baseline/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 3,
+              "for_ref": false,
+              "hash": "RI8zndfokeS5wvngLJ7NP3YNUPc="
+            }
+          }
+        },
+        "seconds": {
+          "present": true,
+          "diagnostic_ms": 77.20061499276198,
+          "item": {
+            "label": "seconds()(as MetricTime)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "seconds",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "seconds()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/baseline/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 4,
+              "for_ref": false,
+              "hash": "8EsVmRbp0nYJpT0FD9g3JzNA6gE="
+            }
+          }
+        },
+        "radians": {
+          "present": true,
+          "diagnostic_ms": 50.22242202539928,
+          "item": {
+            "label": "radians()(as MetricAngle)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "radians",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "radians()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/baseline/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 5,
+              "for_ref": false,
+              "hash": "eSSwJoKHoq8bBNzLKb1aBCHoaaw="
+            }
+          }
+        },
+        "hertzs": {
+          "present": true,
+          "diagnostic_ms": 47.86860299645923,
+          "item": {
+            "label": "hertzs()(as MetricFrequency)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "hertzs",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "hertzs()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/baseline/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 6,
+              "for_ref": false,
+              "hash": "51SPdBtTmFIfFJjCDlCevQQumxg="
+            }
+          }
+        },
+        "newtons": {
+          "present": true,
+          "diagnostic_ms": 43.44016101094894,
+          "item": {
+            "label": "newtons()(as MetricForce)",
+            "kind": 2,
+            "sortText": "7ffffffb",
+            "filterText": "newtons",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "newtons()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/baseline/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 7,
+              "for_ref": false,
+              "hash": "U9kkUXbEV7aHOQaM3/5hbpEizkU="
+            }
+          }
+        },
+        "joules": {
+          "present": true,
+          "diagnostic_ms": 46.992663003038615,
+          "item": {
+            "label": "joules()(as MetricEnergy)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "joules",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "joules()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/baseline/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 8,
+              "for_ref": false,
+              "hash": "Wbn+P5Q+8ELsU7trylilPEEWyPo="
+            }
+          }
+        },
+        "newton_meters": {
+          "present": true,
+          "diagnostic_ms": 47.15284498524852,
+          "item": {
+            "label": "newton_meters()(as MetricEnergy)",
+            "kind": 2,
+            "sortText": "7ffffffb",
+            "filterText": "newton_meters",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "newton_meters()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/baseline/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 9,
+              "for_ref": false,
+              "hash": "HEwbnPKHRehu5jGCo6Kou4dB5kE="
+            }
+          }
+        },
+        "watts": {
+          "present": true,
+          "diagnostic_ms": 50.87784997886047,
+          "item": {
+            "label": "watts()(as MetricPower)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "watts",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "watts()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/baseline/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 10,
+              "for_ref": false,
+              "hash": "2WyOtyXkT0v4VvhXi0pxnvTlw1Q="
+            }
+          }
+        },
+        "pascals": {
+          "present": true,
+          "diagnostic_ms": 45.8700500021223,
+          "item": {
+            "label": "pascals()(as MetricPressure)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "pascals",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "pascals()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/baseline/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 11,
+              "for_ref": false,
+              "hash": "/1o9iukVZSql8zLXspYutehdpMo="
+            }
+          }
+        },
+        "degrees": {
+          "present": true,
+          "diagnostic_ms": 50.20441100350581,
+          "item": {
+            "label": "degrees()(as MetricAngle)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "degrees",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "degrees()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/baseline/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 12,
+              "for_ref": false,
+              "hash": "jbC72q3s62rqxPALHvigzwVYWLY="
+            }
+          }
+        },
+        "ticks": {
+          "present": true,
+          "diagnostic_ms": 47.237316000973806,
+          "item": {
+            "label": "ticks()(as MetricTime)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "ticks",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "ticks()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/baseline/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 13,
+              "for_ref": false,
+              "hash": "lzc0dIN6Bh+3BJ1vAO2O+6P4aQQ="
+            }
+          }
+        }
+      },
+      "request_ms": {
+        "hover": [
+          529.6994250093121,
+          0.5437670042738318,
+          0.39042497519403696,
+          0.5448760057333857
+        ],
+        "completion": [
+          355.2813449932728,
+          33.6071330239065,
+          11.31242499104701,
+          36.417936003999785
+        ]
+      },
+      "raw": {
+        "hover": [
+          "/tmp/whippyunits-cga/ra-traits-comparison/01-typenum.hover-0.json",
+          "/tmp/whippyunits-cga/ra-traits-comparison/01-typenum.hover-1.json",
+          "/tmp/whippyunits-cga/ra-traits-comparison/01-typenum.hover-2.json",
+          "/tmp/whippyunits-cga/ra-traits-comparison/01-typenum.hover-3.json"
+        ],
+        "completion": [
+          "/tmp/whippyunits-cga/ra-traits-comparison/01-typenum.completion-0.json",
+          "/tmp/whippyunits-cga/ra-traits-comparison/01-typenum.completion-1.json",
+          "/tmp/whippyunits-cga/ra-traits-comparison/01-typenum.completion-2.json",
+          "/tmp/whippyunits-cga/ra-traits-comparison/01-typenum.completion-3.json"
+        ]
+      },
+      "server_info": {
+        "name": "rust-analyzer",
+        "version": "0.3.3049-standalone"
+      },
+      "ready_seconds": 3.876244287006557,
+      "server_ready_rss_kib": 1596836,
+      "server_status": {
+        "health": "ok",
+        "quiescent": true,
+        "message": null
+      },
+      "completion_item_count": 111,
+      "completion_is_incomplete": true,
+      "verified_completion": {
+        "label": "meters()(as MetricLength)",
+        "kind": 2,
+        "sortText": "7fffffec",
+        "filterText": "meters",
+        "insertTextFormat": 2,
+        "textEdit": {
+          "newText": "meters()$0",
+          "insert": {
+            "start": {
+              "line": 33,
+              "character": 23
+            },
+            "end": {
+              "line": 33,
+              "character": 25
+            }
+          },
+          "replace": {
+            "start": {
+              "line": 33,
+              "character": 23
+            },
+            "end": {
+              "line": 33,
+              "character": 25
+            }
+          }
+        },
+        "data": {
+          "position": {
+            "textDocument": {
+              "uri": "file:///tmp/whippyunits-cga/snapshots/baseline/probe/src/main.rs"
+            },
+            "position": {
+              "line": 33,
+              "character": 25
+            }
+          },
+          "version": 2,
+          "for_ref": false,
+          "hash": "1JayFnRPO6jNyioWDPgntdIjH6o="
+        }
+      },
+      "server_final_rss_kib": 1737764,
+      "server_peak_rss_kib": 1737764
+    },
+    {
+      "profile": "traits",
+      "cycle": 1,
+      "valid": true,
+      "completion_status": "verified",
+      "missing_completion_names": [],
+      "primary_completion_valid": true,
+      "completion_validation": {
+        "meters": {
+          "present": true,
+          "item": {
+            "label": "meters()(as MetricLength)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "meters",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "meters()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/typenum-traits/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 2,
+              "for_ref": false,
+              "hash": "1JayFnRPO6jNyioWDPgntdIjH6o="
+            }
+          }
+        },
+        "kilograms": {
+          "present": true,
+          "diagnostic_ms": 39.66236498672515,
+          "item": {
+            "label": "kilograms()(as MetricMass)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "kilograms",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "kilograms()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/typenum-traits/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 3,
+              "for_ref": false,
+              "hash": "RI8zndfokeS5wvngLJ7NP3YNUPc="
+            }
+          }
+        },
+        "seconds": {
+          "present": true,
+          "diagnostic_ms": 77.23792499746196,
+          "item": {
+            "label": "seconds()(as MetricTime)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "seconds",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "seconds()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/typenum-traits/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 4,
+              "for_ref": false,
+              "hash": "8EsVmRbp0nYJpT0FD9g3JzNA6gE="
+            }
+          }
+        },
+        "radians": {
+          "present": true,
+          "diagnostic_ms": 50.79921899596229,
+          "item": {
+            "label": "radians()(as MetricAngle)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "radians",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "radians()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/typenum-traits/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 5,
+              "for_ref": false,
+              "hash": "eSSwJoKHoq8bBNzLKb1aBCHoaaw="
+            }
+          }
+        },
+        "hertzs": {
+          "present": true,
+          "diagnostic_ms": 62.23451599362306,
+          "item": {
+            "label": "hertzs()(as MetricFrequency)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "hertzs",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "hertzs()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/typenum-traits/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 6,
+              "for_ref": false,
+              "hash": "51SPdBtTmFIfFJjCDlCevQQumxg="
+            }
+          }
+        },
+        "newtons": {
+          "present": true,
+          "diagnostic_ms": 58.58299200190231,
+          "item": {
+            "label": "newtons()(as MetricForce)",
+            "kind": 2,
+            "sortText": "7ffffffb",
+            "filterText": "newtons",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "newtons()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/typenum-traits/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 7,
+              "for_ref": false,
+              "hash": "U9kkUXbEV7aHOQaM3/5hbpEizkU="
+            }
+          }
+        },
+        "joules": {
+          "present": true,
+          "diagnostic_ms": 40.33580399118364,
+          "item": {
+            "label": "joules()(as MetricEnergy)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "joules",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "joules()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/typenum-traits/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 8,
+              "for_ref": false,
+              "hash": "Wbn+P5Q+8ELsU7trylilPEEWyPo="
+            }
+          }
+        },
+        "newton_meters": {
+          "present": true,
+          "diagnostic_ms": 63.98369598900899,
+          "item": {
+            "label": "newton_meters()(as MetricEnergy)",
+            "kind": 2,
+            "sortText": "7ffffffb",
+            "filterText": "newton_meters",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "newton_meters()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/typenum-traits/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 9,
+              "for_ref": false,
+              "hash": "HEwbnPKHRehu5jGCo6Kou4dB5kE="
+            }
+          }
+        },
+        "watts": {
+          "present": true,
+          "diagnostic_ms": 49.78251599823125,
+          "item": {
+            "label": "watts()(as MetricPower)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "watts",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "watts()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/typenum-traits/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 10,
+              "for_ref": false,
+              "hash": "2WyOtyXkT0v4VvhXi0pxnvTlw1Q="
+            }
+          }
+        },
+        "pascals": {
+          "present": true,
+          "diagnostic_ms": 52.45382897555828,
+          "item": {
+            "label": "pascals()(as MetricPressure)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "pascals",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "pascals()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/typenum-traits/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 11,
+              "for_ref": false,
+              "hash": "/1o9iukVZSql8zLXspYutehdpMo="
+            }
+          }
+        },
+        "degrees": {
+          "present": true,
+          "diagnostic_ms": 52.226695988792926,
+          "item": {
+            "label": "degrees()(as MetricAngle)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "degrees",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "degrees()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/typenum-traits/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 12,
+              "for_ref": false,
+              "hash": "jbC72q3s62rqxPALHvigzwVYWLY="
+            }
+          }
+        },
+        "ticks": {
+          "present": true,
+          "diagnostic_ms": 65.60411601094529,
+          "item": {
+            "label": "ticks()(as MetricTime)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "ticks",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "ticks()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/typenum-traits/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 13,
+              "for_ref": false,
+              "hash": "lzc0dIN6Bh+3BJ1vAO2O+6P4aQQ="
+            }
+          }
+        }
+      },
+      "request_ms": {
+        "hover": [
+          521.9381630013231,
+          0.6742879922967404,
+          0.397905008867383,
+          0.4137050127610564
+        ],
+        "completion": [
+          356.1547670105938,
+          40.55040600360371,
+          17.224886018084362,
+          16.832261986564845
+        ]
+      },
+      "raw": {
+        "hover": [
+          "/tmp/whippyunits-cga/ra-traits-comparison/01-traits.hover-0.json",
+          "/tmp/whippyunits-cga/ra-traits-comparison/01-traits.hover-1.json",
+          "/tmp/whippyunits-cga/ra-traits-comparison/01-traits.hover-2.json",
+          "/tmp/whippyunits-cga/ra-traits-comparison/01-traits.hover-3.json"
+        ],
+        "completion": [
+          "/tmp/whippyunits-cga/ra-traits-comparison/01-traits.completion-0.json",
+          "/tmp/whippyunits-cga/ra-traits-comparison/01-traits.completion-1.json",
+          "/tmp/whippyunits-cga/ra-traits-comparison/01-traits.completion-2.json",
+          "/tmp/whippyunits-cga/ra-traits-comparison/01-traits.completion-3.json"
+        ]
+      },
+      "server_info": {
+        "name": "rust-analyzer",
+        "version": "0.3.3049-standalone"
+      },
+      "ready_seconds": 3.850616789975902,
+      "server_ready_rss_kib": 1561564,
+      "server_status": {
+        "health": "ok",
+        "quiescent": true,
+        "message": null
+      },
+      "completion_item_count": 111,
+      "completion_is_incomplete": true,
+      "verified_completion": {
+        "label": "meters()(as MetricLength)",
+        "kind": 2,
+        "sortText": "7fffffec",
+        "filterText": "meters",
+        "insertTextFormat": 2,
+        "textEdit": {
+          "newText": "meters()$0",
+          "insert": {
+            "start": {
+              "line": 33,
+              "character": 23
+            },
+            "end": {
+              "line": 33,
+              "character": 25
+            }
+          },
+          "replace": {
+            "start": {
+              "line": 33,
+              "character": 23
+            },
+            "end": {
+              "line": 33,
+              "character": 25
+            }
+          }
+        },
+        "data": {
+          "position": {
+            "textDocument": {
+              "uri": "file:///tmp/whippyunits-cga/snapshots/typenum-traits/probe/src/main.rs"
+            },
+            "position": {
+              "line": 33,
+              "character": 25
+            }
+          },
+          "version": 2,
+          "for_ref": false,
+          "hash": "1JayFnRPO6jNyioWDPgntdIjH6o="
+        }
+      },
+      "server_final_rss_kib": 1701512,
+      "server_peak_rss_kib": 1701512
+    },
+    {
+      "profile": "traits",
+      "cycle": 2,
+      "valid": true,
+      "completion_status": "verified",
+      "missing_completion_names": [],
+      "primary_completion_valid": true,
+      "completion_validation": {
+        "meters": {
+          "present": true,
+          "item": {
+            "label": "meters()(as MetricLength)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "meters",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "meters()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/typenum-traits/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 2,
+              "for_ref": false,
+              "hash": "1JayFnRPO6jNyioWDPgntdIjH6o="
+            }
+          }
+        },
+        "kilograms": {
+          "present": true,
+          "diagnostic_ms": 55.322263011476025,
+          "item": {
+            "label": "kilograms()(as MetricMass)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "kilograms",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "kilograms()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/typenum-traits/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 3,
+              "for_ref": false,
+              "hash": "RI8zndfokeS5wvngLJ7NP3YNUPc="
+            }
+          }
+        },
+        "seconds": {
+          "present": true,
+          "diagnostic_ms": 79.64066398562863,
+          "item": {
+            "label": "seconds()(as MetricTime)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "seconds",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "seconds()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/typenum-traits/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 4,
+              "for_ref": false,
+              "hash": "8EsVmRbp0nYJpT0FD9g3JzNA6gE="
+            }
+          }
+        },
+        "radians": {
+          "present": true,
+          "diagnostic_ms": 49.54837399418466,
+          "item": {
+            "label": "radians()(as MetricAngle)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "radians",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "radians()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/typenum-traits/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 5,
+              "for_ref": false,
+              "hash": "eSSwJoKHoq8bBNzLKb1aBCHoaaw="
+            }
+          }
+        },
+        "hertzs": {
+          "present": true,
+          "diagnostic_ms": 45.23105200496502,
+          "item": {
+            "label": "hertzs()(as MetricFrequency)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "hertzs",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "hertzs()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/typenum-traits/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 6,
+              "for_ref": false,
+              "hash": "51SPdBtTmFIfFJjCDlCevQQumxg="
+            }
+          }
+        },
+        "newtons": {
+          "present": true,
+          "diagnostic_ms": 46.969813003670424,
+          "item": {
+            "label": "newtons()(as MetricForce)",
+            "kind": 2,
+            "sortText": "7ffffffb",
+            "filterText": "newtons",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "newtons()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/typenum-traits/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 7,
+              "for_ref": false,
+              "hash": "U9kkUXbEV7aHOQaM3/5hbpEizkU="
+            }
+          }
+        },
+        "joules": {
+          "present": true,
+          "diagnostic_ms": 54.49775300803594,
+          "item": {
+            "label": "joules()(as MetricEnergy)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "joules",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "joules()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/typenum-traits/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 8,
+              "for_ref": false,
+              "hash": "Wbn+P5Q+8ELsU7trylilPEEWyPo="
+            }
+          }
+        },
+        "newton_meters": {
+          "present": true,
+          "diagnostic_ms": 47.15166499954648,
+          "item": {
+            "label": "newton_meters()(as MetricEnergy)",
+            "kind": 2,
+            "sortText": "7ffffffb",
+            "filterText": "newton_meters",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "newton_meters()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/typenum-traits/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 9,
+              "for_ref": false,
+              "hash": "HEwbnPKHRehu5jGCo6Kou4dB5kE="
+            }
+          }
+        },
+        "watts": {
+          "present": true,
+          "diagnostic_ms": 45.31995297293179,
+          "item": {
+            "label": "watts()(as MetricPower)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "watts",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "watts()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/typenum-traits/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 10,
+              "for_ref": false,
+              "hash": "2WyOtyXkT0v4VvhXi0pxnvTlw1Q="
+            }
+          }
+        },
+        "pascals": {
+          "present": true,
+          "diagnostic_ms": 45.45857399352826,
+          "item": {
+            "label": "pascals()(as MetricPressure)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "pascals",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "pascals()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/typenum-traits/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 11,
+              "for_ref": false,
+              "hash": "/1o9iukVZSql8zLXspYutehdpMo="
+            }
+          }
+        },
+        "degrees": {
+          "present": true,
+          "diagnostic_ms": 48.18059699027799,
+          "item": {
+            "label": "degrees()(as MetricAngle)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "degrees",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "degrees()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/typenum-traits/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 12,
+              "for_ref": false,
+              "hash": "jbC72q3s62rqxPALHvigzwVYWLY="
+            }
+          }
+        },
+        "ticks": {
+          "present": true,
+          "diagnostic_ms": 57.824402989353985,
+          "item": {
+            "label": "ticks()(as MetricTime)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "ticks",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "ticks()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/typenum-traits/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 13,
+              "for_ref": false,
+              "hash": "lzc0dIN6Bh+3BJ1vAO2O+6P4aQQ="
+            }
+          }
+        }
+      },
+      "request_ms": {
+        "hover": [
+          522.0867669850122,
+          0.6807280005887151,
+          0.457724992884323,
+          0.33362398971803486
+        ],
+        "completion": [
+          350.0494149920996,
+          28.676863992586732,
+          18.578761984826997,
+          29.57089399569668
+        ]
+      },
+      "raw": {
+        "hover": [
+          "/tmp/whippyunits-cga/ra-traits-comparison/02-traits.hover-0.json",
+          "/tmp/whippyunits-cga/ra-traits-comparison/02-traits.hover-1.json",
+          "/tmp/whippyunits-cga/ra-traits-comparison/02-traits.hover-2.json",
+          "/tmp/whippyunits-cga/ra-traits-comparison/02-traits.hover-3.json"
+        ],
+        "completion": [
+          "/tmp/whippyunits-cga/ra-traits-comparison/02-traits.completion-0.json",
+          "/tmp/whippyunits-cga/ra-traits-comparison/02-traits.completion-1.json",
+          "/tmp/whippyunits-cga/ra-traits-comparison/02-traits.completion-2.json",
+          "/tmp/whippyunits-cga/ra-traits-comparison/02-traits.completion-3.json"
+        ]
+      },
+      "server_info": {
+        "name": "rust-analyzer",
+        "version": "0.3.3049-standalone"
+      },
+      "ready_seconds": 3.8952331129985396,
+      "server_ready_rss_kib": 1593824,
+      "server_status": {
+        "health": "ok",
+        "quiescent": true,
+        "message": null
+      },
+      "completion_item_count": 111,
+      "completion_is_incomplete": true,
+      "verified_completion": {
+        "label": "meters()(as MetricLength)",
+        "kind": 2,
+        "sortText": "7fffffec",
+        "filterText": "meters",
+        "insertTextFormat": 2,
+        "textEdit": {
+          "newText": "meters()$0",
+          "insert": {
+            "start": {
+              "line": 33,
+              "character": 23
+            },
+            "end": {
+              "line": 33,
+              "character": 25
+            }
+          },
+          "replace": {
+            "start": {
+              "line": 33,
+              "character": 23
+            },
+            "end": {
+              "line": 33,
+              "character": 25
+            }
+          }
+        },
+        "data": {
+          "position": {
+            "textDocument": {
+              "uri": "file:///tmp/whippyunits-cga/snapshots/typenum-traits/probe/src/main.rs"
+            },
+            "position": {
+              "line": 33,
+              "character": 25
+            }
+          },
+          "version": 2,
+          "for_ref": false,
+          "hash": "1JayFnRPO6jNyioWDPgntdIjH6o="
+        }
+      },
+      "server_final_rss_kib": 1735220,
+      "server_peak_rss_kib": 1735220
+    },
+    {
+      "profile": "typenum",
+      "cycle": 2,
+      "valid": true,
+      "completion_status": "verified",
+      "missing_completion_names": [],
+      "primary_completion_valid": true,
+      "completion_validation": {
+        "meters": {
+          "present": true,
+          "item": {
+            "label": "meters()(as MetricLength)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "meters",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "meters()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/baseline/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 2,
+              "for_ref": false,
+              "hash": "1JayFnRPO6jNyioWDPgntdIjH6o="
+            }
+          }
+        },
+        "kilograms": {
+          "present": true,
+          "diagnostic_ms": 39.989399985643104,
+          "item": {
+            "label": "kilograms()(as MetricMass)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "kilograms",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "kilograms()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/baseline/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 3,
+              "for_ref": false,
+              "hash": "RI8zndfokeS5wvngLJ7NP3YNUPc="
+            }
+          }
+        },
+        "seconds": {
+          "present": true,
+          "diagnostic_ms": 70.48728500376455,
+          "item": {
+            "label": "seconds()(as MetricTime)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "seconds",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "seconds()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/baseline/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 4,
+              "for_ref": false,
+              "hash": "8EsVmRbp0nYJpT0FD9g3JzNA6gE="
+            }
+          }
+        },
+        "radians": {
+          "present": true,
+          "diagnostic_ms": 45.41414399864152,
+          "item": {
+            "label": "radians()(as MetricAngle)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "radians",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "radians()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/baseline/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 5,
+              "for_ref": false,
+              "hash": "eSSwJoKHoq8bBNzLKb1aBCHoaaw="
+            }
+          }
+        },
+        "hertzs": {
+          "present": true,
+          "diagnostic_ms": 55.23097200784832,
+          "item": {
+            "label": "hertzs()(as MetricFrequency)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "hertzs",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "hertzs()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/baseline/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 6,
+              "for_ref": false,
+              "hash": "51SPdBtTmFIfFJjCDlCevQQumxg="
+            }
+          }
+        },
+        "newtons": {
+          "present": true,
+          "diagnostic_ms": 41.19411401916295,
+          "item": {
+            "label": "newtons()(as MetricForce)",
+            "kind": 2,
+            "sortText": "7ffffffb",
+            "filterText": "newtons",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "newtons()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/baseline/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 7,
+              "for_ref": false,
+              "hash": "U9kkUXbEV7aHOQaM3/5hbpEizkU="
+            }
+          }
+        },
+        "joules": {
+          "present": true,
+          "diagnostic_ms": 49.600964004639536,
+          "item": {
+            "label": "joules()(as MetricEnergy)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "joules",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "joules()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/baseline/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 8,
+              "for_ref": false,
+              "hash": "Wbn+P5Q+8ELsU7trylilPEEWyPo="
+            }
+          }
+        },
+        "newton_meters": {
+          "present": true,
+          "diagnostic_ms": 42.35233800136484,
+          "item": {
+            "label": "newton_meters()(as MetricEnergy)",
+            "kind": 2,
+            "sortText": "7ffffffb",
+            "filterText": "newton_meters",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "newton_meters()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/baseline/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 9,
+              "for_ref": false,
+              "hash": "HEwbnPKHRehu5jGCo6Kou4dB5kE="
+            }
+          }
+        },
+        "watts": {
+          "present": true,
+          "diagnostic_ms": 50.131370982853696,
+          "item": {
+            "label": "watts()(as MetricPower)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "watts",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "watts()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/baseline/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 10,
+              "for_ref": false,
+              "hash": "2WyOtyXkT0v4VvhXi0pxnvTlw1Q="
+            }
+          }
+        },
+        "pascals": {
+          "present": true,
+          "diagnostic_ms": 44.85872699297033,
+          "item": {
+            "label": "pascals()(as MetricPressure)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "pascals",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "pascals()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/baseline/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 11,
+              "for_ref": false,
+              "hash": "/1o9iukVZSql8zLXspYutehdpMo="
+            }
+          }
+        },
+        "degrees": {
+          "present": true,
+          "diagnostic_ms": 41.200753999873996,
+          "item": {
+            "label": "degrees()(as MetricAngle)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "degrees",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "degrees()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/baseline/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 12,
+              "for_ref": false,
+              "hash": "jbC72q3s62rqxPALHvigzwVYWLY="
+            }
+          }
+        },
+        "ticks": {
+          "present": true,
+          "diagnostic_ms": 48.830145999090746,
+          "item": {
+            "label": "ticks()(as MetricTime)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "ticks",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "ticks()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/baseline/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 13,
+              "for_ref": false,
+              "hash": "lzc0dIN6Bh+3BJ1vAO2O+6P4aQQ="
+            }
+          }
+        }
+      },
+      "request_ms": {
+        "hover": [
+          518.2458710041828,
+          0.49514599959366024,
+          0.6300279928836972,
+          0.3525339998304844
+        ],
+        "completion": [
+          346.76993600442074,
+          45.25677202036604,
+          13.57762300176546,
+          14.595554996049032
+        ]
+      },
+      "raw": {
+        "hover": [
+          "/tmp/whippyunits-cga/ra-traits-comparison/02-typenum.hover-0.json",
+          "/tmp/whippyunits-cga/ra-traits-comparison/02-typenum.hover-1.json",
+          "/tmp/whippyunits-cga/ra-traits-comparison/02-typenum.hover-2.json",
+          "/tmp/whippyunits-cga/ra-traits-comparison/02-typenum.hover-3.json"
+        ],
+        "completion": [
+          "/tmp/whippyunits-cga/ra-traits-comparison/02-typenum.completion-0.json",
+          "/tmp/whippyunits-cga/ra-traits-comparison/02-typenum.completion-1.json",
+          "/tmp/whippyunits-cga/ra-traits-comparison/02-typenum.completion-2.json",
+          "/tmp/whippyunits-cga/ra-traits-comparison/02-typenum.completion-3.json"
+        ]
+      },
+      "server_info": {
+        "name": "rust-analyzer",
+        "version": "0.3.3049-standalone"
+      },
+      "ready_seconds": 3.9389638070133515,
+      "server_ready_rss_kib": 1605524,
+      "server_status": {
+        "health": "ok",
+        "quiescent": true,
+        "message": null
+      },
+      "completion_item_count": 111,
+      "completion_is_incomplete": true,
+      "verified_completion": {
+        "label": "meters()(as MetricLength)",
+        "kind": 2,
+        "sortText": "7fffffec",
+        "filterText": "meters",
+        "insertTextFormat": 2,
+        "textEdit": {
+          "newText": "meters()$0",
+          "insert": {
+            "start": {
+              "line": 33,
+              "character": 23
+            },
+            "end": {
+              "line": 33,
+              "character": 25
+            }
+          },
+          "replace": {
+            "start": {
+              "line": 33,
+              "character": 23
+            },
+            "end": {
+              "line": 33,
+              "character": 25
+            }
+          }
+        },
+        "data": {
+          "position": {
+            "textDocument": {
+              "uri": "file:///tmp/whippyunits-cga/snapshots/baseline/probe/src/main.rs"
+            },
+            "position": {
+              "line": 33,
+              "character": 25
+            }
+          },
+          "version": 2,
+          "for_ref": false,
+          "hash": "1JayFnRPO6jNyioWDPgntdIjH6o="
+        }
+      },
+      "server_final_rss_kib": 1746308,
+      "server_peak_rss_kib": 1746308
+    },
+    {
+      "profile": "typenum",
+      "cycle": 3,
+      "valid": true,
+      "completion_status": "verified",
+      "missing_completion_names": [],
+      "primary_completion_valid": true,
+      "completion_validation": {
+        "meters": {
+          "present": true,
+          "item": {
+            "label": "meters()(as MetricLength)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "meters",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "meters()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/baseline/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 2,
+              "for_ref": false,
+              "hash": "1JayFnRPO6jNyioWDPgntdIjH6o="
+            }
+          }
+        },
+        "kilograms": {
+          "present": true,
+          "diagnostic_ms": 42.498098977375776,
+          "item": {
+            "label": "kilograms()(as MetricMass)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "kilograms",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "kilograms()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/baseline/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 3,
+              "for_ref": false,
+              "hash": "RI8zndfokeS5wvngLJ7NP3YNUPc="
+            }
+          }
+        },
+        "seconds": {
+          "present": true,
+          "diagnostic_ms": 66.8800419953186,
+          "item": {
+            "label": "seconds()(as MetricTime)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "seconds",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "seconds()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/baseline/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 4,
+              "for_ref": false,
+              "hash": "8EsVmRbp0nYJpT0FD9g3JzNA6gE="
+            }
+          }
+        },
+        "radians": {
+          "present": true,
+          "diagnostic_ms": 54.49539399705827,
+          "item": {
+            "label": "radians()(as MetricAngle)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "radians",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "radians()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/baseline/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 5,
+              "for_ref": false,
+              "hash": "eSSwJoKHoq8bBNzLKb1aBCHoaaw="
+            }
+          }
+        },
+        "hertzs": {
+          "present": true,
+          "diagnostic_ms": 58.24447798659094,
+          "item": {
+            "label": "hertzs()(as MetricFrequency)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "hertzs",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "hertzs()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/baseline/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 6,
+              "for_ref": false,
+              "hash": "51SPdBtTmFIfFJjCDlCevQQumxg="
+            }
+          }
+        },
+        "newtons": {
+          "present": true,
+          "diagnostic_ms": 50.738717982312664,
+          "item": {
+            "label": "newtons()(as MetricForce)",
+            "kind": 2,
+            "sortText": "7ffffffb",
+            "filterText": "newtons",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "newtons()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/baseline/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 7,
+              "for_ref": false,
+              "hash": "U9kkUXbEV7aHOQaM3/5hbpEizkU="
+            }
+          }
+        },
+        "joules": {
+          "present": true,
+          "diagnostic_ms": 41.86190202017315,
+          "item": {
+            "label": "joules()(as MetricEnergy)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "joules",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "joules()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/baseline/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 8,
+              "for_ref": false,
+              "hash": "Wbn+P5Q+8ELsU7trylilPEEWyPo="
+            }
+          }
+        },
+        "newton_meters": {
+          "present": true,
+          "diagnostic_ms": 50.70630801492371,
+          "item": {
+            "label": "newton_meters()(as MetricEnergy)",
+            "kind": 2,
+            "sortText": "7ffffffb",
+            "filterText": "newton_meters",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "newton_meters()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/baseline/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 9,
+              "for_ref": false,
+              "hash": "HEwbnPKHRehu5jGCo6Kou4dB5kE="
+            }
+          }
+        },
+        "watts": {
+          "present": true,
+          "diagnostic_ms": 43.55764199863188,
+          "item": {
+            "label": "watts()(as MetricPower)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "watts",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "watts()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/baseline/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 10,
+              "for_ref": false,
+              "hash": "2WyOtyXkT0v4VvhXi0pxnvTlw1Q="
+            }
+          }
+        },
+        "pascals": {
+          "present": true,
+          "diagnostic_ms": 41.57013798248954,
+          "item": {
+            "label": "pascals()(as MetricPressure)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "pascals",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "pascals()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/baseline/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 11,
+              "for_ref": false,
+              "hash": "/1o9iukVZSql8zLXspYutehdpMo="
+            }
+          }
+        },
+        "degrees": {
+          "present": true,
+          "diagnostic_ms": 41.423076996579766,
+          "item": {
+            "label": "degrees()(as MetricAngle)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "degrees",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "degrees()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/baseline/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 12,
+              "for_ref": false,
+              "hash": "jbC72q3s62rqxPALHvigzwVYWLY="
+            }
+          }
+        },
+        "ticks": {
+          "present": true,
+          "diagnostic_ms": 50.0487599929329,
+          "item": {
+            "label": "ticks()(as MetricTime)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "ticks",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "ticks()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/baseline/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 13,
+              "for_ref": false,
+              "hash": "lzc0dIN6Bh+3BJ1vAO2O+6P4aQQ="
+            }
+          }
+        }
+      },
+      "request_ms": {
+        "hover": [
+          528.5841969889589,
+          0.47084601828828454,
+          0.3370039921719581,
+          0.36295500467531383
+        ],
+        "completion": [
+          365.82242598524317,
+          43.0308060022071,
+          19.272631005151197,
+          17.817263986216858
+        ]
+      },
+      "raw": {
+        "hover": [
+          "/tmp/whippyunits-cga/ra-traits-comparison/03-typenum.hover-0.json",
+          "/tmp/whippyunits-cga/ra-traits-comparison/03-typenum.hover-1.json",
+          "/tmp/whippyunits-cga/ra-traits-comparison/03-typenum.hover-2.json",
+          "/tmp/whippyunits-cga/ra-traits-comparison/03-typenum.hover-3.json"
+        ],
+        "completion": [
+          "/tmp/whippyunits-cga/ra-traits-comparison/03-typenum.completion-0.json",
+          "/tmp/whippyunits-cga/ra-traits-comparison/03-typenum.completion-1.json",
+          "/tmp/whippyunits-cga/ra-traits-comparison/03-typenum.completion-2.json",
+          "/tmp/whippyunits-cga/ra-traits-comparison/03-typenum.completion-3.json"
+        ]
+      },
+      "server_info": {
+        "name": "rust-analyzer",
+        "version": "0.3.3049-standalone"
+      },
+      "ready_seconds": 3.794427393004298,
+      "server_ready_rss_kib": 1599420,
+      "server_status": {
+        "health": "ok",
+        "quiescent": true,
+        "message": null
+      },
+      "completion_item_count": 111,
+      "completion_is_incomplete": true,
+      "verified_completion": {
+        "label": "meters()(as MetricLength)",
+        "kind": 2,
+        "sortText": "7fffffec",
+        "filterText": "meters",
+        "insertTextFormat": 2,
+        "textEdit": {
+          "newText": "meters()$0",
+          "insert": {
+            "start": {
+              "line": 33,
+              "character": 23
+            },
+            "end": {
+              "line": 33,
+              "character": 25
+            }
+          },
+          "replace": {
+            "start": {
+              "line": 33,
+              "character": 23
+            },
+            "end": {
+              "line": 33,
+              "character": 25
+            }
+          }
+        },
+        "data": {
+          "position": {
+            "textDocument": {
+              "uri": "file:///tmp/whippyunits-cga/snapshots/baseline/probe/src/main.rs"
+            },
+            "position": {
+              "line": 33,
+              "character": 25
+            }
+          },
+          "version": 2,
+          "for_ref": false,
+          "hash": "1JayFnRPO6jNyioWDPgntdIjH6o="
+        }
+      },
+      "server_final_rss_kib": 1740856,
+      "server_peak_rss_kib": 1740856
+    },
+    {
+      "profile": "traits",
+      "cycle": 3,
+      "valid": true,
+      "completion_status": "verified",
+      "missing_completion_names": [],
+      "primary_completion_valid": true,
+      "completion_validation": {
+        "meters": {
+          "present": true,
+          "item": {
+            "label": "meters()(as MetricLength)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "meters",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "meters()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/typenum-traits/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 2,
+              "for_ref": false,
+              "hash": "1JayFnRPO6jNyioWDPgntdIjH6o="
+            }
+          }
+        },
+        "kilograms": {
+          "present": true,
+          "diagnostic_ms": 43.17645699484274,
+          "item": {
+            "label": "kilograms()(as MetricMass)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "kilograms",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "kilograms()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/typenum-traits/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 3,
+              "for_ref": false,
+              "hash": "RI8zndfokeS5wvngLJ7NP3YNUPc="
+            }
+          }
+        },
+        "seconds": {
+          "present": true,
+          "diagnostic_ms": 73.14269701601006,
+          "item": {
+            "label": "seconds()(as MetricTime)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "seconds",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "seconds()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/typenum-traits/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 4,
+              "for_ref": false,
+              "hash": "8EsVmRbp0nYJpT0FD9g3JzNA6gE="
+            }
+          }
+        },
+        "radians": {
+          "present": true,
+          "diagnostic_ms": 59.30110102053732,
+          "item": {
+            "label": "radians()(as MetricAngle)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "radians",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "radians()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/typenum-traits/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 5,
+              "for_ref": false,
+              "hash": "eSSwJoKHoq8bBNzLKb1aBCHoaaw="
+            }
+          }
+        },
+        "hertzs": {
+          "present": true,
+          "diagnostic_ms": 63.32032900536433,
+          "item": {
+            "label": "hertzs()(as MetricFrequency)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "hertzs",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "hertzs()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/typenum-traits/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 6,
+              "for_ref": false,
+              "hash": "51SPdBtTmFIfFJjCDlCevQQumxg="
+            }
+          }
+        },
+        "newtons": {
+          "present": true,
+          "diagnostic_ms": 48.00230500404723,
+          "item": {
+            "label": "newtons()(as MetricForce)",
+            "kind": 2,
+            "sortText": "7ffffffb",
+            "filterText": "newtons",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "newtons()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/typenum-traits/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 7,
+              "for_ref": false,
+              "hash": "U9kkUXbEV7aHOQaM3/5hbpEizkU="
+            }
+          }
+        },
+        "joules": {
+          "present": true,
+          "diagnostic_ms": 45.49710502033122,
+          "item": {
+            "label": "joules()(as MetricEnergy)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "joules",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "joules()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/typenum-traits/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 8,
+              "for_ref": false,
+              "hash": "Wbn+P5Q+8ELsU7trylilPEEWyPo="
+            }
+          }
+        },
+        "newton_meters": {
+          "present": true,
+          "diagnostic_ms": 51.04325202410109,
+          "item": {
+            "label": "newton_meters()(as MetricEnergy)",
+            "kind": 2,
+            "sortText": "7ffffffb",
+            "filterText": "newton_meters",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "newton_meters()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/typenum-traits/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 9,
+              "for_ref": false,
+              "hash": "HEwbnPKHRehu5jGCo6Kou4dB5kE="
+            }
+          }
+        },
+        "watts": {
+          "present": true,
+          "diagnostic_ms": 49.511974008055404,
+          "item": {
+            "label": "watts()(as MetricPower)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "watts",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "watts()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/typenum-traits/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 10,
+              "for_ref": false,
+              "hash": "2WyOtyXkT0v4VvhXi0pxnvTlw1Q="
+            }
+          }
+        },
+        "pascals": {
+          "present": true,
+          "diagnostic_ms": 47.01989397290163,
+          "item": {
+            "label": "pascals()(as MetricPressure)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "pascals",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "pascals()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/typenum-traits/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 11,
+              "for_ref": false,
+              "hash": "/1o9iukVZSql8zLXspYutehdpMo="
+            }
+          }
+        },
+        "degrees": {
+          "present": true,
+          "diagnostic_ms": 50.90475099859759,
+          "item": {
+            "label": "degrees()(as MetricAngle)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "degrees",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "degrees()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/typenum-traits/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 12,
+              "for_ref": false,
+              "hash": "jbC72q3s62rqxPALHvigzwVYWLY="
+            }
+          }
+        },
+        "ticks": {
+          "present": true,
+          "diagnostic_ms": 46.461857011308894,
+          "item": {
+            "label": "ticks()(as MetricTime)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "ticks",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "ticks()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-cga/snapshots/typenum-traits/probe/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 13,
+              "for_ref": false,
+              "hash": "lzc0dIN6Bh+3BJ1vAO2O+6P4aQQ="
+            }
+          }
+        }
+      },
+      "request_ms": {
+        "hover": [
+          510.4189100093208,
+          0.7572990143671632,
+          0.37302501732483506,
+          0.4876260063610971
+        ],
+        "completion": [
+          384.99198597855866,
+          43.04370598401874,
+          12.601631984580308,
+          13.736724999034777
+        ]
+      },
+      "raw": {
+        "hover": [
+          "/tmp/whippyunits-cga/ra-traits-comparison/03-traits.hover-0.json",
+          "/tmp/whippyunits-cga/ra-traits-comparison/03-traits.hover-1.json",
+          "/tmp/whippyunits-cga/ra-traits-comparison/03-traits.hover-2.json",
+          "/tmp/whippyunits-cga/ra-traits-comparison/03-traits.hover-3.json"
+        ],
+        "completion": [
+          "/tmp/whippyunits-cga/ra-traits-comparison/03-traits.completion-0.json",
+          "/tmp/whippyunits-cga/ra-traits-comparison/03-traits.completion-1.json",
+          "/tmp/whippyunits-cga/ra-traits-comparison/03-traits.completion-2.json",
+          "/tmp/whippyunits-cga/ra-traits-comparison/03-traits.completion-3.json"
+        ]
+      },
+      "server_info": {
+        "name": "rust-analyzer",
+        "version": "0.3.3049-standalone"
+      },
+      "ready_seconds": 3.7602042609942146,
+      "server_ready_rss_kib": 1611780,
+      "server_status": {
+        "health": "ok",
+        "quiescent": true,
+        "message": null
+      },
+      "completion_item_count": 111,
+      "completion_is_incomplete": true,
+      "verified_completion": {
+        "label": "meters()(as MetricLength)",
+        "kind": 2,
+        "sortText": "7fffffec",
+        "filterText": "meters",
+        "insertTextFormat": 2,
+        "textEdit": {
+          "newText": "meters()$0",
+          "insert": {
+            "start": {
+              "line": 33,
+              "character": 23
+            },
+            "end": {
+              "line": 33,
+              "character": 25
+            }
+          },
+          "replace": {
+            "start": {
+              "line": 33,
+              "character": 23
+            },
+            "end": {
+              "line": 33,
+              "character": 25
+            }
+          }
+        },
+        "data": {
+          "position": {
+            "textDocument": {
+              "uri": "file:///tmp/whippyunits-cga/snapshots/typenum-traits/probe/src/main.rs"
+            },
+            "position": {
+              "line": 33,
+              "character": 25
+            }
+          },
+          "version": 2,
+          "for_ref": false,
+          "hash": "1JayFnRPO6jNyioWDPgntdIjH6o="
+        }
+      },
+      "server_final_rss_kib": 1750088,
+      "server_peak_rss_kib": 1750088
+    }
+  ],
+  "server_version": "rust-analyzer 0.3.3049-standalone",
+  "rustc_version": "rustc 1.98.1 (48a229cea 2026-09-01)",
+  "summary": {
+    "traits": {
+      "valid_runs": 3,
+      "ready_seconds_median": 3.850616789975902,
+      "completion_missing_runs": 0,
+      "server_ready_rss_kib_median": 1593824,
+      "server_final_rss_kib_median": 1735220,
+      "server_peak_rss_kib_median": 1735220,
+      "hover_valid_runs": 3,
+      "hover_first_ms_median": 521.9381630013231,
+      "hover_repeated_ms_median": 0.457724992884323,
+      "completion_valid_runs": 3,
+      "completion_first_ms_median": 356.1547670105938,
+      "completion_repeated_ms_median": 18.578761984826997
+    },
+    "typenum": {
+      "valid_runs": 3,
+      "ready_seconds_median": 3.876244287006557,
+      "completion_missing_runs": 0,
+      "server_ready_rss_kib_median": 1599420,
+      "server_final_rss_kib_median": 1740856,
+      "server_peak_rss_kib_median": 1740856,
+      "hover_valid_runs": 3,
+      "hover_first_ms_median": 528.5841969889589,
+      "hover_repeated_ms_median": 0.47084601828828454,
+      "completion_valid_runs": 3,
+      "completion_first_ms_median": 355.2813449932728,
+      "completion_repeated_ms_median": 19.272631005151197
+    }
+  }
+}

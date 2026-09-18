@@ -4,6 +4,11 @@ Work starts from `1838a9d` on `experiments/generic-const-args`.
 The preserved performance milestone is `perf/selectable-unit-catalogs` at
 `f6f3323`. This log follows the [implementation plan](cga-backend-plan.md).
 
+Current decision (2026-09-18): the stable default remains unchanged. The native
+backend is implemented behind `nightly-gca`, but the installed rust-analyzer
+cannot infer its computed exponents. The separate quantity-trait rewrite stays
+as an unapplied experiment because it regresses the stable check workload.
+
 ## 1. Baseline and focused feasibility
 
 The immutable baseline is an archive of `1838a9d` with the established
@@ -129,3 +134,130 @@ Cargo warmup. This bounds the result: the installed analyzer cannot infer
 these native associated outputs under either tested syntax. Completion timing
 was deliberately not attempted after hover correctness failed. The two raw
 hover responses are embedded in [editor smoke evidence](performance-results/13-cga-editor-smoke.json).
+
+## 3. Quantity operators through existing unit traits
+
+The second candidate replaces the private `emit_dimension_combining!` macro
+and its two uses with ordinary quantity Mul/Div implementations. Each operation
+uses four type parameters and delegates unit arithmetic to UnitMul/UnitDiv,
+instead of repeating 36 const parameters and twelve exponent constraints.
+The underlying Unit implementation still performs the full twelve-component
+arithmetic; this does not remove physical axes or scale conversions.
+
+Storage and brand remain identical on both operands and the result. There are
+no new Copy, Clone or NumCast requirements. Four new tests exercise abstract
+unit bounds, owned non-Copy storage, brands, scalar/quantity coherence, and
+millimeter/tick scale cancellation. Default stable tests (46) and all root
+examples pass; the native version passes 54 targeted tests. Independent probes
+still reject mismatched storage and brands. The old exported hidden helper
+macro is retained for source compatibility. The new ordinary implementations
+also permit custom unit types implementing the existing unit-operation traits.
+
+Five interleaved samples per variant on the same pinned nightly give:
+
+| Variant | Dependency-chain check | Warm consumer check | Chain max process RSS |
+| --- | ---: | ---: | ---: |
+| Reduced typenum baseline | 11.868 s | 132.7 ms | 483.8 MiB |
+| Quantity traits | 11.814 s | 130.5 ms | 484.4 MiB |
+| CGA | 11.801 s | 129.3 ms | 484.2 MiB |
+| CGA + quantity traits | 11.663 s | 125.5 ms | 484.1 MiB |
+
+The dependency-chain medians change by -0.5%, -0.6%, and -1.7%, respectively.
+Individual ranges overlap: baseline 11.669–12.083 s, traits 11.638–11.969 s,
+CGA 11.554–11.894 s, combined 11.613–11.901 s. The warmed consumer medians
+change by -1.6%, -2.5%, and -5.4%, but these are only 2–7 ms differences.
+There is no meaningful process-memory reduction. On this nightly, the results support simpler
+code without a detected large compiler regression; they do not establish a
+large speedup or guarantee that gains compound in a bigger application.
+
+All measured builds succeeded with the identical dynamics/matrix source,
+locked external dependencies, jobs=1, incremental compilation disabled and no
+competing experiment compiler/editor jobs. This is a selected dependency-chain
+check, not a fully cold build. Raw data and reproduction commands are in
+[the four-variant report](performance-results/14-cga-backend-comparison.json).
+
+On stable 1.98.1 with the installed rust-analyzer 0.3.3049, three fresh-server
+runs per variant all resolve the inferred velocity and all twelve constructor
+completions, including degrees and ticks:
+
+| Editor measurement | Typenum baseline | Quantity traits |
+| --- | ---: | ---: |
+| Ready | 3.876 s | 3.851 s |
+| First inferred hover | 528.6 ms | 521.9 ms |
+| Repeated hover | 0.471 ms | 0.458 ms |
+| First completion | 355.3 ms | 356.2 ms |
+| Repeated completion | 19.3 ms | 18.6 ms |
+| Analyzer peak RSS | 1700.1 MiB | 1694.6 MiB |
+
+This small sample shows preserved editor functionality and essentially unchanged
+latency, not a substantial editor speedup. Measurements use direct LSP, warm
+Cargo artifacts, glob-imported constructors and no VS Code formatter/proxy;
+they do not measure macro auto-imports or a large application's edit cycles.
+See [editor report](performance-results/14-quantity-traits-editor.json).
+
+A follow-up with the actual stable compiler changes the adoption decision.
+Three interleaved samples on 1.98.1 give:
+
+| Stable measurement | Existing implementation | Quantity-trait candidate |
+| --- | ---: | ---: |
+| Dependency-chain median | 10.618 s | 10.935 s (+3.0%) |
+| Dependency-chain range | 10.503–10.700 s | 10.785–11.092 s |
+| Warm consumer median | 142.3 ms | 144.4 ms (+1.5%) |
+
+All three candidate chain samples are slower than their paired controls, and
+the ranges do not overlap. This small experiment does not establish the cause
+or predict every project, but it is enough evidence to **hold adoption** under
+the no-regression requirement. No compiler/editor workloads overlapped these
+measurements. [Raw stable results](performance-results/14-quantity-traits-stable.json).
+
+The production quantity implementation was restored exactly. The candidate,
+including its four meaningful tests, is preserved as
+[quantity-traits.patch](../scripts/experiments/cga/quantity-traits.patch).
+Apply it only in a separate checkout with `git apply`; it works against the
+current experiment branch. Both its successful correctness/editor results and
+its compiler-dependent timing behavior remain useful evidence. The small
+nightly gains are not a reason to impose a measured stable slowdown.
+
+These comparisons use the previously reduced dynamics catalog and ±32 typenum
+input profile. They do not measure the difference from an unmodified upstream
+build with every unit and the wide ±200 bridge.
+
+The release-profile positive full-i16 program also executes successfully; forced
+Add/Sub/Neg overflow each rejects solely with E0080. Checked-overflow behavior
+is therefore verified in release as well as the debug checks above.
+[Release contract report](performance-results/14-cga-release-contract.json).
+
+Final broad native root validation also passes: 155 tests, zero failures or
+compiler crashes; two active exact-text diagnostic snapshot tests are excluded.
+The independent semantic rejection suite covers the backend-specific negative
+contracts without relying on compiler-version-specific wording. See
+[final native validation](performance-results/14-cga-final-native-validation.json).
+
+The final unchanged-default stable build passes all root tests and doctests:
+435 passed, 13 ignored; all 13 embedded trybuild cases pass without updating
+snapshots. Core doctests pass all five cases under both narrow and wide
+profiles. [Final stable validation](performance-results/14-cga-final-stable-validation.json).
+
+The editor failure is now reduced to the numeral leaf alone:
+`let sum = N::<3> + N::<4>` and `let difference = N::<9> - N::<2>` both
+hover as `N<_>`, while explicit `N<7>` annotations/constructors display
+correctly. The compiler accepts this small consumer. The reproducible
+[editor probe](../scripts/experiments/cga/README-probes.md#minimal-editor-inference-probe)
+records incorrect inference as exit 1 and setup/compiler failures separately.
+[Raw minimal evidence](performance-results/14-cga-editor-minimal.json).
+
+## Next experiments, in order
+
+1. Use the reduced native inferred-hover reproducer to track analyzer support
+   before considering the native backend for everyday editing. Explicit syntax
+   and macroless syntax both fail the tested full-library hover.
+2. Profile the stable trait rewrite's extra work before accepting it. An added
+   associated-output normalization is a plausible hypothesis, not an established
+   cause. Narrow the change to one operator or preserve more concrete Self type
+   structure, then rerun identical compiler/editor workloads.
+3. Once the backend/editor boundary works, separately compare four physical
+   axes and a smaller boolean adapter. Retain degree and tick scale arithmetic;
+   do not remove conversion machinery to manufacture a faster baseline.
+
+No default backend switch, dimensional representation change, typenum vendoring,
+or upstream rollback was needed for this first pass.

@@ -1,0 +1,1938 @@
+{
+  "started_at_utc": "2026-09-18T21:06:33.189792+00:00",
+  "status": "complete",
+  "scope": "selected dependency-chain packages rebuilt; unrelated dependencies warm; incremental off; jobs=1",
+  "rss_scope": "GNU time maximum individual-process RSS including waited-for children; KiB, not aggregate memory",
+  "comparison_rule": "Compare backends on the same compiler; stable versus nightly also includes compiler changes",
+  "scratch": "/tmp/whippyunits-cga/stable-traits-comparison",
+  "samples_requested": 3,
+  "consumer_after": true,
+  "environment": {
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_TARGET_DIR": "/tmp/whippyunits-cga/stable-traits-comparison/target",
+    "RUSTFLAGS": null,
+    "CARGO_ENCODED_RUSTFLAGS": null,
+    "RUSTDOCFLAGS": null,
+    "RUSTC_WRAPPER": null,
+    "RUSTC_WORKSPACE_WRAPPER": null,
+    "RUSTC_BOOTSTRAP": null,
+    "CARGO_BUILD_RUSTFLAGS": null,
+    "CARGO_PROFILE_DEV_OPT_LEVEL": null,
+    "CARGO_PROFILE_DEV_DEBUG": null
+  },
+  "fixture": {
+    "preparation_script": "/tmp/whippyunits-macro-compile-time/scripts/prepare_dynamics_probe.py",
+    "script_sha256": "30b56564d8914d69447090ccf74942e8d5a032aeec0a72bc2f7c848b8f6759cd",
+    "main_sha256": "d11f623f60d3f384d2a1bf7a3b80a4f03822a4b040d83d063f92c3ab72795a9d",
+    "reference_lock_sha256": "4c9a03d480157877e0d39fb8e4c9d9267a570839c9990cee168d3975deee6d8c",
+    "external_packages": [
+      {
+        "name": "approx",
+        "version": "0.5.1",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "cab112f0a86d568ea0e627cc1d6be74a1e9cd55214684db5561995f6dad897c6"
+      },
+      {
+        "name": "autocfg",
+        "version": "1.5.1",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "f2032f911046de80f0a198e0901378627c33f59ea0ac00e363d481118bd70a53"
+      },
+      {
+        "name": "bytemuck",
+        "version": "1.25.2",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "95832e849adfb21180ccb6826a99da14e5d266ae5c2e668e1602cf234f153797"
+      },
+      {
+        "name": "equivalent",
+        "version": "1.0.2",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "877a4ace8713b0bcf2a4e7eec82529c029f1d0619886d18145fea96c3ffe5c0f"
+      },
+      {
+        "name": "glam",
+        "version": "0.14.0",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "333928d5eb103c5d4050533cec0384302db6be8ef7d3cebd30ec6a35350353da"
+      },
+      {
+        "name": "glam",
+        "version": "0.15.2",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "3abb554f8ee44336b72d522e0a7fe86a29e09f839a36022fa869a7dfe941a54b"
+      },
+      {
+        "name": "glam",
+        "version": "0.16.0",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "4126c0479ccf7e8664c36a2d719f5f2c140fbb4f9090008098d2c291fa5b3f16"
+      },
+      {
+        "name": "glam",
+        "version": "0.17.3",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "e01732b97afd8508eee3333a541b9f7610f454bb818669e66e90f5f57c93a776"
+      },
+      {
+        "name": "glam",
+        "version": "0.18.0",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "525a3e490ba77b8e326fb67d4b44b4bd2f920f44d4cc73ccec50adc68e3bee34"
+      },
+      {
+        "name": "glam",
+        "version": "0.19.0",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "2b8509e6791516e81c1a630d0bd7fbac36d2fa8712a9da8662e716b52d5051ca"
+      },
+      {
+        "name": "glam",
+        "version": "0.20.5",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "f43e957e744be03f5801a55472f593d43fabdebf25a4585db250f04d86b1675f"
+      },
+      {
+        "name": "glam",
+        "version": "0.21.3",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "518faa5064866338b013ff9b2350dc318e14cc4fcd6cb8206d7e7c9886c98815"
+      },
+      {
+        "name": "glam",
+        "version": "0.22.0",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "12f597d56c1bd55a811a1be189459e8fad2bbc272616375602443bdfb37fa774"
+      },
+      {
+        "name": "glam",
+        "version": "0.23.0",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "8e4afd9ad95555081e109fe1d21f2a30c691b5f0919c67dfa690a2e1eb6bd51c"
+      },
+      {
+        "name": "glam",
+        "version": "0.24.2",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "b5418c17512bdf42730f9032c74e1ae39afc408745ebb2acf72fbc4691c17945"
+      },
+      {
+        "name": "glam",
+        "version": "0.25.0",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "151665d9be52f9bb40fc7966565d39666f2d1e69233571b71b87791c7e0528b3"
+      },
+      {
+        "name": "glam",
+        "version": "0.27.0",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "9e05e7e6723e3455f4818c7b26e855439f7546cf617ef669d1adedb8669e5cb9"
+      },
+      {
+        "name": "glam",
+        "version": "0.28.0",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "779ae4bf7e8421cf91c0b3b64e7e8b40b862fba4d393f59150042de7c4965a94"
+      },
+      {
+        "name": "glam",
+        "version": "0.29.3",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "8babf46d4c1c9d92deac9f7be466f76dfc4482b6452fc5024b5e8daf6ffeb3ee"
+      },
+      {
+        "name": "glam",
+        "version": "0.30.10",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "19fc433e8437a212d1b6f1e68c7824af3aed907da60afa994e7f542d18d12aa9"
+      },
+      {
+        "name": "glam",
+        "version": "0.31.1",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "556f6b2ea90b8d15a74e0e7bb41671c9bdf38cd9f78c284d750b9ce58a2b5be7"
+      },
+      {
+        "name": "glam",
+        "version": "0.32.1",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "f70749695b063ecbf6b62949ccccde2e733ec3ecbbd71d467dca4e5c6c97cca0"
+      },
+      {
+        "name": "hashbrown",
+        "version": "0.17.1",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "ed5909b6e89a2db4456e54cd5f673791d7eca6732202bbf2a9cc504fe2f9b84a"
+      },
+      {
+        "name": "indexmap",
+        "version": "2.14.2",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "cc4e190f5d26ca7051642629da2c52fc03bde85a03197c99408dcd291734c855"
+      },
+      {
+        "name": "libm",
+        "version": "0.2.16",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "b6d2cec3eae94f9f509c767b45932f1ada8350c4bdb85af2fcab4a3c14807981"
+      },
+      {
+        "name": "matrixmultiply",
+        "version": "0.3.11",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "3f607c237553f086e7043417a51df26b2eb899d3caff94e6a67592ff992fedc7"
+      },
+      {
+        "name": "memchr",
+        "version": "2.8.3",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "cf8baf1c55e62ffcace7a9f06f4bd9cd3f0c4beb022d3b367256b91b87513d98"
+      },
+      {
+        "name": "nalgebra",
+        "version": "0.34.2",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "df76ea0ff5c7e6b88689085804d6132ded0ddb9de5ca5b8aeb9eeadc0508a70a"
+      },
+      {
+        "name": "nalgebra-macros",
+        "version": "0.3.0",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "973e7178a678cfd059ccec50887658d482ce16b0aa9da3888ddeab5cd5eb4889"
+      },
+      {
+        "name": "num-bigint",
+        "version": "0.4.8",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "c89e69e7e0f03bea5ef08013795c25018e101932225a656383bd384495ecc367"
+      },
+      {
+        "name": "num-complex",
+        "version": "0.4.6",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "73f88a1307638156682bada9d7604135552957b7818057dcef22705b4d509495"
+      },
+      {
+        "name": "num-integer",
+        "version": "0.1.47",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "7ce2d95d4b3734dc35aa2f45e1aa22cd416814592a4f9d9205e11affd5b8e10b"
+      },
+      {
+        "name": "num-rational",
+        "version": "0.4.2",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "f83d14da390562dca69fc84082e73e548e1ad308d24accdedd2720017cb37824"
+      },
+      {
+        "name": "num-traits",
+        "version": "0.2.19",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "071dfc062690e90b734c0b2273ce72ad0ffa95f0c74596bc250dcfd960262841"
+      },
+      {
+        "name": "op_result",
+        "version": "0.5.8",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "bfdf4800632b220b1567fefdc514a47af0bd348d230368ddb0a42903c96e7ad3"
+      },
+      {
+        "name": "paste",
+        "version": "1.0.15",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "57c0d7b74b563b49d38dae00a0c37d4d6de9b432382b2892f0574ddcae73fd0a"
+      },
+      {
+        "name": "proc-macro-crate",
+        "version": "3.5.0",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "e67ba7e9b2b56446f1d419b1d807906278ffa1a658a8a5d8a39dcb1f5a78614f"
+      },
+      {
+        "name": "proc-macro2",
+        "version": "1.0.107",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "985e7ec9bb745e6ce6535b544d84d6cd6f7ad8bd711c398938ae983b91a766d9"
+      },
+      {
+        "name": "quote",
+        "version": "1.0.47",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "1fbf4db142a473a8d80c26bbf18454ed458bf8d26c8219c331daecfdbd079001"
+      },
+      {
+        "name": "rawpointer",
+        "version": "0.2.1",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "60a357793950651c4ed0f3f52338f53b2f809f32d83a07f72909fa13e4c6c1e3"
+      },
+      {
+        "name": "safe_arch",
+        "version": "0.7.4",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "96b02de82ddbe1b636e6170c21be622223aea188ef2e139be0a5b219ec215323"
+      },
+      {
+        "name": "serde_core",
+        "version": "1.0.229",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "67dca2c9c51e58a4791a4b1ed58308b39c64224d349a935ab5039aa360942a48"
+      },
+      {
+        "name": "serde_derive",
+        "version": "1.0.229",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "e7a5d71263a5a7d47b41f6b3f06ba276f10cc18b0931f1799f710578e2309348"
+      },
+      {
+        "name": "simba",
+        "version": "0.9.1",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "c99284beb21666094ba2b75bbceda012e610f5479dfcc2d6e2426f53197ffd95"
+      },
+      {
+        "name": "strsim",
+        "version": "0.11.1",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "7da8b5736845d9f2fcb837ea5d9e2628564b3b043a70948a3f0b778838c5fb4f"
+      },
+      {
+        "name": "syn",
+        "version": "2.0.119",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "872831b642d1a07999a962a351ed35b955ea2cfc8f3862091e2a240a84f17297"
+      },
+      {
+        "name": "syn",
+        "version": "3.0.6",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "8593e8e72159ed2257d083c7a454a85cbf854f37a0966d8d483aff8c8a3ebcee"
+      },
+      {
+        "name": "toml_datetime",
+        "version": "1.1.1+spec-1.1.0",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "3165f65f62e28e0115a00b2ebdd37eb6f3b641855f9d636d3cd4103767159ad7"
+      },
+      {
+        "name": "toml_edit",
+        "version": "0.25.15+spec-1.1.0",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "1340ea94a5856333492c9064b02c778b191dd2c853778d9609debdcdfea3a614"
+      },
+      {
+        "name": "toml_parser",
+        "version": "1.1.3+spec-1.1.0",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "1d38ac1cf9b95face32296c0a3ede1fdc270627c9d9c02a7274dd6d960dc4d56"
+      },
+      {
+        "name": "typenum",
+        "version": "1.20.1",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "b6f5e870be6c3b371b77fe0ee0bafb859fa4964b4404c27de1d380043c4dda20"
+      },
+      {
+        "name": "unicode-ident",
+        "version": "1.0.26",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "d245f478577f809a851594d02313b640fb437e0bb33866753cff937863096954"
+      },
+      {
+        "name": "wide",
+        "version": "0.7.33",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "0ce5da8ecb62bcd8ec8b7ea19f69a51275e91299be594ea5cc6ef7819e16cd03"
+      },
+      {
+        "name": "winnow",
+        "version": "1.0.4",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "23b97319f7b8343df12cc98938e5c3eb436064524c8d2b4e30a1d3a36eecdf81"
+      }
+    ],
+    "reference_local_packages": [
+      {
+        "name": "dynamics_probe",
+        "version": "0.0.0",
+        "dependencies": [
+          "whippyalgebra",
+          "whippyunits"
+        ]
+      },
+      {
+        "name": "whippyalgebra",
+        "version": "0.1.1",
+        "dependencies": [
+          "nalgebra",
+          "num-traits",
+          "typenum",
+          "whippyalgebra-macros",
+          "whippyunits"
+        ]
+      },
+      {
+        "name": "whippyalgebra-macros",
+        "version": "0.1.0",
+        "dependencies": [
+          "proc-macro2",
+          "quote",
+          "syn 2.0.119"
+        ]
+      },
+      {
+        "name": "whippyunits",
+        "version": "0.3.0",
+        "dependencies": [
+          "bytemuck",
+          "libm",
+          "num-traits",
+          "op_result",
+          "whippyunits-core",
+          "whippyunits-proc-macros"
+        ]
+      },
+      {
+        "name": "whippyunits-core",
+        "version": "0.3.0",
+        "dependencies": [
+          "proc-macro2",
+          "syn 2.0.119",
+          "typenum"
+        ]
+      },
+      {
+        "name": "whippyunits-proc-macros",
+        "version": "0.3.0",
+        "dependencies": [
+          "proc-macro-crate",
+          "proc-macro2",
+          "quote",
+          "strsim",
+          "syn 2.0.119",
+          "whippyunits-core"
+        ]
+      }
+    ],
+    "lock_rule": "identical external names, versions, sources, and checksums; local nodes/edges may differ"
+  },
+  "clean_package_candidates": [
+    "typenum",
+    "whippyunits-num",
+    "whippyunits-core",
+    "whippyunits-proc-macros",
+    "whippyunits",
+    "whippyalgebra",
+    "nalgebra",
+    "simba",
+    "dynamics_probe"
+  ],
+  "clean_package_rule": "clean each candidate present in the variant lockfile",
+  "variants": [
+    {
+      "label": "typenum",
+      "tree": "/tmp/whippyunits-cga/snapshots/baseline",
+      "input_sha256": "a29000118006bce8cb97f38fb44bdd5e109def3d69e8e5b08132726719c14049",
+      "toolchain": "1.98.1",
+      "features": "",
+      "preparation_command": "existing probe validated; not regenerated",
+      "probe_lock_sha256": "4c9a03d480157877e0d39fb8e4c9d9267a570839c9990cee168d3975deee6d8c",
+      "local_packages": [
+        {
+          "name": "dynamics_probe",
+          "version": "0.0.0",
+          "dependencies": [
+            "whippyalgebra",
+            "whippyunits"
+          ]
+        },
+        {
+          "name": "whippyalgebra",
+          "version": "0.1.1",
+          "dependencies": [
+            "nalgebra",
+            "num-traits",
+            "typenum",
+            "whippyalgebra-macros",
+            "whippyunits"
+          ]
+        },
+        {
+          "name": "whippyalgebra-macros",
+          "version": "0.1.0",
+          "dependencies": [
+            "proc-macro2",
+            "quote",
+            "syn 2.0.119"
+          ]
+        },
+        {
+          "name": "whippyunits",
+          "version": "0.3.0",
+          "dependencies": [
+            "bytemuck",
+            "libm",
+            "num-traits",
+            "op_result",
+            "whippyunits-core",
+            "whippyunits-proc-macros"
+          ]
+        },
+        {
+          "name": "whippyunits-core",
+          "version": "0.3.0",
+          "dependencies": [
+            "proc-macro2",
+            "syn 2.0.119",
+            "typenum"
+          ]
+        },
+        {
+          "name": "whippyunits-proc-macros",
+          "version": "0.3.0",
+          "dependencies": [
+            "proc-macro-crate",
+            "proc-macro2",
+            "quote",
+            "strsim",
+            "syn 2.0.119",
+            "whippyunits-core"
+          ]
+        }
+      ],
+      "external_packages_match_reference": true,
+      "clean_packages": [
+        "typenum",
+        "whippyunits-core",
+        "whippyunits-proc-macros",
+        "whippyunits",
+        "whippyalgebra",
+        "nalgebra",
+        "simba",
+        "dynamics_probe"
+      ],
+      "probe_manifest": "[package]\nname = \"dynamics_probe\"\nversion = \"0.0.0\"\nedition = \"2024\"\n[workspace]\n[dependencies]\nwhippyunits = {path=\"..\", default-features=false, features=[\"std\", \"units-dynamics-conversions\"]}\nwhippyalgebra = {path=\"../whippyalgebra\", default-features=false, features=[\"std\", \"nalgebra\", \"units-dynamics-conversions\"]}\n",
+      "probe_manifest_sha256": "d4cda4994f269dc710e1532b138132af41c12651d5ba5d1df66a55f0df79ae05",
+      "prepared_sha256": "a29000118006bce8cb97f38fb44bdd5e109def3d69e8e5b08132726719c14049",
+      "prepared_tree": "/tmp/whippyunits-cga/stable-traits-comparison/prepared/typenum",
+      "rustc_verbose": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: x86_64-unknown-linux-gnu\nrelease: 1.98.1\nLLVM version: 22.1.8",
+      "cargo_version": "cargo 1.98.1 (797e8a9bc 2026-08-05)",
+      "check_command": [
+        "rustup",
+        "run",
+        "1.98.1",
+        "cargo",
+        "check",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "probe/Cargo.toml",
+        "-p",
+        "dynamics_probe",
+        "-j1"
+      ],
+      "clean_command": [
+        "rustup",
+        "run",
+        "1.98.1",
+        "cargo",
+        "clean",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "probe/Cargo.toml",
+        "-p",
+        "typenum",
+        "-p",
+        "whippyunits-core",
+        "-p",
+        "whippyunits-proc-macros",
+        "-p",
+        "whippyunits",
+        "-p",
+        "whippyalgebra",
+        "-p",
+        "nalgebra",
+        "-p",
+        "simba",
+        "-p",
+        "dynamics_probe"
+      ],
+      "consumer_clean_command": [
+        "rustup",
+        "run",
+        "1.98.1",
+        "cargo",
+        "clean",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "probe/Cargo.toml",
+        "-p",
+        "dynamics_probe"
+      ],
+      "time_prefix": [
+        "/usr/bin/time",
+        "-f",
+        "{\"max_rss_kib\":%M,\"user_seconds\":%U,\"system_seconds\":%S}"
+      ]
+    },
+    {
+      "label": "traits",
+      "tree": "/tmp/whippyunits-cga/snapshots/typenum-traits",
+      "input_sha256": "23747c6afbfec9d3a0387fa3c0d78a1651244de21b0c3f11ea3e9eec915f8228",
+      "toolchain": "1.98.1",
+      "features": "",
+      "preparation_command": "existing probe validated; not regenerated",
+      "probe_lock_sha256": "4c9a03d480157877e0d39fb8e4c9d9267a570839c9990cee168d3975deee6d8c",
+      "local_packages": [
+        {
+          "name": "dynamics_probe",
+          "version": "0.0.0",
+          "dependencies": [
+            "whippyalgebra",
+            "whippyunits"
+          ]
+        },
+        {
+          "name": "whippyalgebra",
+          "version": "0.1.1",
+          "dependencies": [
+            "nalgebra",
+            "num-traits",
+            "typenum",
+            "whippyalgebra-macros",
+            "whippyunits"
+          ]
+        },
+        {
+          "name": "whippyalgebra-macros",
+          "version": "0.1.0",
+          "dependencies": [
+            "proc-macro2",
+            "quote",
+            "syn 2.0.119"
+          ]
+        },
+        {
+          "name": "whippyunits",
+          "version": "0.3.0",
+          "dependencies": [
+            "bytemuck",
+            "libm",
+            "num-traits",
+            "op_result",
+            "whippyunits-core",
+            "whippyunits-proc-macros"
+          ]
+        },
+        {
+          "name": "whippyunits-core",
+          "version": "0.3.0",
+          "dependencies": [
+            "proc-macro2",
+            "syn 2.0.119",
+            "typenum"
+          ]
+        },
+        {
+          "name": "whippyunits-proc-macros",
+          "version": "0.3.0",
+          "dependencies": [
+            "proc-macro-crate",
+            "proc-macro2",
+            "quote",
+            "strsim",
+            "syn 2.0.119",
+            "whippyunits-core"
+          ]
+        }
+      ],
+      "external_packages_match_reference": true,
+      "clean_packages": [
+        "typenum",
+        "whippyunits-core",
+        "whippyunits-proc-macros",
+        "whippyunits",
+        "whippyalgebra",
+        "nalgebra",
+        "simba",
+        "dynamics_probe"
+      ],
+      "probe_manifest": "[package]\nname = \"dynamics_probe\"\nversion = \"0.0.0\"\nedition = \"2024\"\n[workspace]\n[dependencies]\nwhippyunits = {path=\"..\", default-features=false, features=[\"std\", \"units-dynamics-conversions\"]}\nwhippyalgebra = {path=\"../whippyalgebra\", default-features=false, features=[\"std\", \"nalgebra\", \"units-dynamics-conversions\"]}\n",
+      "probe_manifest_sha256": "d4cda4994f269dc710e1532b138132af41c12651d5ba5d1df66a55f0df79ae05",
+      "prepared_sha256": "23747c6afbfec9d3a0387fa3c0d78a1651244de21b0c3f11ea3e9eec915f8228",
+      "prepared_tree": "/tmp/whippyunits-cga/stable-traits-comparison/prepared/traits",
+      "rustc_verbose": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: x86_64-unknown-linux-gnu\nrelease: 1.98.1\nLLVM version: 22.1.8",
+      "cargo_version": "cargo 1.98.1 (797e8a9bc 2026-08-05)",
+      "check_command": [
+        "rustup",
+        "run",
+        "1.98.1",
+        "cargo",
+        "check",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "probe/Cargo.toml",
+        "-p",
+        "dynamics_probe",
+        "-j1"
+      ],
+      "clean_command": [
+        "rustup",
+        "run",
+        "1.98.1",
+        "cargo",
+        "clean",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "probe/Cargo.toml",
+        "-p",
+        "typenum",
+        "-p",
+        "whippyunits-core",
+        "-p",
+        "whippyunits-proc-macros",
+        "-p",
+        "whippyunits",
+        "-p",
+        "whippyalgebra",
+        "-p",
+        "nalgebra",
+        "-p",
+        "simba",
+        "-p",
+        "dynamics_probe"
+      ],
+      "consumer_clean_command": [
+        "rustup",
+        "run",
+        "1.98.1",
+        "cargo",
+        "clean",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "probe/Cargo.toml",
+        "-p",
+        "dynamics_probe"
+      ],
+      "time_prefix": [
+        "/usr/bin/time",
+        "-f",
+        "{\"max_rss_kib\":%M,\"user_seconds\":%U,\"system_seconds\":%S}"
+      ]
+    }
+  ],
+  "samples": [
+    {
+      "variant": "typenum",
+      "cycle": 0,
+      "status": "passed",
+      "log": "/tmp/whippyunits-cga/stable-traits-comparison/0-typenum.log",
+      "dependency_chain": {
+        "status": "passed",
+        "seconds": 10.618279048998374,
+        "max_rss_kib": 484464,
+        "user_seconds": 9.37,
+        "system_seconds": 1.33,
+        "time_output": "/tmp/whippyunits-cga/stable-traits-comparison/0-typenum-dependency_chain-time.json"
+      },
+      "consumer": {
+        "status": "passed",
+        "seconds": 0.1422535780002363,
+        "max_rss_kib": 112428,
+        "user_seconds": 0.08,
+        "system_seconds": 0.05,
+        "time_output": "/tmp/whippyunits-cga/stable-traits-comparison/0-typenum-consumer-time.json"
+      }
+    },
+    {
+      "variant": "traits",
+      "cycle": 0,
+      "status": "passed",
+      "log": "/tmp/whippyunits-cga/stable-traits-comparison/0-traits.log",
+      "dependency_chain": {
+        "status": "passed",
+        "seconds": 10.78456502300105,
+        "max_rss_kib": 484088,
+        "user_seconds": 9.51,
+        "system_seconds": 1.37,
+        "time_output": "/tmp/whippyunits-cga/stable-traits-comparison/0-traits-dependency_chain-time.json"
+      },
+      "consumer": {
+        "status": "passed",
+        "seconds": 0.14602830400690436,
+        "max_rss_kib": 112872,
+        "user_seconds": 0.08,
+        "system_seconds": 0.06,
+        "time_output": "/tmp/whippyunits-cga/stable-traits-comparison/0-traits-consumer-time.json"
+      }
+    },
+    {
+      "variant": "traits",
+      "cycle": 1,
+      "status": "passed",
+      "log": "/tmp/whippyunits-cga/stable-traits-comparison/1-traits.log",
+      "dependency_chain": {
+        "status": "passed",
+        "seconds": 11.091565188020468,
+        "max_rss_kib": 483848,
+        "user_seconds": 9.79,
+        "system_seconds": 1.4,
+        "time_output": "/tmp/whippyunits-cga/stable-traits-comparison/1-traits-dependency_chain-time.json"
+      },
+      "consumer": {
+        "status": "passed",
+        "seconds": 0.14394884099601768,
+        "max_rss_kib": 112248,
+        "user_seconds": 0.09,
+        "system_seconds": 0.05,
+        "time_output": "/tmp/whippyunits-cga/stable-traits-comparison/1-traits-consumer-time.json"
+      }
+    },
+    {
+      "variant": "typenum",
+      "cycle": 1,
+      "status": "passed",
+      "log": "/tmp/whippyunits-cga/stable-traits-comparison/1-typenum.log",
+      "dependency_chain": {
+        "status": "passed",
+        "seconds": 10.502757401991403,
+        "max_rss_kib": 483960,
+        "user_seconds": 9.26,
+        "system_seconds": 1.35,
+        "time_output": "/tmp/whippyunits-cga/stable-traits-comparison/1-typenum-dependency_chain-time.json"
+      },
+      "consumer": {
+        "status": "passed",
+        "seconds": 0.14611284801503643,
+        "max_rss_kib": 112132,
+        "user_seconds": 0.09,
+        "system_seconds": 0.05,
+        "time_output": "/tmp/whippyunits-cga/stable-traits-comparison/1-typenum-consumer-time.json"
+      }
+    },
+    {
+      "variant": "typenum",
+      "cycle": 2,
+      "status": "passed",
+      "log": "/tmp/whippyunits-cga/stable-traits-comparison/2-typenum.log",
+      "dependency_chain": {
+        "status": "passed",
+        "seconds": 10.700035590998596,
+        "max_rss_kib": 483728,
+        "user_seconds": 9.43,
+        "system_seconds": 1.36,
+        "time_output": "/tmp/whippyunits-cga/stable-traits-comparison/2-typenum-dependency_chain-time.json"
+      },
+      "consumer": {
+        "status": "passed",
+        "seconds": 0.14202665898483247,
+        "max_rss_kib": 112856,
+        "user_seconds": 0.09,
+        "system_seconds": 0.04,
+        "time_output": "/tmp/whippyunits-cga/stable-traits-comparison/2-typenum-consumer-time.json"
+      }
+    },
+    {
+      "variant": "traits",
+      "cycle": 2,
+      "status": "passed",
+      "log": "/tmp/whippyunits-cga/stable-traits-comparison/2-traits.log",
+      "dependency_chain": {
+        "status": "passed",
+        "seconds": 10.93506118498044,
+        "max_rss_kib": 483860,
+        "user_seconds": 9.64,
+        "system_seconds": 1.39,
+        "time_output": "/tmp/whippyunits-cga/stable-traits-comparison/2-traits-dependency_chain-time.json"
+      },
+      "consumer": {
+        "status": "passed",
+        "seconds": 0.1443767889868468,
+        "max_rss_kib": 112476,
+        "user_seconds": 0.08,
+        "system_seconds": 0.05,
+        "time_output": "/tmp/whippyunits-cga/stable-traits-comparison/2-traits-consumer-time.json"
+      }
+    }
+  ],
+  "events": [
+    {
+      "variant": "typenum",
+      "cycle": 0,
+      "phase": "reset_before_warmup",
+      "command": [
+        "rustup",
+        "run",
+        "1.98.1",
+        "cargo",
+        "clean",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "probe/Cargo.toml",
+        "-p",
+        "typenum",
+        "-p",
+        "whippyunits-core",
+        "-p",
+        "whippyunits-proc-macros",
+        "-p",
+        "whippyunits",
+        "-p",
+        "whippyalgebra",
+        "-p",
+        "nalgebra",
+        "-p",
+        "simba",
+        "-p",
+        "dynamics_probe"
+      ],
+      "cwd": "/tmp/whippyunits-cga/stable-traits-comparison/source",
+      "status": "passed",
+      "wall_seconds": 0.07345766099751927,
+      "returncode": 0
+    },
+    {
+      "variant": "typenum",
+      "cycle": 0,
+      "phase": "warmup",
+      "command": [
+        "rustup",
+        "run",
+        "1.98.1",
+        "cargo",
+        "check",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "probe/Cargo.toml",
+        "-p",
+        "dynamics_probe",
+        "-j1"
+      ],
+      "cwd": "/tmp/whippyunits-cga/stable-traits-comparison/source",
+      "status": "passed",
+      "wall_seconds": 26.634626068000216,
+      "returncode": 0
+    },
+    {
+      "variant": "typenum",
+      "cycle": 0,
+      "phase": "clean_dependency_chain",
+      "command": [
+        "rustup",
+        "run",
+        "1.98.1",
+        "cargo",
+        "clean",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "probe/Cargo.toml",
+        "-p",
+        "typenum",
+        "-p",
+        "whippyunits-core",
+        "-p",
+        "whippyunits-proc-macros",
+        "-p",
+        "whippyunits",
+        "-p",
+        "whippyalgebra",
+        "-p",
+        "nalgebra",
+        "-p",
+        "simba",
+        "-p",
+        "dynamics_probe"
+      ],
+      "cwd": "/tmp/whippyunits-cga/stable-traits-comparison/source",
+      "status": "passed",
+      "wall_seconds": 0.04417595098493621,
+      "returncode": 0
+    },
+    {
+      "variant": "typenum",
+      "cycle": 0,
+      "phase": "dependency_chain",
+      "command": [
+        "/usr/bin/time",
+        "-f",
+        "{\"max_rss_kib\":%M,\"user_seconds\":%U,\"system_seconds\":%S}",
+        "-o",
+        "/tmp/whippyunits-cga/stable-traits-comparison/0-typenum-dependency_chain-time.json",
+        "rustup",
+        "run",
+        "1.98.1",
+        "cargo",
+        "check",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "probe/Cargo.toml",
+        "-p",
+        "dynamics_probe",
+        "-j1"
+      ],
+      "cwd": "/tmp/whippyunits-cga/stable-traits-comparison/source",
+      "status": "passed",
+      "wall_seconds": 10.618279048998374,
+      "returncode": 0
+    },
+    {
+      "variant": "typenum",
+      "cycle": 0,
+      "phase": "clean_consumer",
+      "command": [
+        "rustup",
+        "run",
+        "1.98.1",
+        "cargo",
+        "clean",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "probe/Cargo.toml",
+        "-p",
+        "dynamics_probe"
+      ],
+      "cwd": "/tmp/whippyunits-cga/stable-traits-comparison/source",
+      "status": "passed",
+      "wall_seconds": 0.031514557980699465,
+      "returncode": 0
+    },
+    {
+      "variant": "typenum",
+      "cycle": 0,
+      "phase": "consumer",
+      "command": [
+        "/usr/bin/time",
+        "-f",
+        "{\"max_rss_kib\":%M,\"user_seconds\":%U,\"system_seconds\":%S}",
+        "-o",
+        "/tmp/whippyunits-cga/stable-traits-comparison/0-typenum-consumer-time.json",
+        "rustup",
+        "run",
+        "1.98.1",
+        "cargo",
+        "check",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "probe/Cargo.toml",
+        "-p",
+        "dynamics_probe",
+        "-j1"
+      ],
+      "cwd": "/tmp/whippyunits-cga/stable-traits-comparison/source",
+      "status": "passed",
+      "wall_seconds": 0.1422535780002363,
+      "returncode": 0
+    },
+    {
+      "variant": "traits",
+      "cycle": 0,
+      "phase": "reset_before_warmup",
+      "command": [
+        "rustup",
+        "run",
+        "1.98.1",
+        "cargo",
+        "clean",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "probe/Cargo.toml",
+        "-p",
+        "typenum",
+        "-p",
+        "whippyunits-core",
+        "-p",
+        "whippyunits-proc-macros",
+        "-p",
+        "whippyunits",
+        "-p",
+        "whippyalgebra",
+        "-p",
+        "nalgebra",
+        "-p",
+        "simba",
+        "-p",
+        "dynamics_probe"
+      ],
+      "cwd": "/tmp/whippyunits-cga/stable-traits-comparison/source",
+      "status": "passed",
+      "wall_seconds": 0.04248786097741686,
+      "returncode": 0
+    },
+    {
+      "variant": "traits",
+      "cycle": 0,
+      "phase": "warmup",
+      "command": [
+        "rustup",
+        "run",
+        "1.98.1",
+        "cargo",
+        "check",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "probe/Cargo.toml",
+        "-p",
+        "dynamics_probe",
+        "-j1"
+      ],
+      "cwd": "/tmp/whippyunits-cga/stable-traits-comparison/source",
+      "status": "passed",
+      "wall_seconds": 10.525255590997403,
+      "returncode": 0
+    },
+    {
+      "variant": "traits",
+      "cycle": 0,
+      "phase": "clean_dependency_chain",
+      "command": [
+        "rustup",
+        "run",
+        "1.98.1",
+        "cargo",
+        "clean",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "probe/Cargo.toml",
+        "-p",
+        "typenum",
+        "-p",
+        "whippyunits-core",
+        "-p",
+        "whippyunits-proc-macros",
+        "-p",
+        "whippyunits",
+        "-p",
+        "whippyalgebra",
+        "-p",
+        "nalgebra",
+        "-p",
+        "simba",
+        "-p",
+        "dynamics_probe"
+      ],
+      "cwd": "/tmp/whippyunits-cga/stable-traits-comparison/source",
+      "status": "passed",
+      "wall_seconds": 0.04437017301097512,
+      "returncode": 0
+    },
+    {
+      "variant": "traits",
+      "cycle": 0,
+      "phase": "dependency_chain",
+      "command": [
+        "/usr/bin/time",
+        "-f",
+        "{\"max_rss_kib\":%M,\"user_seconds\":%U,\"system_seconds\":%S}",
+        "-o",
+        "/tmp/whippyunits-cga/stable-traits-comparison/0-traits-dependency_chain-time.json",
+        "rustup",
+        "run",
+        "1.98.1",
+        "cargo",
+        "check",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "probe/Cargo.toml",
+        "-p",
+        "dynamics_probe",
+        "-j1"
+      ],
+      "cwd": "/tmp/whippyunits-cga/stable-traits-comparison/source",
+      "status": "passed",
+      "wall_seconds": 10.78456502300105,
+      "returncode": 0
+    },
+    {
+      "variant": "traits",
+      "cycle": 0,
+      "phase": "clean_consumer",
+      "command": [
+        "rustup",
+        "run",
+        "1.98.1",
+        "cargo",
+        "clean",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "probe/Cargo.toml",
+        "-p",
+        "dynamics_probe"
+      ],
+      "cwd": "/tmp/whippyunits-cga/stable-traits-comparison/source",
+      "status": "passed",
+      "wall_seconds": 0.03385187601088546,
+      "returncode": 0
+    },
+    {
+      "variant": "traits",
+      "cycle": 0,
+      "phase": "consumer",
+      "command": [
+        "/usr/bin/time",
+        "-f",
+        "{\"max_rss_kib\":%M,\"user_seconds\":%U,\"system_seconds\":%S}",
+        "-o",
+        "/tmp/whippyunits-cga/stable-traits-comparison/0-traits-consumer-time.json",
+        "rustup",
+        "run",
+        "1.98.1",
+        "cargo",
+        "check",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "probe/Cargo.toml",
+        "-p",
+        "dynamics_probe",
+        "-j1"
+      ],
+      "cwd": "/tmp/whippyunits-cga/stable-traits-comparison/source",
+      "status": "passed",
+      "wall_seconds": 0.14602830400690436,
+      "returncode": 0
+    },
+    {
+      "variant": "traits",
+      "cycle": 1,
+      "phase": "reset_before_warmup",
+      "command": [
+        "rustup",
+        "run",
+        "1.98.1",
+        "cargo",
+        "clean",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "probe/Cargo.toml",
+        "-p",
+        "typenum",
+        "-p",
+        "whippyunits-core",
+        "-p",
+        "whippyunits-proc-macros",
+        "-p",
+        "whippyunits",
+        "-p",
+        "whippyalgebra",
+        "-p",
+        "nalgebra",
+        "-p",
+        "simba",
+        "-p",
+        "dynamics_probe"
+      ],
+      "cwd": "/tmp/whippyunits-cga/stable-traits-comparison/source",
+      "status": "passed",
+      "wall_seconds": 0.04306748800445348,
+      "returncode": 0
+    },
+    {
+      "variant": "traits",
+      "cycle": 1,
+      "phase": "warmup",
+      "command": [
+        "rustup",
+        "run",
+        "1.98.1",
+        "cargo",
+        "check",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "probe/Cargo.toml",
+        "-p",
+        "dynamics_probe",
+        "-j1"
+      ],
+      "cwd": "/tmp/whippyunits-cga/stable-traits-comparison/source",
+      "status": "passed",
+      "wall_seconds": 10.83295395298046,
+      "returncode": 0
+    },
+    {
+      "variant": "traits",
+      "cycle": 1,
+      "phase": "clean_dependency_chain",
+      "command": [
+        "rustup",
+        "run",
+        "1.98.1",
+        "cargo",
+        "clean",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "probe/Cargo.toml",
+        "-p",
+        "typenum",
+        "-p",
+        "whippyunits-core",
+        "-p",
+        "whippyunits-proc-macros",
+        "-p",
+        "whippyunits",
+        "-p",
+        "whippyalgebra",
+        "-p",
+        "nalgebra",
+        "-p",
+        "simba",
+        "-p",
+        "dynamics_probe"
+      ],
+      "cwd": "/tmp/whippyunits-cga/stable-traits-comparison/source",
+      "status": "passed",
+      "wall_seconds": 0.046547780017135665,
+      "returncode": 0
+    },
+    {
+      "variant": "traits",
+      "cycle": 1,
+      "phase": "dependency_chain",
+      "command": [
+        "/usr/bin/time",
+        "-f",
+        "{\"max_rss_kib\":%M,\"user_seconds\":%U,\"system_seconds\":%S}",
+        "-o",
+        "/tmp/whippyunits-cga/stable-traits-comparison/1-traits-dependency_chain-time.json",
+        "rustup",
+        "run",
+        "1.98.1",
+        "cargo",
+        "check",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "probe/Cargo.toml",
+        "-p",
+        "dynamics_probe",
+        "-j1"
+      ],
+      "cwd": "/tmp/whippyunits-cga/stable-traits-comparison/source",
+      "status": "passed",
+      "wall_seconds": 11.091565188020468,
+      "returncode": 0
+    },
+    {
+      "variant": "traits",
+      "cycle": 1,
+      "phase": "clean_consumer",
+      "command": [
+        "rustup",
+        "run",
+        "1.98.1",
+        "cargo",
+        "clean",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "probe/Cargo.toml",
+        "-p",
+        "dynamics_probe"
+      ],
+      "cwd": "/tmp/whippyunits-cga/stable-traits-comparison/source",
+      "status": "passed",
+      "wall_seconds": 0.03162312999484129,
+      "returncode": 0
+    },
+    {
+      "variant": "traits",
+      "cycle": 1,
+      "phase": "consumer",
+      "command": [
+        "/usr/bin/time",
+        "-f",
+        "{\"max_rss_kib\":%M,\"user_seconds\":%U,\"system_seconds\":%S}",
+        "-o",
+        "/tmp/whippyunits-cga/stable-traits-comparison/1-traits-consumer-time.json",
+        "rustup",
+        "run",
+        "1.98.1",
+        "cargo",
+        "check",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "probe/Cargo.toml",
+        "-p",
+        "dynamics_probe",
+        "-j1"
+      ],
+      "cwd": "/tmp/whippyunits-cga/stable-traits-comparison/source",
+      "status": "passed",
+      "wall_seconds": 0.14394884099601768,
+      "returncode": 0
+    },
+    {
+      "variant": "typenum",
+      "cycle": 1,
+      "phase": "reset_before_warmup",
+      "command": [
+        "rustup",
+        "run",
+        "1.98.1",
+        "cargo",
+        "clean",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "probe/Cargo.toml",
+        "-p",
+        "typenum",
+        "-p",
+        "whippyunits-core",
+        "-p",
+        "whippyunits-proc-macros",
+        "-p",
+        "whippyunits",
+        "-p",
+        "whippyalgebra",
+        "-p",
+        "nalgebra",
+        "-p",
+        "simba",
+        "-p",
+        "dynamics_probe"
+      ],
+      "cwd": "/tmp/whippyunits-cga/stable-traits-comparison/source",
+      "status": "passed",
+      "wall_seconds": 0.04467128700343892,
+      "returncode": 0
+    },
+    {
+      "variant": "typenum",
+      "cycle": 1,
+      "phase": "warmup",
+      "command": [
+        "rustup",
+        "run",
+        "1.98.1",
+        "cargo",
+        "check",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "probe/Cargo.toml",
+        "-p",
+        "dynamics_probe",
+        "-j1"
+      ],
+      "cwd": "/tmp/whippyunits-cga/stable-traits-comparison/source",
+      "status": "passed",
+      "wall_seconds": 10.858055468997918,
+      "returncode": 0
+    },
+    {
+      "variant": "typenum",
+      "cycle": 1,
+      "phase": "clean_dependency_chain",
+      "command": [
+        "rustup",
+        "run",
+        "1.98.1",
+        "cargo",
+        "clean",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "probe/Cargo.toml",
+        "-p",
+        "typenum",
+        "-p",
+        "whippyunits-core",
+        "-p",
+        "whippyunits-proc-macros",
+        "-p",
+        "whippyunits",
+        "-p",
+        "whippyalgebra",
+        "-p",
+        "nalgebra",
+        "-p",
+        "simba",
+        "-p",
+        "dynamics_probe"
+      ],
+      "cwd": "/tmp/whippyunits-cga/stable-traits-comparison/source",
+      "status": "passed",
+      "wall_seconds": 0.05577309097861871,
+      "returncode": 0
+    },
+    {
+      "variant": "typenum",
+      "cycle": 1,
+      "phase": "dependency_chain",
+      "command": [
+        "/usr/bin/time",
+        "-f",
+        "{\"max_rss_kib\":%M,\"user_seconds\":%U,\"system_seconds\":%S}",
+        "-o",
+        "/tmp/whippyunits-cga/stable-traits-comparison/1-typenum-dependency_chain-time.json",
+        "rustup",
+        "run",
+        "1.98.1",
+        "cargo",
+        "check",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "probe/Cargo.toml",
+        "-p",
+        "dynamics_probe",
+        "-j1"
+      ],
+      "cwd": "/tmp/whippyunits-cga/stable-traits-comparison/source",
+      "status": "passed",
+      "wall_seconds": 10.502757401991403,
+      "returncode": 0
+    },
+    {
+      "variant": "typenum",
+      "cycle": 1,
+      "phase": "clean_consumer",
+      "command": [
+        "rustup",
+        "run",
+        "1.98.1",
+        "cargo",
+        "clean",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "probe/Cargo.toml",
+        "-p",
+        "dynamics_probe"
+      ],
+      "cwd": "/tmp/whippyunits-cga/stable-traits-comparison/source",
+      "status": "passed",
+      "wall_seconds": 0.034265801979927346,
+      "returncode": 0
+    },
+    {
+      "variant": "typenum",
+      "cycle": 1,
+      "phase": "consumer",
+      "command": [
+        "/usr/bin/time",
+        "-f",
+        "{\"max_rss_kib\":%M,\"user_seconds\":%U,\"system_seconds\":%S}",
+        "-o",
+        "/tmp/whippyunits-cga/stable-traits-comparison/1-typenum-consumer-time.json",
+        "rustup",
+        "run",
+        "1.98.1",
+        "cargo",
+        "check",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "probe/Cargo.toml",
+        "-p",
+        "dynamics_probe",
+        "-j1"
+      ],
+      "cwd": "/tmp/whippyunits-cga/stable-traits-comparison/source",
+      "status": "passed",
+      "wall_seconds": 0.14611284801503643,
+      "returncode": 0
+    },
+    {
+      "variant": "typenum",
+      "cycle": 2,
+      "phase": "reset_before_warmup",
+      "command": [
+        "rustup",
+        "run",
+        "1.98.1",
+        "cargo",
+        "clean",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "probe/Cargo.toml",
+        "-p",
+        "typenum",
+        "-p",
+        "whippyunits-core",
+        "-p",
+        "whippyunits-proc-macros",
+        "-p",
+        "whippyunits",
+        "-p",
+        "whippyalgebra",
+        "-p",
+        "nalgebra",
+        "-p",
+        "simba",
+        "-p",
+        "dynamics_probe"
+      ],
+      "cwd": "/tmp/whippyunits-cga/stable-traits-comparison/source",
+      "status": "passed",
+      "wall_seconds": 0.05228819898911752,
+      "returncode": 0
+    },
+    {
+      "variant": "typenum",
+      "cycle": 2,
+      "phase": "warmup",
+      "command": [
+        "rustup",
+        "run",
+        "1.98.1",
+        "cargo",
+        "check",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "probe/Cargo.toml",
+        "-p",
+        "dynamics_probe",
+        "-j1"
+      ],
+      "cwd": "/tmp/whippyunits-cga/stable-traits-comparison/source",
+      "status": "passed",
+      "wall_seconds": 10.560544260020833,
+      "returncode": 0
+    },
+    {
+      "variant": "typenum",
+      "cycle": 2,
+      "phase": "clean_dependency_chain",
+      "command": [
+        "rustup",
+        "run",
+        "1.98.1",
+        "cargo",
+        "clean",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "probe/Cargo.toml",
+        "-p",
+        "typenum",
+        "-p",
+        "whippyunits-core",
+        "-p",
+        "whippyunits-proc-macros",
+        "-p",
+        "whippyunits",
+        "-p",
+        "whippyalgebra",
+        "-p",
+        "nalgebra",
+        "-p",
+        "simba",
+        "-p",
+        "dynamics_probe"
+      ],
+      "cwd": "/tmp/whippyunits-cga/stable-traits-comparison/source",
+      "status": "passed",
+      "wall_seconds": 0.04173335200175643,
+      "returncode": 0
+    },
+    {
+      "variant": "typenum",
+      "cycle": 2,
+      "phase": "dependency_chain",
+      "command": [
+        "/usr/bin/time",
+        "-f",
+        "{\"max_rss_kib\":%M,\"user_seconds\":%U,\"system_seconds\":%S}",
+        "-o",
+        "/tmp/whippyunits-cga/stable-traits-comparison/2-typenum-dependency_chain-time.json",
+        "rustup",
+        "run",
+        "1.98.1",
+        "cargo",
+        "check",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "probe/Cargo.toml",
+        "-p",
+        "dynamics_probe",
+        "-j1"
+      ],
+      "cwd": "/tmp/whippyunits-cga/stable-traits-comparison/source",
+      "status": "passed",
+      "wall_seconds": 10.700035590998596,
+      "returncode": 0
+    },
+    {
+      "variant": "typenum",
+      "cycle": 2,
+      "phase": "clean_consumer",
+      "command": [
+        "rustup",
+        "run",
+        "1.98.1",
+        "cargo",
+        "clean",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "probe/Cargo.toml",
+        "-p",
+        "dynamics_probe"
+      ],
+      "cwd": "/tmp/whippyunits-cga/stable-traits-comparison/source",
+      "status": "passed",
+      "wall_seconds": 0.03297505702357739,
+      "returncode": 0
+    },
+    {
+      "variant": "typenum",
+      "cycle": 2,
+      "phase": "consumer",
+      "command": [
+        "/usr/bin/time",
+        "-f",
+        "{\"max_rss_kib\":%M,\"user_seconds\":%U,\"system_seconds\":%S}",
+        "-o",
+        "/tmp/whippyunits-cga/stable-traits-comparison/2-typenum-consumer-time.json",
+        "rustup",
+        "run",
+        "1.98.1",
+        "cargo",
+        "check",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "probe/Cargo.toml",
+        "-p",
+        "dynamics_probe",
+        "-j1"
+      ],
+      "cwd": "/tmp/whippyunits-cga/stable-traits-comparison/source",
+      "status": "passed",
+      "wall_seconds": 0.14202665898483247,
+      "returncode": 0
+    },
+    {
+      "variant": "traits",
+      "cycle": 2,
+      "phase": "reset_before_warmup",
+      "command": [
+        "rustup",
+        "run",
+        "1.98.1",
+        "cargo",
+        "clean",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "probe/Cargo.toml",
+        "-p",
+        "typenum",
+        "-p",
+        "whippyunits-core",
+        "-p",
+        "whippyunits-proc-macros",
+        "-p",
+        "whippyunits",
+        "-p",
+        "whippyalgebra",
+        "-p",
+        "nalgebra",
+        "-p",
+        "simba",
+        "-p",
+        "dynamics_probe"
+      ],
+      "cwd": "/tmp/whippyunits-cga/stable-traits-comparison/source",
+      "status": "passed",
+      "wall_seconds": 0.044778529001632705,
+      "returncode": 0
+    },
+    {
+      "variant": "traits",
+      "cycle": 2,
+      "phase": "warmup",
+      "command": [
+        "rustup",
+        "run",
+        "1.98.1",
+        "cargo",
+        "check",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "probe/Cargo.toml",
+        "-p",
+        "dynamics_probe",
+        "-j1"
+      ],
+      "cwd": "/tmp/whippyunits-cga/stable-traits-comparison/source",
+      "status": "passed",
+      "wall_seconds": 10.501668905984843,
+      "returncode": 0
+    },
+    {
+      "variant": "traits",
+      "cycle": 2,
+      "phase": "clean_dependency_chain",
+      "command": [
+        "rustup",
+        "run",
+        "1.98.1",
+        "cargo",
+        "clean",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "probe/Cargo.toml",
+        "-p",
+        "typenum",
+        "-p",
+        "whippyunits-core",
+        "-p",
+        "whippyunits-proc-macros",
+        "-p",
+        "whippyunits",
+        "-p",
+        "whippyalgebra",
+        "-p",
+        "nalgebra",
+        "-p",
+        "simba",
+        "-p",
+        "dynamics_probe"
+      ],
+      "cwd": "/tmp/whippyunits-cga/stable-traits-comparison/source",
+      "status": "passed",
+      "wall_seconds": 0.04258278300403617,
+      "returncode": 0
+    },
+    {
+      "variant": "traits",
+      "cycle": 2,
+      "phase": "dependency_chain",
+      "command": [
+        "/usr/bin/time",
+        "-f",
+        "{\"max_rss_kib\":%M,\"user_seconds\":%U,\"system_seconds\":%S}",
+        "-o",
+        "/tmp/whippyunits-cga/stable-traits-comparison/2-traits-dependency_chain-time.json",
+        "rustup",
+        "run",
+        "1.98.1",
+        "cargo",
+        "check",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "probe/Cargo.toml",
+        "-p",
+        "dynamics_probe",
+        "-j1"
+      ],
+      "cwd": "/tmp/whippyunits-cga/stable-traits-comparison/source",
+      "status": "passed",
+      "wall_seconds": 10.93506118498044,
+      "returncode": 0
+    },
+    {
+      "variant": "traits",
+      "cycle": 2,
+      "phase": "clean_consumer",
+      "command": [
+        "rustup",
+        "run",
+        "1.98.1",
+        "cargo",
+        "clean",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "probe/Cargo.toml",
+        "-p",
+        "dynamics_probe"
+      ],
+      "cwd": "/tmp/whippyunits-cga/stable-traits-comparison/source",
+      "status": "passed",
+      "wall_seconds": 0.03193688401370309,
+      "returncode": 0
+    },
+    {
+      "variant": "traits",
+      "cycle": 2,
+      "phase": "consumer",
+      "command": [
+        "/usr/bin/time",
+        "-f",
+        "{\"max_rss_kib\":%M,\"user_seconds\":%U,\"system_seconds\":%S}",
+        "-o",
+        "/tmp/whippyunits-cga/stable-traits-comparison/2-traits-consumer-time.json",
+        "rustup",
+        "run",
+        "1.98.1",
+        "cargo",
+        "check",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "probe/Cargo.toml",
+        "-p",
+        "dynamics_probe",
+        "-j1"
+      ],
+      "cwd": "/tmp/whippyunits-cga/stable-traits-comparison/source",
+      "status": "passed",
+      "wall_seconds": 0.1443767889868468,
+      "returncode": 0
+    }
+  ],
+  "medians": {
+    "typenum": {
+      "dependency_chain": {
+        "sample_count": 3,
+        "seconds": 10.618279048998374,
+        "max_rss_kib": 483960,
+        "user_seconds": 9.37,
+        "system_seconds": 1.35
+      },
+      "consumer": {
+        "sample_count": 3,
+        "seconds": 0.1422535780002363,
+        "max_rss_kib": 112428,
+        "user_seconds": 0.09,
+        "system_seconds": 0.05
+      }
+    },
+    "traits": {
+      "dependency_chain": {
+        "sample_count": 3,
+        "seconds": 10.93506118498044,
+        "max_rss_kib": 483860,
+        "user_seconds": 9.64,
+        "system_seconds": 1.39
+      },
+      "consumer": {
+        "sample_count": 3,
+        "seconds": 0.1443767889868468,
+        "max_rss_kib": 112476,
+        "user_seconds": 0.08,
+        "system_seconds": 0.05
+      }
+    }
+  },
+  "finished_at_utc": "2026-09-18T21:09:00.230753+00:00"
+}

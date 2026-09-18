@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- Reproducible CGA and quantity-trait compiler/editor experiments with recorded adoption decisions in `docs/cga-experiment-log.md`. The quantity-trait candidate is preserved as a patch after a measured stable-compiler regression.
 - Experimental `nightly-gca` exponent backend on pinned `nightly-2026-09-13`, isolated from unit metadata. Stable remains the default; see `docs/cga-experiment-log.md` for validation, compiler workarounds and editor limitations.
 
 - `units-dynamics-conversions`: a lean dynamics constructor catalog with degrees and fixed 1/60-second ticks, forwarded by `whippyalgebra`. Conversion scales remain supported with default features disabled.

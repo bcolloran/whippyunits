@@ -1,0 +1,68 @@
+{
+  "command": [
+    "cargo",
+    "+nightly-2026-09-13",
+    "test",
+    "--offline",
+    "--locked",
+    "-p",
+    "whippyunits",
+    "--lib",
+    "--tests",
+    "--features",
+    "nightly-gca",
+    "-j2",
+    "--",
+    "--skip",
+    "test_compile_failures_stable",
+    "--skip",
+    "unsupported_angular_conversions_fail",
+    "--skip",
+    "disabled_catalog_items_are_not_exported",
+    "--skip",
+    "coherent_catalog_omits_noncoherent_declarators"
+  ],
+  "cwd": "/tmp/whippyunits-macro-compile-time",
+  "environment": {
+    "CARGO_TARGET_DIR": "/tmp/whippyunits-cga/native-leaf-validation-target",
+    "CARGO_INCREMENTAL": "0"
+  },
+  "scope": "broad native runtime tests; only exact diagnostic snapshot suites filtered, not reblessed",
+  "source_sha256": {
+    "src/api.rs": "6dd8a8c6ee5c431933b2a315d66f25b49c4209782aa43ad592b5d3788756b265",
+    "Cargo.lock": "913c01ad8bf7ee9c6434d028db27a490e7f279458b9aecf218489ea3f40e792d",
+    "whippyunits-core/src/lib.rs": "04bd4a7478af07480f87319d0890c6d301c385e746f5556b50e193c166c5cd9a",
+    "whippyunits-num/src/lib.rs": "766dc2c726b16747b141427d6d917eb3598554be4886955e7e309063754a2eb2",
+    "whippyunits-num/src/gca.rs": "06fb874f3cb7490fc141db7a268437009829ff9b8c99a0995962979e964fbb62"
+  },
+  "exit_code": 0,
+  "log": "/tmp/whippyunits-cga/final-native-validation/cargo.log",
+  "test_summaries": [
+    "test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+    "test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s",
+    "test result: ok. 36 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+    "test result: ok. 21 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+    "test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+    "test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s",
+    "test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+    "test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+    "test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+    "test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+    "test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+    "test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+    "test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+    "test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+    "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+    "test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+    "test result: ok. 21 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+    "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+    "test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+  ],
+  "compiler_crash": false,
+  "counts": {
+    "passed": 155,
+    "failed": 0,
+    "ignored": 0,
+    "filtered out": 2
+  }
+}
