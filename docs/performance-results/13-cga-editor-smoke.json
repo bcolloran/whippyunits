@@ -1,0 +1,192 @@
+{
+  "scope": "fresh server, warm Cargo artifacts; direct LSP without editor/formatter",
+  "rss_scope": "Linux rust-analyzer process RSS only; sampled every 50 ms; child processes excluded",
+  "profiles": [
+    {
+      "label": "cga-smoke",
+      "project_path": "/tmp/whippyunits-cga/ra-native-source/probe",
+      "dependency_path": "/tmp/whippyunits-cga/ra-native-source",
+      "source_sha256": "04bc73f691a64ab3d8d4ad6eabd55605d28f47bcfe95420d9aaa8c16cd2c43eb",
+      "probe_sha256": "56b2aa6ce5049e0671b10d8a300093116c411dc2890cd9f3f7aceb1ce6c4da57"
+    }
+  ],
+  "server": "/home/bc/.vscode/extensions/rust-lang.rust-analyzer-0.3.3049-linux-x64/server/rust-analyzer",
+  "import_style": "glob",
+  "receiver": "variable",
+  "allow_missing_completion": [],
+  "timed_completion_method": "meters",
+  "required_completions": [
+    "meters",
+    "kilograms",
+    "seconds",
+    "radians",
+    "hertzs",
+    "newtons",
+    "joules",
+    "newton_meters",
+    "watts",
+    "pascals",
+    "degrees",
+    "ticks"
+  ],
+  "cargo_warmup": true,
+  "cache_priming": true,
+  "cargo_lock_policy": "Existing project profiles use --locked for warmup and analysis; generated profiles may create a lock during warmup, then analysis uses --locked",
+  "runs": 1,
+  "repeated_requests": 2,
+  "samples": [
+    {
+      "profile": "cga-smoke",
+      "cycle": 1,
+      "valid": false,
+      "completion_status": "pending",
+      "missing_completion_names": [],
+      "primary_completion_valid": false,
+      "completion_validation": {},
+      "request_ms": {
+        "hover": [
+          538.9163170184474
+        ],
+        "completion": []
+      },
+      "raw": {
+        "hover": [
+          "/tmp/whippyunits-cga/ra-cga-smoke-refreshed/01-cga-smoke.hover-0.json"
+        ]
+      },
+      "server_info": {
+        "name": "rust-analyzer",
+        "version": "0.3.3049-standalone"
+      },
+      "ready_seconds": 3.9306988480093423,
+      "server_ready_rss_kib": 1616140,
+      "server_status": {
+        "health": "ok",
+        "quiescent": true,
+        "message": null
+      },
+      "error": "RuntimeError('inferred velocity hover did not resolve length/time Quantity')",
+      "server_final_rss_kib": 1708424,
+      "server_peak_rss_kib": 1708424
+    }
+  ],
+  "server_version": "rust-analyzer 0.3.3049-standalone",
+  "rustc_version": "rustc 1.100.0-nightly (809936eac 2026-09-12)",
+  "summary": {},
+  "raw_inferred_hover": {
+    "jsonrpc": "2.0",
+    "id": 2,
+    "result": {
+      "contents": {
+        "kind": "markdown",
+        "value": "\n```rust\nlet velocity: Quantity<Unit<Scale<_2<_>, _3<_>, _5<_>, _Pi<_>>, Dimension<_M<_>, _L<_>, _T<_>, _I<_>, _\u0398<_>, _N<_>, _J<_>, _A<_>>>>\n```\n\n---\n\nImplements notable traits: `Future<Output = <Quantity<Unit<Scale<_2<_>, _3<_>, _5<_>, _Pi<_>>, Dimension<_M<_>, _L<_>, _T<_>, _I<_>, _\u0398<_>, _N<_>, _J<_>, _A<_>>>, f64, ()> as Future>::Output>`, `Iterator<Item = <Quantity<Unit<Scale<_2<_>, _3<_>, _5<_>, _Pi<_>>, Dimension<_M<_>, _L<_>, _T<_>, _I<_>, _\u0398<_>, _N<_>, _J<_>, _A<_>>>, f64, ()> as Iterator>::Item>`, `Read`, `Write`\n\n---\n\nsize = 8, align = 0x8, no Drop"
+      },
+      "range": {
+        "start": {
+          "line": 25,
+          "character": 8
+        },
+        "end": {
+          "line": 25,
+          "character": 16
+        }
+      }
+    }
+  },
+  "alternate_macroless": {
+    "scope": "fresh server, warm Cargo artifacts; direct LSP without editor/formatter",
+    "rss_scope": "Linux rust-analyzer process RSS only; sampled every 50 ms; child processes excluded",
+    "profiles": [
+      {
+        "label": "cga-macroless",
+        "project_path": "/tmp/whippyunits-cga/ra-native-macroless/probe",
+        "dependency_path": "/tmp/whippyunits-cga/ra-native-macroless",
+        "source_sha256": "04bc73f691a64ab3d8d4ad6eabd55605d28f47bcfe95420d9aaa8c16cd2c43eb",
+        "probe_sha256": "56b2aa6ce5049e0671b10d8a300093116c411dc2890cd9f3f7aceb1ce6c4da57"
+      }
+    ],
+    "server": "/home/bc/.vscode/extensions/rust-lang.rust-analyzer-0.3.3049-linux-x64/server/rust-analyzer",
+    "import_style": "glob",
+    "receiver": "variable",
+    "allow_missing_completion": [],
+    "timed_completion_method": "meters",
+    "required_completions": [
+      "meters",
+      "kilograms",
+      "seconds",
+      "radians",
+      "hertzs",
+      "newtons",
+      "joules",
+      "newton_meters",
+      "watts",
+      "pascals",
+      "degrees",
+      "ticks"
+    ],
+    "cargo_warmup": true,
+    "cache_priming": true,
+    "cargo_lock_policy": "Existing project profiles use --locked for warmup and analysis; generated profiles may create a lock during warmup, then analysis uses --locked",
+    "runs": 1,
+    "repeated_requests": 0,
+    "samples": [
+      {
+        "profile": "cga-macroless",
+        "cycle": 1,
+        "valid": false,
+        "completion_status": "pending",
+        "missing_completion_names": [],
+        "primary_completion_valid": false,
+        "completion_validation": {},
+        "request_ms": {
+          "hover": [
+            559.4012110086624
+          ],
+          "completion": []
+        },
+        "raw": {
+          "hover": [
+            "/tmp/whippyunits-cga/ra-cga-macroless/01-cga-macroless.hover-0.json"
+          ]
+        },
+        "server_info": {
+          "name": "rust-analyzer",
+          "version": "0.3.3049-standalone"
+        },
+        "ready_seconds": 3.947410597000271,
+        "server_ready_rss_kib": 1610936,
+        "server_status": {
+          "health": "ok",
+          "quiescent": true,
+          "message": null
+        },
+        "error": "RuntimeError('inferred velocity hover did not resolve length/time Quantity')",
+        "server_final_rss_kib": 1703196,
+        "server_peak_rss_kib": 1703196
+      }
+    ],
+    "server_version": "rust-analyzer 0.3.3049-standalone",
+    "rustc_version": "rustc 1.100.0-nightly (809936eac 2026-09-12)",
+    "summary": {}
+  },
+  "alternate_raw_inferred_hover": {
+    "jsonrpc": "2.0",
+    "id": 2,
+    "result": {
+      "contents": {
+        "kind": "markdown",
+        "value": "\n```rust\nlet velocity: Quantity<Unit<Scale<_2<_>, _3<_>, _5<_>, _Pi<_>>, Dimension<_M<_>, _L<_>, _T<_>, _I<_>, _\u0398<_>, _N<_>, _J<_>, _A<_>>>>\n```\n\n---\n\nImplements notable traits: `Future<Output = <Quantity<Unit<Scale<_2<_>, _3<_>, _5<_>, _Pi<_>>, Dimension<_M<_>, _L<_>, _T<_>, _I<_>, _\u0398<_>, _N<_>, _J<_>, _A<_>>>, f64, ()> as Future>::Output>`, `Iterator<Item = <Quantity<Unit<Scale<_2<_>, _3<_>, _5<_>, _Pi<_>>, Dimension<_M<_>, _L<_>, _T<_>, _I<_>, _\u0398<_>, _N<_>, _J<_>, _A<_>>>, f64, ()> as Iterator>::Item>`, `Read`, `Write`\n\n---\n\nsize = 8, align = 0x8, no Drop"
+      },
+      "range": {
+        "start": {
+          "line": 25,
+          "character": 8
+        },
+        "end": {
+          "line": 25,
+          "character": 16
+        }
+      }
+    }
+  }
+}

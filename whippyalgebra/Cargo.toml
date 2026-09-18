@@ -11,6 +11,7 @@ categories = ["science", "mathematics"]
 readme = "README.md"
 
 [features]
+nightly-gca = ["whippyunits/nightly-gca"]
 # Extend arithmetic inputs from +/-32 to +/-200 without changing quantity types.
 wide-exponents = ["whippyunits/wide-exponents"]
 default = ["std", "nalgebra", "all-units", "literals", "wide-exponents"]

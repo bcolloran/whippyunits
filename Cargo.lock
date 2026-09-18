@@ -1237,6 +1237,7 @@ dependencies = [
  "proc-macro2",
  "syn 2.0.108",
  "typenum",
+ "whippyunits-num",
 ]
 
 [[package]]
@@ -1268,6 +1269,13 @@ dependencies = [
  "tokio",
  "whippyunits",
  "whippyunits-core",
+]
+
+[[package]]
+name = "whippyunits-num"
+version = "0.3.0"
+dependencies = [
+ "typenum",
 ]
 
 [[package]]

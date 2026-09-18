@@ -43,6 +43,9 @@ def main():
         ('no-std', cmd('check', '-p', 'whippyalgebra', '--lib', '--no-default-features',
             *features(['nalgebra', 'units-dynamics-conversions']))),
     ]
+    if args.native:
+        checks.insert(0, ('native-numerals', cmd('test', '-p', 'whippyunits-num',
+            '--features', 'nightly-gca')))
     probe_features = ['whippyunits/nightly-gca', 'whippyalgebra/nightly-gca'] if args.native else []
     checks.append(('runtime-probe', cmd('run', '--manifest-path', 'probe/Cargo.toml',
         *(['--features', ','.join(probe_features)] if probe_features else []))))

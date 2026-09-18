@@ -1,0 +1,215 @@
+{
+  "scope": "correctness only; no timing claims",
+  "status": "complete",
+  "all_passed": true,
+  "planned_checks": [
+    "core-narrow",
+    "core-wide",
+    "quantity",
+    "generic-example",
+    "algebra",
+    "no-std",
+    "runtime-probe"
+  ],
+  "repo": "/tmp/whippyunits-cga/snapshots/native-leaf",
+  "toolchain": "nightly-2026-09-13",
+  "native": true,
+  "rustc": "rustc 1.100.0-nightly (809936eac 2026-09-12)\nbinary: rustc\ncommit-hash: 809936eac66c547a5127ce1da805f0d3a6789b98\ncommit-date: 2026-09-12\nhost: x86_64-unknown-linux-gnu\nrelease: 1.100.0-nightly\nLLVM version: 23.1.1\n",
+  "environment": {
+    "RUSTUP_TOOLCHAIN": "nightly-2026-09-13",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_TARGET_DIR": "/tmp/whippyunits-cga/native-leaf-validation-target"
+  },
+  "checks": [
+    {
+      "label": "core-narrow",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "--locked",
+        "-j2",
+        "-p",
+        "whippyunits-core",
+        "--lib",
+        "--no-default-features",
+        "--features",
+        "nightly-gca"
+      ],
+      "status": 0,
+      "log": "/tmp/whippyunits-cga/validation/native-leaf/core-narrow.log",
+      "test_summaries": [
+        "test result: ok. 19 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+      ]
+    },
+    {
+      "label": "core-wide",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "--locked",
+        "-j2",
+        "-p",
+        "whippyunits-core",
+        "--lib",
+        "--features",
+        "nightly-gca"
+      ],
+      "status": 0,
+      "log": "/tmp/whippyunits-cga/validation/native-leaf/core-wide.log",
+      "test_summaries": [
+        "test result: ok. 19 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+      ]
+    },
+    {
+      "label": "quantity",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "--locked",
+        "-j2",
+        "-p",
+        "whippyunits",
+        "--lib",
+        "--test",
+        "custom_storage_types",
+        "--test",
+        "exponent_features",
+        "--test",
+        "phantom_marker_traits",
+        "--test",
+        "catalog_features",
+        "--no-default-features",
+        "--features",
+        "std,units-dynamics-conversions,nightly-gca",
+        "--",
+        "--skip",
+        "disabled_catalog_items_are_not_exported",
+        "--skip",
+        "coherent_catalog_omits_noncoherent_declarators"
+      ],
+      "status": 0,
+      "log": "/tmp/whippyunits-cga/validation/native-leaf/quantity.log",
+      "test_summaries": [
+        "test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+        "test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s",
+        "test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+        "test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+        "test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+      ]
+    },
+    {
+      "label": "generic-example",
+      "command": [
+        "cargo",
+        "run",
+        "--offline",
+        "--locked",
+        "-j2",
+        "-p",
+        "whippyunits",
+        "--example",
+        "centripetal_acceleration",
+        "--features",
+        "nightly-gca"
+      ],
+      "status": 0,
+      "log": "/tmp/whippyunits-cga/validation/native-leaf/generic-example.log",
+      "test_summaries": []
+    },
+    {
+      "label": "algebra",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "--locked",
+        "-j2",
+        "-p",
+        "whippyalgebra",
+        "--lib",
+        "--test",
+        "uniform",
+        "--test",
+        "brands",
+        "--test",
+        "generic_block",
+        "--test",
+        "generic_matrix_uniform",
+        "--test",
+        "operations",
+        "--test",
+        "canonical",
+        "--no-default-features",
+        "--features",
+        "std,nalgebra,units-dynamics-conversions,nightly-gca"
+      ],
+      "status": 0,
+      "log": "/tmp/whippyunits-cga/validation/native-leaf/algebra.log",
+      "test_summaries": [
+        "test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+        "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+        "test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+        "test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+        "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+        "test result: ok. 53 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+        "test result: ok. 64 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+      ]
+    },
+    {
+      "label": "no-std",
+      "command": [
+        "cargo",
+        "check",
+        "--offline",
+        "--locked",
+        "-j2",
+        "-p",
+        "whippyalgebra",
+        "--lib",
+        "--no-default-features",
+        "--features",
+        "nalgebra,units-dynamics-conversions,nightly-gca"
+      ],
+      "status": 0,
+      "log": "/tmp/whippyunits-cga/validation/native-leaf/no-std.log",
+      "test_summaries": []
+    },
+    {
+      "label": "runtime-probe",
+      "command": [
+        "cargo",
+        "run",
+        "--offline",
+        "--locked",
+        "-j2",
+        "--manifest-path",
+        "probe/Cargo.toml",
+        "--features",
+        "whippyunits/nightly-gca,whippyalgebra/nightly-gca"
+      ],
+      "status": 0,
+      "log": "/tmp/whippyunits-cga/validation/native-leaf/runtime-probe.log",
+      "test_summaries": []
+    }
+  ],
+  "followup_leaf_guard": "Native leaf gated empty by default to preserve stable workspace builds; final guarded leaf has 8 integration tests and 1 compile-fail doctest, plus 12 final independent production cases. Backend arithmetic unchanged.",
+  "native_leaf_final_tests": {
+    "command": "CARGO_TARGET_DIR=/tmp/whippyunits-cga/native-leaf-target cargo +nightly-2026-09-13 test --offline --locked -p whippyunits-num --features nightly-gca",
+    "status": 0,
+    "summaries": [
+      "test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+      "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s"
+    ]
+  },
+  "stable_core_and_default_leaf": {
+    "command": "CARGO_TARGET_DIR=/tmp/whippyunits-cga/stable-leaf-target cargo +1.98.1 test --offline --locked -p whippyunits-num -p whippyunits-core --lib --no-default-features",
+    "status": 0,
+    "summaries": [
+      "test result: ok. 26 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+      "test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+    ]
+  }
+}

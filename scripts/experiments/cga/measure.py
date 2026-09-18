@@ -20,9 +20,10 @@ import statistics
 import subprocess
 import sys
 import time
+import tomllib
 
 
-PACKAGES = ["typenum", "whippyunits-core", "whippyunits-proc-macros", "whippyunits",
+PACKAGES = ["typenum", "whippyunits-num", "whippyunits-core", "whippyunits-proc-macros", "whippyunits",
             "whippyalgebra", "nalgebra", "simba", "dynamics_probe"]
 IGNORED = {".git", "target", "__pycache__"}
 TIMING_FORMAT = '{"max_rss_kib":%M,"user_seconds":%U,"system_seconds":%S}'
@@ -39,6 +40,17 @@ def fingerprint(root):
 
 def file_hash(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def locked_packages(path):
+    """Separate fixed external identities from intentionally variable local nodes."""
+    packages = tomllib.loads(path.read_text())["package"]
+    external = [{key: package.get(key) for key in ("name", "version", "source", "checksum")}
+                for package in packages if "source" in package]
+    external.sort(key=lambda package: (package["name"], package["version"], package["source"]))
+    local = sorted((package for package in packages if "source" not in package),
+                   key=lambda package: (package["name"], package["version"]))
+    return external, local
 
 
 def write_report(path, report):
@@ -123,7 +135,9 @@ def main():
     prepared = scratch / "prepared"
     prepare_script = Path(__file__).resolve().parents[2] / "prepare_dynamics_probe.py"
     expected_main_hash = file_hash(prepare_script.with_name("dynamics_probe.rs"))
-    expected_lock_hash = file_hash(prepare_script.with_name("dynamics_probe.Cargo.lock"))
+    reference_lock = prepare_script.with_name("dynamics_probe.Cargo.lock")
+    expected_lock_hash = file_hash(reference_lock)
+    expected_external, reference_local = locked_packages(reference_lock)
     env = dict(os.environ, CARGO_INCREMENTAL="0", CARGO_TARGET_DIR=str(target))
     report = {
         "started_at_utc": datetime.now(timezone.utc).isoformat(), "status": "preparing",
@@ -136,8 +150,12 @@ def main():
                          "RUSTDOCFLAGS", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "RUSTC_BOOTSTRAP",
                          "CARGO_BUILD_RUSTFLAGS", "CARGO_PROFILE_DEV_OPT_LEVEL", "CARGO_PROFILE_DEV_DEBUG")},
         "fixture": {"preparation_script": str(prepare_script), "script_sha256": file_hash(prepare_script),
-                    "main_sha256": expected_main_hash, "lock_sha256": expected_lock_hash},
-        "clean_packages": PACKAGES, "variants": [], "samples": [], "events": [], "medians": {}}
+                    "main_sha256": expected_main_hash, "reference_lock_sha256": expected_lock_hash,
+                    "external_packages": expected_external, "reference_local_packages": reference_local,
+                    "lock_rule": "identical external names, versions, sources, and checksums; local nodes/edges may differ"},
+        "clean_package_candidates": PACKAGES,
+        "clean_package_rule": "clean each candidate present in the variant lockfile",
+        "variants": [], "samples": [], "events": [], "medians": {}}
     write_report(output, report)
     try:
         for label, tree, toolchain in trees:
@@ -156,12 +174,18 @@ def main():
                 variant["preparation_command"] = preparation_command
             else:
                 # A prepared input may include a local dependency patch. Preserve
-                # its manifest, but enforce an identical body and locked versions.
+                # its manifest, but enforce an identical body and external locks.
                 variant["preparation_command"] = "existing probe validated; not regenerated"
             if file_hash(probe / "src/main.rs") != expected_main_hash:
                 raise ValueError(f"{label}: probe body differs from the checked-in workload")
-            if file_hash(probe / "Cargo.lock") != expected_lock_hash:
-                raise ValueError(f"{label}: probe lock differs; use identical resolved dependencies")
+            external, local = locked_packages(probe / "Cargo.lock")
+            variant["probe_lock_sha256"] = file_hash(probe / "Cargo.lock")
+            variant["local_packages"] = local
+            variant["external_packages_match_reference"] = external == expected_external
+            if external != expected_external:
+                raise ValueError(f"{label}: external probe packages differ; keep names, versions, sources, and checksums identical")
+            package_names = {package["name"] for package in external + local}
+            variant["clean_packages"] = [package for package in PACKAGES if package in package_names]
             variant["probe_manifest"] = (probe / "Cargo.toml").read_text()
             variant["probe_manifest_sha256"] = file_hash(probe / "Cargo.toml")
             variant["prepared_sha256"] = fingerprint(destination)
@@ -171,7 +195,7 @@ def main():
             variant["cargo_version"] = subprocess.check_output(
                 ["rustup", "run", toolchain, "cargo", "--version"], text=True).strip()
             variant["check_command"] = command_for(variant)
-            variant["clean_command"] = clean_for(variant, PACKAGES)
+            variant["clean_command"] = clean_for(variant, variant["clean_packages"])
             variant["consumer_clean_command"] = clean_for(variant, ["dynamics_probe"])
             variant["time_prefix"] = ["/usr/bin/time", "-f", TIMING_FORMAT]
             write_report(output, report)

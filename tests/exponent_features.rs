@@ -45,3 +45,13 @@ fn wide_feature_preserves_the_original_dimension_boundaries() {
     assert_eq!(inverse_doubled.unsafe_value, 9.0);
     assert_eq!(cancellation.unsafe_value, 6.0);
 }
+
+#[cfg(feature = "nightly-gca")]
+#[test]
+fn native_dimension_outputs_can_be_reused_beyond_the_stable_bridge() {
+    let a: qty!(m ^ 300) = quantity!(2.0, m ^ 300);
+    let b: qty!(m ^ 300) = quantity!(3.0, m ^ 300);
+    let product = a * b;
+    let restored: qty!(m ^ 300) = product / b;
+    assert_eq!(restored.unsafe_value, 2.0);
+}

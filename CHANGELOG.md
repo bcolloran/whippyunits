@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- Experimental `nightly-gca` exponent backend on pinned `nightly-2026-09-13`, isolated from unit metadata. Stable remains the default; see `docs/cga-experiment-log.md` for validation, compiler workarounds and editor limitations.
+
 - `units-dynamics-conversions`: a lean dynamics constructor catalog with degrees and fixed 1/60-second ticks, forwarded by `whippyalgebra`. Conversion scales remain supported with default features disabled.
 - Reproducible typenum-pruning, explicit-arithmetic and four-axis performance experiments, with compiler/editor measurements and adoption decisions in `docs/typenum-dynamics-experiments.md`.
 - **editors/vscode**: A VS Code extension that rewrites whippyunits types in rust-analyzer hovers, inlay hints and diagnostics by hooking into the rust-analyzer extension's language client — no proxy binary to install, and it works in dev containers. The formatting runs through a WebAssembly build of the lsp-proxy formatting code (`editors/vscode/formatter-wasm`)

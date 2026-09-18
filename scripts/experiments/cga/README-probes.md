@@ -58,3 +58,37 @@ The frozen report is [probes/results.json](probes/results.json); its diagnostic
 text is embedded so the negative evidence remains reviewable after `/tmp` is
 removed. Rerunning writes a new scratch report rather than silently replacing
 the frozen result.
+
+## Pinned compiler test-harness crash
+
+The later production integration exposed a separate compiler crash. This
+minimal source reproduces it without arithmetic, typenum, metadata, or even a
+test body:
+
+```rust
+#![allow(incomplete_features)]
+#![feature(min_generic_const_args, generic_const_args)]
+#[test]
+fn trivial() {}
+```
+
+```sh
+rustc +nightly-2026-09-13 --edition=2024 --test \
+  scripts/experiments/cga/probes/test-harness-ice.rs \
+  -o /tmp/whippyunits-cga-test-harness-ice
+```
+
+This exits 101 with two delayed internal compiler errors: a type-system
+constant with a non-valtree type and an unevaluated constant in a MIR body.
+An otherwise identical test with no gates, `min_generic_const_args` alone, or
+`generic_const_items` alone compiles and runs. The `generic_const_args` gate
+alone produces an ordinary diagnostic requiring `min_generic_const_args`.
+See [test-harness-results.json](probes/test-harness-results.json) for the six
+commands, source hashes, control executions, and full diagnostics. Compiler
+crashes here are recorded failures, never successful compile-fail tests.
+
+The narrow workaround is to disable the native library's generated test
+harness and exercise it from ordinary external integration-test crates without
+these feature attributes. Isolating the native implementation also avoids
+applying unstable const handling to unrelated unit-catalog code. Removing the
+macroless feature gates does not fix this test-harness crash.

@@ -3,7 +3,17 @@
 `measure.py` compares explicit `(label, source tree, toolchain)` variants with the
 same tick/degree and nalgebra consumer used in the preceding experiments. It
 prepares a copied snapshot with `scripts/prepare_dynamics_probe.py`; an existing
-probe must match the checked-in workload and lockfile. Inputs are never changed.
+probe must match the checked-in workload. Its lockfile must retain exactly the
+same external package names, versions, sources, and checksums. Local package
+nodes and dependency edges may differ, allowing an isolated `whippyunits-num`
+backend crate without silently changing third-party dependency versions. The
+report preserves each full lockfile hash and local package records. Inputs are
+never changed. Python 3.11 or later is required for `tomllib`.
+
+If a candidate adds a local crate, prepare its probe and resolve the candidate
+lockfile offline before making the immutable input snapshot. Retain the
+existing external dependency versions. The harness itself does not update
+lockfiles, and every check still uses `--locked`.
 
 Establish the compiler baseline first:
 
@@ -23,7 +33,7 @@ by the caller; use the exact names implemented by the candidate:
 python3 scripts/experiments/cga/measure.py \
   --variant nightly-typenum /tmp/whippyunits-cga/snapshots/baseline nightly-2026-09-13 \
   --variant nightly-cga /tmp/whippyunits-cga/snapshots/candidate nightly-2026-09-13 \
-  --features nightly-cga whippyunits/nightly-cga,whippyalgebra/nightly-cga \
+  --features nightly-cga whippyunits/nightly-gca,whippyalgebra/nightly-gca \
   --samples 5 \
   --scratch /tmp/whippyunits-cga/backend-check \
   --output docs/performance-results/cga-backend-check.json
@@ -38,7 +48,8 @@ directory to retry; there is deliberately no partial-run resume mechanism.
 
 The harness alternates forward/reverse variant order. All variants use the same
 absolute source path and shared target directory. It cleans typenum,
-whippyunits-core, the procedural macros, whippyunits, whippyalgebra, nalgebra,
+whippyunits-num when present in the lockfile, whippyunits-core, the procedural
+macros, whippyunits, whippyalgebra, nalgebra,
 simba, and the consumer before each warmup. After warming that exact dependency
 graph, it cleans those packages again and times `cargo check --offline --locked
 -j1`, with incremental compilation disabled. Unrelated dependencies remain
@@ -46,7 +57,8 @@ warm. It subsequently cleans and times only the consumer; use
 `--no-consumer-after` to omit that separate scope.
 
 The report records immutable input/prepared source hashes, identical consumer
-body and lock hashes, probe manifests, exact `rustc -vV` and Cargo versions,
+body hashes, individual lock hashes and verified external package identities,
+probe manifests, exact `rustc -vV` and Cargo versions,
 effective environment overrides, commands, individual logs, each timed sample,
 and medians. GNU time reports maximum individual-process RSS including
 waited-for children, **not the sum of concurrently resident processes**. The

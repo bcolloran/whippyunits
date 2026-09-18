@@ -453,6 +453,7 @@ WhippyUnits works on **stable Rust**, using a typenum-based polyfill for compile
 | `units-photometric` | Via `all-units` | Luminous intensity and illuminance units; includes dynamics |
 | `literals` | Yes | Generates custom literal suffix macros for the selected catalogs |
 | `wide-exponents` | Yes | Extends dimension and scale arithmetic inputs from -32…32 to -200…200 |
+| `nightly-gca` | No | Experimental native exponent arithmetic on `nightly-2026-09-13`; preserves the stable backend when disabled |
 
 To compile only the dynamics catalog:
 
@@ -503,6 +504,24 @@ matrix products and determinants; the final unit alone is insufficient.
 `whippyalgebra` forwards `wide-exponents` as well. As with other Cargo features,
 any dependency enabling the wide bridge expands the range for the shared
 crate; it never changes existing quantity types.
+
+The experimental `nightly-gca` feature selects native exponent arithmetic on
+`nightly-2026-09-13`. It keeps the same quantity/unit representation and the
+degree/tick conversion machinery, while allowing checked i16 arithmetic beyond
+the finite stable bridge. With this backend, `wide-exponents` has no effect on
+arithmetic. Overflow rejects when an output is evaluated; a bare arithmetic
+trait bound does not itself prove the output is representable. Exact square
+roots still require even physical and scale exponents at the trait bound.
+Numeric rescaling retains its existing lookup ranges; larger valid exponents
+do not imply arbitrary-scale conversion support.
+
+Enable `nightly-gca` alongside the catalog and runtime features you need;
+`whippyalgebra` forwards it. It is opt-in, requires the pinned nightly for the
+whole consumer build, and currently retains typenum booleans and nalgebra's
+independent typenum use. The tested rust-analyzer 0.3.3049 cannot yet infer
+its computed exponents in hovers, so keep this disabled for normal editor use.
+See the [experiment log](docs/cga-experiment-log.md)
+for validation, limitations and measured results.
 
 Catalog features control generated aliases, constructor methods, and literal
 suffixes, including custom declarator namespaces. The `unit!`, `qty!`,

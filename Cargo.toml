@@ -3,6 +3,7 @@ members = [
     ".",
     "proc-macros",
     "whippyunits-core",
+    "whippyunits-num",
     "whippyunits-pretty",
     "lsp-proxy",
     "whippyalgebra",
@@ -53,6 +54,8 @@ typenum = "1"
 
 
 [features]
+# Experimental native exponent arithmetic; requires nightly-2026-09-13.
+nightly-gca = ["whippyunits-core/nightly-gca", "whippyunits-proc-macros/nightly-gca"]
 # Extend arithmetic inputs from +/-32 to +/-200 without changing quantity types.
 wide-exponents = ["whippyunits-core/wide-exponents", "whippyunits-proc-macros/wide-exponents"]
 default = ["std", "serde", "all-units", "literals", "wide-exponents"]

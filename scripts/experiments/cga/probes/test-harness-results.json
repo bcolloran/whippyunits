@@ -1,0 +1,119 @@
+[
+  {
+    "name": "no_gates",
+    "command": [
+      "rustc",
+      "+nightly-2026-09-13",
+      "--edition=2024",
+      "--test",
+      "/tmp/whippyunits-cga/gates/test-harness/no_gates.rs",
+      "-o",
+      "/tmp/whippyunits-cga/gates/test-harness/no_gates"
+    ],
+    "exit_code": 0,
+    "source_sha256": "53934402d4fdc93c84d75bf00c090e18df8a1eef081b53529b5e1239e0bc541e",
+    "diagnostic": "",
+    "execution": {
+      "exit_code": 0,
+      "stdout": "\nrunning 1 test\ntest trivial ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+      "stderr": ""
+    },
+    "source": "#![allow(incomplete_features)]\n\n#[test]\nfn trivial() {}\n",
+    "compiler_crash": false
+  },
+  {
+    "name": "generic_const_args",
+    "command": [
+      "rustc",
+      "+nightly-2026-09-13",
+      "--edition=2024",
+      "--test",
+      "/tmp/whippyunits-cga/gates/test-harness/generic_const_args.rs",
+      "-o",
+      "/tmp/whippyunits-cga/gates/test-harness/generic_const_args"
+    ],
+    "exit_code": 1,
+    "source_sha256": "6d0e883e01e1ad529703f80b107b5275faa79f324f3cac9895b3e779b49ec712",
+    "diagnostic": "error: `generic_const_args` requires `min_generic_const_args` to be enabled\n --> /tmp/whippyunits-cga/gates/test-harness/generic_const_args.rs:2:12\n  |\n2 | #![feature(generic_const_args)]\n  |            ^^^^^^^^^^^^^^^^^^\n  |\n  = help: enable all of these features\n\nerror: aborting due to 1 previous error\n\n",
+    "source": "#![allow(incomplete_features)]\n#![feature(generic_const_args)]\n#[test]\nfn trivial() {}\n",
+    "compiler_crash": false
+  },
+  {
+    "name": "min_generic_const_args",
+    "command": [
+      "rustc",
+      "+nightly-2026-09-13",
+      "--edition=2024",
+      "--test",
+      "/tmp/whippyunits-cga/gates/test-harness/min_generic_const_args.rs",
+      "-o",
+      "/tmp/whippyunits-cga/gates/test-harness/min_generic_const_args"
+    ],
+    "exit_code": 0,
+    "source_sha256": "be2376558f28eb61a6baea9f343434cc4ecf7b77eb801268ee1a13bd8a1bf005",
+    "diagnostic": "",
+    "execution": {
+      "exit_code": 0,
+      "stdout": "\nrunning 1 test\ntest trivial ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+      "stderr": ""
+    },
+    "source": "#![allow(incomplete_features)]\n#![feature(min_generic_const_args)]\n#[test]\nfn trivial() {}\n",
+    "compiler_crash": false
+  },
+  {
+    "name": "generic_const_items",
+    "command": [
+      "rustc",
+      "+nightly-2026-09-13",
+      "--edition=2024",
+      "--test",
+      "/tmp/whippyunits-cga/gates/test-harness/generic_const_items.rs",
+      "-o",
+      "/tmp/whippyunits-cga/gates/test-harness/generic_const_items"
+    ],
+    "exit_code": 0,
+    "source_sha256": "4c5c721d9646c45dd6a216414c94d1dc7998569346527b1c01045fc2ee43b087",
+    "diagnostic": "",
+    "execution": {
+      "exit_code": 0,
+      "stdout": "\nrunning 1 test\ntest trivial ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+      "stderr": ""
+    },
+    "source": "#![allow(incomplete_features)]\n#![feature(generic_const_items)]\n#[test]\nfn trivial() {}\n",
+    "compiler_crash": false
+  },
+  {
+    "name": "min_and_args",
+    "command": [
+      "rustc",
+      "+nightly-2026-09-13",
+      "--edition=2024",
+      "--test",
+      "/tmp/whippyunits-cga/gates/test-harness/min_and_args.rs",
+      "-o",
+      "/tmp/whippyunits-cga/gates/test-harness/min_and_args"
+    ],
+    "exit_code": 101,
+    "source_sha256": "a7d01c82a2e39035a1c3cc6ecf06dcf8ae99936babf7f4c1bd8ee2d833daa05d",
+    "diagnostic": "note: no errors encountered even though delayed bugs were created\n\nnote: those delayed bugs will now be shown as internal compiler errors\n\nerror: internal compiler error: Type system constant with non valtree'able type evaluated but no error emitted\n  |\n  = note: delayed at /rustc-dev/809936eac66c547a5127ce1da805f0d3a6789b98/compiler/rustc_trait_selection/src/traits/mod.rs:777:39 - disabled backtrace\n\nerror: internal compiler error: Unevaluated `ty::Const` in MIR body\n  |\n  = note: delayed at /rustc-dev/809936eac66c547a5127ce1da805f0d3a6789b98/compiler/rustc_middle/src/mir/consts.rs:339:35 - disabled backtrace\n\nnote: we would appreciate a bug report: https://github.com/rust-lang/rust/issues/new?labels=C-bug%2C+I-ICE%2C+T-compiler&template=ice.md\n\nnote: please make sure that you have updated to the latest nightly\n\nnote: please attach the file at `/tmp/whippyunits-cga/gates/test-harness/rustc-ice-2026-09-18T20_53_11-121.txt` to your bug report\n\nnote: rustc 1.100.0-nightly (809936eac 2026-09-12) running on x86_64-unknown-linux-gnu\n\nquery stack during panic:\nend of query stack\n",
+    "source": "#![allow(incomplete_features)]\n#![feature(min_generic_const_args,generic_const_args)]\n#[test]\nfn trivial() {}\n",
+    "compiler_crash": true
+  },
+  {
+    "name": "all_three",
+    "command": [
+      "rustc",
+      "+nightly-2026-09-13",
+      "--edition=2024",
+      "--test",
+      "/tmp/whippyunits-cga/gates/test-harness/all_three.rs",
+      "-o",
+      "/tmp/whippyunits-cga/gates/test-harness/all_three"
+    ],
+    "exit_code": 101,
+    "source_sha256": "a30877a5b949d41010349aa3f9cdcab4f1d9ddfdaa45858b5649fcd8d54e26a4",
+    "diagnostic": "note: no errors encountered even though delayed bugs were created\n\nnote: those delayed bugs will now be shown as internal compiler errors\n\nerror: internal compiler error: Type system constant with non valtree'able type evaluated but no error emitted\n  |\n  = note: delayed at /rustc-dev/809936eac66c547a5127ce1da805f0d3a6789b98/compiler/rustc_trait_selection/src/traits/mod.rs:777:39 - disabled backtrace\n\nerror: internal compiler error: Unevaluated `ty::Const` in MIR body\n  |\n  = note: delayed at /rustc-dev/809936eac66c547a5127ce1da805f0d3a6789b98/compiler/rustc_middle/src/mir/consts.rs:339:35 - disabled backtrace\n\nnote: we would appreciate a bug report: https://github.com/rust-lang/rust/issues/new?labels=C-bug%2C+I-ICE%2C+T-compiler&template=ice.md\n\nnote: please make sure that you have updated to the latest nightly\n\nnote: please attach the file at `/tmp/whippyunits-cga/gates/test-harness/rustc-ice-2026-09-18T20_53_11-132.txt` to your bug report\n\nnote: rustc 1.100.0-nightly (809936eac 2026-09-12) running on x86_64-unknown-linux-gnu\n\nquery stack during panic:\nend of query stack\n",
+    "source": "#![allow(incomplete_features)]\n#![feature(min_generic_const_args,generic_const_args,generic_const_items)]\n#[test]\nfn trivial() {}\n",
+    "compiler_crash": true
+  }
+]

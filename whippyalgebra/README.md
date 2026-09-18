@@ -71,6 +71,7 @@ default `std` feature is off. The features are additive:
 | `std` | Yes | Full standard library; implies `alloc`. Adds nalgebra's `matrixmultiply` fast path and the `std`-only matrix exponential (`.exp()`). |
 | `alloc` | via `std` | Heap allocation without `std`. Required for matrix `Display` (unit-aware pretty-printing renders each cell to a `String`), dynamically sized matrices (`DMatrix`/`DVector`, `from_dyn`), and the `Vec`/columns/rows uniform constructors. |
 | `nalgebra` | Yes | The nalgebra backend adapter. |
+| `nightly-gca` | No | Forwards the experimental native exponent backend; requires `nightly-2026-09-13`. |
 | `all-units` | Yes | All whippyunits constructor and type-alias catalogs. |
 | `units-dynamics` | via `all-units` | Dynamics constructors and aliases; includes mass, length, time, angle, and derived units. |
 | `units-si-dynamics` | No | Only the ten coherent SI dynamics constructors and aliases. |

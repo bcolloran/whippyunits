@@ -22,6 +22,7 @@ syn = { version = "2.0", features = ["full", "visit-mut"] }
 whippyunits-core = { path = "../whippyunits-core", version = "0.3.0", default-features = false }
 
 [features]
+nightly-gca = ["whippyunits-core/nightly-gca"]
 # Extend arithmetic inputs from +/-32 to +/-200 without changing quantity types.
 wide-exponents = ["whippyunits-core/wide-exponents"]
 default = ["all-units", "literals", "wide-exponents"]

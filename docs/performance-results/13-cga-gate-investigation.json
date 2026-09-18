@@ -1,0 +1,432 @@
+{
+  "scope": "correctness only; no timing claims",
+  "status": "complete",
+  "all_passed": false,
+  "planned_checks": [
+    "core-narrow",
+    "core-wide",
+    "quantity",
+    "generic-example",
+    "algebra",
+    "no-std",
+    "runtime-probe"
+  ],
+  "repo": "/tmp/whippyunits-cga/snapshots/native",
+  "toolchain": "nightly-2026-09-13",
+  "native": true,
+  "rustc": "rustc 1.100.0-nightly (809936eac 2026-09-12)\nbinary: rustc\ncommit-hash: 809936eac66c547a5127ce1da805f0d3a6789b98\ncommit-date: 2026-09-12\nhost: x86_64-unknown-linux-gnu\nrelease: 1.100.0-nightly\nLLVM version: 23.1.1\n",
+  "environment": {
+    "RUSTUP_TOOLCHAIN": "nightly-2026-09-13",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_TARGET_DIR": "/tmp/whippyunits-cga/validation-target"
+  },
+  "checks": [
+    {
+      "label": "core-narrow",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "--locked",
+        "-j2",
+        "-p",
+        "whippyunits-core",
+        "--lib",
+        "--no-default-features",
+        "--features",
+        "nightly-gca"
+      ],
+      "status": 101,
+      "log": "/tmp/whippyunits-cga/validation/native/core-narrow.log"
+    },
+    {
+      "label": "core-wide",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "--locked",
+        "-j2",
+        "-p",
+        "whippyunits-core",
+        "--lib",
+        "--features",
+        "nightly-gca"
+      ],
+      "status": 101,
+      "log": "/tmp/whippyunits-cga/validation/native/core-wide.log"
+    },
+    {
+      "label": "quantity",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "--locked",
+        "-j2",
+        "-p",
+        "whippyunits",
+        "--lib",
+        "--test",
+        "custom_storage_types",
+        "--test",
+        "exponent_features",
+        "--test",
+        "phantom_marker_traits",
+        "--test",
+        "catalog_features",
+        "--no-default-features",
+        "--features",
+        "std,units-dynamics-conversions,nightly-gca",
+        "--",
+        "--skip",
+        "disabled_catalog_items_are_not_exported",
+        "--skip",
+        "coherent_catalog_omits_noncoherent_declarators"
+      ],
+      "status": 101,
+      "log": "/tmp/whippyunits-cga/validation/native/quantity.log"
+    },
+    {
+      "label": "generic-example",
+      "command": [
+        "cargo",
+        "run",
+        "--offline",
+        "--locked",
+        "-j2",
+        "-p",
+        "whippyunits",
+        "--example",
+        "centripetal_acceleration",
+        "--features",
+        "nightly-gca"
+      ],
+      "status": 101,
+      "log": "/tmp/whippyunits-cga/validation/native/generic-example.log"
+    },
+    {
+      "label": "algebra",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "--locked",
+        "-j2",
+        "-p",
+        "whippyalgebra",
+        "--lib",
+        "--test",
+        "uniform",
+        "--test",
+        "brands",
+        "--test",
+        "generic_block",
+        "--test",
+        "generic_matrix_uniform",
+        "--test",
+        "operations",
+        "--test",
+        "canonical",
+        "--no-default-features",
+        "--features",
+        "std,nalgebra,units-dynamics-conversions,nightly-gca"
+      ],
+      "status": 101,
+      "log": "/tmp/whippyunits-cga/validation/native/algebra.log"
+    },
+    {
+      "label": "no-std",
+      "command": [
+        "cargo",
+        "check",
+        "--offline",
+        "--locked",
+        "-j2",
+        "-p",
+        "whippyalgebra",
+        "--lib",
+        "--no-default-features",
+        "--features",
+        "nalgebra,units-dynamics-conversions,nightly-gca"
+      ],
+      "status": 101,
+      "log": "/tmp/whippyunits-cga/validation/native/no-std.log"
+    },
+    {
+      "label": "runtime-probe",
+      "command": [
+        "cargo",
+        "run",
+        "--offline",
+        "--locked",
+        "-j2",
+        "--manifest-path",
+        "probe/Cargo.toml",
+        "--features",
+        "whippyunits/nightly-gca,whippyalgebra/nightly-gca"
+      ],
+      "status": 101,
+      "log": "/tmp/whippyunits-cga/validation/native/runtime-probe.log"
+    }
+  ],
+  "outcome": "Rejected feature-gate combination; macroless_const_item_generic_const_args changes unrelated constants.",
+  "core_diagnostic_excerpt": "warning: `whippyalgebra` (manifest) generated 1 warning\n   Compiling whippyunits-core v0.3.0 (/tmp/whippyunits-cga/snapshots/native/whippyunits-core)\nerror[E0741]: `f64` is forbidden as the type of a const generic parameter\n   --> whippyunits-core/src/units.rs:118:17\n    |\n118 | const IDENTITY: f64 = 1.0;\n    |                 ^^^\n\nerror[E0741]: `f64` is forbidden as the type of a const generic parameter\n   --> whippyunits-core/src/units.rs:119:13\n    |\n119 | const NONE: f64 = 0.0;\n    |             ^^^\n\nerror[E0741]: `[dimension_exponents::DimensionBasis; 8]` can't be used as a const parameter type\n  --> whippyunits-core/src/dimension_exponents.rs:35:20\n   |\n35 |     pub const ALL: [Self; 8] = [\n   |                    ^^^^^^^^^\n   |\n   = note: `dimension_exponents::DimensionBasis` must implement `ConstParamTy_`, but it does not\n\nerror[E0658]: inherent associated types are unstable\n  --> whippyunits-core/src/prefix.rs:52:9\n   |\n52 |         Self::QUECTO,\n   |         ^^^^^^^^^^^^\n   |\n   = note: see issue #8995 <https://github.com/rust-lang/rust/issues/8995> for more information\n   = help: add `#![feature(inherent_associated_types)]` to the crate attributes to enable\n   = note: this compiler was built on 2026-09-12; consider upgrading it if it is out of date\n\nerror[E0658]: inherent associated types are unstable\n  --> whippyunits-core/src/prefix.rs:53:9\n   |\n53 |         Self::RONTO,\n   |         ^^^^^^^^^^^\n   |\n   = note: see issue #8995 <https://github.com/rust-lang/rust/issues/8995> for more information\n   = help: add `#![feature(inherent_associated_types)]` to the crate attributes to enable\n   = note: this compiler was built on 2026-09-12; consider upgrading it if it is out of date\n\nerror[E0658]: inherent associated types are unstable\n  --> whippyunits-core/src/prefix.rs:54:9\n   |\n54 |         Self::YOCTO,\n   |         ^^^^^^^^^^^\n   |\n   = note: see issue #8995 <https://github.com/rust-lang/rust/issues/8995> for more information\n   = help: add `#![feature(inherent_associated_types)]` to the crate attributes to enable\n   = note: this compiler was built on 2026-09-12; consider upgrading it if it is out of date\n\nerror[E0658]: inherent associated types are unstable\n  --> whippyunits-core/src/prefix.rs:55:9\n   |\n55 |         Self::ZEPTO,\n   |         ^^^^^^^^^^^\n   |\n   = note: see issue #8995 <https://github.com/rust-lang/rust/issues/8995> for more information\n   = help: add `#![feature(inherent_associated_types)]` to the crate attributes to enable\n   = note: this compiler was built on 2026-09-12; consider upgrading it if it is out of date\n\nerror[E0658]: inherent associated types are unstable\n  --> whippyunits-core/src/prefix.rs:56:9\n   |\n56 |         Self::ATTO,\n   |         ^^^^^^^^^^\n   |\n   = note: see issue #8995 <https://github.com/rust-lang/rust/issues/8995> for more information\n   = help: add `#![feature(inherent_associated_types)]` to the crate attributes to enable",
+  "gate_probe_results": [
+    {
+      "name": "all_gates",
+      "command": [
+        "rustc",
+        "+nightly-2026-09-13",
+        "--edition=2024",
+        "--crate-type",
+        "rlib",
+        "/tmp/whippyunits-cga/gates/all_gates.rs",
+        "--extern",
+        "typenum=/tmp/whippyunits-cga/probes/libtypenum.rlib",
+        "-L",
+        "dependency=/tmp/whippyunits-cga/probes",
+        "-o",
+        "/tmp/whippyunits-cga/gates/liball_gates.rlib"
+      ],
+      "exit_code": 1,
+      "source_sha256": "4d9ac53b48c782012fbf8217a9bf27e911089e75df4e6df50062fe94d4b1e94a",
+      "diagnostic": "error[E0741]: `f64` is forbidden as the type of a const generic parameter\n   --> /tmp/whippyunits-cga/gates/all_gates.rs:105:18\n    |\n105 | pub const FLOAT: f64 = 1.0;\n    |                  ^^^\n\nerror[E0741]: `Other` must implement `ConstParamTy` to be used as the type of a const generic parameter\n   --> /tmp/whippyunits-cga/gates/all_gates.rs:106:19\n    |\n106 | pub const OBJECT: Other = Other { value: FLOAT };\n    |                   ^^^^^\n    |\nhelp: add `#[derive(ConstParamTy, PartialEq, Eq)]` to the struct\n    |\n104 + #[derive(ConstParamTy, PartialEq, Eq)]\n105 | pub struct Other { pub value: f64 }\n    |\n\nerror: struct expression with invalid base path\n   --> /tmp/whippyunits-cga/gates/all_gates.rs:108:29\n    |\n108 |     pub const FIRST: Self = Self { value: 2.0 };\n    |                             ^^^^^^^^^^^^^^^^^^^\n\nerror[E0741]: `Other` must implement `ConstParamTy` to be used as the type of a const generic parameter\n   --> /tmp/whippyunits-cga/gates/all_gates.rs:108:22\n    |\n108 |     pub const FIRST: Self = Self { value: 2.0 };\n    |                      ^^^^\n    |\nhelp: add `#[derive(ConstParamTy, PartialEq, Eq)]` to the struct\n    |\n104 + #[derive(ConstParamTy, PartialEq, Eq)]\n105 | pub struct Other { pub value: f64 }\n    |\n\nerror[E0658]: inherent associated types are unstable\n   --> /tmp/whippyunits-cga/gates/all_gates.rs:110:39\n    |\n110 |     pub const ALL_FIXED: [Self; 1] = [Self::FIRST];\n    |                                       ^^^^^^^^^^^\n    |\n    = note: see issue #8995 <https://github.com/rust-lang/rust/issues/8995> for more information\n    = help: add `#![feature(inherent_associated_types)]` to the crate attributes to enable\n    = note: this compiler was built on 2026-09-12; consider upgrading it if it is out of date\n\nerror[E0741]: `[Other; 1]` can't be used as a const parameter type\n   --> /tmp/whippyunits-cga/gates/all_gates.rs:110:26\n    |\n110 |     pub const ALL_FIXED: [Self; 1] = [Self::FIRST];\n    |                          ^^^^^^^^^\n    |\n    = note: `Other` must implement `ConstParamTy_`, but it does not\n\nerror: aborting due to 6 previous errors\n\nSome errors have detailed explanations: E0658, E0741.\nFor more information about an error, try `rustc --explain E0658`.\n"
+    },
+    {
+      "name": "direct_rhs",
+      "command": [
+        "rustc",
+        "+nightly-2026-09-13",
+        "--edition=2024",
+        "--crate-type",
+        "rlib",
+        "/tmp/whippyunits-cga/gates/direct_rhs.rs",
+        "--extern",
+        "typenum=/tmp/whippyunits-cga/probes/libtypenum.rlib",
+        "-L",
+        "dependency=/tmp/whippyunits-cga/probes",
+        "-o",
+        "/tmp/whippyunits-cga/gates/libdirect_rhs.rlib"
+      ],
+      "exit_code": 1,
+      "source_sha256": "f6c5e1cd5ad73dd7d9800e362ac0e1ada18b2bd72552d6aaa5842946489f7c7a",
+      "diagnostic": "error: generic parameters in const blocks are not allowed; use a named `const` item instead\n  --> /tmp/whippyunits-cga/gates/direct_rhs.rs:14:82\n   |\n14 | pub const ADD<const A: i16, const B: i16>: i16 = core::direct_const_arg!(const { A + B });\n   |                                                                                  ^\n   |\n   = help: consider factoring the expression into a `type const` item and use it as the const argument instead\n\nerror: generic parameters in const blocks are not allowed; use a named `const` item instead\n  --> /tmp/whippyunits-cga/gates/direct_rhs.rs:14:86\n   |\n14 | pub const ADD<const A: i16, const B: i16>: i16 = core::direct_const_arg!(const { A + B });\n   |                                                                                      ^\n   |\n   = help: consider factoring the expression into a `type const` item and use it as the const argument instead\n\nerror: generic parameters in const blocks are not allowed; use a named `const` item instead\n  --> /tmp/whippyunits-cga/gates/direct_rhs.rs:15:82\n   |\n15 | pub const SUB<const A: i16, const B: i16>: i16 = core::direct_const_arg!(const { A - B });\n   |                                                                                  ^\n   |\n   = help: consider factoring the expression into a `type const` item and use it as the const argument instead\n\nerror: generic parameters in const blocks are not allowed; use a named `const` item instead\n  --> /tmp/whippyunits-cga/gates/direct_rhs.rs:15:86\n   |\n15 | pub const SUB<const A: i16, const B: i16>: i16 = core::direct_const_arg!(const { A - B });\n   |                                                                                      ^\n   |\n   = help: consider factoring the expression into a `type const` item and use it as the const argument instead\n\nerror: generic parameters in const blocks are not allowed; use a named `const` item instead\n  --> /tmp/whippyunits-cga/gates/direct_rhs.rs:16:69\n   |\n16 | pub const NEG<const A: i16>: i16 = core::direct_const_arg!(const { -A });\n   |                                                                     ^\n   |\n   = help: consider factoring the expression into a `type const` item and use it as the const argument instead\n\nerror: generic parameters in const blocks are not allowed; use a named `const` item instead\n  --> /tmp/whippyunits-cga/gates/direct_rhs.rs:17:69\n   |\n17 | pub const HALF<const A: i16>: i16 = core::direct_const_arg!(const { A / 2 });\n   |                                                                     ^\n   |\n   = help: consider factoring the expression into a `type const` item and use it as the const argument instead\n\nerror: generic parameters in const blocks are not allowed; use a named `const` item instead\n  --> /tmp/whippyunits-cga/gates/direct_rhs.rs:18:70\n   |\n18 | pub const EVEN<const A: i16>: bool = core::direct_const_arg!(const { A % 2 == 0 });\n   |                                                                      ^\n   |\n   = help: consider factoring the expression into a `type const` item and use it as the const argument instead\n\nerror: generic parameters in const blocks are not allowed; use a named `const` item instead\n  --> /tmp/whippyunits-cga/gates/direct_rhs.rs:19:82\n   |\n19 | pub const EQ<const A: i16, const B: i16>: bool = core::direct_const_arg!(const { A == B });\n   |                                                                                  ^\n   |\n   = help: consider factoring the expression into a `type const` item and use it as the const argument instead\n\nerror: generic parameters in const blocks are not allowed; use a named `const` item instead\n  --> /tmp/whippyunits-cga/gates/direct_rhs.rs:19:87\n   |\n19 | pub const EQ<const A: i16, const B: i16>: bool = core::direct_const_arg!(const { A == B });\n   |                                                                                       ^\n   |\n   = help: consider factoring the expression into a `type const` item and use it as the const argument instead\n\nerror: aborting due to 9 previous errors\n\n"
+    },
+    {
+      "name": "type_const",
+      "command": [
+        "rustc",
+        "+nightly-2026-09-13",
+        "--edition=2024",
+        "--crate-type",
+        "rlib",
+        "/tmp/whippyunits-cga/gates/type_const.rs",
+        "--extern",
+        "typenum=/tmp/whippyunits-cga/probes/libtypenum.rlib",
+        "-L",
+        "dependency=/tmp/whippyunits-cga/probes",
+        "-o",
+        "/tmp/whippyunits-cga/gates/libtype_const.rlib"
+      ],
+      "exit_code": 1,
+      "source_sha256": "1ae2a6d6213c0632861669c6ce27edef785ff5cdb335d395e5ae5c0c3500ab88",
+      "diagnostic": "error: expected identifier, found keyword `const`\n  --> /tmp/whippyunits-cga/gates/type_const.rs:14:10\n   |\n14 | pub type const ADD<const A: i16, const B: i16>: i16 = const { A + B };\n   |          ^^^^^ expected identifier, found keyword\n\nerror: expected one of `:`, `;`, `<`, `=`, or `where`, found `ADD`\n  --> /tmp/whippyunits-cga/gates/type_const.rs:14:16\n   |\n14 | pub type const ADD<const A: i16, const B: i16>: i16 = const { A + B };\n   |                ^^^ expected one of `:`, `;`, `<`, `=`, or `where`\n\nerror: aborting due to 2 previous errors\n\n"
+    },
+    {
+      "name": "fully_explicit",
+      "command": [
+        "rustc",
+        "+nightly-2026-09-13",
+        "--edition=2024",
+        "--crate-type",
+        "rlib",
+        "/tmp/whippyunits-cga/gates/fully_explicit.rs",
+        "--extern",
+        "typenum=/tmp/whippyunits-cga/probes/libtypenum.rlib",
+        "-L",
+        "dependency=/tmp/whippyunits-cga/probes",
+        "-o",
+        "/tmp/whippyunits-cga/gates/libfully_explicit.rlib"
+      ],
+      "exit_code": 1,
+      "source_sha256": "9a0825f44e6af9192ebfcdf038c774cd47ca260d20a5eec01d22e8db1a4cefaf",
+      "diagnostic": "error: generic parameters in const blocks are not allowed; use a named `const` item instead\n  --> /tmp/whippyunits-cga/gates/fully_explicit.rs:13:82\n   |\n13 | pub const ADD<const A: i16, const B: i16>: i16 = core::direct_const_arg!(const { A + B });\n   |                                                                                  ^\n   |\n   = help: consider factoring the expression into a `type const` item and use it as the const argument instead\n\nerror: generic parameters in const blocks are not allowed; use a named `const` item instead\n  --> /tmp/whippyunits-cga/gates/fully_explicit.rs:13:86\n   |\n13 | pub const ADD<const A: i16, const B: i16>: i16 = core::direct_const_arg!(const { A + B });\n   |                                                                                      ^\n   |\n   = help: consider factoring the expression into a `type const` item and use it as the const argument instead\n\nerror: generic parameters in const blocks are not allowed; use a named `const` item instead\n  --> /tmp/whippyunits-cga/gates/fully_explicit.rs:14:82\n   |\n14 | pub const SUB<const A: i16, const B: i16>: i16 = core::direct_const_arg!(const { A - B });\n   |                                                                                  ^\n   |\n   = help: consider factoring the expression into a `type const` item and use it as the const argument instead\n\nerror: generic parameters in const blocks are not allowed; use a named `const` item instead\n  --> /tmp/whippyunits-cga/gates/fully_explicit.rs:14:86\n   |\n14 | pub const SUB<const A: i16, const B: i16>: i16 = core::direct_const_arg!(const { A - B });\n   |                                                                                      ^\n   |\n   = help: consider factoring the expression into a `type const` item and use it as the const argument instead\n\nerror: generic parameters in const blocks are not allowed; use a named `const` item instead\n  --> /tmp/whippyunits-cga/gates/fully_explicit.rs:15:69\n   |\n15 | pub const NEG<const A: i16>: i16 = core::direct_const_arg!(const { -A });\n   |                                                                     ^\n   |\n   = help: consider factoring the expression into a `type const` item and use it as the const argument instead\n\nerror: generic parameters in const blocks are not allowed; use a named `const` item instead\n  --> /tmp/whippyunits-cga/gates/fully_explicit.rs:16:69\n   |\n16 | pub const HALF<const A: i16>: i16 = core::direct_const_arg!(const { A / 2 });\n   |                                                                     ^\n   |\n   = help: consider factoring the expression into a `type const` item and use it as the const argument instead\n\nerror: generic parameters in const blocks are not allowed; use a named `const` item instead\n  --> /tmp/whippyunits-cga/gates/fully_explicit.rs:17:70\n   |\n17 | pub const EVEN<const A: i16>: bool = core::direct_const_arg!(const { A % 2 == 0 });\n   |                                                                      ^\n   |\n   = help: consider factoring the expression into a `type const` item and use it as the const argument instead\n\nerror: generic parameters in const blocks are not allowed; use a named `const` item instead\n  --> /tmp/whippyunits-cga/gates/fully_explicit.rs:18:82\n   |\n18 | pub const EQ<const A: i16, const B: i16>: bool = core::direct_const_arg!(const { A == B });\n   |                                                                                  ^\n   |\n   = help: consider factoring the expression into a `type const` item and use it as the const argument instead\n\nerror: generic parameters in const blocks are not allowed; use a named `const` item instead\n  --> /tmp/whippyunits-cga/gates/fully_explicit.rs:18:87\n   |\n18 | pub const EQ<const A: i16, const B: i16>: bool = core::direct_const_arg!(const { A == B });\n   |                                                                                       ^\n   |\n   = help: consider factoring the expression into a `type const` item and use it as the const argument instead\n\nerror: aborting due to 9 previous errors\n\n"
+    },
+    {
+      "name": "direct_expression",
+      "command": [
+        "rustc",
+        "+nightly-2026-09-13",
+        "--edition=2024",
+        "--crate-type",
+        "rlib",
+        "/tmp/whippyunits-cga/gates/direct_expression.rs",
+        "--extern",
+        "typenum=/tmp/whippyunits-cga/probes/libtypenum.rlib",
+        "-L",
+        "dependency=/tmp/whippyunits-cga/probes",
+        "-o",
+        "/tmp/whippyunits-cga/gates/libdirect_expression.rlib"
+      ],
+      "exit_code": 1,
+      "source_sha256": "dface7df95894b3cce6c237a200090f4f143e968cfa243563074f9fd117cdcd9",
+      "diagnostic": "error: complex const arguments must be placed inside of a `const` block\n  --> /tmp/whippyunits-cga/gates/direct_expression.rs:14:74\n   |\n14 | pub const ADD<const A: i16, const B: i16>: i16 = core::direct_const_arg!(A + B);\n   |                                                                          ^^^^^\n\nerror: complex const arguments must be placed inside of a `const` block\n  --> /tmp/whippyunits-cga/gates/direct_expression.rs:15:74\n   |\n15 | pub const SUB<const A: i16, const B: i16>: i16 = core::direct_const_arg!(A - B);\n   |                                                                          ^^^^^\n\nerror: complex const arguments must be placed inside of a `const` block\n  --> /tmp/whippyunits-cga/gates/direct_expression.rs:16:60\n   |\n16 | pub const NEG<const A: i16>: i16 = core::direct_const_arg!(-A);\n   |                                                            ^^\n\nerror: complex const arguments must be placed inside of a `const` block\n  --> /tmp/whippyunits-cga/gates/direct_expression.rs:17:61\n   |\n17 | pub const HALF<const A: i16>: i16 = core::direct_const_arg!(A / 2);\n   |                                                             ^^^^^\n\nerror: complex const arguments must be placed inside of a `const` block\n  --> /tmp/whippyunits-cga/gates/direct_expression.rs:18:62\n   |\n18 | pub const EVEN<const A: i16>: bool = core::direct_const_arg!(A % 2 == 0);\n   |                                                              ^^^^^^^^^^\n\nerror: complex const arguments must be placed inside of a `const` block\n  --> /tmp/whippyunits-cga/gates/direct_expression.rs:19:74\n   |\n19 | pub const EQ<const A: i16, const B: i16>: bool = core::direct_const_arg!(A == B);\n   |                                                                          ^^^^^^\n\nerror: aborting due to 6 previous errors\n\n"
+    },
+    {
+      "name": "direct_block",
+      "command": [
+        "rustc",
+        "+nightly-2026-09-13",
+        "--edition=2024",
+        "--crate-type",
+        "rlib",
+        "/tmp/whippyunits-cga/gates/direct_block.rs",
+        "--extern",
+        "typenum=/tmp/whippyunits-cga/probes/libtypenum.rlib",
+        "-L",
+        "dependency=/tmp/whippyunits-cga/probes",
+        "-o",
+        "/tmp/whippyunits-cga/gates/libdirect_block.rlib"
+      ],
+      "exit_code": 1,
+      "source_sha256": "50cddfde4b73547338cecf87de4eb8a605597fd4e6166e9904727576526636f4",
+      "diagnostic": "error: complex const arguments must be placed inside of a `const` block\n  --> /tmp/whippyunits-cga/gates/direct_block.rs:14:76\n   |\n14 | pub const ADD<const A: i16, const B: i16>: i16 = core::direct_const_arg!({ A + B });\n   |                                                                            ^^^^^\n\nerror: complex const arguments must be placed inside of a `const` block\n  --> /tmp/whippyunits-cga/gates/direct_block.rs:15:76\n   |\n15 | pub const SUB<const A: i16, const B: i16>: i16 = core::direct_const_arg!({ A - B });\n   |                                                                            ^^^^^\n\nerror: complex const arguments must be placed inside of a `const` block\n  --> /tmp/whippyunits-cga/gates/direct_block.rs:16:62\n   |\n16 | pub const NEG<const A: i16>: i16 = core::direct_const_arg!({ -A });\n   |                                                              ^^\n\nerror: complex const arguments must be placed inside of a `const` block\n  --> /tmp/whippyunits-cga/gates/direct_block.rs:17:63\n   |\n17 | pub const HALF<const A: i16>: i16 = core::direct_const_arg!({ A / 2 });\n   |                                                               ^^^^^\n\nerror: complex const arguments must be placed inside of a `const` block\n  --> /tmp/whippyunits-cga/gates/direct_block.rs:18:64\n   |\n18 | pub const EVEN<const A: i16>: bool = core::direct_const_arg!({ A % 2 == 0 });\n   |                                                                ^^^^^^^^^^\n\nerror: complex const arguments must be placed inside of a `const` block\n  --> /tmp/whippyunits-cga/gates/direct_block.rs:19:76\n   |\n19 | pub const EQ<const A: i16, const B: i16>: bool = core::direct_const_arg!({ A == B });\n   |                                                                            ^^^^^^\n\nerror: aborting due to 6 previous errors\n\n"
+    },
+    {
+      "name": "ordinary_named",
+      "command": [
+        "rustc",
+        "+nightly-2026-09-13",
+        "--edition=2024",
+        "--crate-type",
+        "rlib",
+        "/tmp/whippyunits-cga/gates/ordinary_named.rs",
+        "--extern",
+        "typenum=/tmp/whippyunits-cga/probes/libtypenum.rlib",
+        "-L",
+        "dependency=/tmp/whippyunits-cga/probes",
+        "-o",
+        "/tmp/whippyunits-cga/gates/libordinary_named.rlib"
+      ],
+      "exit_code": 0,
+      "source_sha256": "386c97b80ce8e8df0671aa6d5069219f341d0a66bbcf4fe6501cc142b260ecb9",
+      "diagnostic": ""
+    },
+    {
+      "name": "marked_const",
+      "command": [
+        "rustc",
+        "+nightly-2026-09-13",
+        "--edition=2024",
+        "--crate-type",
+        "rlib",
+        "/tmp/whippyunits-cga/gates/marked_const.rs",
+        "--extern",
+        "typenum=/tmp/whippyunits-cga/probes/libtypenum.rlib",
+        "-L",
+        "dependency=/tmp/whippyunits-cga/probes",
+        "-o",
+        "/tmp/whippyunits-cga/gates/libmarked_const.rlib"
+      ],
+      "exit_code": 1,
+      "source_sha256": "cff1fba5b62afbe72e0986371a1de03c69712adea4d0998474c354d0de927033",
+      "diagnostic": "warning: the feature `rustc_attrs` is internal to the compiler or standard library\n --> /tmp/whippyunits-cga/gates/marked_const.rs:3:12\n  |\n3 | #![feature(rustc_attrs)]\n  |            ^^^^^^^^^^^\n  |\n  = note: using it is strongly discouraged\n  = note: `#[warn(internal_features)]` on by default\n\nerror: the `rustc_always_gca` attribute cannot be used on constants\n  --> /tmp/whippyunits-cga/gates/marked_const.rs:15:3\n   |\n15 | #[rustc_always_gca]\n   |   ^^^^^^^^^^^^^^^^\n   |\n   = help: the `rustc_always_gca` attribute can only be applied to associated consts\n\nerror: the `rustc_always_gca` attribute cannot be used on constants\n  --> /tmp/whippyunits-cga/gates/marked_const.rs:17:3\n   |\n17 | #[rustc_always_gca]\n   |   ^^^^^^^^^^^^^^^^\n   |\n   = help: the `rustc_always_gca` attribute can only be applied to associated consts\n\nerror: the `rustc_always_gca` attribute cannot be used on constants\n  --> /tmp/whippyunits-cga/gates/marked_const.rs:19:3\n   |\n19 | #[rustc_always_gca]\n   |   ^^^^^^^^^^^^^^^^\n   |\n   = help: the `rustc_always_gca` attribute can only be applied to associated consts\n\nerror: the `rustc_always_gca` attribute cannot be used on constants\n  --> /tmp/whippyunits-cga/gates/marked_const.rs:21:3\n   |\n21 | #[rustc_always_gca]\n   |   ^^^^^^^^^^^^^^^^\n   |\n   = help: the `rustc_always_gca` attribute can only be applied to associated consts\n\nerror: the `rustc_always_gca` attribute cannot be used on constants\n  --> /tmp/whippyunits-cga/gates/marked_const.rs:23:3\n   |\n23 | #[rustc_always_gca]\n   |   ^^^^^^^^^^^^^^^^\n   |\n   = help: the `rustc_always_gca` attribute can only be applied to associated consts\n\nerror: the `rustc_always_gca` attribute cannot be used on constants\n  --> /tmp/whippyunits-cga/gates/marked_const.rs:25:3\n   |\n25 | #[rustc_always_gca]\n   |   ^^^^^^^^^^^^^^^^\n   |\n   = help: the `rustc_always_gca` attribute can only be applied to associated consts\n\nerror: aborting due to 6 previous errors; 1 warning emitted\n\n"
+    },
+    {
+      "name": "ordinary_named_positive",
+      "command": [
+        "rustc",
+        "+nightly-2026-09-13",
+        "--edition=2024",
+        "/tmp/whippyunits-macro-compile-time/scripts/experiments/cga/probes/positive.rs",
+        "--extern",
+        "typenum=/tmp/whippyunits-cga/probes/libtypenum.rlib",
+        "--extern",
+        "cga_probe=/tmp/whippyunits-cga/gates/libordinary_named.rlib",
+        "-L",
+        "dependency=/tmp/whippyunits-cga/probes",
+        "-o",
+        "/tmp/whippyunits-cga/gates/ordinary_named_positive"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "source_sha256": "e5547686a2c8457b34e5b1c96138a31a08460af1ea09fafa18a6371f7042c35b",
+      "diagnostic": "",
+      "runtime_exit_code": 0
+    },
+    {
+      "name": "ordinary_named_odd_scale",
+      "command": [
+        "rustc",
+        "+nightly-2026-09-13",
+        "--edition=2024",
+        "/tmp/whippyunits-cga/probes/odd_scale_bound.rs",
+        "--extern",
+        "typenum=/tmp/whippyunits-cga/probes/libtypenum.rlib",
+        "--extern",
+        "cga_probe=/tmp/whippyunits-cga/gates/libordinary_named.rlib",
+        "-L",
+        "dependency=/tmp/whippyunits-cga/probes",
+        "-o",
+        "/tmp/whippyunits-cga/gates/ordinary_named_odd_scale"
+      ],
+      "exit_code": 1,
+      "expected_exit_code": 1,
+      "source_sha256": "1afb847937a4a566da26cab442e00d32b1a62affbb3af0be56b4128c55c1f67a",
+      "diagnostic": "error[E0277]: the trait bound `ordinary_named::Bool<false>: True` is not satisfied\n   --> /tmp/whippyunits-cga/probes/odd_scale_bound.rs:1:64\n    |\n  1 | use cga_probe::{Unit,witness_root}; fn main() { witness_root::<Unit<2,-3>>(); }\n    |                                                                ^^^^^^^^^^ the trait `True` is not implemented for `ordinary_named::Bool<false>`\n    |\nhelp: the trait `True` is implemented for `ordinary_named::Bool<true>`\n   --> /tmp/whippyunits-cga/gates/ordinary_named.rs:36:1\n    |\n 36 | impl True for Bool<true> {}\n    | ^^^^^^^^^^^^^^^^^^^^^^^^\n    = note: required for `N<-3>` to implement `Halve`\n    = note: required for `Unit<2, -3>` to implement `UnitSqrt`\nnote: required by a bound in `witness_root`\n   --> /tmp/whippyunits-cga/gates/ordinary_named.rs:100:24\n    |\n100 | pub fn witness_root<U: UnitSqrt>() {}\n    |                        ^^^^^^^^ required by this bound in `witness_root`\n\nerror: aborting due to 1 previous error\n\nFor more information about this error, try `rustc --explain E0277`.\n"
+    },
+    {
+      "name": "ordinary_named_add_overflow",
+      "command": [
+        "rustc",
+        "+nightly-2026-09-13",
+        "--edition=2024",
+        "/tmp/whippyunits-cga/probes/add_overflow.rs",
+        "--extern",
+        "typenum=/tmp/whippyunits-cga/probes/libtypenum.rlib",
+        "--extern",
+        "cga_probe=/tmp/whippyunits-cga/gates/libordinary_named.rlib",
+        "-L",
+        "dependency=/tmp/whippyunits-cga/probes",
+        "-o",
+        "/tmp/whippyunits-cga/gates/ordinary_named_add_overflow"
+      ],
+      "exit_code": 1,
+      "expected_exit_code": 1,
+      "source_sha256": "6b19fcc4f434a2498e7b6080d63b91525345e89f2ba1fdf5c56f95aba0dd5d54",
+      "diagnostic": "error[E0080]: attempt to compute `i16::MAX + 1_i16`, which would overflow\n  --> /tmp/whippyunits-cga/gates/ordinary_named.rs:14:50\n   |\n14 | pub const ADD<const A: i16, const B: i16>: i16 = A + B;\n   |                                                  ^^^^^ evaluation of `ordinary_named::ADD::<i16::MAX, 1>` failed here\n\nerror: aborting due to 1 previous error\n\nFor more information about this error, try `rustc --explain E0080`.\n"
+    },
+    {
+      "name": "ordinary_named_generic_zero",
+      "command": [
+        "rustc",
+        "+nightly-2026-09-13",
+        "--edition=2024",
+        "/tmp/whippyunits-cga/probes/generic_zero_identity.rs",
+        "--extern",
+        "typenum=/tmp/whippyunits-cga/probes/libtypenum.rlib",
+        "--extern",
+        "cga_probe=/tmp/whippyunits-cga/gates/libordinary_named.rlib",
+        "-L",
+        "dependency=/tmp/whippyunits-cga/probes",
+        "-o",
+        "/tmp/whippyunits-cga/gates/ordinary_named_generic_zero"
+      ],
+      "exit_code": 1,
+      "expected_exit_code": 1,
+      "source_sha256": "9d26da4649af46aa6146f26bd54c77ecbd1522fdd067085d581b7bb3c6e8848d",
+      "diagnostic": "error[E0284]: type annotations needed: cannot satisfy `<N<A> as Add<N<0>>>::Output == N<A>`\n --> /tmp/whippyunits-cga/probes/generic_zero_identity.rs:1:62\n  |\n1 | use cga_probe::N; fn zero<const A: i16>(a: N<A>) -> N<A> { a + N::<0> } fn main() {}\n  |                                                              ^ cannot satisfy `<N<A> as Add<N<0>>>::Output == N<A>`\n\nerror: aborting due to 1 previous error\n\nFor more information about this error, try `rustc --explain E0284`.\n"
+    }
+  ],
+  "production_four_gate_check": {
+    "status": 0,
+    "log_excerpt": "                  ^^^^^^^^^^^^^\n   |\nhelp: to change the binary name to `symbol-linter`, convert `bin.name`\n  --> whippyunits-core/Cargo.toml:24:8\n   |\n24 - name = \"symbol_linter\"\n24 + name = \"symbol-linter\"\n   |\nwarning: `whippyunits-core` (manifest) generated 2 warnings\nwarning: explicit `package.readme` can be inferred\n  --> Cargo.toml:30:1\n   |\n30 | readme = \"README.md\"\n   | ^^^^^^^^^^^^^^^^^^^^\n   |\n   = note: `cargo::manual_readme` is set to `warn` by default\nhelp: consider removing `package.readme`\nwarning: `whippyunits` (manifest) generated 1 warning\nwarning: explicit `package.readme` can be inferred\n  --> whippyalgebra/Cargo.toml:11:1\n   |\n11 | readme = \"README.md\"\n   | ^^^^^^^^^^^^^^^^^^^^\n   |\n   = note: `cargo::manual_readme` is set to `warn` by default\nhelp: consider removing `package.readme`\nwarning: `whippyalgebra` (manifest) generated 1 warning\nwarning: explicit `package.readme` can be inferred\n  --> lsp-proxy/Cargo.toml:11:1\n   |\n11 | readme = \"README.md\"\n   | ^^^^^^^^^^^^^^^^^^^^\n   |\n   = note: `cargo::manual_readme` is set to `warn` by default\nhelp: consider removing `package.readme`\nwarning: `whippyunits-lsp-proxy` (manifest) generated 1 warning\n    Checking unicode-ident v1.0.20\n    Checking typenum v1.20.1\n    Checking proc-macro2 v1.0.102\n    Checking quote v1.0.41\n    Checking syn v2.0.108\n    Checking whippyunits-core v0.3.0 (/tmp/whippyunits-macro-compile-time/whippyunits-core)\n    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.80s\n"
+  },
+  "production_four_gate_test": {
+    "status": 101,
+    "diagnostic": "warning: binary `conversion_factor_linter` should have a kebab-case name\n   |\n 1 | /tmp/whippyunits-cga/native-target/.../conversion_factor_linter\n   |                                        ^^^^^^^^^^^^^^^^^^^^^^^^\n   |\n   = note: `cargo::non_kebab_case_bins` is set to `warn` by default\nhelp: to change the binary name to `conversion-factor-linter`, convert `bin.name`\n  --> whippyunits-core/Cargo.toml:28:8\n   |\n28 - name = \"conversion_factor_linter\"\n28 + name = \"conversion-factor-linter\"\n   |\nwarning: binary `symbol_linter` should have a kebab-case name\n   |\n 1 | /tmp/whippyunits-cga/native-target/.../symbol_linter\n   |                                        ^^^^^^^^^^^^^\n   |\nhelp: to change the binary name to `symbol-linter`, convert `bin.name`\n  --> whippyunits-core/Cargo.toml:24:8\n   |\n24 - name = \"symbol_linter\"\n24 + name = \"symbol-linter\"\n   |\nwarning: `whippyunits-core` (manifest) generated 2 warnings\nwarning: explicit `package.readme` can be inferred\n  --> Cargo.toml:30:1\n   |\n30 | readme = \"README.md\"\n   | ^^^^^^^^^^^^^^^^^^^^\n   |\n   = note: `cargo::manual_readme` is set to `warn` by default\nhelp: consider removing `package.readme`\nwarning: `whippyunits` (manifest) generated 1 warning\nwarning: explicit `package.readme` can be inferred\n  --> whippyalgebra/Cargo.toml:11:1\n   |\n11 | readme = \"README.md\"\n   | ^^^^^^^^^^^^^^^^^^^^\n   |\n   = note: `cargo::manual_readme` is set to `warn` by default\nhelp: consider removing `package.readme`\nwarning: `whippyalgebra` (manifest) generated 1 warning\nwarning: explicit `package.readme` can be inferred\n  --> lsp-proxy/Cargo.toml:11:1\n   |\n11 | readme = \"README.md\"\n   | ^^^^^^^^^^^^^^^^^^^^\n   |\n   = note: `cargo::manual_readme` is set to `warn` by default\nhelp: consider removing `package.readme`\nwarning: `whippyunits-lsp-proxy` (manifest) generated 1 warning\n   Compiling whippyunits-core v0.3.0 (/tmp/whippyunits-macro-compile-time/whippyunits-core)\nnote: no errors encountered even though delayed bugs were created\n\nnote: those delayed bugs will now be shown as internal compiler errors\n\nerror: internal compiler error: Type system constant with non valtree'able type evaluated but no error emitted\n  |\n  = note: delayed at /rustc-dev/809936eac66c547a5127ce1da805f0d3a6789b98/compiler/rustc_trait_selection/src/traits/mod.rs:777:39 - disabled backtrace\n\nerror: internal compiler error: Unevaluated `ty::Const` in MIR body\n  |\n  = note: delayed at /rustc-dev/809936eac66c547a5127ce1da805f0d3a6789b98/compiler/rustc_middle/src/mir/consts.rs:339:35 - disabled backtrace\n\nnote: we would appreciate a bug report: https://github.com/rust-lang/rust/issues/new?labels=C-bug%2C+I-ICE%2C+T-compiler&template=ice.md\n\nnote: please make sure that you have updated to the latest nightly\n\nnote: please attach the file at `/tmp/whippyunits-macro-compile-time/rustc-ice-2026-09-18T20_50_24-19.txt` to your bug report\n\nnote: rustc 1.100.0-nightly (809936eac 2026-09-12) running on x86_64-unknown-linux-gnu\n\nnote: compiler flags: -C embed-bitcode=no -C debuginfo=2\n\nnote: some of the compiler flags provided by cargo are hidden\n\nquery stack during panic:\nend of query stack\nerror: could not compile `whippyunits-core` (lib test)\n\nCaused by:\n  process didn't exit successfully: `/home/bc/.rustup/toolchains/nightly-2026-09-13-x86_64-unknown-linux-gnu/bin/rustc --crate-name whippyunits_core --edition=2024 whippyunits-core/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts,future-incompat,unused-externs-silent --emit=dep-info,link -C embed-bitcode=no -C debuginfo=2 --allow=mixed_script_confusables --test --cfg 'feature=\"nightly-gca\"' --check-cfg 'cfg(docsrs,test)' --check-cfg 'cfg(feature, values(\"default\", \"nightly-gca\", \"wide-exponents\"))' -C metadata=dcbe0aca53d60a0f -C extra-filename=-e62d1248bf4eee6f --out-dir /tmp/whippyunits-cga/native-target/debug/build/whippyunits-core/e62d1248bf4eee6f/out -L dependency=/tmp/whippyunits-cga/native-target/debug/build/proc-macro2/52d2445a13ace3e6/out -L dependency=/tmp/whippyunits-cga/native-target/debug/build/quote/545b255aba430c0f/out -L dependency=/tmp/whippyunits-cga/native-target/debug/build/unicode-ident/5f7da4bdbde036b0/out --extern proc_macro2=/tmp/whippyunits-cga/native-target/debug/build/proc-macro2/52d2445a13ace3e6/out/libproc_macro2-52d2445a13ace3e6.rlib --extern proc_macro2=/tmp/whippyunits-cga/native-target/debug/build/proc-macro2/52d2445a13ace3e6/out/libproc_macro2-52d2445a13ace3e6.rmeta --extern syn=/tmp/whippyunits-cga/native-target/debug/build/syn/c0891d7db5c58181/out/libsyn-c0891d7db5c58181.rlib --extern syn=/tmp/whippyunits-cga/native-target/debug/build/syn/c0891d7db5c58181/out/libsyn-c0891d7db5c58181.rmeta --extern typenum=/tmp/whippyunits-cga/native-target/debug/build/typenum/deb82593482796b3/out/libtypenum-deb82593482796b3.rlib --extern typenum=/tmp/whippyunits-cga/native-target/debug/build/typenum/deb82593482796b3/out/libtypenum-deb82593482796b3.rmeta --force-warn=unused_crate_dependencies` (exit status: 101)\n"
+  },
+  "test_harness_minimized": "See scripts/experiments/cga/probes/test-harness-results.json: a trivial #[test] with min_generic_const_args + generic_const_args crashes the pinned compiler.",
+  "resolution": "Three feature gates and explicit core::direct_const_arg! inside optional whippyunits-num; no library test harness; ordinary external integration tests."
+}
