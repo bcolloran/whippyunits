@@ -1,0 +1,145 @@
+--- /dev/null
++++ b/.github/workflows/index-bridges.yml
+@@ -0,0 +1,21 @@
++name: Index bridges
++
++on:
++  push:
++    branches: [main, develop]
++  pull_request:
++    branches: [main, develop]
++  workflow_dispatch:
++
++jobs:
++  index-bridges:
++    runs-on: ubuntu-latest
++    steps:
++      - uses: actions/checkout@v4
++      - uses: dtolnay/rust-toolchain@stable
++      - name: Check reduced nalgebra bridge without allocation
++        run: cargo check --locked -p whippyalgebra --lib --no-default-features --features nalgebra
++      - name: Test backend-free indexing and its wider domain
++        run: cargo test --locked -p whippyalgebra --test standalone_indexing --no-default-features --features standalone-indexing
++      - name: Check default compatibility
++        run: cargo check --locked -p whippyalgebra --lib
+--- a/whippyalgebra/Cargo.toml
++++ b/whippyalgebra/Cargo.toml
+@@ -13,7 +13,7 @@
+ [features]
+ # Extend arithmetic inputs from +/-32 to +/-200 without changing quantity types.
+ wide-exponents = ["whippyunits/wide-exponents"]
+-default = ["std", "nalgebra", "all-units", "literals", "wide-exponents"]
++default = ["std", "nalgebra", "all-units", "literals", "wide-exponents", "standalone-indexing"]
+ # Standard library support. On by default; turning it off makes the crate
+ # `#![no_std]`. `std` is additive over `alloc`: it enables everything `alloc`
+ # does, plus std-only niceties in the dependency tree (e.g. nalgebra's
+@@ -33,6 +33,9 @@
+ # machinery (`dims`, `index`, `entry`) while a different linear-algebra backend
+ # adapter is used.
+ nalgebra = ["dep:nalgebra"]
++# Keep typenum's full const-generic index bridge for backend-free consumers.
++# Nalgebra supplies its own bridge and does not need this mapping catalog.
++standalone-indexing = ["typenum/const-generics"]
+ 
+ # Forward the optional unit catalogs without forcing them on minimal builds.
+ all-units = ["whippyunits/all-units"]
+@@ -47,10 +50,10 @@
+ [dependencies]
+ whippyunits = { path = "..", version = "0.3.0", default-features = false }
+ whippyalgebra-macros = { path = "../whippyalgebra-macros", version = "0.1.0" }
+-# Type-level naturals + const-generic bridge for indexing/slicing dimension
+-# lists. Shared with the rest of the stack (whippyunits-core uses it too), so we
+-# don't maintain a parallel Peano encoding. `const-generics` gives `Const`/`U`.
+-typenum = { version = "1", features = ["const-generics"] }
++# Type-level naturals shared with nalgebra and the units crate. The optional
++# standalone-indexing feature supplies typenum::Const/ToUInt for backend-free
++# indexing; nalgebra builds use nalgebra::Const/ToTypenum instead.
++typenum = "1"
+ # `default-features = false` drops nalgebra's `std` (forwarded back via our own
+ # `std` feature). `libm` is always on so `f32`/`f64` satisfy `ComplexField` in
+ # `no_std` builds (it is a no-op fallback when `std` is also present); `macros`
+--- a/whippyalgebra/README.md
++++ b/whippyalgebra/README.md
+@@ -58,8 +58,15 @@
+ 
+ ```toml
+ [dependencies]
+-whippyalgebra = { version = "0.1", default-features = false, features = ["std"] }
++whippyalgebra = { version = "0.1", default-features = false, features = ["std", "standalone-indexing"] }
+ ```
++
++Backend-free builds must explicitly enable `standalone-indexing` when default
++features are disabled. This retains the existing `Nat<N>` / `ShapeIndex` API
++and typenum's full supported index domain. A bare `--no-default-features` build
++now reports a configuration error until either this feature or `nalgebra` is
++enabled. The feature is enabled by default for compatibility; another dependency
++can enable it through Cargo feature unification even in a reduced nalgebra build.
+ 
+ ## `no_std` / `no-alloc`
+ 
+@@ -70,7 +77,8 @@
+ |---|---|---|
+ | `std` | Yes | Full standard library; implies `alloc`. Adds nalgebra's `matrixmultiply` fast path and the `std`-only matrix exponential (`.exp()`). |
+ | `alloc` | via `std` | Heap allocation without `std`. Required for matrix `Display` (unit-aware pretty-printing renders each cell to a `String`), dynamically sized matrices (`DMatrix`/`DVector`, `from_dyn`), and the `Vec`/columns/rows uniform constructors. |
+-| `nalgebra` | Yes | The nalgebra backend adapter. |
++| `nalgebra` | Yes | The nalgebra backend adapter and its index bridge. |
++| `standalone-indexing` | Yes | Typenum's full const-generic index bridge for backend-free consumers. Reduced nalgebra builds can omit this feature. |
+ | `all-units` | Yes | All whippyunits constructor and type-alias catalogs. |
+ | `units-dynamics` | via `all-units` | Dynamics constructors and aliases; includes mass, length, time, angle, and derived units. |
+ | `units-si-dynamics` | No | Only the ten coherent SI dynamics constructors and aliases. |
+--- a/whippyalgebra/src/lib.rs
++++ b/whippyalgebra/src/lib.rs
+@@ -186,8 +186,15 @@
+ // as in examples and downstream crates.
+ extern crate self as whippyalgebra;
+ 
++#[cfg(not(any(feature = "nalgebra", feature = "standalone-indexing")))]
++compile_error!(
++    "enable `nalgebra` for its index bridge, or `standalone-indexing` for backend-free indexing"
++);
++
+ pub mod dims;
++#[cfg(any(feature = "nalgebra", feature = "standalone-indexing"))]
+ pub mod entry;
++#[cfg(any(feature = "nalgebra", feature = "standalone-indexing"))]
+ pub mod index;
+ pub mod uniformity;
+ 
+@@ -203,7 +210,9 @@
+     Producted, Reciprocal, RescaleFactors, ToDimensionless, UniformDiag, Unit, UnitRescale, ZipDiv,
+     ZipDivided, ZipMul, ZipMulled, ZipToDimensionless,
+ };
++#[cfg(any(feature = "nalgebra", feature = "standalone-indexing"))]
+ pub use entry::{ColUnitOf, EntryUnit, EntryUnitOf, FromRaw, IntoEntry, RowUnitOf};
++#[cfg(any(feature = "nalgebra", feature = "standalone-indexing"))]
+ pub use index::{
+     Drop, ElemAt, Nat, PowUnit, Repeat, Repeated, ShapeIndex, Sliced, SlicedAt, Take, UnitPow,
+     Unsigned,
+--- /dev/null
++++ b/whippyalgebra/tests/standalone_indexing.rs
+@@ -0,0 +1,25 @@
++//! Backend-free indexing keeps typenum's original types and wider bridge domain.
++#![cfg(all(feature = "standalone-indexing", not(feature = "nalgebra")))]
++
++use whippyalgebra::{DCons, DNil, DimList, ElemAt, Nat, Repeat, ShapeIndex, Unsigned};
++use whippyunits::unit;
++
++trait Same<Rhs> {}
++impl<T> Same<T> for T {}
++fn same<L: Same<R>, R>() {}
++
++#[test]
++fn backend_free_bridge_preserves_typenum_identity_beyond_nalgebra_limit() {
++    same::<Nat<1024>, typenum::U1024>();
++    same::<<typenum::Const<1024> as ShapeIndex>::Nat, typenum::U1024>();
++    assert_eq!(<Nat<1024> as Unsigned>::USIZE, 1024);
++}
++
++#[test]
++fn backend_free_indexing_and_uniform_lists_keep_their_units() {
++    type Units = DCons<unit!(m), DCons<unit!(s), DCons<unit!(kg), DNil>>>;
++    same::<<Units as ElemAt<Nat<1>>>::Elem, unit!(s)>();
++    type ThreeMeters = <Nat<3> as Repeat<unit!(m)>>::Out;
++    assert_eq!(<ThreeMeters as DimList>::LEN, 3);
++    same::<<ThreeMeters as ElemAt<Nat<2>>>::Elem, unit!(m)>();
++}

@@ -1,0 +1,978 @@
+{
+  "scope": "fresh server, warm Cargo artifacts; direct LSP without editor/formatter",
+  "rss_scope": "Linux rust-analyzer process RSS only; sampled every 50 ms; child processes excluded",
+  "profiles": [
+    {
+      "label": "eight",
+      "project_path": "/tmp/whippyunits-four-axis-measure/eight/consumer",
+      "dependency_path": "/tmp/whippyunits-four-axis-measure/eight",
+      "source_sha256": "5114696d216905cb3d19eee8fb49a9d72f242048958f2fa706e5c2e7e43a8419",
+      "probe_sha256": "b2873ac9b6d3c7dc618795bb6ce70fb8ab20749de7554cc2f2bc69f92e27309b"
+    },
+    {
+      "label": "four",
+      "project_path": "/tmp/whippyunits-four-axis-measure/four/consumer",
+      "dependency_path": "/tmp/whippyunits-four-axis-measure/four",
+      "source_sha256": "f09e773fba2903b02f8db1bc4b103d33ae3a5c7815255e242e346733763750f6",
+      "probe_sha256": "b2873ac9b6d3c7dc618795bb6ce70fb8ab20749de7554cc2f2bc69f92e27309b"
+    }
+  ],
+  "server": "/home/bc/.vscode/extensions/rust-lang.rust-analyzer-0.3.3049-linux-x64/server/rust-analyzer",
+  "import_style": "glob",
+  "receiver": "variable",
+  "allow_missing_completion": [],
+  "timed_completion_method": "meters",
+  "required_completions": [
+    "meters"
+  ],
+  "cargo_warmup": true,
+  "cache_priming": true,
+  "runs": 3,
+  "repeated_requests": 5,
+  "samples": [
+    {
+      "profile": "eight",
+      "cycle": 1,
+      "valid": true,
+      "completion_status": "verified",
+      "missing_completion_names": [],
+      "primary_completion_valid": true,
+      "completion_validation": {
+        "meters": {
+          "present": true,
+          "item": {
+            "label": "meters()(as MetricLength)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "meters",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "meters()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-four-axis-measure/eight/consumer/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 2,
+              "for_ref": false,
+              "hash": "v6mnOOeL2sKcTL2oB1mbNJPQ6/0="
+            }
+          }
+        }
+      },
+      "request_ms": {
+        "hover": [
+          56.60187199828215,
+          0.5703599890694022,
+          0.40759998955763876,
+          0.42170999222435057,
+          0.3774099750444293,
+          0.5885099817533046
+        ],
+        "completion": [
+          999.5562299736775,
+          35.74124100850895,
+          18.247589992824942,
+          18.683950998820364,
+          12.748071021633223,
+          13.240369997220114
+        ]
+      },
+      "raw": {
+        "hover": [
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/01-eight.hover-0.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/01-eight.hover-1.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/01-eight.hover-2.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/01-eight.hover-3.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/01-eight.hover-4.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/01-eight.hover-5.json"
+        ],
+        "completion": [
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/01-eight.completion-0.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/01-eight.completion-1.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/01-eight.completion-2.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/01-eight.completion-3.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/01-eight.completion-4.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/01-eight.completion-5.json"
+        ]
+      },
+      "server_info": {
+        "name": "rust-analyzer",
+        "version": "0.3.3049-standalone"
+      },
+      "ready_seconds": 4.037391369987745,
+      "server_ready_rss_kib": 1451520,
+      "server_status": {
+        "health": "ok",
+        "quiescent": true,
+        "message": null
+      },
+      "completion_item_count": 120,
+      "completion_is_incomplete": true,
+      "verified_completion": {
+        "label": "meters()(as MetricLength)",
+        "kind": 2,
+        "sortText": "7fffffec",
+        "filterText": "meters",
+        "insertTextFormat": 2,
+        "textEdit": {
+          "newText": "meters()$0",
+          "insert": {
+            "start": {
+              "line": 33,
+              "character": 23
+            },
+            "end": {
+              "line": 33,
+              "character": 25
+            }
+          },
+          "replace": {
+            "start": {
+              "line": 33,
+              "character": 23
+            },
+            "end": {
+              "line": 33,
+              "character": 25
+            }
+          }
+        },
+        "data": {
+          "position": {
+            "textDocument": {
+              "uri": "file:///tmp/whippyunits-four-axis-measure/eight/consumer/src/main.rs"
+            },
+            "position": {
+              "line": 33,
+              "character": 25
+            }
+          },
+          "version": 2,
+          "for_ref": false,
+          "hash": "v6mnOOeL2sKcTL2oB1mbNJPQ6/0="
+        }
+      },
+      "server_final_rss_kib": 1557600,
+      "server_peak_rss_kib": 1557600
+    },
+    {
+      "profile": "four",
+      "cycle": 1,
+      "valid": true,
+      "completion_status": "verified",
+      "missing_completion_names": [],
+      "primary_completion_valid": true,
+      "completion_validation": {
+        "meters": {
+          "present": true,
+          "item": {
+            "label": "meters()(as MetricLength)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "meters",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "meters()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-four-axis-measure/four/consumer/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 2,
+              "for_ref": false,
+              "hash": "HiPFiQ2dcq0JjZh5dAQ0Ys91WTI="
+            }
+          }
+        }
+      },
+      "request_ms": {
+        "hover": [
+          43.0169110186398,
+          0.38131000474095345,
+          0.7812500116415322,
+          0.2768700069282204,
+          0.29863000963814557,
+          0.3909299848601222
+        ],
+        "completion": [
+          689.9034010129981,
+          34.785530995577574,
+          17.051069997251034,
+          14.065789990127087,
+          15.195640997262672,
+          14.669249998405576
+        ]
+      },
+      "raw": {
+        "hover": [
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/01-four.hover-0.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/01-four.hover-1.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/01-four.hover-2.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/01-four.hover-3.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/01-four.hover-4.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/01-four.hover-5.json"
+        ],
+        "completion": [
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/01-four.completion-0.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/01-four.completion-1.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/01-four.completion-2.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/01-four.completion-3.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/01-four.completion-4.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/01-four.completion-5.json"
+        ]
+      },
+      "server_info": {
+        "name": "rust-analyzer",
+        "version": "0.3.3049-standalone"
+      },
+      "ready_seconds": 3.728088892006781,
+      "server_ready_rss_kib": 1443544,
+      "server_status": {
+        "health": "ok",
+        "quiescent": true,
+        "message": null
+      },
+      "completion_item_count": 120,
+      "completion_is_incomplete": true,
+      "verified_completion": {
+        "label": "meters()(as MetricLength)",
+        "kind": 2,
+        "sortText": "7fffffec",
+        "filterText": "meters",
+        "insertTextFormat": 2,
+        "textEdit": {
+          "newText": "meters()$0",
+          "insert": {
+            "start": {
+              "line": 33,
+              "character": 23
+            },
+            "end": {
+              "line": 33,
+              "character": 25
+            }
+          },
+          "replace": {
+            "start": {
+              "line": 33,
+              "character": 23
+            },
+            "end": {
+              "line": 33,
+              "character": 25
+            }
+          }
+        },
+        "data": {
+          "position": {
+            "textDocument": {
+              "uri": "file:///tmp/whippyunits-four-axis-measure/four/consumer/src/main.rs"
+            },
+            "position": {
+              "line": 33,
+              "character": 25
+            }
+          },
+          "version": 2,
+          "for_ref": false,
+          "hash": "HiPFiQ2dcq0JjZh5dAQ0Ys91WTI="
+        }
+      },
+      "server_final_rss_kib": 1550008,
+      "server_peak_rss_kib": 1550008
+    },
+    {
+      "profile": "four",
+      "cycle": 2,
+      "valid": true,
+      "completion_status": "verified",
+      "missing_completion_names": [],
+      "primary_completion_valid": true,
+      "completion_validation": {
+        "meters": {
+          "present": true,
+          "item": {
+            "label": "meters()(as MetricLength)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "meters",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "meters()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-four-axis-measure/four/consumer/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 2,
+              "for_ref": false,
+              "hash": "HiPFiQ2dcq0JjZh5dAQ0Ys91WTI="
+            }
+          }
+        }
+      },
+      "request_ms": {
+        "hover": [
+          43.86418199283071,
+          0.5995699902996421,
+          0.39798999205231667,
+          0.3557699965313077,
+          0.33668000833131373,
+          5.193009972572327
+        ],
+        "completion": [
+          728.0135920154862,
+          22.35359000042081,
+          18.43674000701867,
+          16.212221002206206,
+          15.565229987259954,
+          15.610140020726249
+        ]
+      },
+      "raw": {
+        "hover": [
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/02-four.hover-0.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/02-four.hover-1.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/02-four.hover-2.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/02-four.hover-3.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/02-four.hover-4.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/02-four.hover-5.json"
+        ],
+        "completion": [
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/02-four.completion-0.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/02-four.completion-1.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/02-four.completion-2.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/02-four.completion-3.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/02-four.completion-4.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/02-four.completion-5.json"
+        ]
+      },
+      "server_info": {
+        "name": "rust-analyzer",
+        "version": "0.3.3049-standalone"
+      },
+      "ready_seconds": 3.8540512649924494,
+      "server_ready_rss_kib": 1449964,
+      "server_status": {
+        "health": "ok",
+        "quiescent": true,
+        "message": null
+      },
+      "completion_item_count": 120,
+      "completion_is_incomplete": true,
+      "verified_completion": {
+        "label": "meters()(as MetricLength)",
+        "kind": 2,
+        "sortText": "7fffffec",
+        "filterText": "meters",
+        "insertTextFormat": 2,
+        "textEdit": {
+          "newText": "meters()$0",
+          "insert": {
+            "start": {
+              "line": 33,
+              "character": 23
+            },
+            "end": {
+              "line": 33,
+              "character": 25
+            }
+          },
+          "replace": {
+            "start": {
+              "line": 33,
+              "character": 23
+            },
+            "end": {
+              "line": 33,
+              "character": 25
+            }
+          }
+        },
+        "data": {
+          "position": {
+            "textDocument": {
+              "uri": "file:///tmp/whippyunits-four-axis-measure/four/consumer/src/main.rs"
+            },
+            "position": {
+              "line": 33,
+              "character": 25
+            }
+          },
+          "version": 2,
+          "for_ref": false,
+          "hash": "HiPFiQ2dcq0JjZh5dAQ0Ys91WTI="
+        }
+      },
+      "server_final_rss_kib": 1556812,
+      "server_peak_rss_kib": 1556812
+    },
+    {
+      "profile": "eight",
+      "cycle": 2,
+      "valid": true,
+      "completion_status": "verified",
+      "missing_completion_names": [],
+      "primary_completion_valid": true,
+      "completion_validation": {
+        "meters": {
+          "present": true,
+          "item": {
+            "label": "meters()(as MetricLength)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "meters",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "meters()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-four-axis-measure/eight/consumer/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 2,
+              "for_ref": false,
+              "hash": "v6mnOOeL2sKcTL2oB1mbNJPQ6/0="
+            }
+          }
+        }
+      },
+      "request_ms": {
+        "hover": [
+          36.0486010031309,
+          0.7324499893002212,
+          0.4054000019095838,
+          0.3807100001722574,
+          0.3043699834961444,
+          0.3928600053768605
+        ],
+        "completion": [
+          705.5358809884638,
+          28.232170996489003,
+          12.63098098570481,
+          22.04576099757105,
+          17.415699985576794,
+          11.710790015058592
+        ]
+      },
+      "raw": {
+        "hover": [
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/02-eight.hover-0.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/02-eight.hover-1.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/02-eight.hover-2.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/02-eight.hover-3.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/02-eight.hover-4.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/02-eight.hover-5.json"
+        ],
+        "completion": [
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/02-eight.completion-0.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/02-eight.completion-1.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/02-eight.completion-2.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/02-eight.completion-3.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/02-eight.completion-4.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/02-eight.completion-5.json"
+        ]
+      },
+      "server_info": {
+        "name": "rust-analyzer",
+        "version": "0.3.3049-standalone"
+      },
+      "ready_seconds": 3.784596142999362,
+      "server_ready_rss_kib": 1451048,
+      "server_status": {
+        "health": "ok",
+        "quiescent": true,
+        "message": null
+      },
+      "completion_item_count": 120,
+      "completion_is_incomplete": true,
+      "verified_completion": {
+        "label": "meters()(as MetricLength)",
+        "kind": 2,
+        "sortText": "7fffffec",
+        "filterText": "meters",
+        "insertTextFormat": 2,
+        "textEdit": {
+          "newText": "meters()$0",
+          "insert": {
+            "start": {
+              "line": 33,
+              "character": 23
+            },
+            "end": {
+              "line": 33,
+              "character": 25
+            }
+          },
+          "replace": {
+            "start": {
+              "line": 33,
+              "character": 23
+            },
+            "end": {
+              "line": 33,
+              "character": 25
+            }
+          }
+        },
+        "data": {
+          "position": {
+            "textDocument": {
+              "uri": "file:///tmp/whippyunits-four-axis-measure/eight/consumer/src/main.rs"
+            },
+            "position": {
+              "line": 33,
+              "character": 25
+            }
+          },
+          "version": 2,
+          "for_ref": false,
+          "hash": "v6mnOOeL2sKcTL2oB1mbNJPQ6/0="
+        }
+      },
+      "server_final_rss_kib": 1557504,
+      "server_peak_rss_kib": 1557504
+    },
+    {
+      "profile": "eight",
+      "cycle": 3,
+      "valid": true,
+      "completion_status": "verified",
+      "missing_completion_names": [],
+      "primary_completion_valid": true,
+      "completion_validation": {
+        "meters": {
+          "present": true,
+          "item": {
+            "label": "meters()(as MetricLength)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "meters",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "meters()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-four-axis-measure/eight/consumer/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 2,
+              "for_ref": false,
+              "hash": "v6mnOOeL2sKcTL2oB1mbNJPQ6/0="
+            }
+          }
+        }
+      },
+      "request_ms": {
+        "hover": [
+          49.343481980031356,
+          0.5250099929980934,
+          0.4021200002171099,
+          0.2962400030810386,
+          0.371259986422956,
+          0.41013999725691974
+        ],
+        "completion": [
+          829.0756150090601,
+          31.62381099537015,
+          17.393801012076437,
+          14.799940021475777,
+          15.356121002696455,
+          13.42030000523664
+        ]
+      },
+      "raw": {
+        "hover": [
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/03-eight.hover-0.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/03-eight.hover-1.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/03-eight.hover-2.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/03-eight.hover-3.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/03-eight.hover-4.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/03-eight.hover-5.json"
+        ],
+        "completion": [
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/03-eight.completion-0.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/03-eight.completion-1.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/03-eight.completion-2.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/03-eight.completion-3.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/03-eight.completion-4.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/03-eight.completion-5.json"
+        ]
+      },
+      "server_info": {
+        "name": "rust-analyzer",
+        "version": "0.3.3049-standalone"
+      },
+      "ready_seconds": 3.762557762005599,
+      "server_ready_rss_kib": 1453000,
+      "server_status": {
+        "health": "ok",
+        "quiescent": true,
+        "message": null
+      },
+      "completion_item_count": 120,
+      "completion_is_incomplete": true,
+      "verified_completion": {
+        "label": "meters()(as MetricLength)",
+        "kind": 2,
+        "sortText": "7fffffec",
+        "filterText": "meters",
+        "insertTextFormat": 2,
+        "textEdit": {
+          "newText": "meters()$0",
+          "insert": {
+            "start": {
+              "line": 33,
+              "character": 23
+            },
+            "end": {
+              "line": 33,
+              "character": 25
+            }
+          },
+          "replace": {
+            "start": {
+              "line": 33,
+              "character": 23
+            },
+            "end": {
+              "line": 33,
+              "character": 25
+            }
+          }
+        },
+        "data": {
+          "position": {
+            "textDocument": {
+              "uri": "file:///tmp/whippyunits-four-axis-measure/eight/consumer/src/main.rs"
+            },
+            "position": {
+              "line": 33,
+              "character": 25
+            }
+          },
+          "version": 2,
+          "for_ref": false,
+          "hash": "v6mnOOeL2sKcTL2oB1mbNJPQ6/0="
+        }
+      },
+      "server_final_rss_kib": 1559684,
+      "server_peak_rss_kib": 1559684
+    },
+    {
+      "profile": "four",
+      "cycle": 3,
+      "valid": true,
+      "completion_status": "verified",
+      "missing_completion_names": [],
+      "primary_completion_valid": true,
+      "completion_validation": {
+        "meters": {
+          "present": true,
+          "item": {
+            "label": "meters()(as MetricLength)",
+            "kind": 2,
+            "sortText": "7fffffec",
+            "filterText": "meters",
+            "insertTextFormat": 2,
+            "textEdit": {
+              "newText": "meters()$0",
+              "insert": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "replace": {
+                "start": {
+                  "line": 33,
+                  "character": 23
+                },
+                "end": {
+                  "line": 33,
+                  "character": 25
+                }
+              }
+            },
+            "data": {
+              "position": {
+                "textDocument": {
+                  "uri": "file:///tmp/whippyunits-four-axis-measure/four/consumer/src/main.rs"
+                },
+                "position": {
+                  "line": 33,
+                  "character": 25
+                }
+              },
+              "version": 2,
+              "for_ref": false,
+              "hash": "HiPFiQ2dcq0JjZh5dAQ0Ys91WTI="
+            }
+          }
+        }
+      },
+      "request_ms": {
+        "hover": [
+          54.54179100343026,
+          0.4806600045412779,
+          0.37721998523920774,
+          0.3771900082938373,
+          0.5996499967295676,
+          0.41062000673264265
+        ],
+        "completion": [
+          791.3326039852109,
+          47.51857201335952,
+          16.30719000240788,
+          16.59581999410875,
+          16.99663102044724,
+          16.37252001091838
+        ]
+      },
+      "raw": {
+        "hover": [
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/03-four.hover-0.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/03-four.hover-1.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/03-four.hover-2.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/03-four.hover-3.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/03-four.hover-4.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/03-four.hover-5.json"
+        ],
+        "completion": [
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/03-four.completion-0.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/03-four.completion-1.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/03-four.completion-2.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/03-four.completion-3.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/03-four.completion-4.json",
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis-local/03-four.completion-5.json"
+        ]
+      },
+      "server_info": {
+        "name": "rust-analyzer",
+        "version": "0.3.3049-standalone"
+      },
+      "ready_seconds": 3.792902593006147,
+      "server_ready_rss_kib": 1454168,
+      "server_status": {
+        "health": "ok",
+        "quiescent": true,
+        "message": null
+      },
+      "completion_item_count": 120,
+      "completion_is_incomplete": true,
+      "verified_completion": {
+        "label": "meters()(as MetricLength)",
+        "kind": 2,
+        "sortText": "7fffffec",
+        "filterText": "meters",
+        "insertTextFormat": 2,
+        "textEdit": {
+          "newText": "meters()$0",
+          "insert": {
+            "start": {
+              "line": 33,
+              "character": 23
+            },
+            "end": {
+              "line": 33,
+              "character": 25
+            }
+          },
+          "replace": {
+            "start": {
+              "line": 33,
+              "character": 23
+            },
+            "end": {
+              "line": 33,
+              "character": 25
+            }
+          }
+        },
+        "data": {
+          "position": {
+            "textDocument": {
+              "uri": "file:///tmp/whippyunits-four-axis-measure/four/consumer/src/main.rs"
+            },
+            "position": {
+              "line": 33,
+              "character": 25
+            }
+          },
+          "version": 2,
+          "for_ref": false,
+          "hash": "HiPFiQ2dcq0JjZh5dAQ0Ys91WTI="
+        }
+      },
+      "server_final_rss_kib": 1560136,
+      "server_peak_rss_kib": 1560136
+    }
+  ],
+  "server_version": "rust-analyzer 0.3.3049-standalone",
+  "rustc_version": "rustc 1.98.1 (48a229cea 2026-09-01)",
+  "summary": {
+    "eight": {
+      "valid_runs": 3,
+      "ready_seconds_median": 3.784596142999362,
+      "completion_missing_runs": 0,
+      "server_ready_rss_kib_median": 1451520,
+      "server_final_rss_kib_median": 1557600,
+      "server_peak_rss_kib_median": 1557600,
+      "hover_valid_runs": 3,
+      "hover_first_ms_median": 49.343481980031356,
+      "hover_repeated_ms_median": 0.4054000019095838,
+      "completion_valid_runs": 3,
+      "completion_first_ms_median": 829.0756150090601,
+      "completion_repeated_ms_median": 17.393801012076437
+    },
+    "four": {
+      "valid_runs": 3,
+      "ready_seconds_median": 3.792902593006147,
+      "completion_missing_runs": 0,
+      "server_ready_rss_kib_median": 1449964,
+      "server_final_rss_kib_median": 1556812,
+      "server_peak_rss_kib_median": 1556812,
+      "hover_valid_runs": 3,
+      "hover_first_ms_median": 43.86418199283071,
+      "hover_repeated_ms_median": 0.3909299848601222,
+      "completion_valid_runs": 3,
+      "completion_first_ms_median": 728.0135920154862,
+      "completion_repeated_ms_median": 16.37252001091838
+    }
+  }
+}

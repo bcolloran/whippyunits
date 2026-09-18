@@ -8,6 +8,9 @@ Example (use immutable source snapshots for reproducible comparisons):
     --output /tmp/whippyunits-ra-results --runs 3
 
 Each profile becomes a standalone Cargo consumer with default features disabled.
+Use --project-profile for an existing locked probe; its lockfile and source
+imports are preserved. --import-style rewrites imports only in generated probes;
+for existing probes, select the style already present (autoimport adds validation).
 Cargo dependencies are warmed outside the timing window; each sample starts a
 fresh server, waits for indexing/cache priming, then measures first/repeated
 hover and completion. Every timed completion must offer a usable `meters()`
@@ -114,7 +117,26 @@ class LspClient:
         self.last_status = None
         self.saw_busy = False
         self.ready_seconds = None
+        self.rss_peak_kib = None
+        self.memory_stop = threading.Event()
         threading.Thread(target=self.read_messages, daemon=True).start()
+        threading.Thread(target=self.sample_memory, daemon=True).start()
+
+    def rss_kib(self):
+        """Linux server RSS only; excludes Cargo and proc-macro children."""
+        try:
+            status = Path(f"/proc/{self.process.pid}/status").read_text()
+            match = re.search(r"^VmRSS:\s+(\d+) kB$", status, re.M)
+            return int(match[1]) if match else None
+        except (OSError, ValueError):
+            return None
+
+    def sample_memory(self):
+        while not self.memory_stop.is_set():
+            rss = self.rss_kib()
+            if rss is not None:
+                self.rss_peak_kib = max(self.rss_peak_kib or 0, rss)
+            self.memory_stop.wait(0.05)
 
     def read_messages(self):
         try:
@@ -209,6 +231,7 @@ class LspClient:
         return self.ready_seconds
 
     def close(self):
+        self.memory_stop.set()
         try:
             self.request("shutdown", None, timeout=5)
             self.notify("exit", None)
@@ -263,13 +286,25 @@ def collect_failure_diagnostics(args, profile, client, uri, source, stem):
 def source_fingerprint(root):
     digest = hashlib.sha256()
     files = []
-    for directory in [root, root / "proc-macros", root / "whippyunits-core"]:
-        manifest = directory / "Cargo.toml"
-        if manifest.is_file():
-            files.append(manifest)
+    for directory in [root, root / "proc-macros", root / "whippyunits-core",
+                      root / "whippyalgebra", root / "whippyalgebra-macros", root / "vendor/typenum",
+                      root / "engine", root / "consumer"]:
+        for name in ("Cargo.toml", "Cargo.lock", "rust-toolchain.toml", "build.rs"):
+            path = directory / name
+            if path.is_file():
+                files.append(path)
         files.extend((directory / "src").rglob("*.rs"))
+    # The isolated axis fixture keeps shared implementations alongside both
+    # workspaces; include those inputs as well as representation.rs above.
+    if (root / "engine").is_dir():
+        files.extend((root.parent / "common").glob("*.rs"))
+        core = root.parent / "source/whippyunits-core"
+        files.extend((core / "src").rglob("*.rs"))
+        for name in ("Cargo.toml", "build.rs"):
+            if (core / name).is_file():
+                files.append(core / name)
     for path in sorted(files):
-        digest.update(str(path.relative_to(root)).encode())
+        digest.update(os.path.relpath(path, root).encode())
         digest.update(b"\0")
         digest.update(path.read_bytes())
         digest.update(b"\0")
@@ -300,7 +335,7 @@ def measure(args, profile, cycle, project, source, environment):
            "request_ms": {"hover": [], "completion": []}, "raw": {}}
     settings = {
         "checkOnSave": False,
-        "cargo": {"allTargets": False, "extraArgs": ["--offline"]},
+        "cargo": {"allTargets": False, "extraArgs": ["--offline", "--locked"]},
         "procMacro": {"enable": True}, "cachePriming": {"enable": True},
         "completion": {"autoimport": {"enable": True}, "limit": None},
     }
@@ -341,6 +376,7 @@ def measure(args, profile, cycle, project, source, environment):
             "uri": uri, "languageId": "rust", "version": 1, "text": source,
         }})
         row["ready_seconds"] = client.wait_ready(args.load_timeout)
+        row["server_ready_rss_kib"] = client.rss_kib()
         row["server_status"] = client.last_status
         print(json.dumps({"event": "indexed", "profile": profile["label"], "cycle": cycle,
                           "seconds": row["ready_seconds"]}), flush=True)
@@ -439,6 +475,10 @@ def measure(args, profile, cycle, project, source, environment):
                 collect_failure_diagnostics(args, profile, client, uri, source, stem)
             except Exception as diagnostics_error:
                 row["diagnostics_error"] = repr(diagnostics_error)
+        row["server_final_rss_kib"] = client.rss_kib()
+        observed_rss = [value for value in (client.rss_peak_kib, row["server_final_rss_kib"],
+                        row.get("server_ready_rss_kib")) if value is not None]
+        row["server_peak_rss_kib"] = max(observed_rss) if observed_rss else None
         client.close()
         write_json(args.output / f"{stem}.events.json", client.events)
         log.close()
@@ -455,6 +495,9 @@ def summarize(rows):
         result = {"valid_runs": len(valid),
                   "ready_seconds_median": statistics.median(row["ready_seconds"] for row in valid)}
         result["completion_missing_runs"] = sum(bool(row["missing_completion_names"]) for row in valid)
+        for key in ("server_ready_rss_kib", "server_final_rss_kib", "server_peak_rss_kib"):
+            available = [row[key] for row in valid if row.get(key) is not None]
+            result[key + "_median"] = statistics.median(available) if available else None
         for kind in ("hover", "completion"):
             available = [row for row in valid if row["request_ms"][kind]
                          and (kind != "completion" or row["primary_completion_valid"])]
@@ -470,7 +513,9 @@ def summarize(rows):
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--server", type=Path, required=True)
-    parser.add_argument("--profile", nargs=3, action="append", metavar=("LABEL", "DEPENDENCY_PATH", "FEATURES"), required=True)
+    parser.add_argument("--profile", nargs=3, action="append", default=[], metavar=("LABEL", "DEPENDENCY_PATH", "FEATURES"))
+    parser.add_argument("--project-profile", nargs=2, action="append", default=[], metavar=("LABEL", "PROJECT"),
+                        help="Use an existing locked Cargo probe, preserving its dependency patches, source and imports")
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--runs", type=int, default=3)
     parser.add_argument("--repeats", type=int, default=5, help="Additional cached requests after the first request")
@@ -509,18 +554,35 @@ def main():
         profiles.append({"label": label, "dependency_path": dependency,
                          "features": [x for x in features.split(",") if x], "default_features": False,
                          "source_sha256": source_fingerprint(Path(dependency))})
+    for label, directory in args.project_profile:
+        if not re.fullmatch(r"[a-z][a-z0-9_-]*", label) or any(p["label"] == label for p in profiles):
+            parser.error("project profile labels must be unique lowercase identifiers")
+        project = Path(directory).expanduser().resolve()
+        if not (project / "Cargo.toml").is_file() or not (project / "src/main.rs").is_file():
+            parser.error(f"project profile needs Cargo.toml and src/main.rs: {project}")
+        profiles.append({"label": label, "project_path": str(project), "dependency_path": str(project.parent),
+                         "source_sha256": source_fingerprint(project.parent),
+                         "probe_sha256": source_fingerprint(project)})
+    if not profiles:
+        parser.error("at least one --profile or --project-profile is required")
     if set(args.allow_missing_completion) - {p["label"] for p in profiles}:
         parser.error("--allow-missing-completion labels must match a --profile")
     report = {"scope": "fresh server, warm Cargo artifacts; direct LSP without editor/formatter",
+              "rss_scope": "Linux rust-analyzer process RSS only; sampled every 50 ms; child processes excluded",
               "profiles": profiles, "server": str(args.server), "import_style": args.import_style,
               "receiver": args.receiver, "allow_missing_completion": args.allow_missing_completion,
               "timed_completion_method": "meters", "required_completions": args.required_completions,
               "cargo_warmup": not args.skip_warmup, "cache_priming": True,
+              "cargo_lock_policy": "Existing project profiles use --locked for warmup and analysis; generated profiles may create a lock during warmup, then analysis uses --locked",
               "runs": args.runs, "repeated_requests": args.repeats, "samples": []}
     projects = {}
     for profile in profiles:
-        project = args.output / "projects" / profile["label"]
-        projects[profile["label"]] = (project, make_project(project, profile, args.import_style))
+        if "project_path" in profile:
+            project = Path(profile["project_path"])
+            projects[profile["label"]] = (project, (project / "src/main.rs").read_text())
+        else:
+            project = args.output / "projects" / profile["label"]
+            projects[profile["label"]] = (project, make_project(project, profile, args.import_style))
     write_json(args.output / "results.json", report)
     if args.prepare_only:
         print(json.dumps({"prepared": [str(project) for project, _ in projects.values()]}))
@@ -535,7 +597,10 @@ def main():
         for profile in profiles:
             project, _ = projects[profile["label"]]
             with (args.output / f'{profile["label"]}.cargo-warmup.log').open("w") as log:
-                subprocess.run(["cargo", "check", "--offline"], cwd=project, env=environment,
+                command = ["cargo", "check", "--offline"]
+                if "project_path" in profile:
+                    command.append("--locked")
+                subprocess.run(command, cwd=project, env=environment,
                                stdout=log, stderr=subprocess.STDOUT, check=True)
     for cycle in range(1, args.runs + 1):
         order = profiles if cycle % 2 else list(reversed(profiles))

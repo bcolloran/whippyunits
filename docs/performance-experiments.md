@@ -42,16 +42,26 @@ prototypes are documented in [mks-performance-hypotheses.md](mks-performance-hyp
 | Coherent SI dynamics catalog | Retained | Rebuild/check median 3.007 s → 2.114 s (29.7% lower), broad dynamics vs coherent SI conveniences |
 | Pre-generated fixed catalogs | Retained for editor correctness | Revised checks effectively unchanged: SI 2.159 s → 2.162 s; broad dynamics 3.064 s → 3.079 s. All ten constructor completions verified |
 | Remove phantom trait bounds | Retained as a bound cleanup | Rebuild/check 2.156 s → 2.151 s (0.2%, effectively unchanged); opaque markers now support Clone/Copy/Pod |
+| Dynamics catalog with conversions | Retained | Adds degrees and fixed 1/60-second ticks to the ten coherent constructors; preserves scale arithmetic |
+| Optional typenum const mappings | Not adopted | Dependency-chain check −3.3%, but focused editor first hover +4.9%; no editor benefit established |
+| Explicit exponent arithmetic table | Rejected | Dependency-chain check +91.3%, first completion +120.9%, editor RSS +39.5% |
+| Slim vendored typenum | Experiment preserved | Typenum-only check −34.9%; whole-chain median −5.5% with substantial noise, editor RSS −0.7% |
+| Four physical axes with conversions | Prototype measured | Solver-heavy consumer check −20.7%; production integration remains separate, editor benefit not established |
 | Simplify raw matrix element construction | Queued | Remove redundant twelve-exponent obligations |
 | Improve type-level unit powers | Queued | Preserve intermediate-domain behavior or document deliberate limits |
 | Separate arithmetic core from parsing | Queued | Measure host and target dependency costs separately |
 | Optional numeric conversions and decomposition APIs | Queued | Preserve defaults; benchmark reduced consumers |
-| Four-axis coherent representation | Queued | Isolated compatibility and performance prototype |
 | Separate branded representation | Queued | Adopt only if measurement justifies extra API machinery |
 | Hover scaffolding and incremental-build settings | Queued | Measure editor behavior, including documentation quality |
 
+The latest round is documented with reproducible variants, validation and raw
+samples in [typenum-dynamics-experiments.md](typenum-dynamics-experiments.md).
+It uses a larger nalgebra consumer, so its timings are not directly comparable
+to the earlier scalar/three-crate results above.
+
 Select the retained lean profile with `default-features = false` and
-`features = ["std", "units-si-dynamics"]`. For `whippyalgebra`, also enable
+`features = ["std", "units-dynamics-conversions"]` to include degrees and ticks.
+The ten-constructor `units-si-dynamics` profile remains available. For `whippyalgebra`, also enable
 `"nalgebra"`. Add `"wide-exponents"` if any intermediate dimension or scale
 exponent needs magnitude greater than 32. Existing default features still
 provide the full catalogs and wide bridge. These feature additions are on this

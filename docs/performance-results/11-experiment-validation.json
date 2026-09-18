@@ -1,0 +1,788 @@
+{
+  "conversion_profile": [
+    {
+      "name": "core",
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "-p",
+        "whippyunits-core",
+        "--lib",
+        "--no-default-features"
+      ],
+      "status": 0
+    },
+    {
+      "name": "none_public",
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "-p",
+        "whippyunits",
+        "--test",
+        "catalog_features",
+        "--no-default-features",
+        "--features",
+        ""
+      ],
+      "status": 0
+    },
+    {
+      "name": "none_snapshot",
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "-p",
+        "whippyunits-proc-macros",
+        "--lib",
+        "--no-default-features",
+        "--features",
+        ""
+      ],
+      "status": 0
+    },
+    {
+      "name": "coherent_public",
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "-p",
+        "whippyunits",
+        "--test",
+        "catalog_features",
+        "--no-default-features",
+        "--features",
+        "units-si-dynamics,literals"
+      ],
+      "status": 0
+    },
+    {
+      "name": "coherent_snapshot",
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "-p",
+        "whippyunits-proc-macros",
+        "--lib",
+        "--no-default-features",
+        "--features",
+        "units-si-dynamics,literals"
+      ],
+      "status": 0
+    },
+    {
+      "name": "conversions_public",
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "-p",
+        "whippyunits",
+        "--test",
+        "catalog_features",
+        "--no-default-features",
+        "--features",
+        "units-dynamics-conversions"
+      ],
+      "status": 0
+    },
+    {
+      "name": "conversions_snapshot",
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "-p",
+        "whippyunits-proc-macros",
+        "--lib",
+        "--no-default-features",
+        "--features",
+        "units-dynamics-conversions"
+      ],
+      "status": 0
+    },
+    {
+      "name": "conversion_literals_public",
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "-p",
+        "whippyunits",
+        "--test",
+        "catalog_features",
+        "--no-default-features",
+        "--features",
+        "units-dynamics-conversions,literals"
+      ],
+      "status": 0
+    },
+    {
+      "name": "conversion_literals_snapshot",
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "-p",
+        "whippyunits-proc-macros",
+        "--lib",
+        "--no-default-features",
+        "--features",
+        "units-dynamics-conversions,literals"
+      ],
+      "status": 0
+    },
+    {
+      "name": "broad_union_public",
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "-p",
+        "whippyunits",
+        "--test",
+        "catalog_features",
+        "--no-default-features",
+        "--features",
+        "units-dynamics-conversions,units-dynamics"
+      ],
+      "status": 0
+    },
+    {
+      "name": "broad_union_snapshot",
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "-p",
+        "whippyunits-proc-macros",
+        "--lib",
+        "--no-default-features",
+        "--features",
+        "units-dynamics-conversions,units-dynamics"
+      ],
+      "status": 0
+    },
+    {
+      "name": "thermal_union_public",
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "-p",
+        "whippyunits",
+        "--test",
+        "catalog_features",
+        "--no-default-features",
+        "--features",
+        "units-dynamics-conversions,units-thermal"
+      ],
+      "status": 0
+    },
+    {
+      "name": "thermal_union_snapshot",
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "-p",
+        "whippyunits-proc-macros",
+        "--lib",
+        "--no-default-features",
+        "--features",
+        "units-dynamics-conversions,units-thermal"
+      ],
+      "status": 0
+    },
+    {
+      "name": "defaults_public",
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "-p",
+        "whippyunits",
+        "--test",
+        "catalog_features"
+      ],
+      "status": 0
+    },
+    {
+      "name": "defaults_snapshot",
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "-p",
+        "whippyunits-proc-macros",
+        "--lib"
+      ],
+      "status": 0
+    },
+    {
+      "name": "algebra_forwarding",
+      "command": [
+        "cargo",
+        "check",
+        "--locked",
+        "-p",
+        "whippyalgebra",
+        "--lib",
+        "--no-default-features",
+        "--features",
+        "units-dynamics-conversions,nalgebra"
+      ],
+      "status": 0
+    },
+    {
+      "name": "catalog_freshness",
+      "command": [
+        "python3",
+        "tools/regenerate-default-catalogs.py",
+        "--check"
+      ],
+      "status": 0
+    }
+  ],
+  "backend_variants": [
+    {
+      "label": "mapping-noalloc-nalgebra",
+      "folder": "mapping_feature",
+      "command": [
+        "cargo",
+        "check",
+        "--offline",
+        "-p",
+        "whippyalgebra",
+        "--lib",
+        "--no-default-features",
+        "--features",
+        "nalgebra"
+      ],
+      "returncode": 0,
+      "expected": 0,
+      "ok": true
+    },
+    {
+      "label": "mapping-standalone",
+      "folder": "mapping_feature",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "whippyalgebra",
+        "--test",
+        "standalone_indexing",
+        "--no-default-features",
+        "--features",
+        "standalone-indexing"
+      ],
+      "returncode": 0,
+      "expected": 0,
+      "ok": true
+    },
+    {
+      "label": "mapping-default",
+      "folder": "mapping_feature",
+      "command": [
+        "cargo",
+        "check",
+        "--offline",
+        "-p",
+        "whippyalgebra",
+        "--lib"
+      ],
+      "returncode": 0,
+      "expected": 0,
+      "ok": true
+    },
+    {
+      "label": "mapping-missing-feature",
+      "folder": "mapping_feature",
+      "command": [
+        "cargo",
+        "check",
+        "--offline",
+        "-p",
+        "whippyalgebra",
+        "--lib",
+        "--no-default-features"
+      ],
+      "returncode": 101,
+      "expected": 101,
+      "ok": true
+    },
+    {
+      "label": "mapping-roundtrip",
+      "folder": "mapping_feature",
+      "command": [
+        "cargo",
+        "run",
+        "--offline",
+        "-p",
+        "whippyalgebra",
+        "--example",
+        "block_roundtrip",
+        "--no-default-features",
+        "--features",
+        "std,nalgebra,units-si-dynamics"
+      ],
+      "returncode": 0,
+      "expected": 0,
+      "ok": true
+    },
+    {
+      "label": "direct-core-narrow",
+      "folder": "direct_exponents",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "whippyunits-core",
+        "--lib",
+        "--no-default-features"
+      ],
+      "returncode": 0,
+      "expected": 0,
+      "ok": true
+    },
+    {
+      "label": "direct-core-wide",
+      "folder": "direct_exponents",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "whippyunits-core",
+        "--lib"
+      ],
+      "returncode": 0,
+      "expected": 0,
+      "ok": true
+    },
+    {
+      "label": "direct-doc-narrow",
+      "folder": "direct_exponents",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "whippyunits-core",
+        "--doc",
+        "--no-default-features",
+        "num::"
+      ],
+      "returncode": 0,
+      "expected": 0,
+      "ok": true
+    },
+    {
+      "label": "direct-doc-wide",
+      "folder": "direct_exponents",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "whippyunits-core",
+        "--doc",
+        "num::"
+      ],
+      "returncode": 0,
+      "expected": 0,
+      "ok": true
+    },
+    {
+      "label": "direct-quantity-narrow",
+      "folder": "direct_exponents",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "whippyunits",
+        "--test",
+        "exponent_features",
+        "--no-default-features"
+      ],
+      "returncode": 0,
+      "expected": 0,
+      "ok": true
+    },
+    {
+      "label": "direct-quantity-wide",
+      "folder": "direct_exponents",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "whippyunits",
+        "--test",
+        "exponent_features",
+        "--no-default-features",
+        "--features",
+        "wide-exponents"
+      ],
+      "returncode": 0,
+      "expected": 0,
+      "ok": true
+    },
+    {
+      "label": "direct-roundtrip",
+      "folder": "direct_exponents",
+      "command": [
+        "cargo",
+        "run",
+        "--offline",
+        "-p",
+        "whippyalgebra",
+        "--example",
+        "block_roundtrip",
+        "--no-default-features",
+        "--features",
+        "std,nalgebra,units-si-dynamics"
+      ],
+      "returncode": 0,
+      "expected": 0,
+      "ok": true
+    }
+  ],
+  "four_axis_compile_probes": [
+    {
+      "variant": "eight",
+      "probe": "pass",
+      "expected_compile_pass": true,
+      "actual_compile_pass": true
+    },
+    {
+      "variant": "eight",
+      "probe": "incompatible_add",
+      "expected_compile_pass": false,
+      "actual_compile_pass": false
+    },
+    {
+      "variant": "eight",
+      "probe": "incompatible_rescale",
+      "expected_compile_pass": false,
+      "actual_compile_pass": false
+    },
+    {
+      "variant": "eight",
+      "probe": "angle_is_not_scalar",
+      "expected_compile_pass": false,
+      "actual_compile_pass": false
+    },
+    {
+      "variant": "eight",
+      "probe": "scale_is_not_erased",
+      "expected_compile_pass": false,
+      "actual_compile_pass": false
+    },
+    {
+      "variant": "eight",
+      "probe": "sqrt_odd_axis",
+      "expected_compile_pass": false,
+      "actual_compile_pass": false
+    },
+    {
+      "variant": "eight",
+      "probe": "wrong_matrix_inner_units",
+      "expected_compile_pass": false,
+      "actual_compile_pass": false
+    },
+    {
+      "variant": "four",
+      "probe": "pass",
+      "expected_compile_pass": true,
+      "actual_compile_pass": true
+    },
+    {
+      "variant": "four",
+      "probe": "incompatible_add",
+      "expected_compile_pass": false,
+      "actual_compile_pass": false
+    },
+    {
+      "variant": "four",
+      "probe": "incompatible_rescale",
+      "expected_compile_pass": false,
+      "actual_compile_pass": false
+    },
+    {
+      "variant": "four",
+      "probe": "angle_is_not_scalar",
+      "expected_compile_pass": false,
+      "actual_compile_pass": false
+    },
+    {
+      "variant": "four",
+      "probe": "scale_is_not_erased",
+      "expected_compile_pass": false,
+      "actual_compile_pass": false
+    },
+    {
+      "variant": "four",
+      "probe": "sqrt_odd_axis",
+      "expected_compile_pass": false,
+      "actual_compile_pass": false
+    },
+    {
+      "variant": "four",
+      "probe": "wrong_matrix_inner_units",
+      "expected_compile_pass": false,
+      "actual_compile_pass": false
+    }
+  ],
+  "four_axis_runtime": "Both final crate-local representations passed 5 runtime tests, 96 stress functions, 1 positive + 6 negative compilation probes, and the consumer binary; exact final commands and hashes follow.",
+  "dynamics_probe_runtime": {
+    "scope": "Runtime assertion correctness only; no timing claims",
+    "environment": {
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_TARGET_DIR": "/tmp/whippyunits-typenum-experiments/ra/target",
+      "RUSTUP_TOOLCHAIN": "1.98.1"
+    },
+    "results": [
+      {
+        "variant": "prepared/control",
+        "cwd": "/tmp/whippyunits-typenum-experiments/prepared/control",
+        "command": [
+          "cargo",
+          "run",
+          "--offline",
+          "--locked",
+          "--manifest-path",
+          "probe/Cargo.toml",
+          "-j2"
+        ],
+        "environment": {
+          "CARGO_INCREMENTAL": "0",
+          "CARGO_TARGET_DIR": "/tmp/whippyunits-typenum-experiments/ra/target",
+          "RUSTUP_TOOLCHAIN": "1.98.1"
+        },
+        "log": "/tmp/whippyunits-typenum-experiments/runtime-validation/prepared-control.log",
+        "returncode": 0,
+        "status": "passed",
+        "probe_sha256": "d11f623f60d3f384d2a1bf7a3b80a4f03822a4b040d83d063f92c3ab72795a9d"
+      },
+      {
+        "variant": "prepared/mapping",
+        "cwd": "/tmp/whippyunits-typenum-experiments/prepared/mapping",
+        "command": [
+          "cargo",
+          "run",
+          "--offline",
+          "--locked",
+          "--manifest-path",
+          "probe/Cargo.toml",
+          "-j2"
+        ],
+        "environment": {
+          "CARGO_INCREMENTAL": "0",
+          "CARGO_TARGET_DIR": "/tmp/whippyunits-typenum-experiments/ra/target",
+          "RUSTUP_TOOLCHAIN": "1.98.1"
+        },
+        "log": "/tmp/whippyunits-typenum-experiments/runtime-validation/prepared-mapping.log",
+        "returncode": 0,
+        "status": "passed",
+        "probe_sha256": "d11f623f60d3f384d2a1bf7a3b80a4f03822a4b040d83d063f92c3ab72795a9d"
+      },
+      {
+        "variant": "prepared/direct",
+        "cwd": "/tmp/whippyunits-typenum-experiments/prepared/direct",
+        "command": [
+          "cargo",
+          "run",
+          "--offline",
+          "--locked",
+          "--manifest-path",
+          "probe/Cargo.toml",
+          "-j2"
+        ],
+        "environment": {
+          "CARGO_INCREMENTAL": "0",
+          "CARGO_TARGET_DIR": "/tmp/whippyunits-typenum-experiments/ra/target",
+          "RUSTUP_TOOLCHAIN": "1.98.1"
+        },
+        "log": "/tmp/whippyunits-typenum-experiments/runtime-validation/prepared-direct.log",
+        "returncode": 0,
+        "status": "passed",
+        "probe_sha256": "d11f623f60d3f384d2a1bf7a3b80a4f03822a4b040d83d063f92c3ab72795a9d"
+      },
+      {
+        "variant": "vendor/full",
+        "cwd": "/tmp/whippyunits-typenum-experiments/vendor/full",
+        "command": [
+          "cargo",
+          "run",
+          "--offline",
+          "--locked",
+          "--manifest-path",
+          "probe/Cargo.toml",
+          "-j2"
+        ],
+        "environment": {
+          "CARGO_INCREMENTAL": "0",
+          "CARGO_TARGET_DIR": "/tmp/whippyunits-typenum-experiments/ra/target",
+          "RUSTUP_TOOLCHAIN": "1.98.1"
+        },
+        "log": "/tmp/whippyunits-typenum-experiments/runtime-validation/vendor-full.log",
+        "returncode": 0,
+        "status": "passed",
+        "probe_sha256": "d11f623f60d3f384d2a1bf7a3b80a4f03822a4b040d83d063f92c3ab72795a9d"
+      },
+      {
+        "variant": "vendor/constants",
+        "cwd": "/tmp/whippyunits-typenum-experiments/vendor/constants",
+        "command": [
+          "cargo",
+          "run",
+          "--offline",
+          "--locked",
+          "--manifest-path",
+          "probe/Cargo.toml",
+          "-j2"
+        ],
+        "environment": {
+          "CARGO_INCREMENTAL": "0",
+          "CARGO_TARGET_DIR": "/tmp/whippyunits-typenum-experiments/ra/target",
+          "RUSTUP_TOOLCHAIN": "1.98.1"
+        },
+        "log": "/tmp/whippyunits-typenum-experiments/runtime-validation/vendor-constants.log",
+        "returncode": 0,
+        "status": "passed",
+        "probe_sha256": "d11f623f60d3f384d2a1bf7a3b80a4f03822a4b040d83d063f92c3ab72795a9d"
+      },
+      {
+        "variant": "vendor/modules",
+        "cwd": "/tmp/whippyunits-typenum-experiments/vendor/modules",
+        "command": [
+          "cargo",
+          "run",
+          "--offline",
+          "--locked",
+          "--manifest-path",
+          "probe/Cargo.toml",
+          "-j2"
+        ],
+        "environment": {
+          "CARGO_INCREMENTAL": "0",
+          "CARGO_TARGET_DIR": "/tmp/whippyunits-typenum-experiments/ra/target",
+          "RUSTUP_TOOLCHAIN": "1.98.1"
+        },
+        "log": "/tmp/whippyunits-typenum-experiments/runtime-validation/vendor-modules.log",
+        "returncode": 0,
+        "status": "passed",
+        "probe_sha256": "d11f623f60d3f384d2a1bf7a3b80a4f03822a4b040d83d063f92c3ab72795a9d"
+      },
+      {
+        "variant": "vendor/slim",
+        "cwd": "/tmp/whippyunits-typenum-experiments/vendor/slim",
+        "command": [
+          "cargo",
+          "run",
+          "--offline",
+          "--locked",
+          "--manifest-path",
+          "probe/Cargo.toml",
+          "-j2"
+        ],
+        "environment": {
+          "CARGO_INCREMENTAL": "0",
+          "CARGO_TARGET_DIR": "/tmp/whippyunits-typenum-experiments/ra/target",
+          "RUSTUP_TOOLCHAIN": "1.98.1"
+        },
+        "log": "/tmp/whippyunits-typenum-experiments/runtime-validation/vendor-slim.log",
+        "returncode": 0,
+        "status": "passed",
+        "probe_sha256": "d11f623f60d3f384d2a1bf7a3b80a4f03822a4b040d83d063f92c3ab72795a9d"
+      }
+    ],
+    "all_passed": true,
+    "identical_probe_source": true
+  },
+  "four_axis_final_layout": {
+    "source_layout": "crate-local ordinary Rust",
+    "toolchain": "1.98.1",
+    "commands": [
+      "python3 scripts/experiments/four_axis/validate.py --work-dir /tmp/whippyunits-four-axis-measure --target-root /tmp/whippyunits-typenum-experiments/ra-four-axis/target-validation",
+      "RUSTUP_TOOLCHAIN=1.98.1 CARGO_INCREMENTAL=0 CARGO_TARGET_DIR=/tmp/whippyunits-typenum-experiments/ra-four-axis/target-validation/eight cargo run --offline --locked --manifest-path /tmp/whippyunits-four-axis-measure/eight/consumer/Cargo.toml --package axis-consumer --bin axis-consumer",
+      "RUSTUP_TOOLCHAIN=1.98.1 CARGO_INCREMENTAL=0 CARGO_TARGET_DIR=/tmp/whippyunits-typenum-experiments/ra-four-axis/target-validation/four cargo run --offline --locked --manifest-path /tmp/whippyunits-four-axis-measure/four/consumer/Cargo.toml --package axis-consumer --bin axis-consumer"
+    ],
+    "exit_codes": [
+      0,
+      0,
+      0
+    ],
+    "variants": {
+      "eight": {
+        "runtime_tests_passed": 5,
+        "stress_functions_compiled": 96,
+        "compile_pass_probes": 1,
+        "compile_fail_probes": 6,
+        "consumer_binary_exit_code": 0,
+        "source_sha256": {
+          "engine/src/lib.rs": "058a86dae8e08650ada84787e24d6785a0f8f62c6cbcfb8b0e3d4e8462745d23",
+          "engine/src/representation.rs": "dde30b2a12c8770a0b66e1406918d00d6ada3a6b8a14c21ccac7eff295b01b03",
+          "consumer/src/lib.rs": "61fc8eb119fda81afe694e758ecc935214c76c0c00f0f74ef61609bd37f32fa6",
+          "consumer/src/main.rs": "ed6a8355fb2a983545ac6fffba0719a21b553c5b6dfa73a53ea6bec41247b813"
+        }
+      },
+      "four": {
+        "runtime_tests_passed": 5,
+        "stress_functions_compiled": 96,
+        "compile_pass_probes": 1,
+        "compile_fail_probes": 6,
+        "consumer_binary_exit_code": 0,
+        "source_sha256": {
+          "engine/src/lib.rs": "058a86dae8e08650ada84787e24d6785a0f8f62c6cbcfb8b0e3d4e8462745d23",
+          "engine/src/representation.rs": "70241a4777d8dfde909867c12863321ead5fb85f1d9d9caa4df269ea9b7f70aa",
+          "consumer/src/lib.rs": "61fc8eb119fda81afe694e758ecc935214c76c0c00f0f74ef61609bd37f32fa6",
+          "consumer/src/main.rs": "ed6a8355fb2a983545ac6fffba0719a21b553c5b6dfa73a53ea6bec41247b813"
+        }
+      }
+    },
+    "notes": [
+      "No source changes made.",
+      "Both variants emit the same unused-import warning for Unit in generated dims.rs.",
+      "Cargo run wall times are not benchmark measurements."
+    ]
+  },
+  "experiment_reproduction": {
+    "base": "3eb0f11",
+    "applied_patches": [
+      "optional-const-mappings.patch",
+      "optional-const-mappings-docs.patch",
+      "direct-exponents.patch"
+    ],
+    "patch_apply_checks": "passed in a fresh git archive snapshot",
+    "direct_exponent_generator": "passed: 12,773 implementations",
+    "probe_preparation": "passed",
+    "python_syntax": "7 scripts passed",
+    "report_links": "passed"
+  },
+  "final_locked_harness_smoke": {
+    "scope": "Correctness smoke after locking Cargo and expanding source fingerprints; excluded from benchmark comparisons",
+    "command": "python3 scripts/measure_rust_analyzer.py --server /home/bc/.vscode/extensions/rust-lang.rust-analyzer-0.3.3049-linux-x64/server/rust-analyzer --project-profile four-axis /tmp/whippyunits-four-axis-measure/four/consumer --required-completions meters --import-style glob --runs 1 --repeats 0 --output /tmp/whippyunits-ra-harness-smoke-final --target-dir /tmp/whippyunits-typenum-experiments/ra-four-axis/target-validation/four",
+    "status": 0,
+    "hover_and_completion_valid": true,
+    "profiles": [
+      {
+        "label": "four-axis",
+        "project_path": "/tmp/whippyunits-four-axis-measure/four/consumer",
+        "dependency_path": "/tmp/whippyunits-four-axis-measure/four",
+        "source_sha256": "9e88d3062f92fc5bd68358d1facc5183c2c370268e34bc9a8323fbb82496124f",
+        "probe_sha256": "b2873ac9b6d3c7dc618795bb6ce70fb8ab20749de7554cc2f2bc69f92e27309b"
+      }
+    ]
+  }
+}

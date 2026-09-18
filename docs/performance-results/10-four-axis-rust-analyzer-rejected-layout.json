@@ -1,0 +1,71 @@
+{
+  "scope": "fresh server, warm Cargo artifacts; direct LSP without editor/formatter",
+  "rss_scope": "Linux rust-analyzer process RSS only; sampled every 50 ms; child processes excluded",
+  "profiles": [
+    {
+      "label": "eight",
+      "project_path": "/tmp/whippyunits-four-axis-measure/eight/consumer",
+      "dependency_path": "/tmp/whippyunits-four-axis-measure/eight",
+      "source_sha256": "0473a3fe7442dc2faf5bd939e5f50ac5ce64a80eeaba8f8d12446dce164bcbc3",
+      "probe_sha256": "42d0ca3025ab4b423295680c7ea310e3049b31723a69d500fb06bf91f697f364"
+    },
+    {
+      "label": "four",
+      "project_path": "/tmp/whippyunits-four-axis-measure/four/consumer",
+      "dependency_path": "/tmp/whippyunits-four-axis-measure/four",
+      "source_sha256": "b9331376990f282e50dbc43c507620a96e16a96daf8b590b57bf90549558f81a",
+      "probe_sha256": "42d0ca3025ab4b423295680c7ea310e3049b31723a69d500fb06bf91f697f364"
+    }
+  ],
+  "server": "/home/bc/.vscode/extensions/rust-lang.rust-analyzer-0.3.3049-linux-x64/server/rust-analyzer",
+  "import_style": "glob",
+  "receiver": "variable",
+  "allow_missing_completion": [],
+  "timed_completion_method": "meters",
+  "required_completions": [
+    "meters"
+  ],
+  "cargo_warmup": true,
+  "cache_priming": true,
+  "runs": 3,
+  "repeated_requests": 5,
+  "samples": [
+    {
+      "profile": "eight",
+      "cycle": 1,
+      "valid": false,
+      "completion_status": "pending",
+      "missing_completion_names": [],
+      "primary_completion_valid": false,
+      "completion_validation": {},
+      "request_ms": {
+        "hover": [
+          3.9718199986964464
+        ],
+        "completion": []
+      },
+      "raw": {
+        "hover": [
+          "/tmp/whippyunits-typenum-experiments/ra-four-axis/01-eight.hover-0.json"
+        ]
+      },
+      "server_info": {
+        "name": "rust-analyzer",
+        "version": "0.3.3049-standalone"
+      },
+      "ready_seconds": 3.6852672889945097,
+      "server_ready_rss_kib": 1453540,
+      "server_status": {
+        "health": "ok",
+        "quiescent": true,
+        "message": null
+      },
+      "error": "RuntimeError('inferred velocity hover did not resolve length/time Quantity')",
+      "server_final_rss_kib": 1456688,
+      "server_peak_rss_kib": 1456688
+    }
+  ],
+  "server_version": "rust-analyzer 0.3.3049-standalone",
+  "rustc_version": "rustc 1.98.1 (48a229cea 2026-09-01)",
+  "summary": {}
+}

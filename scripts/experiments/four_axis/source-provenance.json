@@ -1,0 +1,27 @@
+{
+  "commit": "b45de40f08f9b65277cf4a4a924f3afb7e0cd86d",
+  "sha256": {
+    "Cargo.lock": "f1c201a8ace75c09cc6bc7d3395b410c952da4e244e90ceeefc9d4efd3a43fbb",
+    "Cargo.toml": "b45d4b2235548ab522538878092d83be65987930e3dd060e9d3a53cb75ac66a7",
+    "rust-toolchain.toml": "a3df22577d8e9301f6bab43672f9da894bf3b81d2f3dbfda6f13373fc21704a8",
+    "src/api.rs": "6dd8a8c6ee5c431933b2a315d66f25b49c4209782aa43ad592b5d3788756b265",
+    "src/quantity.rs": "5f69a4164915105dcff450fc68e673bd4afe9cae9968e2e2f6197e7e9e47da2f",
+    "src/scale_conversion.rs": "ad50995b07c91872186414e79f2471916974fc4b62154c92f4a6b71903fa417b",
+    "src/unit.rs": "1df1164a7950cd50fd18df1d68462b9e4541cf49ffa7db33b46f0c1a50b29e7b",
+    "whippyalgebra/src/dims.rs": "0b9ca3fb3f78d535e2b73ba9eacdb8aab77bf1d4cc226a6ad7f78ea471cc8589",
+    "whippyalgebra/src/index.rs": "82387c071a2759c6d83c5c735a2180c7f6379f924e9c2a892d240d2a211aeb35",
+    "whippyalgebra/src/uniformity.rs": "e2710923e49f545561fdad8ae99cc08dfa46ce24c55b42c6453a9d957bb9d743",
+    "whippyunits-core/Cargo.toml": "da4bb131990f3ba3c775218b17d413bf06b7db364b0d20deae7cb502361ff285",
+    "whippyunits-core/src/bin/conversion_factor_linter.rs": "2598aeb1a4ecf73bdc630071541fc8c6a0e8b6fd396194505726ac7036365d78",
+    "whippyunits-core/src/bin/symbol_linter.rs": "15f08390bd5cfc9b91a589c01857298e0ff5b25bdce1bdfd2e54c87b9302ece9",
+    "whippyunits-core/src/dimension_exponents.rs": "4864743e2ea0df98dd1e8fd761ab5d9c460243d4ae7981b09cd65ae25f1b959f",
+    "whippyunits-core/src/dimensions.rs": "4efdead3c728532a1ce66d3eaaaa8be97a4849b805fee19d08ee08cf8771bbd5",
+    "whippyunits-core/src/lib.rs": "5bd3183d699fd00b0c3ea36e9a042c8918591ff2464e14b1409fda5af9773de7",
+    "whippyunits-core/src/num.rs": "8fa9b62335c7a07a31d1f3c3e0d192ed34814462cc0e7b9fef8e703184d8cb22",
+    "whippyunits-core/src/parser.rs": "f128c8b188ace6ead494e458c3f7a076110399466b0eaf742a7bff14024100d0",
+    "whippyunits-core/src/prefix.rs": "f5cef80aae903ed14356e473037a2362463f38fef261b5f4b8383a6316f64f90",
+    "whippyunits-core/src/scale_exponents.rs": "50af24ac802f8f08e3c8af3d28f2654dc5f3a0b5bc3f2f76ae32ca1af5914ae8",
+    "whippyunits-core/src/storage_unit.rs": "63a763a32f7bc4e6c6c822d48208d1ced2c28f270a7b73150bd1875d6a1c9345",
+    "whippyunits-core/src/units.rs": "3ec110d6fba84584266a1b2464b7ef7b45b7f6eead0865ae0a9501773d7f0de5"
+  }
+}

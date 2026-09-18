@@ -1,0 +1,192 @@
+{
+  "scope": "check after selected package clean; unrelated dependencies warm; incremental off; jobs=1",
+  "rss_scope": "GNU time maximum single-process RSS including children; KiB, not aggregate RSS",
+  "variants": [
+    {
+      "label": "control",
+      "tree": "/tmp/whippyunits-typenum-experiments/prepared/control",
+      "sha256": "7ff1c8e9df48c1559b5bc316e6b41e52303be113a61ccce9a2ebf39e7fdb6173"
+    },
+    {
+      "label": "mapping",
+      "tree": "/tmp/whippyunits-typenum-experiments/prepared/mapping",
+      "sha256": "25712b06969f9667ef414e5069895c291fa49d0124d491486c6d2bfb2e0854c4"
+    },
+    {
+      "label": "direct",
+      "tree": "/tmp/whippyunits-typenum-experiments/prepared/direct",
+      "sha256": "af90cb419426edb5c4d6cf4dc4c64183ae3bdb31a0ac7dbfb9c93b8f9850ab10"
+    }
+  ],
+  "command": [
+    "cargo",
+    "check",
+    "--offline",
+    "--locked",
+    "--manifest-path",
+    "probe/Cargo.toml",
+    "-p",
+    "dynamics_probe",
+    "-j1"
+  ],
+  "clean_command": [
+    "cargo",
+    "clean",
+    "--offline",
+    "--manifest-path",
+    "probe/Cargo.toml",
+    "-p",
+    "typenum",
+    "-p",
+    "whippyunits-core",
+    "-p",
+    "whippyunits-proc-macros",
+    "-p",
+    "whippyunits",
+    "-p",
+    "whippyalgebra",
+    "-p",
+    "nalgebra",
+    "-p",
+    "simba",
+    "-p",
+    "dynamics_probe"
+  ],
+  "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)",
+  "samples": [
+    {
+      "variant": "control",
+      "cycle": 0,
+      "seconds": 10.833277613011887,
+      "max_rss_kib": 483220,
+      "user_seconds": 9.48,
+      "system_seconds": 1.46
+    },
+    {
+      "variant": "mapping",
+      "cycle": 0,
+      "seconds": 10.550341335008852,
+      "max_rss_kib": 483868,
+      "user_seconds": 9.29,
+      "system_seconds": 1.37
+    },
+    {
+      "variant": "direct",
+      "cycle": 0,
+      "seconds": 20.638879354984965,
+      "max_rss_kib": 636128,
+      "user_seconds": 18.42,
+      "system_seconds": 2.29
+    },
+    {
+      "variant": "direct",
+      "cycle": 1,
+      "seconds": 20.04915601699031,
+      "max_rss_kib": 636376,
+      "user_seconds": 18.06,
+      "system_seconds": 2.09
+    },
+    {
+      "variant": "mapping",
+      "cycle": 1,
+      "seconds": 10.526405233016703,
+      "max_rss_kib": 484828,
+      "user_seconds": 9.3,
+      "system_seconds": 1.32
+    },
+    {
+      "variant": "control",
+      "cycle": 1,
+      "seconds": 10.414222010993399,
+      "max_rss_kib": 484288,
+      "user_seconds": 9.17,
+      "system_seconds": 1.34
+    },
+    {
+      "variant": "control",
+      "cycle": 2,
+      "seconds": 10.882596565003041,
+      "max_rss_kib": 483920,
+      "user_seconds": 9.62,
+      "system_seconds": 1.36
+    },
+    {
+      "variant": "mapping",
+      "cycle": 2,
+      "seconds": 10.358251978992485,
+      "max_rss_kib": 484096,
+      "user_seconds": 9.1,
+      "system_seconds": 1.36
+    },
+    {
+      "variant": "direct",
+      "cycle": 2,
+      "seconds": 19.7793079999974,
+      "max_rss_kib": 636228,
+      "user_seconds": 17.74,
+      "system_seconds": 2.14
+    },
+    {
+      "variant": "direct",
+      "cycle": 3,
+      "seconds": 20.41557616798673,
+      "max_rss_kib": 635736,
+      "user_seconds": 18.39,
+      "system_seconds": 2.14
+    },
+    {
+      "variant": "mapping",
+      "cycle": 3,
+      "seconds": 10.230155964993173,
+      "max_rss_kib": 484424,
+      "user_seconds": 8.99,
+      "system_seconds": 1.33
+    },
+    {
+      "variant": "control",
+      "cycle": 3,
+      "seconds": 11.09641897099209,
+      "max_rss_kib": 484092,
+      "user_seconds": 9.77,
+      "system_seconds": 1.42
+    },
+    {
+      "variant": "control",
+      "cycle": 4,
+      "seconds": 10.552243704005377,
+      "max_rss_kib": 484680,
+      "user_seconds": 9.27,
+      "system_seconds": 1.39
+    },
+    {
+      "variant": "mapping",
+      "cycle": 4,
+      "seconds": 10.478901121998206,
+      "max_rss_kib": 483868,
+      "user_seconds": 9.2,
+      "system_seconds": 1.37
+    },
+    {
+      "variant": "direct",
+      "cycle": 4,
+      "seconds": 19.74684773897752,
+      "max_rss_kib": 636500,
+      "user_seconds": 17.72,
+      "system_seconds": 2.14
+    }
+  ],
+  "medians": {
+    "control": {
+      "seconds": 10.833277613011887,
+      "max_rss_kib": 484092
+    },
+    "mapping": {
+      "seconds": 10.478901121998206,
+      "max_rss_kib": 484096
+    },
+    "direct": {
+      "seconds": 20.04915601699031,
+      "max_rss_kib": 636228
+    }
+  }
+}

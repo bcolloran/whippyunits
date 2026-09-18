@@ -1,6 +1,14 @@
-Rust-analyzer follow-up, 2026-09-17.
+Rust-analyzer follow-up, updated 2026-09-18.
 
-The latest combined experiments compare `6196218` with `4494b79`, selecting
+The latest [typenum and four-axis experiments](typenum-dynamics-experiments.md)
+use a larger nalgebra consumer with degrees and 1/60-second ticks. Explicit
+arithmetic tables substantially regress editor requests; slimming typenum saves
+less than 1% of server memory. A real four-axis prototype improves heavier
+compiler checks, but its three editor samples do not establish an application
+hover/completion speedup. All twelve methods in the production
+`units-dynamics-conversions` catalog passed the completion probe.
+
+The earlier combined experiments compare `6196218` with `4494b79`, selecting
 `std,units-dynamics` before and `std,units-si-dynamics` after, with defaults off.
 Three interleaved fresh-server runs per snapshot measured indexing at **28.908 s
 → 3.180 s**, and first inferred velocity hover at **158.373 ms → 29.233 ms**.
@@ -72,7 +80,7 @@ macros, or quantity serialization. Their own LSP serialization dependencies
 remain unchanged. This does not remove electrical or thermal unit names from
 formatted output.
 
-The current workspace metadata with the following feature selection resolves
+The earlier workspace metadata with the following feature selection resolved
 only `alloc`, `std`, and `units-si-dynamics` on whippyunits, with neither
 `all-units` nor `wide-exponents` accidentally enabled:
 
@@ -84,18 +92,18 @@ The proxy's 40 library tests passed without default features, and the formatter
 passed `cargo check` for `wasm32-unknown-unknown`. The active editor settings were
 not changed.
 
-For an editor session intentionally focused on dynamics in this worktree, the
-corresponding rust-analyzer settings are:
+For an editor session focused on dynamics including degrees and ticks in this
+worktree, the corresponding rust-analyzer settings are:
 
 ```json
 {
   "rust-analyzer.cargo.noDefaultFeatures": true,
   "rust-analyzer.cargo.features": [
     "whippyunits/std",
-    "whippyunits/units-si-dynamics",
+    "whippyunits/units-dynamics-conversions",
     "whippyalgebra/std",
     "whippyalgebra/nalgebra",
-    "whippyalgebra/units-si-dynamics"
+    "whippyalgebra/units-dynamics-conversions"
   ]
 }
 ```
@@ -118,9 +126,9 @@ can defer work to later requests rather than eliminate it.
 
 **The remaining hover/completion investigation**
 
-Further pruning the fixed dimension axes or removing `Brand` is not yet supported
-by these measurements. First profile expensive editor requests and distinguish
-analysis work from presentation work. Rust-analyzer provides LSP tracing and
+The four-axis prototype now has isolated compiler evidence; production editor
+benefits and removing `Brand` remain unestablished. Profiling expensive editor
+requests should distinguish analysis work from presentation work. Rust-analyzer provides LSP tracing and
 `RA_PROFILE` instrumentation in its
 [profiling documentation](https://rust-analyzer.github.io/book/contributing/#profiling).
 
