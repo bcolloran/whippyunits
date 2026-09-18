@@ -32,5 +32,7 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
       - name: Test public catalog API
         run: cargo test --locked -p whippyunits --test catalog_features --no-default-features --features "${{ matrix.features }}"
+      - name: Run declarator example
+        run: cargo run --locked -p whippyunits --example declarators --no-default-features --features "std ${{ matrix.features }}"
       - name: Test catalog generation
         run: cargo test --locked -p whippyunits-proc-macros --lib --no-default-features --features "${{ matrix.features }}"

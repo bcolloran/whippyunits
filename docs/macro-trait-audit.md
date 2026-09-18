@@ -431,3 +431,20 @@ whippyunits = { version = "0.3", default-features = false, features = ["std", "u
 Add `literals` for suffix syntax and `serde` for serialization. If depending on
 `whippyalgebra`, disable its defaults too and select `std`, `nalgebra`, and
 `units-dynamics`; otherwise its default full catalog is unified back in.
+
+All 13 uncommitted paths from the original `main` checkout were reconciled with
+this branch. The macro changes, algebra changes, and UI fixtures were already
+included; the report retains the subsequent optimization results above. The
+remaining generic and concrete struct examples in `declarators.rs` are now
+included too. Its method and literal demonstrations follow the selected catalog
+features, with literal expansion confined to a gated function. The catalog CI
+matrix also runs this example with `std` for its debug output, including with
+no catalogs or literals enabled. The manifest declares its minimum `alloc`
+requirement. The original checkout remains untouched.
+
+Integration validation passed: the declarator example with defaults, all nine
+catalog selections with `std`, and `alloc` alone; three vector-type tests with
+both defaults and dynamics-only features; all 23 algebra UI fixtures; and the
+dynamics-only matrix round-trip example. Workspace metadata still resolves only
+`alloc`, `std`, and `units-dynamics` on whippyunits for the reduced editor
+configuration documented in [rust-analyzer-performance.md](rust-analyzer-performance.md).

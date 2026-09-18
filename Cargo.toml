@@ -122,6 +122,7 @@ path = "examples/getting_started/concepts.rs"
 [[example]]
 name = "declarators"
 path = "examples/getting_started/declarators.rs"
+required-features = ["alloc"]
 
 [[example]]
 name = "common_errors"
