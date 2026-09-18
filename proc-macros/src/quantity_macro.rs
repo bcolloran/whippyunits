@@ -109,7 +109,7 @@ impl QuantityMacroInput {
             return self.expand_with_conversion_factors();
         };
 
-        if !crate::utils::catalog::dimension_enabled(&dimension.exponents) {
+        if !crate::utils::catalog::entry_enabled(unit_info, None) {
             return self.expand_without_declarator(unit_info);
         }
 

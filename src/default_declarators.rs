@@ -3,7 +3,11 @@
 //! By default, declarators are generated for all standard SI units, base and derived.
 //! The `units-*` features select catalogs; `literals` enables suffix macros for
 //! the selected units. With default features disabled, explicitly select the
-//! catalogs whose constructor methods and type aliases you need.
+//! catalogs whose constructor methods and type aliases you need. The additive
+//! `units-si-dynamics` catalog provides kilograms, meters, seconds, radians, and
+//! coherent named derived units (Hz, N, J, Nm, W, Pa), without prefix or non-SI
+//! catalogs. The existing `units-dynamics` feature retains its broader catalog;
+//! enabling both features includes that broader set.
 //! Quantities in bespoke units can be declared using the [quantity!](crate::quantity!) macro,
 //! which offers a simple unit literal syntax.
 //!

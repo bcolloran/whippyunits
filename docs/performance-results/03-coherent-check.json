@@ -1,0 +1,102 @@
+{
+  "baseline": "a2a7c72",
+  "candidate_head": "a2a7c72be9621d48b42964bf38bb5474e64c8d28",
+  "candidate_diff": " .github/workflows/catalog-features.yml             |   2 +\n Cargo.toml                                         |   2 +\n README.md                                          |  12 +++\n proc-macros/Cargo.toml                             |   1 +\n proc-macros/src/define_unit_declarators_macro.rs   |  40 ++++++--\n .../src/generate_default_declarators_macro.rs      |  30 ++++--\n proc-macros/src/local_unit_type_macro.rs           |   5 +-\n proc-macros/src/quantity_macro.rs                  |   2 +-\n proc-macros/src/utils/catalog.rs                   | 105 ++++++++++++++++++-\n proc-macros/src/utils/literal_macros.rs            |  11 +-\n proc-macros/src/utils/shared_utils.rs              |  16 ++-\n src/default_declarators.rs                         |   6 +-\n tests/catalog_features.rs                          | 112 ++++++++++++++++++++-\n whippyalgebra/Cargo.toml                           |   1 +\n 14 files changed, 308 insertions(+), 37 deletions(-)\n",
+  "commands": {
+    "baseline": [
+      "cargo",
+      "check",
+      "--offline",
+      "--locked",
+      "-p",
+      "whippyunits",
+      "--lib",
+      "--no-default-features",
+      "--features",
+      "std,units-dynamics"
+    ],
+    "candidate": [
+      "cargo",
+      "check",
+      "--offline",
+      "--locked",
+      "-p",
+      "whippyunits",
+      "--lib",
+      "--no-default-features",
+      "--features",
+      "std,units-si-dynamics"
+    ]
+  },
+  "clean_command": [
+    "cargo",
+    "clean",
+    "--offline",
+    "-p",
+    "whippyunits-core",
+    "-p",
+    "whippyunits-proc-macros",
+    "-p",
+    "whippyunits"
+  ],
+  "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)",
+  "scope": "core, proc-macro and root library check; warm third-party dependencies; incremental disabled",
+  "scratch": "/tmp/whippyunits-experiments/03-coherent-check",
+  "samples": [
+    {
+      "variant": "baseline",
+      "cycle": 0,
+      "seconds": 3.2043782950058812
+    },
+    {
+      "variant": "candidate",
+      "cycle": 0,
+      "seconds": 2.145260274002794
+    },
+    {
+      "variant": "candidate",
+      "cycle": 1,
+      "seconds": 2.1142628230008995
+    },
+    {
+      "variant": "baseline",
+      "cycle": 1,
+      "seconds": 3.1172528530005366
+    },
+    {
+      "variant": "baseline",
+      "cycle": 2,
+      "seconds": 3.0074730299966177
+    },
+    {
+      "variant": "candidate",
+      "cycle": 2,
+      "seconds": 2.157164043994271
+    },
+    {
+      "variant": "candidate",
+      "cycle": 3,
+      "seconds": 2.0791719620028744
+    },
+    {
+      "variant": "baseline",
+      "cycle": 3,
+      "seconds": 2.995510330001707
+    },
+    {
+      "variant": "baseline",
+      "cycle": 4,
+      "seconds": 2.9915616489888635
+    },
+    {
+      "variant": "candidate",
+      "cycle": 4,
+      "seconds": 2.073113050995744
+    }
+  ],
+  "medians_seconds": {
+    "baseline": 3.0074730299966177,
+    "candidate": 2.1142628230008995
+  },
+  "reduction_percent": 29.699691338436462
+}

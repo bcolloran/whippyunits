@@ -148,7 +148,11 @@ impl DefaultDeclaratorsInput {
         // Filter units by type
         let filtered_units: Vec<_> = units
             .iter()
-            .filter(|unit| Self::classify_unit(unit) == unit_type && is_valid_identifier(unit.name))
+            .filter(|unit| {
+                Self::classify_unit(unit) == unit_type
+                    && is_valid_identifier(unit.name)
+                    && crate::utils::catalog::entry_enabled(unit, None)
+            })
             .collect();
 
         if filtered_units.is_empty() {
@@ -366,12 +370,17 @@ impl DefaultDeclaratorsInput {
                 let base_scale_name_ident = syn::parse_str::<Ident>(&base_scale_name).unwrap();
                 let base_fn_name_ident = syn::parse_str::<Ident>(&base_fn_name).unwrap();
 
-                scale_definitions.push(quote! {
-                    (#base_scale_name_ident, #base_fn_name_ident, #base_p2, #base_p3, #base_p5, #base_pi)
-                });
+                if crate::utils::catalog::entry_enabled(unit, None) {
+                    scale_definitions.push(quote! {
+                        (#base_scale_name_ident, #base_fn_name_ident, #base_p2, #base_p3, #base_p5, #base_pi)
+                    });
+                }
 
                 // Generate all the prefixed units
                 for prefix in SiPrefix::ALL {
+                    if !crate::utils::catalog::entry_enabled(unit, Some(prefix)) {
+                        continue;
+                    }
                     // For type names, use the unit name as-is (it's already singular)
                     let scale_name = generate_scale_name(prefix.name(), unit.name);
                     // For function names, use the plural form
@@ -409,12 +418,17 @@ impl DefaultDeclaratorsInput {
                     let fn_name = whippyunits_core::make_plural(unit.name);
                     let fn_name_ident = syn::parse_str::<Ident>(&fn_name).unwrap();
 
-                    scale_definitions.push(quote! {
-                        (#scale_name_ident, #fn_name_ident, #p2, #p3, #p5, #pi)
-                    });
+                    if crate::utils::catalog::entry_enabled(unit, None) {
+                        scale_definitions.push(quote! {
+                            (#scale_name_ident, #fn_name_ident, #p2, #p3, #p5, #pi)
+                        });
+                    }
 
                     // Generate prefixed versions of this compound unit
                     for prefix_info in SiPrefix::ALL {
+                        if !crate::utils::catalog::entry_enabled(unit, Some(prefix_info)) {
+                            continue;
+                        }
                         let prefixed_p2 = p2 + prefix_info.factor_log10();
                         let prefixed_p3 = p3;
                         let prefixed_p5 = p5 + prefix_info.factor_log10();
@@ -512,7 +526,7 @@ impl DefaultDeclaratorsInput {
                 continue;
             }
             for unit in dimension.units {
-                if unit.system == system {
+                if unit.system == system && crate::utils::catalog::entry_enabled(unit, None) {
                     system_units.push((dimension, unit));
                 }
             }

@@ -1,0 +1,17 @@
+error[E0599]: no method named `millimeters` found for type `f64` in the current scope
+  --> tests/catalog_ui/absent_noncoherent_namespaces.rs:19:25
+   |
+19 |         let _ = 1.0_f64.millimeters();
+   |                         ^^^^^^^^^^^ method not found in `f64`
+
+error[E0599]: no method named `grams` found for type `f64` in the current scope
+  --> tests/catalog_ui/absent_noncoherent_namespaces.rs:23:25
+   |
+23 |         let _ = 1.0_f64.grams();
+   |                         ^^^^^ method not found in `f64`
+
+error[E0599]: no method named `feet` found for type `f64` in the current scope
+  --> tests/catalog_ui/absent_noncoherent_namespaces.rs:27:25
+   |
+27 |         let _ = 1.0_f64.feet();
+   |                         ^^^^ method not found in `f64`

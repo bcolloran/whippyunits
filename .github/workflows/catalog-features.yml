@@ -22,6 +22,8 @@ jobs:
           - literals
           - units-dynamics
           - units-dynamics,literals
+          - units-si-dynamics
+          - units-si-dynamics,literals
           - units-electrical
           - units-thermal
           - units-chemical

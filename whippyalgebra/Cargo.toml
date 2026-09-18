@@ -37,6 +37,7 @@ nalgebra = ["dep:nalgebra"]
 # Forward the optional unit catalogs without forcing them on minimal builds.
 all-units = ["whippyunits/all-units"]
 units-dynamics = ["whippyunits/units-dynamics"]
+units-si-dynamics = ["whippyunits/units-si-dynamics"]
 units-electrical = ["whippyunits/units-electrical"]
 units-thermal = ["whippyunits/units-thermal"]
 units-chemical = ["whippyunits/units-chemical"]

@@ -608,7 +608,7 @@ impl LocalQuantityMacroInput {
             scale_ident.to_string()
         } else {
             // It's a compound unit - generate the unit expression using local base units
-            
+
             self.generate_unit_expression_from_dimensions(dimensions)
         }
     }
@@ -708,7 +708,6 @@ impl LocalQuantityMacroInput {
             ),
         ];
 
-        
         dimension_exponents_to_unit_expression_with_base_units(dimensions, &base_units_refs)
     }
 
@@ -875,7 +874,7 @@ impl LocalQuantityMacroInput {
     /// Get the local target type for a single unit identifier (reuses existing lift logic)
     fn get_local_target_type_for_unit(&self, unit_name: &str, storage_type: &Type) -> TokenStream {
         if let Some(unit) = whippyunits_core::get_unit_info(unit_name) {
-            if !crate::utils::catalog::dimension_enabled(&unit.exponents) {
+            if !crate::utils::catalog::broad_dimension_enabled(&unit.exponents) {
                 // Compute the same local unit selected by the type expansion,
                 // retaining the lift trace without naming a disabled alias.
                 let expression =

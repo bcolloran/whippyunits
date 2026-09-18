@@ -180,7 +180,10 @@ fn default_literals_follow_the_selected_catalog() {
     assert_eq!(angle.unsafe_value, 4.0);
 }
 
-#[cfg(all(feature = "literals", feature = "units-dynamics"))]
+#[cfg(all(
+    feature = "literals",
+    any(feature = "units-dynamics", feature = "units-si-dynamics")
+))]
 #[culit::culit(local_catalog::literals)]
 #[test]
 fn local_literals_preserve_rescaling_and_brand() {
@@ -188,7 +191,10 @@ fn local_literals_preserve_rescaling_and_brand() {
     assert_eq!(distance.unsafe_value, 2000.0);
 }
 
-#[cfg(all(feature = "literals", feature = "units-dynamics"))]
+#[cfg(all(
+    feature = "literals",
+    any(feature = "units-dynamics", feature = "units-si-dynamics")
+))]
 #[culit::culit(branded_catalog::literals)]
 #[test]
 fn branded_literals_preserve_brand() {
@@ -196,7 +202,10 @@ fn branded_literals_preserve_brand() {
     assert_eq!(distance.unsafe_value, 2.0);
 }
 
-#[cfg(all(feature = "literals", feature = "units-dynamics"))]
+#[cfg(all(
+    feature = "literals",
+    any(feature = "units-dynamics", feature = "units-si-dynamics")
+))]
 #[culit::culit(custom_literals)]
 #[test]
 fn custom_literal_generator_obeys_the_same_features() {
@@ -210,6 +219,101 @@ fn disabled_catalog_items_are_not_exported() {
     let cases = trybuild::TestCases::new();
     #[cfg(not(feature = "units-electrical"))]
     cases.compile_fail("tests/catalog_ui/absent_electrical.rs");
-    #[cfg(any(not(feature = "literals"), not(feature = "units-dynamics")))]
+    #[cfg(any(
+        not(feature = "literals"),
+        not(any(feature = "units-dynamics", feature = "units-si-dynamics"))
+    ))]
     cases.compile_fail("tests/catalog_ui/absent_literals.rs");
+}
+
+#[cfg(feature = "units-si-dynamics")]
+#[test]
+fn coherent_constructors_cover_base_and_named_derived_units() {
+    use whippyunits::default_declarators::*;
+
+    let mass: Kilogram = 2.0.kilograms();
+    let distance: Meter = 3.0.meters();
+    let duration: Second = 4.0.seconds();
+    let angle: Radian = 5.0.radians();
+    let frequency: Hertz = 6.0.hertzs();
+    let force: Newton = 7.0.newtons();
+    let energy: Joule = 8.0.joules();
+    let torque: Newton_meter = 9.0.newton_meters();
+    let power: Watt = 10.0.watts();
+    let pressure: Pascal = 11.0.pascals();
+    assert_eq!(
+        [
+            mass.unsafe_value,
+            distance.unsafe_value,
+            duration.unsafe_value,
+            angle.unsafe_value,
+            frequency.unsafe_value,
+            force.unsafe_value,
+            energy.unsafe_value,
+            torque.unsafe_value,
+            power.unsafe_value,
+            pressure.unsafe_value,
+        ],
+        [2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0]
+    );
+}
+
+#[cfg(feature = "units-si-dynamics")]
+#[test]
+fn coherent_namespace_constructors_preserve_local_scales_and_brands() {
+    {
+        use local_catalog::*;
+        let mass: qty!(kg, f64, LocalBrand) = 2.0.kilograms();
+        let distance: qty!(mm, f64, LocalBrand) = 3.0.meters();
+        assert_eq!(mass.unsafe_value, 2.0);
+        assert_eq!(distance.unsafe_value, 3000.0);
+    }
+    {
+        use branded_catalog::*;
+        let mass: qty!(kg, f64, Brand) = 2.0.kilograms();
+        let force: qty!(N, f64, Brand) = 3.0.newtons();
+        assert_eq!(mass.unsafe_value, 2.0);
+        assert_eq!(force.unsafe_value, 3.0);
+    }
+}
+
+#[cfg(feature = "units-si-dynamics")]
+#[test]
+fn omitted_noncoherent_units_keep_the_full_dsl_and_hover_expansions() {
+    let millimeters: qty!(mm) = quantity!(2.0, mm);
+    let grams: qty!(g) = quantity!(3.0, g);
+    let minutes: qty!(min) = quantity!(4.0, min);
+    let degrees: qty!(deg) = quantity!(5.0, deg);
+    let liters: qty!(L) = quantity!(6.0, L);
+    let kiloliters: qty!(kL) = quantity!(7.0, kL);
+    let yards: qty!(m) = quantity!(2.0, yard);
+    assert_eq!(value!(millimeters, m), 0.002);
+    assert_eq!(value!(grams, kg), 0.003);
+    assert_eq!(value!(minutes, s), 240.0);
+    assert!((value!(degrees, rad) - core::f64::consts::PI / 36.0).abs() < 1e-12);
+    assert_eq!(value!(liters, m ^ 3), 0.006);
+    assert_eq!(value!(kiloliters, m ^ 3), 7.0);
+    assert_eq!(yards.unsafe_value, 1.8288);
+}
+
+#[cfg(all(feature = "units-si-dynamics", feature = "literals"))]
+#[culit::culit(whippyunits::default_declarators::literals)]
+#[test]
+fn coherent_literals_keep_kilogram_and_named_derived_units() {
+    let mass: qty!(kg) = 2.0kg;
+    let force: qty!(N, i64) = 3N_i64;
+    let energy: qty!(J, f32) = 4.0J_f32;
+    assert_eq!(mass.unsafe_value, 2.0);
+    assert_eq!(force.unsafe_value, 3);
+    assert_eq!(energy.unsafe_value, 4.0);
+}
+
+#[cfg(all(feature = "units-si-dynamics", not(feature = "units-dynamics")))]
+#[test]
+fn coherent_catalog_omits_noncoherent_declarators() {
+    let cases = trybuild::TestCases::new();
+    cases.compile_fail("tests/catalog_ui/absent_noncoherent.rs");
+    cases.compile_fail("tests/catalog_ui/absent_noncoherent_namespaces.rs");
+    #[cfg(feature = "literals")]
+    cases.compile_fail("tests/catalog_ui/absent_noncoherent_literals.rs");
 }

@@ -11,9 +11,9 @@ prototypes are documented in [mks-performance-hypotheses.md](mks-performance-hyp
 | --- | --- | --- |
 | Compact rational power tables | Retained | Rebuild/check median 4.458 s → 3.399 s (23.8% lower); runtime lookup improved in all nine measured cases |
 | Optional narrow exponent bridge | Retained | Rebuild/check median 3.275 s → 3.008 s (8.2% lower); defaults preserve +/-200, reduced builds use +/-32 |
-| Coherent SI dynamics catalog | Preparing | Additive lean entry point; preserve existing full catalogs and DSL |
-| Pre-generated fixed catalogs | Queued | Compare identical declarations before changing catalog size |
-| Remove phantom trait bounds | Queued | Preserve layout and numeric behavior |
+| Coherent SI dynamics catalog | Retained | Rebuild/check median 3.007 s → 2.114 s (29.7% lower), broad dynamics vs coherent SI conveniences |
+| Pre-generated fixed catalogs | Validating | Compare identical declarations; deterministic developer generation, no build script |
+| Remove phantom trait bounds | Preparing | Clone/Copy/Pod cleanup; preserve derived equality and constant-pattern compatibility |
 | Simplify raw matrix element construction | Queued | Remove redundant twelve-exponent obligations |
 | Improve type-level unit powers | Queued | Preserve intermediate-domain behavior or document deliberate limits |
 | Separate arithmetic core from parsing | Queued | Measure host and target dependency costs separately |
@@ -66,3 +66,18 @@ Both profiles passed seven core arithmetic tests and five negative doctests;
 public quantity boundary tests passed (two reduced, three wide), along with the
 reduced dynamics catalog tests. Workspace feature inspection confirms the editor
 helper crates do not accidentally re-enable the wide bridge.
+
+The coherent catalog comparison uses `a2a7c72` with `std,units-dynamics`
+against the candidate with `std,units-si-dynamics`. Both use the reduced
+exponent bridge and compact rational tables. The new option selects ten
+coherent constructor spellings and, when requested, ten literal suffixes.
+Other units remain available through the complete expression DSL. Existing
+catalog features remain additive. See
+[raw measurements](performance-results/03-coherent-check.json).
+
+Validation passed: 145 default library/integration tests, 10 lean catalog tests,
+14 lean-with-literals tests, 19 additive full-plus-lean tests, six proc-macro
+selection tests, and the reduced-profile `block_roundtrip` algebra example.
+Negative fixtures cover disabled aliases, default/local/branded methods, and
+literal suffixes. Included tests exercise omitted-unit DSL expansion, inferred
+integer conversions, signed zero, local scales, and branding.

@@ -63,6 +63,8 @@ serde = ["alloc", "dep:serde", "dep:serde_json", "dep:syn", "dep:proc-macro2", "
 # Catalog features only control generated declarators; the unit DSL remains complete.
 all-units = ["units-dynamics", "units-electrical", "units-thermal", "units-chemical", "units-photometric"]
 units-dynamics = ["whippyunits-proc-macros/units-dynamics"]
+# Coherent mechanical conveniences only; broader catalogs remain additive.
+units-si-dynamics = ["whippyunits-proc-macros/units-si-dynamics"]
 units-electrical = ["units-dynamics", "whippyunits-proc-macros/units-electrical"]
 units-thermal = ["units-dynamics", "whippyunits-proc-macros/units-thermal"]
 units-chemical = ["units-dynamics", "whippyunits-proc-macros/units-chemical"]

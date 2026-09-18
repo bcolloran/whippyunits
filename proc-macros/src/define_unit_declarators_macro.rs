@@ -503,12 +503,17 @@ impl DefineBaseUnitsInput {
             let base_scale_name_ident = syn::parse_str::<Ident>(&base_scale_name).unwrap();
             let base_fn_name_ident = syn::parse_str::<Ident>(&base_fn_name).unwrap();
 
-            scale_definitions.push(quote! {
-                (#base_scale_name_ident, #base_fn_name_ident)
-            });
+            if crate::utils::catalog::entry_enabled(base_unit, None) {
+                scale_definitions.push(quote! {
+                    (#base_scale_name_ident, #base_fn_name_ident)
+                });
+            }
 
             // Then generate all the prefixed units
             for prefix in si_prefixes {
+                if !crate::utils::catalog::entry_enabled(base_unit, Some(prefix)) {
+                    continue;
+                }
                 // Generate the correct naming convention using the source of truth
                 let scale_name = generate_scale_name(prefix.name(), base_unit_name);
                 let fn_name = format!("{}{}", prefix.name(), unit_suffix);
@@ -826,7 +831,7 @@ impl DefineBaseUnitsInput {
                 // Check if the scale name matches the unit name (capitalized)
                 let unit_name_capitalized = whippyunits_core::CapitalizedFmt(unit.name).to_string();
                 if unit_name_capitalized == scale_name {
-                    if !crate::utils::catalog::dimension_enabled(&dimension.exponents) {
+                    if !crate::utils::catalog::entry_enabled(unit, None) {
                         return crate::utils::shared_utils::get_declarator_type_for_exponents(
                             dimension.exponents,
                             unit.scale,
@@ -850,7 +855,7 @@ impl DefineBaseUnitsInput {
                         base_unit.name,
                     );
                     if type_name == scale_name {
-                        if !crate::utils::catalog::dimension_enabled(&dimension.exponents) {
+                        if !crate::utils::catalog::entry_enabled(base_unit, Some(prefix)) {
                             let mut scale = base_unit.scale;
                             scale.0[0] += prefix.factor_log10();
                             scale.0[2] += prefix.factor_log10();
@@ -1031,21 +1036,36 @@ impl DefineBaseUnitsInput {
             let mut impl_i32_methods = Vec::new();
             let mut impl_i64_methods = Vec::new();
 
-            // For each storage unit (conversion_factor == 1.0, no affine)
-            for unit in &metric_units {
+            // Brand-only namespaces historically expose unprefixed storage
+            // spellings. The lean catalog also needs the coherent mass entry:
+            // kilogram is represented by gram plus kilo in the shared metadata.
+            let entries = metric_units.iter().flat_map(|unit| {
+                let mut entries = vec![(*unit, None)];
+                if cfg!(feature = "units-si-dynamics") && unit.name == "gram" {
+                    entries.push((*unit, Some(&whippyunits_core::SiPrefix::KILO)));
+                }
+                entries
+            });
+            for (unit, prefix) in entries {
                 if !is_valid_identifier(unit.name)
                     || unit.conversion_factor != 1.0
                     || unit.affine_offset != 0.0
+                    || !crate::utils::catalog::entry_enabled(unit, prefix)
                 {
                     continue;
                 }
 
-                let scale_name = generate_scale_name("", unit.name);
+                let prefix_name = prefix.map_or("", |prefix| prefix.name());
+                let scale_name = generate_scale_name(prefix_name, unit.name);
                 let scale_name_ident = match syn::parse_str::<Ident>(&scale_name) {
                     Ok(ident) => ident,
                     Err(_) => continue, // Skip if we can't parse the scale name
                 };
-                let fn_name = whippyunits_core::make_plural(unit.name);
+                let fn_name = format!(
+                    "{}{}",
+                    prefix_name,
+                    whippyunits_core::make_plural(unit.name)
+                );
                 let fn_name_ident = match syn::parse_str::<Ident>(&fn_name) {
                     Ok(ident) => ident,
                     Err(_) => continue, // Skip if we can't parse the function name
@@ -1055,7 +1075,7 @@ impl DefineBaseUnitsInput {
                 let unit_symbol = unit
                     .symbols
                     .first()
-                    .map(|s| s.to_string())
+                    .map(|s| format!("{}{}", prefix.map_or("", |prefix| prefix.symbol()), s))
                     .unwrap_or_else(|| "m".to_string());
                 let unit_symbol_ident = match syn::parse_str::<Ident>(&unit_symbol) {
                     Ok(ident) => ident,

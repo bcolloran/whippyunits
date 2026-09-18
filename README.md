@@ -445,6 +445,7 @@ WhippyUnits works on **stable Rust**, using a typenum-based polyfill for compile
 | `serde` | Yes     | Enables serde `Serialize`/`Deserialize` impls, `from_json!`/`from_string!` macros, and the `.fmt()` display method (implies `alloc`) |
 | `all-units` | Yes | Enables every generated unit catalog below |
 | `units-dynamics` | Via `all-units` | Mass, length, time, angle, and their derived units, including force, energy, power, pressure, and density |
+| `units-si-dynamics` | No | Coherent SI dynamics constructors and aliases only: kg, m, s, rad, Hz, N, J, Nm, W, Pa |
 | `units-electrical` | Via `all-units` | Electrical and magnetic units; includes dynamics |
 | `units-thermal` | Via `all-units` | Temperature units, including affine conversions; includes dynamics |
 | `units-chemical` | Via `all-units` | Amount-of-substance units; includes dynamics |
@@ -461,6 +462,17 @@ whippyunits = { version = "0.3", default-features = false, features = ["std", "u
 Add `"literals"` if you use suffixes such as `1.0m` with `#[culit::culit(...)]`,
 and `"serde"` if you need serialization. Constructors such as `.meters()` and
 `.newtons()` remain available without `literals`.
+
+For just coherent SI dynamics, replace `"units-dynamics"` with
+`"units-si-dynamics"`. This removes convenience catalogs for other prefixes,
+grams, minutes, degrees, liters, and non-SI units. Kilograms remain available;
+`kg` is the coherent SI mass unit. Compound units such as velocity and density
+remain expressible with `qty!` and `quantity!`. The complete expression DSL
+also continues to accept omitted units, including `mm` and electrical units.
+This option trims generated declarations; it does not change quantity types
+or disable conversions. Catalog features are additive: enabling the broader
+`units-dynamics` or `all-units` restores their larger catalogs. `whippyalgebra`
+forwards `units-si-dynamics` too.
 
 This configuration uses the reduced exponent bridge. Add `"wide-exponents"`
 if intermediate dimension or scale exponents exceed 32 in magnitude. This is

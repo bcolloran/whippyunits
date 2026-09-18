@@ -19,7 +19,7 @@ pub fn get_all_unit_symbols_for_literals() -> Vec<String> {
 
     // Add base units from the canonical data
     for unit in Unit::BASES.iter() {
-        if !crate::utils::catalog::dimension_enabled(&unit.exponents) {
+        if !crate::utils::catalog::entry_enabled(unit, None) {
             continue;
         }
         if unit.name != "dimensionless" {
@@ -35,6 +35,9 @@ pub fn get_all_unit_symbols_for_literals() -> Vec<String> {
             continue;
         }
         for unit in dimension.units {
+            if !crate::utils::catalog::entry_enabled(unit, None) {
+                continue;
+            }
             // Add all symbols for the unit
             for symbol in unit.symbols {
                 symbols.push(symbol.to_string());
@@ -55,7 +58,7 @@ pub fn get_all_unit_symbols_for_literals() -> Vec<String> {
     // Add prefixed units from the canonical data (base units)
     for prefix in SiPrefix::ALL {
         for unit in Unit::BASES.iter() {
-            if !crate::utils::catalog::dimension_enabled(&unit.exponents) {
+            if !crate::utils::catalog::entry_enabled(unit, Some(prefix)) {
                 continue;
             }
             if unit.name != "dimensionless" {
@@ -77,7 +80,9 @@ pub fn get_all_unit_symbols_for_literals() -> Vec<String> {
                 for unit in dimension.units {
                     // Skip prefixed versions for units with conversion factors (imperial units)
                     // as they are stored internally in SI units and don't need prefixed types
-                    if !unit.has_conversion() {
+                    if !unit.has_conversion()
+                        && crate::utils::catalog::entry_enabled(unit, Some(prefix))
+                    {
                         for symbol in unit.symbols {
                             let prefixed_symbol = format!("{}{}", prefix.symbol(), symbol);
                             symbols.push(prefixed_symbol);
