@@ -48,7 +48,7 @@ fn main() {
     // A mixed 3x3 over rows [m, m, s] and columns [s, s, K]: entry (i, j) has
     // unit RowDims[i] / ColDims[j]. Written row-major as inline quantities, each
     // carrying exactly its cell's unit (a wrong unit would be a compile error).
-    let original = mixed_unit_matrix![dims![m, m, J], dims![s, s, K];
+    let original = mixed_unit_matrix![dims![m, m, s], dims![s, s, K];
         [quantity!(1.0, m / s), quantity!(2.0, m / s), quantity!(3.0, m / K)],
         [quantity!(4.0, m / s), quantity!(5.0, m / s), quantity!(6.0, m / K)],
         [7.0, 8.0, quantity!(9.0, s / K)],

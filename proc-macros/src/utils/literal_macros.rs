@@ -19,6 +19,9 @@ pub fn get_all_unit_symbols_for_literals() -> Vec<String> {
 
     // Add base units from the canonical data
     for unit in Unit::BASES.iter() {
+        if !crate::utils::catalog::dimension_enabled(&unit.exponents) {
+            continue;
+        }
         if unit.name != "dimensionless" {
             for symbol in unit.symbols {
                 symbols.push(symbol.to_string());
@@ -28,6 +31,9 @@ pub fn get_all_unit_symbols_for_literals() -> Vec<String> {
 
     // Add all units from the unified dimensions data (including compound units and unit literals)
     for dimension in Dimension::ALL {
+        if !crate::utils::catalog::dimension_enabled(&dimension.exponents) {
+            continue;
+        }
         for unit in dimension.units {
             // Add all symbols for the unit
             for symbol in unit.symbols {
@@ -49,6 +55,9 @@ pub fn get_all_unit_symbols_for_literals() -> Vec<String> {
     // Add prefixed units from the canonical data (base units)
     for prefix in SiPrefix::ALL {
         for unit in Unit::BASES.iter() {
+            if !crate::utils::catalog::dimension_enabled(&unit.exponents) {
+                continue;
+            }
             if unit.name != "dimensionless" {
                 for symbol in unit.symbols {
                     symbols.push(format!("{}{}", prefix.symbol(), symbol));
@@ -60,6 +69,9 @@ pub fn get_all_unit_symbols_for_literals() -> Vec<String> {
     // Add prefixed compound units and derived units (kJ, mW, kN, mHz, etc.)
     for prefix in SiPrefix::ALL {
         for dimension in Dimension::ALL {
+            if !crate::utils::catalog::dimension_enabled(&dimension.exponents) {
+                continue;
+            }
             // Anything that's not atomic is composite (compound or derived)
             if !Dimension::BASIS.contains(dimension) {
                 for unit in dimension.units {
@@ -101,7 +113,11 @@ pub fn generate_literal_macros_module(
     namespace_ident: Ident,
 ) -> TokenStream2 {
     // Get all unit symbols using the shared function
-    let unit_symbols = get_all_unit_symbols_for_literals();
+    let unit_symbols = if cfg!(feature = "literals") {
+        get_all_unit_symbols_for_literals()
+    } else {
+        Vec::new()
+    };
 
     // Determine the correct quantity! path based on mode
     let quantity_path = if is_local_mode {
@@ -130,15 +146,12 @@ pub fn generate_literal_macros_module(
                 let equivalent_text = if let Some(storage_type) = storage_type {
                     format!(
                         "equivalent to: `{}::quantity!(value, {}, {})`<br><hr><br>",
-                        namespace_ident,
-                        unit_symbol,
-                        storage_type
+                        namespace_ident, unit_symbol, storage_type
                     )
                 } else {
                     format!(
                         "equivalent to: `{}::quantity!(value, {})`<br><hr><br>",
-                        namespace_ident,
-                        unit_symbol
+                        namespace_ident, unit_symbol
                     )
                 };
                 formatted_details.push_str(&equivalent_text);

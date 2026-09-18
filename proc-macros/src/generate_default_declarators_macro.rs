@@ -292,6 +292,9 @@ impl DefaultDeclaratorsInput {
         use whippyunits_core::{Dimension, System};
 
         for dimension in Dimension::ALL {
+            if !crate::utils::catalog::dimension_enabled(&dimension.exponents) {
+                continue;
+            }
             // Get all metric units for this dimension
             let metric_units: Vec<_> = dimension
                 .units
@@ -381,12 +384,7 @@ impl DefaultDeclaratorsInput {
                         (total_scale, 0i16, total_scale, 0i16)
                     } else {
                         // Other units have 0 inherent scale factor
-                        (
-                            prefix.factor_log10(),
-                            0i16,
-                            prefix.factor_log10(),
-                            0i16,
-                        )
+                        (prefix.factor_log10(), 0i16, prefix.factor_log10(), 0i16)
                     };
 
                     let scale_name_ident = syn::parse_str::<Ident>(&scale_name).unwrap();
@@ -510,6 +508,9 @@ impl DefaultDeclaratorsInput {
         let mut system_units = Vec::new();
 
         for dimension in Dimension::ALL {
+            if !crate::utils::catalog::dimension_enabled(&dimension.exponents) {
+                continue;
+            }
             for unit in dimension.units {
                 if unit.system == system {
                     system_units.push((dimension, unit));
@@ -939,7 +940,6 @@ impl DefaultDeclaratorsInput {
                     crate::quantity::Quantity::<crate::quantity::Unit<crate::quantity::Scale<crate::quantity::_2<#p2>, crate::quantity::_3<#p3>, crate::quantity::_5<#p5>, crate::quantity::_Pi<#pi>>, crate::quantity::Dimension<crate::quantity::_M<#mass_exp>, crate::quantity::_L<#length_exp>, crate::quantity::_T<#time_exp>, crate::quantity::_I<#current_exp>, crate::quantity::_Θ<#temperature_exp>, crate::quantity::_N<#amount_exp>, crate::quantity::_J<#luminosity_exp>, crate::quantity::_A<#angle_exp>>>, i64>::new((self as f64 * #conversion_factor) as i64)
                 }
             });
-
         }
 
         quote! {

@@ -39,6 +39,17 @@
 //! | `std`   | Yes     | Enables standard library support (implies `alloc`) |
 //! | `alloc` | Yes     | Enables `Display`/`Debug` impls on `Quantity` (requires a global allocator) |
 //! | `serde` | Yes     | Enables `Serialize`/`Deserialize` impls, `from_json!`/`from_string!` macros, and `.fmt()` (implies `alloc`) |
+//! | `all-units` | Yes | Enables all generated unit catalogs |
+//! | `units-dynamics` | Via `all-units` | Mass, length, time, angle, and their derived units |
+//! | `units-electrical`, `units-thermal`, `units-chemical`, `units-photometric` | Via `all-units` | Additional catalogs; each includes dynamics |
+//! | `literals` | Yes | Custom literal suffixes for the selected catalogs |
+//!
+//! For dynamics-only constructor methods, use `default-features = false` with
+//! `features = ["std", "units-dynamics"]`. Add `"literals"` for `1.0m` syntax.
+//! The `unit!`, `qty!`, `quantity!`, and `value!` expression macros retain the
+//! complete unit vocabulary even when no catalogs are enabled. Catalog flags
+//! also apply to custom declarator namespaces. Cargo combines features requested
+//! by all dependencies, so another dependency can enable additional catalogs.
 //!
 //! ## `no_std` and `no_alloc` Support
 //!

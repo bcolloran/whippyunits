@@ -262,10 +262,8 @@ impl DefineBaseUnitsInput {
         );
 
         // Create the prefixed macro name identifier
-        let prefixed_macro_name = syn::Ident::new(
-            &format!("{}_quantity", namespace),
-            namespace.span(),
-        );
+        let prefixed_macro_name =
+            syn::Ident::new(&format!("{}_quantity", namespace), namespace.span());
 
         quote! {
             // Generate documentation structs for scale identifiers (validation happens here)
@@ -438,6 +436,9 @@ impl DefineBaseUnitsInput {
         let base_dimensions = Dimension::BASIS;
 
         for dimension in base_dimensions {
+            if !crate::utils::catalog::dimension_enabled(&dimension.exponents) {
+                continue;
+            }
             let (
                 _mass_exp,
                 _length_exp,
@@ -475,10 +476,7 @@ impl DefineBaseUnitsInput {
 
             // Generate trait name from dimension name, converting spaces to underscores
             let sanitized_name = dimension.name.replace(" ", "");
-            let trait_name = format!(
-                "Local{}",
-                whippyunits_core::CapitalizedFmt(&sanitized_name)
-            );
+            let trait_name = format!("Local{}", whippyunits_core::CapitalizedFmt(&sanitized_name));
 
             // Determine scale identifier based on dimension (used later for documentation)
             let _scale_ident = match dimension.name {
@@ -605,7 +603,6 @@ impl DefineBaseUnitsInput {
                             <whippyunits::local_unit!(#unit_symbol_ident, #mass_scale, #length_scale, #time_scale, #current_scale, #temperature_scale, #amount_scale, #luminosity_scale, #angle_scale, i64, #brand_type_tokens)>::new(rescaled.unsafe_value)
                         }
                     });
-
                 }
             }
 
@@ -829,6 +826,12 @@ impl DefineBaseUnitsInput {
                 // Check if the scale name matches the unit name (capitalized)
                 let unit_name_capitalized = whippyunits_core::CapitalizedFmt(unit.name).to_string();
                 if unit_name_capitalized == scale_name {
+                    if !crate::utils::catalog::dimension_enabled(&dimension.exponents) {
+                        return crate::utils::shared_utils::get_declarator_type_for_exponents(
+                            dimension.exponents,
+                            unit.scale,
+                        );
+                    }
                     let type_ident = syn::Ident::new(scale_name, proc_macro2::Span::call_site());
                     return Some(quote! {
                         whippyunits::default_declarators::#type_ident
@@ -847,6 +850,15 @@ impl DefineBaseUnitsInput {
                         base_unit.name,
                     );
                     if type_name == scale_name {
+                        if !crate::utils::catalog::dimension_enabled(&dimension.exponents) {
+                            let mut scale = base_unit.scale;
+                            scale.0[0] += prefix.factor_log10();
+                            scale.0[2] += prefix.factor_log10();
+                            return crate::utils::shared_utils::get_declarator_type_for_exponents(
+                                dimension.exponents,
+                                scale,
+                            );
+                        }
                         let type_ident =
                             syn::Ident::new(scale_name, proc_macro2::Span::call_site());
                         return Some(quote! {
@@ -899,10 +911,8 @@ impl DefineBaseUnitsInput {
         );
 
         // Create prefixed macro name
-        let prefixed_macro_name = syn::Ident::new(
-            &format!("{}_quantity", namespace),
-            namespace.span(),
-        );
+        let prefixed_macro_name =
+            syn::Ident::new(&format!("{}_quantity", namespace), namespace.span());
 
         // Generate brand-specific documentation
         let brand_doc = if let Some(ref brand) = brand_ident {
@@ -996,6 +1006,9 @@ impl DefineBaseUnitsInput {
 
         // Iterate over all dimensions like default_declarators does
         for dimension in Dimension::ALL {
+            if !crate::utils::catalog::dimension_enabled(&dimension.exponents) {
+                continue;
+            }
             let metric_units: Vec<_> = dimension
                 .units
                 .iter()
@@ -1083,7 +1096,6 @@ impl DefineBaseUnitsInput {
                         <whippyunits::qty!(#unit_symbol_ident, i64, #brand_type_tokens)>::new(q.unsafe_value)
                     }
                 });
-
             }
 
             // Generate trait with all methods

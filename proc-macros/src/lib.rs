@@ -27,6 +27,7 @@ mod unit_macro;
 mod value_macro;
 
 mod utils {
+    pub mod catalog;
     pub mod culit;
     pub mod dimension_suggestions;
     pub mod lift_trace;

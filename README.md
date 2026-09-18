@@ -443,6 +443,37 @@ WhippyUnits works on **stable Rust**, using a typenum-based polyfill for compile
 | `std`   | Yes     | Enables standard library support (implies `alloc`) |
 | `alloc` | Yes     | Enables `Display`/`Debug` impls on `Quantity` (requires a global allocator) |
 | `serde` | Yes     | Enables serde `Serialize`/`Deserialize` impls, `from_json!`/`from_string!` macros, and the `.fmt()` display method (implies `alloc`) |
+| `all-units` | Yes | Enables every generated unit catalog below |
+| `units-dynamics` | Via `all-units` | Mass, length, time, angle, and their derived units, including force, energy, power, pressure, and density |
+| `units-electrical` | Via `all-units` | Electrical and magnetic units; includes dynamics |
+| `units-thermal` | Via `all-units` | Temperature units, including affine conversions; includes dynamics |
+| `units-chemical` | Via `all-units` | Amount-of-substance units; includes dynamics |
+| `units-photometric` | Via `all-units` | Luminous intensity and illuminance units; includes dynamics |
+| `literals` | Yes | Generates custom literal suffix macros for the selected catalogs |
+
+To compile only the dynamics catalog:
+
+```toml
+whippyunits = { version = "0.3", default-features = false, features = ["std", "units-dynamics"] }
+```
+
+Add `"literals"` if you use suffixes such as `1.0m` with `#[culit::culit(...)]`,
+and `"serde"` if you need serialization. Constructors such as `.meters()` and
+`.newtons()` remain available without `literals`.
+
+Catalog features control generated aliases, constructor methods, and literal
+suffixes, including custom declarator namespaces. The `unit!`, `qty!`,
+`quantity!`, and `value!` expression macros keep the complete unit vocabulary
+with any feature set. The underlying eight-dimensional types and default brand
+are unchanged. With no catalog features, use those expression macros directly.
+
+`whippyalgebra` forwards the same catalog features. For a dynamics-only algebra
+build, use `default-features = false` and enable `std`, `nalgebra`, and
+`units-dynamics` there as well. Cargo combines features requested by dependencies;
+another dependency enabling `all-units` restores the full catalog. Savings apply
+when the library is compiled; ordinary application edits can reuse its cached
+build.
+
 
 ## `no_std` and `no_alloc` Support
 

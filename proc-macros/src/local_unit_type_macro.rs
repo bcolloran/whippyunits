@@ -874,6 +874,34 @@ impl LocalQuantityMacroInput {
 
     /// Get the local target type for a single unit identifier (reuses existing lift logic)
     fn get_local_target_type_for_unit(&self, unit_name: &str, storage_type: &Type) -> TokenStream {
+        if let Some(unit) = whippyunits_core::get_unit_info(unit_name) {
+            if !crate::utils::catalog::dimension_enabled(&unit.exponents) {
+                // Compute the same local unit selected by the type expansion,
+                // retaining the lift trace without naming a disabled alias.
+                let expression =
+                    if let Some(scale_ident) = self.get_scale_for_dimensions(unit.exponents) {
+                        let scale_name = scale_ident.to_string();
+                        crate::utils::lift_trace::scale_type_to_actual_unit_symbol(&scale_name)
+                            .unwrap_or_else(|| scale_name.to_lowercase())
+                    } else {
+                        self.generate_unit_expression_from_dimensions(unit.exponents)
+                    };
+                if let Ok(expression) = syn::parse_str::<UnitExpr>(&expression) {
+                    let evaluated =
+                        expression.evaluate_with_mode(whippyunits_core::EvaluationMode::Tolerant);
+                    if let Some(target) =
+                        crate::utils::shared_utils::get_declarator_type_for_exponents(
+                            evaluated.dimension_exponents,
+                            evaluated.scale_exponents,
+                        )
+                    {
+                        return target;
+                    }
+                }
+                return quote! { () };
+            }
+        }
+
         // Check if this is a time unit that needs conversion (like h → s)
         if let Some(_time_conversion) = self.get_time_unit_conversion(unit_name) {
             // For time units with conversion factors, return the target time unit declarator

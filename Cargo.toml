@@ -35,28 +35,37 @@ proc-macro2 = { version = "1.0", optional = true }
 syn = { version = "2.0", features = ["full"], optional = true }
 libm = "0.2"
 bytemuck = "1"
-whippyunits-proc-macros = { path = "proc-macros", version = "0.3.0" }
+whippyunits-proc-macros = { path = "proc-macros", version = "0.3.0", default-features = false }
 whippyunits-core = { path = "whippyunits-core", version = "0.3.0" }
 # `default-features = false` drops num-traits' `std` (on by default), which would
 # otherwise be unified onto every downstream no_std build. Only `NumCast` is used
 # here (a core-only trait), so the std impls are not needed; `std` is forwarded
 # back through this crate's own `std` feature for downstream std builds.
 num-traits = { version = "0.2", default-features = false }
-culit = "0.6.0"
 op_result = "0.5.8"
 serde = { version = "1.0", default-features = false, features = ["alloc", "derive"], optional = true }
 serde_json = { version = "1.0", default-features = false, features = ["alloc"], optional = true }
 
 [dev-dependencies]
+culit = "0.6.0"
 trybuild = "1.0"
 typenum = "1"
 
 
 [features]
-default = ["std", "serde"]
+default = ["std", "serde", "all-units", "literals"]
 std = ["alloc", "num-traits/std"]
 alloc = []
 serde = ["alloc", "dep:serde", "dep:serde_json", "dep:syn", "dep:proc-macro2", "dep:quote"]
+
+# Catalog features only control generated declarators; the unit DSL remains complete.
+all-units = ["units-dynamics", "units-electrical", "units-thermal", "units-chemical", "units-photometric"]
+units-dynamics = ["whippyunits-proc-macros/units-dynamics"]
+units-electrical = ["units-dynamics", "whippyunits-proc-macros/units-electrical"]
+units-thermal = ["units-dynamics", "whippyunits-proc-macros/units-thermal"]
+units-chemical = ["units-dynamics", "whippyunits-proc-macros/units-chemical"]
+units-photometric = ["units-dynamics", "whippyunits-proc-macros/units-photometric"]
+literals = ["whippyunits-proc-macros/literals"]
 
 [lib]
 name = "whippyunits"

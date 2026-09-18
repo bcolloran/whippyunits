@@ -1,0 +1,7 @@
+error[E0432]: unresolved import `whippyunits::default_declarators::literals::float::m`
+ --> tests/catalog_ui/absent_literals.rs:1:5
+  |
+1 | use whippyunits::default_declarators::literals::float::m;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^-
+  |                                                        |
+  |                                                        no `m` in `default_declarators::literals::float`

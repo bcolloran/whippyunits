@@ -71,6 +71,21 @@ default `std` feature is off. The features are additive:
 | `std` | Yes | Full standard library; implies `alloc`. Adds nalgebra's `matrixmultiply` fast path and the `std`-only matrix exponential (`.exp()`). |
 | `alloc` | via `std` | Heap allocation without `std`. Required for matrix `Display` (unit-aware pretty-printing renders each cell to a `String`), dynamically sized matrices (`DMatrix`/`DVector`, `from_dyn`), and the `Vec`/columns/rows uniform constructors. |
 | `nalgebra` | Yes | The nalgebra backend adapter. |
+| `all-units` | Yes | All whippyunits constructor and type-alias catalogs. |
+| `units-dynamics` | via `all-units` | Dynamics constructors and aliases; includes mass, length, time, angle, and derived units. |
+| `units-electrical`, `units-thermal`, `units-chemical`, `units-photometric` | via `all-units` | Additional whippyunits catalogs; each includes dynamics. |
+| `literals` | Yes | Custom literal suffix macros for the selected catalogs. |
+
+To select dynamics while keeping nalgebra and standard-library support:
+
+```toml
+whippyalgebra = { version = "0.1", default-features = false, features = ["std", "nalgebra", "units-dynamics"] }
+```
+
+Add `literals` if needed. If you also depend directly on `whippyunits`, disable its
+default features and select the same catalogs there. Cargo combines features
+requested by dependencies. The unit-expression macros remain available for all
+units regardless of catalog selection.
 
 With neither `std` nor `alloc`, the statically sized, unit-checked core — construction,
 arithmetic, decompositions, element access, and `rescale_matrix` — keeps working; the

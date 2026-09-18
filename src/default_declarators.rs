@@ -1,6 +1,9 @@
 //! Default declarators for [Quantity] instances.
 //!
 //! By default, declarators are generated for all standard SI units, base and derived.
+//! The `units-*` features select catalogs; `literals` enables suffix macros for
+//! the selected units. With default features disabled, explicitly select the
+//! catalogs whose constructor methods and type aliases you need.
 //! Quantities in bespoke units can be declared using the [quantity!](crate::quantity!) macro,
 //! which offers a simple unit literal syntax.
 //!
@@ -32,11 +35,14 @@
 //! # }
 //! ```
 
+#[allow(unused_imports)]
 use crate::quantity::Quantity;
+#[allow(unused_imports)]
 use crate::quantity::{_2, _3, _5, _A, _I, _J, _L, _M, _N, _Pi, _T, _Θ, Dimension, Scale, Unit};
 use whippyunits_proc_macros::generate_default_declarators;
 
 #[doc(hidden)]
+#[allow(unused_macros)]
 macro_rules! define_quantity {
     (
         $mass_exp:expr, $length_exp:expr, $time_exp:expr, $current_exp:expr, $temperature_exp:expr, $amount_exp:expr, $luminosity_exp:expr, $angle_exp:expr,
@@ -80,6 +86,7 @@ macro_rules! define_quantity {
 }
 
 #[doc(hidden)]
+#[allow(unused_macros)]
 macro_rules! define_nonstorage_quantity {
     (
         $mass_exp:expr, $length_exp:expr, $time_exp:expr, $current_exp:expr, $temperature_exp:expr, $amount_exp:expr, $luminosity_exp:expr, $angle_exp:expr,
@@ -139,6 +146,7 @@ macro_rules! define_nonstorage_quantity {
 }
 
 #[doc(hidden)]
+#[allow(unused_macros)]
 macro_rules! define_affine_quantity {
     (
         $mass_exp:expr, $length_exp:expr, $time_exp:expr, $current_exp:expr, $temperature_exp:expr, $amount_exp:expr, $luminosity_exp:expr, $angle_exp:expr,
@@ -180,6 +188,7 @@ macro_rules! define_affine_quantity {
 
 #[allow(unused)]
 #[doc(hidden)]
+#[allow(unused_macros)]
 macro_rules! define_nonstorage_affine_quantity {
     (
         $mass_exp:expr, $length_exp:expr, $time_exp:expr, $current_exp:expr, $temperature_exp:expr, $amount_exp:expr, $luminosity_exp:expr, $angle_exp:expr,
