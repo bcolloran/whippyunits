@@ -62,25 +62,35 @@ impl UnitFormatter {
     ) -> String {
         let base = self.format_types_with_original_impl(text, config, original_text);
         match self.unit_matrix_trace(original_text) {
-            Some(trace) => Self::insert_after_first_code_block(&base, &trace),
+            Some(trace) => Self::insert_after_last_code_block(&base, &trace),
             None => base,
         }
     }
 
     /// Insert a fenced `text` block containing `trace` immediately after the
-    /// first fenced code block of `base` (i.e. right after the prettified type,
-    /// and before any `Raw:` section). Falls back to appending if no code block
-    /// is found.
-    fn insert_after_first_code_block(base: &str, trace: &str) -> String {
+    /// last fenced code block of `base` — right after the prettified type
+    /// (rust-analyzer's field hovers put the owner's path in a first block and
+    /// the field in a second), and before any `Raw:` section. Falls back to
+    /// appending if no code block is found.
+    fn insert_after_last_code_block(base: &str, trace: &str) -> String {
         let block = format!("\n\n```text\n{trace}\n```");
-        if let Some(start) = base.find("```rust") {
-            let after_open = start + "```rust".len();
-            if let Some(rel_close) = base[after_open..].find("```") {
-                let close_end = after_open + rel_close + "```".len();
-                return format!("{}{}{}", &base[..close_end], block, &base[close_end..]);
-            }
+        // The Raw section is a code block too; the trace belongs before it
+        let limit = base.find("---\nRaw:").unwrap_or(base.len());
+        let mut close_end = None;
+        let mut search = 0;
+        while let Some(rel) = base[search..limit].find("```rust") {
+            let after_open = search + rel + "```rust".len();
+            let Some(rel_close) = base[after_open..limit].find("```") else {
+                break;
+            };
+            let end = after_open + rel_close + "```".len();
+            close_end = Some(end);
+            search = end;
         }
-        format!("{base}{block}")
+        match close_end {
+            Some(end) => format!("{}{}{}", &base[..end], block, &base[end..]),
+            None => format!("{base}{block}"),
+        }
     }
 
     fn format_types_with_original_impl(
@@ -98,76 +108,62 @@ impl UnitFormatter {
             return self.format_quantity_types(text, config.verbose, config.unicode, false);
         }
 
-        // Work within the existing markdown structure
-        // Find the first code block and replace its content
-        // Use `text` (which may have been pre-transformed, e.g. trait simplification)
-        // rather than `original_text` so earlier transformations aren't discarded.
-        if let Some(code_start) = text.find("```rust") {
-            let after_code_start = &text[code_start + 7..]; // Skip "```rust"
-            if let Some(code_end) = after_code_start.find("```") {
-                let code_content = &after_code_start[..code_end];
+        // Work within the existing markdown structure: rewrite the contents of every
+        // ```rust block. rust-analyzer's hovers carry one block for a `let`, but two for
+        // a struct field (the owner's path, then the field), and the type may sit in any
+        // of them. Use `text` (which may have been pre-transformed, e.g. trait
+        // simplification) rather than `original_text` so earlier transformations aren't
+        // discarded; `original_text`'s blocks only feed the Raw section.
+        let original_blocks = code_blocks(original_text);
+        let mut result = String::new();
+        let mut rest = text;
+        let mut raw_type = String::new();
+        let mut index = 0;
+        while let Some(code_start) = rest.find("```rust") {
+            let after_open = code_start + "```rust".len();
+            let Some(rel_close) = rest[after_open..].find("```") else {
+                break;
+            };
+            let code_content = &rest[after_open..after_open + rel_close];
+            let formatted_content =
+                self.format_quantity_types(code_content, config.verbose, config.unicode, false);
 
-                // Format the code content
-                let formatted_content =
-                    self.format_quantity_types(code_content, config.verbose, config.unicode, false);
-
-                // Check if we actually transformed anything (compare against original)
-                let original_code_content = original_text
-                    .find("```rust")
-                    .and_then(|s| {
-                        let after = &original_text[s + 7..];
-                        after.find("```").map(|e| &after[..e])
-                    });
-                let was_transformed = original_code_content
-                    .is_none_or(|orig| formatted_content != orig);
-
-                // Extract raw type from the original code content if we transformed it
-                let raw_type = if was_transformed && config.include_raw {
-                    original_code_content
-                        .map(|c| self.extract_raw_type_from_hover(c))
-                        .unwrap_or_default()
-                } else {
-                    String::new()
-                };
-
-                // Replace the content in the existing code block
-                let before_code = &text[..code_start + 7]; // Include "```rust"
-                let after_code_block = &after_code_start[code_end + 3..]; // Skip closing ```
-
-                let result = if !raw_type.is_empty() {
-                    // Insert raw section after the first --- separator
-                    if let Some(separator_pos) = after_code_block.find("---") {
-                        let after_separator = &after_code_block[separator_pos..];
-                        format!(
-                            "{}\n{}\n```\n\n---\nRaw:\n\n```rust\n{}\n```\n{}",
-                            before_code,
-                            formatted_content.trim(),
-                            raw_type,
-                            after_separator
-                        )
-                    } else {
-                        format!(
-                            "{}\n{}\n```\n\n---\nRaw:\n\n```rust\n{}\n```\n",
-                            before_code,
-                            formatted_content.trim(),
-                            raw_type
-                        )
-                    }
-                } else {
-                    format!(
-                        "{}\n{}\n```{}",
-                        before_code,
-                        formatted_content.trim(),
-                        after_code_block
-                    )
-                };
-
-                return result;
+            // Extract the raw type from the first block we actually transformed
+            let original_code_content = original_blocks.get(index).copied();
+            let was_transformed =
+                original_code_content.is_none_or(|orig| formatted_content != orig);
+            if raw_type.is_empty() && was_transformed && config.include_raw {
+                raw_type = original_code_content
+                    .map(|c| self.extract_raw_type_from_hover(c))
+                    .unwrap_or_default();
             }
+
+            result.push_str(&rest[..after_open]);
+            result.push('\n');
+            result.push_str(formatted_content.trim());
+            result.push('\n');
+            rest = &rest[after_open + rel_close..]; // starts at the closing ```
+            index += 1;
         }
 
-        // Fallback to normal formatting if we can't parse the markdown structure
-        self.format_quantity_types(text, config.verbose, config.unicode, false)
+        if index == 0 {
+            // No code block: format the text as a whole
+            return self.format_quantity_types(text, config.verbose, config.unicode, false);
+        }
+
+        if raw_type.is_empty() {
+            result.push_str(rest);
+            return result;
+        }
+
+        // Insert the Raw section right after the last block, before the first --- separator
+        let after_code_block = &rest["```".len()..];
+        result.push_str("```");
+        result.push_str(&format!("\n\n---\nRaw:\n\n```rust\n{}\n```\n", raw_type));
+        if let Some(separator_pos) = after_code_block.find("---") {
+            result.push_str(&after_code_block[separator_pos..]);
+        }
+        result
     }
 
     /// Format whippyunits types for inlay hints (compact format)
@@ -188,7 +184,9 @@ impl UnitFormatter {
         unicode: bool,
         is_inlay_hint: bool,
     ) -> String {
-        let mut result = text.to_string();
+        // rust-analyzer renders const blocks in declared types as `{const}`, which no
+        // Rust parser accepts; `_` parses and is already read as an unresolved exponent.
+        let mut result = collapse_lift_trace(text).replace("{const}", "_");
         if result.contains("Quantity<Unit<") && result.contains("Scale") {
             result = self.format_quantity_pass(&result, verbose, unicode, is_inlay_hint);
         }
@@ -202,14 +200,19 @@ impl UnitFormatter {
         // Drop a trailing default `, ()` brand from `MixedUnitMatrix<…>` so unbranded
         // matrices read as `MixedUnitMatrix<[…], […], Matrix<…>>`.
         result = self.strip_default_brand(&result);
+        // Fold nalgebra's expanded storage types back into their aliases
+        // (`Matrix<T, Const<2>, Const<1>, ArrayStorage<T, 2, 1>>` -> `Vector2<T>`).
+        result = self.collapse_nalgebra_aliases(&result);
         result
     }
 
-    /// Remove a trailing default brand (`, ()`) from every `MixedUnitMatrix<…>` in
-    /// `text`. `Brand` is the last, defaulted (`()`) type parameter, so an
-    /// unbranded matrix carries a redundant `()` we elide from the display.
+    /// Remove a trailing default brand (`, ()`) from every `MixedUnitMatrix<…>` and
+    /// `UniformUnitMatrix<…>` in `text`. `Brand` is the last, defaulted (`()`) type
+    /// parameter, so an unbranded matrix carries a redundant `()` we elide from the
+    /// display.
     fn strip_default_brand(&self, text: &str) -> String {
-        if !text.contains("MixedUnitMatrix<") {
+        const MATRIX_TYPES: [&str; 2] = ["MixedUnitMatrix<", "UniformUnitMatrix<"];
+        if !MATRIX_TYPES.iter().any(|name| text.contains(name)) {
             return text.to_string();
         }
 
@@ -218,11 +221,14 @@ impl UnitFormatter {
         let mut i = 0;
 
         while i < text.len() {
-            if text[i..].starts_with("MixedUnitMatrix<") && Self::is_ident_boundary(text, i) {
-                let lt = i + 15; // byte index of the '<' after "MixedUnitMatrix"
+            let matrix_type = MATRIX_TYPES
+                .iter()
+                .find(|name| text[i..].starts_with(*name) && Self::is_ident_boundary(text, i));
+            if let Some(name) = matrix_type {
+                let lt = i + name.len() - 1; // byte index of the '<'
                 if let Some(gt) = Self::find_matching_angle(bytes, lt) {
                     if let Some(new_inner) = self.drop_trailing_unit_brand(&text[lt + 1..gt]) {
-                        result.push_str("MixedUnitMatrix<");
+                        result.push_str(name);
                         result.push_str(&new_inner);
                         result.push('>');
                         i = gt + 1;
@@ -238,6 +244,80 @@ impl UnitFormatter {
         }
 
         result
+    }
+
+    /// Fold nalgebra's fully expanded matrix type back into the alias a user would
+    /// write. rust-analyzer prints `Matrix<T, Const<2>, Const<1>, ArrayStorage<T, 2, 1>>`
+    /// for a `Vector2<T>`; faithful, but unreadable inside a `UniformUnitMatrix<…>`.
+    /// Only the shapes nalgebra names are folded (`Vector2`, `Matrix2x3`, `SVector`,
+    /// `DMatrix`, …); views and custom storage are left as they are.
+    fn collapse_nalgebra_aliases(&self, text: &str) -> String {
+        if !text.contains("Matrix<") {
+            return text.to_string();
+        }
+
+        let bytes = text.as_bytes();
+        let mut result = String::new();
+        let mut i = 0;
+
+        while i < text.len() {
+            if text[i..].starts_with("Matrix<") && Self::is_ident_boundary(text, i) {
+                let lt = i + "Matrix".len();
+                if let Some(gt) = Self::find_matching_angle(bytes, lt) {
+                    if let Some(alias) = Self::nalgebra_alias(&text[lt + 1..gt]) {
+                        // The qualifier, if any, was already copied over; the alias is unqualified
+                        if result.ends_with("nalgebra::") {
+                            result.truncate(result.len() - "nalgebra::".len());
+                        }
+                        result.push_str(&alias);
+                        i = gt + 1;
+                        continue;
+                    }
+                }
+            }
+
+            let ch = text[i..].chars().next().unwrap();
+            let len = ch.len_utf8();
+            result.push_str(&text[i..i + len]);
+            i += len;
+        }
+
+        result
+    }
+
+    /// The nalgebra alias for the arguments of `Matrix<T, R, C, S>`, if it has one.
+    fn nalgebra_alias(args: &str) -> Option<String> {
+        let args = Self::split_top_level(args);
+        if args.len() != 4 {
+            return None;
+        }
+        let scalar = args[0].trim();
+        let rows = MatrixDim::parse(args[1])?;
+        let cols = MatrixDim::parse(args[2])?;
+        let storage = args[3].trim().trim_start_matches("nalgebra::");
+        if !(storage.starts_with("ArrayStorage<") || storage.starts_with("VecStorage<")) {
+            return None;
+        }
+
+        use MatrixDim::{Dyn, Fixed};
+        let alias = match (rows, cols) {
+            (Fixed(r), Fixed(c)) if r <= 6 && c <= 6 => match (r, c) {
+                (r, 1) => format!("Vector{r}<{scalar}>"),
+                (1, c) => format!("RowVector{c}<{scalar}>"),
+                (r, c) if r == c => format!("Matrix{r}<{scalar}>"),
+                (r, c) => format!("Matrix{r}x{c}<{scalar}>"),
+            },
+            (Fixed(r), Fixed(1)) => format!("SVector<{scalar}, {r}>"),
+            (Fixed(1), Fixed(c)) => format!("RowSVector<{scalar}, {c}>"),
+            (Fixed(r), Fixed(c)) => format!("SMatrix<{scalar}, {r}, {c}>"),
+            (Dyn, Dyn) => format!("DMatrix<{scalar}>"),
+            (Dyn, Fixed(1)) => format!("DVector<{scalar}>"),
+            (Fixed(1), Dyn) => format!("RowDVector<{scalar}>"),
+            (Dyn, Fixed(c)) if c <= 6 => format!("MatrixXx{c}<{scalar}>"),
+            (Fixed(r), Dyn) if r <= 6 => format!("Matrix{r}xX<{scalar}>"),
+            _ => return None,
+        };
+        Some(alias)
     }
 
     /// Build a values-free diagram of the first concrete unit matrix in `text`:
@@ -1386,4 +1466,137 @@ struct QuantityParams {
     scale: ScaleExponents,
     generic_type: String,
     brand: Option<String>,
+}
+
+/// Strip the lift-trace wrapper `qty!` expands to in type position.
+///
+/// `qty!(m / s)` becomes `<Helper<{ …doc shadows…; 0 }, Quantity<…>> as GetSecondGeneric>::Type`
+/// so the unit identifiers get hover docs and go-to-definition; the projection
+/// normalizes to the inner `Quantity<…>`. rustc shows the normalized type, but
+/// rust-analyzer's hover on a struct *field* shows the declared type verbatim, with
+/// the const block rendered as `{const}`. This reduces every such wrapper (optionally
+/// `whippyunits::`-qualified) to its inner type; anything not matching the exact
+/// shape is left untouched.
+pub fn collapse_lift_trace(text: &str) -> String {
+    const HELPER: &str = "Helper<";
+    const PROJECTION: &str = " as GetSecondGeneric>::Type";
+    const QUALIFIED_PROJECTION: &str = " as whippyunits::GetSecondGeneric>::Type";
+
+    let mut result = text.to_string();
+    let mut search_from = 0;
+    while let Some(rel) = result[search_from..].find(HELPER) {
+        let helper_at = search_from + rel;
+        let after_helper = helper_at + HELPER.len();
+        search_from = after_helper;
+
+        // The wrapper starts at the `<` before `Helper` / `whippyunits::Helper`
+        let before = &result[..helper_at];
+        let start = if before.ends_with("<whippyunits::") {
+            helper_at - "<whippyunits::".len()
+        } else if before.ends_with('<') {
+            helper_at - 1
+        } else {
+            continue;
+        };
+
+        // First argument: a brace-delimited const block such as `{const}` or `{ ...; 0 }`
+        let bytes = result.as_bytes();
+        let mut i = after_helper;
+        while i < bytes.len() && bytes[i] == b' ' {
+            i += 1;
+        }
+        if i >= bytes.len() || bytes[i] != b'{' {
+            continue;
+        }
+        let mut depth = 0i32;
+        let mut block_end = None;
+        for (j, &b) in bytes.iter().enumerate().skip(i) {
+            match b {
+                b'{' => depth += 1,
+                b'}' => {
+                    depth -= 1;
+                    if depth == 0 {
+                        block_end = Some(j + 1);
+                        break;
+                    }
+                }
+                _ => {}
+            }
+        }
+        let Some(mut i) = block_end else { continue };
+        if !result[i..].starts_with(',') {
+            continue;
+        }
+        i += 1;
+        while i < bytes.len() && bytes[i] == b' ' {
+            i += 1;
+        }
+
+        // Second argument: the wrapped type, up to the `>` that closes `Helper<`
+        let inner_start = i;
+        let mut depth = 0i32;
+        let mut inner_end = None;
+        for (j, &b) in bytes.iter().enumerate().skip(inner_start) {
+            match b {
+                b'<' => depth += 1,
+                b'>' => {
+                    if depth == 0 {
+                        inner_end = Some(j);
+                        break;
+                    }
+                    depth -= 1;
+                }
+                _ => {}
+            }
+        }
+        let Some(inner_end) = inner_end else { continue };
+        let after_close = inner_end + 1;
+        let projection_len = if result[after_close..].starts_with(PROJECTION) {
+            PROJECTION.len()
+        } else if result[after_close..].starts_with(QUALIFIED_PROJECTION) {
+            QUALIFIED_PROJECTION.len()
+        } else {
+            continue;
+        };
+
+        let inner = result[inner_start..inner_end].to_string();
+        result.replace_range(start..after_close + projection_len, &inner);
+        // Rescan from the start of the replacement in case wrappers were nested
+        search_from = start;
+    }
+    result
+}
+
+
+/// The contents of every ```rust block in a markdown text, in order.
+fn code_blocks(text: &str) -> Vec<&str> {
+    let mut blocks = Vec::new();
+    let mut rest = text;
+    while let Some(start) = rest.find("```rust") {
+        let after_open = start + "```rust".len();
+        let Some(rel_close) = rest[after_open..].find("```") else {
+            break;
+        };
+        blocks.push(&rest[after_open..after_open + rel_close]);
+        rest = &rest[after_open + rel_close + "```".len()..];
+    }
+    blocks
+}
+
+
+/// A nalgebra matrix dimension argument: `Const<N>` or `Dyn`.
+enum MatrixDim {
+    Fixed(usize),
+    Dyn,
+}
+
+impl MatrixDim {
+    fn parse(arg: &str) -> Option<Self> {
+        let arg = arg.trim().trim_start_matches("nalgebra::");
+        if arg == "Dyn" || arg == "Dynamic" {
+            return Some(MatrixDim::Dyn);
+        }
+        let n = arg.strip_prefix("Const<")?.strip_suffix('>')?.trim();
+        n.parse().ok().map(MatrixDim::Fixed)
+    }
 }

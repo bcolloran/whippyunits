@@ -1,0 +1,102 @@
+{
+  "baseline": "f3e940a",
+  "candidate_head": "f3e940abae51daf7bfd319b9c56084af016ac843",
+  "candidate_diff": " .../src/generate_default_declarators_macro.rs      | 276 ++++++++++++++++-----\n src/default_declarators.rs                         | 216 +---------------\n 2 files changed, 225 insertions(+), 267 deletions(-)\n",
+  "commands": {
+    "baseline": [
+      "cargo",
+      "check",
+      "--offline",
+      "--locked",
+      "-p",
+      "whippyunits",
+      "--lib",
+      "--no-default-features",
+      "--features",
+      "std,units-si-dynamics"
+    ],
+    "candidate": [
+      "cargo",
+      "check",
+      "--offline",
+      "--locked",
+      "-p",
+      "whippyunits",
+      "--lib",
+      "--no-default-features",
+      "--features",
+      "std,units-si-dynamics"
+    ]
+  },
+  "clean_command": [
+    "cargo",
+    "clean",
+    "--offline",
+    "-p",
+    "whippyunits-core",
+    "-p",
+    "whippyunits-proc-macros",
+    "-p",
+    "whippyunits"
+  ],
+  "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)",
+  "scope": "core, proc-macro and root library check; warm third-party dependencies; incremental disabled",
+  "scratch": "/tmp/whippyunits-experiments/04-pregenerated-si-check",
+  "samples": [
+    {
+      "variant": "baseline",
+      "cycle": 0,
+      "seconds": 2.202787695990992
+    },
+    {
+      "variant": "candidate",
+      "cycle": 0,
+      "seconds": 2.544877774998895
+    },
+    {
+      "variant": "candidate",
+      "cycle": 1,
+      "seconds": 2.495722374995239
+    },
+    {
+      "variant": "baseline",
+      "cycle": 1,
+      "seconds": 2.224594145998708
+    },
+    {
+      "variant": "baseline",
+      "cycle": 2,
+      "seconds": 2.1595314239966683
+    },
+    {
+      "variant": "candidate",
+      "cycle": 2,
+      "seconds": 2.415900531996158
+    },
+    {
+      "variant": "candidate",
+      "cycle": 3,
+      "seconds": 2.3422119800088694
+    },
+    {
+      "variant": "baseline",
+      "cycle": 3,
+      "seconds": 2.160971923993202
+    },
+    {
+      "variant": "baseline",
+      "cycle": 4,
+      "seconds": 2.1658238939999137
+    },
+    {
+      "variant": "candidate",
+      "cycle": 4,
+      "seconds": 2.4259633520123316
+    }
+  ],
+  "medians_seconds": {
+    "baseline": 2.1658238939999137,
+    "candidate": 2.4259633520123316
+  },
+  "reduction_percent": -12.011108508549317
+}

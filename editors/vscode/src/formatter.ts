@@ -12,6 +12,7 @@ interface WasmFormatter {
   format_text(text: string): string;
   format_inlay_type(typeText: string): string;
   unit_macro_annotation(prettyType: string): string;
+  unit_label(unitExpr: string): string | undefined;
   free(): void;
 }
 
@@ -66,5 +67,10 @@ export class Formatter {
 
   unitMacroAnnotation(prettyType: string): string {
     return this.inner.unit_macro_annotation(prettyType);
+  }
+
+  /** The label the formatter prints for a unit expression (`m / s` → `(m·s⁻¹)`), if it parses. */
+  unitLabel(unitExpr: string): string | undefined {
+    return this.inner.unit_label(unitExpr);
   }
 }

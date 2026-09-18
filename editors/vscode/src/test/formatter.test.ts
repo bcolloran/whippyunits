@@ -2,7 +2,7 @@ import "./setup";
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { Formatter } from "../formatter";
-import { DEFAULT_SETTINGS, EXTENSION_ROOT, HOVER_ENERGY, RAW_ENERGY, RAW_LENGTH } from "./fixtures";
+import { DEFAULT_SETTINGS, EXTENSION_ROOT, FIELD_HOVER, HOVER_ENERGY, RAW_ENERGY, RAW_LENGTH } from "./fixtures";
 
 test("loads the wasm build and formats a hover like the proxy does", () => {
   const formatter = Formatter.load(EXTENSION_ROOT, DEFAULT_SETTINGS);
@@ -40,4 +40,22 @@ test("formatText rewrites every type in a diagnostic message", () => {
   const formatter = Formatter.load(EXTENSION_ROOT, DEFAULT_SETTINGS);
   const out = formatter.formatText(`mismatched types: expected ${RAW_LENGTH}, found ${RAW_ENERGY}`);
   assert.match(out, /expected Quantity<m, f64>, found Quantity<J, f64>/);
+});
+
+test("unitLabel renders a unit expression the way the formatter does", () => {
+  const formatter = Formatter.load(EXTENSION_ROOT, DEFAULT_SETTINGS);
+  assert.equal(formatter.unitLabel("m / s"), "(m·s⁻¹)");
+  assert.equal(formatter.unitLabel("kg * m / s ^ 2"), "N");
+  assert.equal(formatter.unitLabel("m"), "m");
+  assert.equal(formatter.unitLabel("not a unit expression ((("), undefined);
+});
+
+test("formatHover sees through the qty! lift-trace wrapper", () => {
+  const formatter = Formatter.load(EXTENSION_ROOT, DEFAULT_SETTINGS);
+  const out = formatter.formatHover(FIELD_HOVER);
+  assert.doesNotMatch(out, /Helper|GetSecondGeneric/);
+  assert.equal(
+    out,
+    "```rust\ndeclarators::TestNoGeneric\n```\n\n```rust\npub vel32: Quantity<(m·sˀ), f32>\n```\n\n---\nsize = 4, align = 0x4, offset = 0xC, no Drop",
+  );
 });

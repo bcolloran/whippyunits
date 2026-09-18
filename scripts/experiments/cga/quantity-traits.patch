@@ -1,0 +1,193 @@
+diff --git a/src/api.rs b/src/api.rs
+--- a/src/api.rs
++++ b/src/api.rs
+@@ -753,10 +753,9 @@
+ // up in the per-type generators: with a generic storage parameter in `Self`
+ // position they would violate E0210.
+ //
+-// The const-generic parameter bundles the interface macros expect are enormous
+-// and identical at nearly every call site, so they are written exactly once, in
+-// the two `emit_*` macros below. Each emission is then a single line naming only
+-// what actually varies: which interface, and the operator/method/trait triple.
++// The dimension-preserving interfaces share one const-generic parameter bundle
++// through `emit_dimension_preserving!`. Multiplication and division delegate unit
++// arithmetic to UnitMul/UnitDiv, keeping the exponent rules in the unit layer.
+ // ============================================================================
+ 
+ 
+@@ -808,61 +807,6 @@
+     };
+ }
+ 
+-/// Emit one **dimension-combining** op (multiplication or division).
+-///
+-/// These need two independent dimension/scale bundles plus a where-clause pinning
+-/// each output exponent to the corresponding input pair. Multiplication and
+-/// division differ *only* in whether that pinning is `Add` or `Sub`, so both are
+-/// generated from this one body: `$dim_op` is the type-level exponent operation,
+-/// `$op` the value-level operator, and `$log_op` the scale-exponent operator.
+-macro_rules! emit_dimension_combining {
+-    ($op:tt, $log_op:tt, $fn:ident, $Trait:ident, $dim_op:ident) => {
+-        $crate::quantity_quantity_mul_div_interface!(
+-            (
+-                STORAGE: core::ops::$Trait<Output = STORAGE>,
+-                const MASS_EXPONENT: i16,
+-                const LENGTH_EXPONENT: i16,
+-                const TIME_EXPONENT: i16,
+-                const CURRENT_EXPONENT: i16,
+-                const TEMPERATURE_EXPONENT: i16,
+-                const AMOUNT_EXPONENT: i16,
+-                const LUMINOSITY_EXPONENT: i16,
+-                const ANGLE_EXPONENT: i16,
+-                const SCALE_P2: i16,
+-                const SCALE_P3: i16,
+-                const SCALE_P5: i16,
+-                const SCALE_PI: i16,
+-                const MASS_EXPONENT_1: i16, const MASS_EXPONENT_2: i16,
+-                const LENGTH_EXPONENT_1: i16, const LENGTH_EXPONENT_2: i16,
+-                const TIME_EXPONENT_1: i16, const TIME_EXPONENT_2: i16,
+-                const CURRENT_EXPONENT_1: i16, const CURRENT_EXPONENT_2: i16,
+-                const TEMPERATURE_EXPONENT_1: i16, const TEMPERATURE_EXPONENT_2: i16,
+-                const AMOUNT_EXPONENT_1: i16, const AMOUNT_EXPONENT_2: i16,
+-                const LUMINOSITY_EXPONENT_1: i16, const LUMINOSITY_EXPONENT_2: i16,
+-                const ANGLE_EXPONENT_1: i16, const ANGLE_EXPONENT_2: i16,
+-                const SCALE_P2_1: i16, const SCALE_P3_1: i16, const SCALE_P5_1: i16, const SCALE_PI_1: i16,
+-                const SCALE_P2_2: i16, const SCALE_P3_2: i16, const SCALE_P5_2: i16, const SCALE_PI_2: i16,
+-                Brand,
+-            ),
+-            (
+-                N<MASS_EXPONENT_1>: core::ops::$dim_op<N<MASS_EXPONENT_2>, Output = N<MASS_EXPONENT>>,
+-                N<LENGTH_EXPONENT_1>: core::ops::$dim_op<N<LENGTH_EXPONENT_2>, Output = N<LENGTH_EXPONENT>>,
+-                N<TIME_EXPONENT_1>: core::ops::$dim_op<N<TIME_EXPONENT_2>, Output = N<TIME_EXPONENT>>,
+-                N<CURRENT_EXPONENT_1>: core::ops::$dim_op<N<CURRENT_EXPONENT_2>, Output = N<CURRENT_EXPONENT>>,
+-                N<TEMPERATURE_EXPONENT_1>: core::ops::$dim_op<N<TEMPERATURE_EXPONENT_2>, Output = N<TEMPERATURE_EXPONENT>>,
+-                N<AMOUNT_EXPONENT_1>: core::ops::$dim_op<N<AMOUNT_EXPONENT_2>, Output = N<AMOUNT_EXPONENT>>,
+-                N<LUMINOSITY_EXPONENT_1>: core::ops::$dim_op<N<LUMINOSITY_EXPONENT_2>, Output = N<LUMINOSITY_EXPONENT>>,
+-                N<ANGLE_EXPONENT_1>: core::ops::$dim_op<N<ANGLE_EXPONENT_2>, Output = N<ANGLE_EXPONENT>>,
+-                N<SCALE_P2_1>: core::ops::$dim_op<N<SCALE_P2_2>, Output = N<SCALE_P2>>,
+-                N<SCALE_P3_1>: core::ops::$dim_op<N<SCALE_P3_2>, Output = N<SCALE_P3>>,
+-                N<SCALE_P5_1>: core::ops::$dim_op<N<SCALE_P5_2>, Output = N<SCALE_P5>>,
+-                N<SCALE_PI_1>: core::ops::$dim_op<N<SCALE_PI_2>, Output = N<SCALE_PI>>
+-            ),
+-            $op, $log_op, $fn, $Trait, STORAGE, rescale_unused
+-        );
+-    };
+-}
+-
+ // The `rescale_unused` argument above and below is a placeholder: these interfaces
+ // take a rescale function only for their scale-converting arms, and every arm
+ // emitted here is scale-strict, so no rescale is ever performed.
+@@ -899,5 +843,26 @@
+ );
+ 
+ // --- quantity ∘ quantity: mul/div (dimension-combining) -----------------------
+-emit_dimension_combining!(*, +, mul, Mul, Add);
+-emit_dimension_combining!(/, -, div, Div, Sub);
++impl<U, V, T, Brand> core::ops::Mul<Quantity<V, T, Brand>> for Quantity<U, T, Brand>
++where
++    U: crate::unit::UnitMul<V>,
++    T: core::ops::Mul<Output = T>,
++{
++    type Output = Quantity<crate::unit::MulUnit<U, V>, T, Brand>;
++
++    fn mul(self, other: Quantity<V, T, Brand>) -> Self::Output {
++        Quantity::from_raw_value(self.unsafe_value * other.unsafe_value)
++    }
++}
++
++impl<U, V, T, Brand> core::ops::Div<Quantity<V, T, Brand>> for Quantity<U, T, Brand>
++where
++    U: crate::unit::UnitDiv<V>,
++    T: core::ops::Div<Output = T>,
++{
++    type Output = Quantity<crate::unit::DivUnit<U, V>, T, Brand>;
++
++    fn div(self, other: Quantity<V, T, Brand>) -> Self::Output {
++        Quantity::from_raw_value(self.unsafe_value / other.unsafe_value)
++    }
++}
+diff --git a/tests/unit_trait_arithmetic.rs b/tests/unit_trait_arithmetic.rs
+new file mode 100644
+--- /dev/null
++++ b/tests/unit_trait_arithmetic.rs
+@@ -0,0 +1,80 @@
++//! The quantity operators delegate units to associated-output traits, while
++//! storage values are moved and need only the operation being performed.
++
++use whippyunits::quantity::Quantity;
++use whippyunits::unit::{DivUnit, MulUnit, UnitDiv, UnitMul};
++use whippyunits::{qty, unit};
++
++// Deliberately not Copy, Clone, NumCast, PartialEq, or Default.
++struct Owned(Box<f64>);
++struct Brand;
++
++impl core::ops::Mul for Owned {
++    type Output = Self;
++    fn mul(self, rhs: Self) -> Self {
++        Self(Box::new(*self.0 * *rhs.0))
++    }
++}
++
++impl core::ops::Div for Owned {
++    type Output = Self;
++    fn div(self, rhs: Self) -> Self {
++        Self(Box::new(*self.0 / *rhs.0))
++    }
++}
++
++fn multiply<U: UnitMul<V>, V, T: core::ops::Mul<Output = T>, B>(
++    lhs: Quantity<U, T, B>,
++    rhs: Quantity<V, T, B>,
++) -> Quantity<MulUnit<U, V>, T, B> {
++    lhs * rhs
++}
++
++fn divide<U: UnitDiv<V>, V, T: core::ops::Div<Output = T>, B>(
++    lhs: Quantity<U, T, B>,
++    rhs: Quantity<V, T, B>,
++) -> Quantity<DivUnit<U, V>, T, B> {
++    lhs / rhs
++}
++
++#[test]
++fn non_copy_storage_and_brand_survive_abstract_unit_operations() {
++    let length: qty!(m, Owned, Brand) = Quantity::new(Owned(Box::new(12.0)));
++    let duration: qty!(tick, Owned, Brand) = Quantity::new(Owned(Box::new(6.0)));
++    let speed: qty!(m / tick, Owned, Brand) = divide(length, duration);
++    assert_eq!(*speed.unsafe_value.0, 2.0);
++
++    let duration: qty!(tick, Owned, Brand) = Quantity::new(Owned(Box::new(3.0)));
++    let length: qty!(m, Owned, Brand) = multiply(speed, duration);
++    assert_eq!(*length.unsafe_value.0, 6.0);
++}
++
++#[test]
++fn scalar_right_keeps_its_unit_with_the_same_non_copy_storage() {
++    let length: qty!(mm, Owned, Brand) = Quantity::new(Owned(Box::new(12.0)));
++    let doubled: qty!(mm, Owned, Brand) = length * Owned(Box::new(2.0));
++    let halved: qty!(mm, Owned, Brand) = doubled / Owned(Box::new(4.0));
++    assert_eq!(*halved.unsafe_value.0, 6.0);
++}
++
++#[test]
++fn primitive_left_keeps_multiplication_and_inverse_division() {
++    let angle: qty!(deg, f64, Brand) = Quantity::new(30.0);
++    let doubled: qty!(deg, f64, Brand) = 2.0 * angle;
++    let reciprocal: qty!(1 / deg, f64, Brand) = 60.0 / doubled;
++    assert_eq!(doubled.unsafe_value, 60.0);
++    assert_eq!(reciprocal.unsafe_value, 1.0);
++}
++
++#[test]
++fn generic_unit_bounds_compose_scales_and_cancel_them() {
++    type Length = unit!(mm);
++    type Duration = unit!(tick);
++    let length = Quantity::<Length>::new(120.0);
++    let duration = Quantity::<Duration>::new(6.0);
++    let speed: qty!(mm / tick) = divide(length, duration);
++    let restored: qty!(mm) = multiply(speed, duration);
++    let speed_si: qty!(m / s) = whippyunits::api::rescale(speed);
++    assert!((speed_si.unsafe_value - 1.2).abs() < 1e-12);
++    assert_eq!(restored.unsafe_value, 120.0);
++}

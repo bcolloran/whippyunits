@@ -103,8 +103,7 @@
     "build": "npm run build:wasm && npm run compile",
     "watch": "tsc -watch -p ./",
     "test": "npm run compile && node --test \"out/test/**/*.test.js\"",
-    "package": "npm run build && vsce package --no-dependencies -o whippyunits-vscode.vsix",
-    "vscode:prepublish": "npm run build"
+    "package": "npm run build && vsce package --no-dependencies -o whippyunits-vscode.vsix"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

@@ -1,0 +1,23 @@
+[package]
+name = "whippyunits-num"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Experimental nightly native exponent arithmetic for whippyunits"
+
+[features]
+nightly-gca = []
+
+[dependencies]
+typenum = "1"
+
+# The pinned compiler ICEs when its test harness shares CGA gates.
+# Arithmetic tests live in tests/arithmetic.rs, an ordinary consumer crate.
+[lib]
+test = false
+
+[[test]]
+name = "arithmetic"
+required-features = ["nightly-gca"]

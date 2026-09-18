@@ -2,6 +2,9 @@ import * as vscode from "vscode";
 import type { Settings } from "./config";
 import type { Formatter } from "./formatter";
 
+/** What the formatter prints for an exponent it could not read (e.g. rust-analyzer's `{const}`). */
+const UNKNOWN_EXPONENT = "ˀ";
+
 /**
  * Rewrites the VS Code objects rust-analyzer's middleware hands back.
  *
@@ -14,11 +17,24 @@ export class Rewriter {
     public settings: Settings,
   ) {}
 
-  hover<T extends vscode.Hover | null | undefined>(hover: T): T {
+  /**
+   * `document`/`position` are where the hover was requested. They let a hover
+   * on a struct field recover from rust-analyzer showing the *declared* type,
+   * in which negative exponents appear only as `{const}`: the `qty!(…)` on that
+   * source line still says what the type is.
+   */
+  hover<T extends vscode.Hover | null | undefined>(
+    hover: T,
+    document?: vscode.TextDocument,
+    position?: vscode.Position,
+  ): T {
     if (!hover || !this.settings.enabled || !this.settings.rewriteHover) {
       return hover;
     }
     hover.contents = hover.contents.map((item) => this.hoverItem(item));
+    if (document && position) {
+      this.recoverFromSource(hover, document.lineAt(position.line).text);
+    }
     return hover;
   }
 
@@ -39,6 +55,30 @@ export class Rewriter {
       item.value = this.formatter.formatHover(item.value);
     }
     return item;
+  }
+
+  /**
+   * Replaces every unit label with an unknown exponent (`(m·sˀ)`) by the label the
+   * line's `qty!(…)`/`vqty!(…)` denotes. One macro per line is assumed: every
+   * unknown label in the hover — the field type, a matrix's entry unit, the
+   * unit-matrix trace — comes from that one unit expression.
+   */
+  private recoverFromSource(hover: vscode.Hover, line: string): void {
+    const unitExpr = macroUnitExpr(line);
+    if (unitExpr === undefined) {
+      return;
+    }
+    let label: string | undefined;
+    for (const item of hover.contents) {
+      if (typeof item === "string" || !item.value.includes(UNKNOWN_EXPONENT)) {
+        continue;
+      }
+      label ??= this.formatter.unitLabel(unitExpr);
+      if (label === undefined) {
+        return;
+      }
+      item.value = replaceUnknownUnitLabels(item.value, label);
+    }
   }
 
   inlayHints<T extends vscode.InlayHint[] | null | undefined>(hints: T): T {
@@ -140,4 +180,39 @@ export class Rewriter {
   private text(text: string): string {
     return this.formatter.containsQuantity(text) ? this.formatter.formatText(text) : text;
   }
+}
+
+/**
+ * The unit expression of the first `qty!(…)` or `vqty!(…)` on a line, if any:
+ * `qty!(unit[, storage[, brand]])` and `vqty!(count, unit[, storage])`. A `vqty!`
+ * with a bracketed per-entry unit list has no single unit and yields nothing.
+ */
+export function macroUnitExpr(line: string): string | undefined {
+  const match = /(?<![A-Za-z0-9_])(v?qty)!\s*\(/.exec(line);
+  if (!match) {
+    return undefined;
+  }
+  const start = match.index + match[0].length;
+  let depth = 1;
+  let end = -1;
+  for (let i = start; i < line.length; i++) {
+    if (line[i] === "(") {
+      depth++;
+    } else if (line[i] === ")" && --depth === 0) {
+      end = i;
+      break;
+    }
+  }
+  if (end < 0) {
+    return undefined;
+  }
+  // Unit expressions never contain commas, so top-level commas separate the arguments
+  const args = line.slice(start, end).split(",");
+  const unit = (match[1] === "vqty" ? args[1] : args[0])?.trim();
+  return unit && !unit.startsWith("[") ? unit : undefined;
+}
+
+/** Replaces every unit label containing an unknown exponent — `(m·sˀ)`, `sˀ` — with `label`. */
+export function replaceUnknownUnitLabels(text: string, label: string): string {
+  return text.replace(/\([^()]*ˀ[^()]*\)|[^\s<>,()[\]]*ˀ[^\s<>,()[\]]*/g, label);
 }

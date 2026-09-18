@@ -1,0 +1,56 @@
+error[E0277]: the trait bound `_A<10>: quantity::NonzeroRadianExponent` is not satisfied
+ --> tests/angular_erasure_ui/exponent_outside_range.rs:5:27
+  |
+5 |     let _: f64 = positive.into();
+  |                           ^^^^ the trait `quantity::NonzeroRadianExponent` is not implemented for `_A<10>`
+  |
+  = help: the following other types implement trait `quantity::NonzeroRadianExponent`:
+            _A<-1>
+            _A<-2>
+            _A<-3>
+            _A<-4>
+            _A<-5>
+            _A<-6>
+            _A<-7>
+            _A<-8>
+          and $N others
+  = note: required for `f64` to implement `From<Quantity<Unit<Scale, Dimension<_M, _L, _T, _I, _Θ, _N, _J, _A<10>>>>>`
+  = note: required for `Quantity<Unit<Scale, Dimension<_M, _L, _T, _I, _Θ, _N, _J, _A<10>>>>` to implement `Into<f64>`
+
+error[E0277]: the trait bound `_A<-10>: quantity::NonzeroRadianExponent` is not satisfied
+ --> tests/angular_erasure_ui/exponent_outside_range.rs:8:27
+  |
+8 |     let _: f64 = negative.into();
+  |                           ^^^^ the trait `quantity::NonzeroRadianExponent` is not implemented for `_A<-10>`
+  |
+  = help: the following other types implement trait `quantity::NonzeroRadianExponent`:
+            _A<-1>
+            _A<-2>
+            _A<-3>
+            _A<-4>
+            _A<-5>
+            _A<-6>
+            _A<-7>
+            _A<-8>
+          and $N others
+  = note: required for `f64` to implement `From<Quantity<Unit<Scale, Dimension<_M, _L, _T, _I, _Θ, _N, _J, _A<-10>>>>>`
+  = note: required for `Quantity<Unit<Scale, Dimension<_M, _L, _T, _I, _Θ, _N, _J, _A<-10>>>>` to implement `Into<f64>`
+
+error[E0277]: the trait bound `_A<10>: quantity::NonzeroRadianExponent` is not satisfied
+  --> tests/angular_erasure_ui/exponent_outside_range.rs:11:31
+   |
+11 |     let _: qty!(m) = compound.into();
+   |                               ^^^^ the trait `quantity::NonzeroRadianExponent` is not implemented for `_A<10>`
+   |
+   = help: the following other types implement trait `quantity::NonzeroRadianExponent`:
+             _A<-1>
+             _A<-2>
+             _A<-3>
+             _A<-4>
+             _A<-5>
+             _A<-6>
+             _A<-7>
+             _A<-8>
+           and $N others
+   = note: required for `Quantity<Unit<Scale, Dimension<_M, _L<1>>>>` to implement `From<Quantity<Unit<Scale, Dimension<_M, _L<1>, _T, _I, _Θ, _N, _J, _A<10>>>>>`
+   = note: required for `Quantity<Unit<Scale, Dimension<_M, _L<1>, _T, _I, _Θ, _N, _J, _A<10>>>>` to implement `Into<Quantity<Unit<Scale, Dimension<_M, _L<1>>>>>`

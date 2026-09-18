@@ -27,6 +27,7 @@ mod unit_macro;
 mod value_macro;
 
 mod utils {
+    pub mod catalog;
     pub mod culit;
     pub mod dimension_suggestions;
     pub mod lift_trace;
@@ -164,9 +165,10 @@ pub fn proc_qty(input: TokenStream) -> TokenStream {
 /// ```
 ///
 /// Attribute macros expand top to bottom, so the attribute must be written above
-/// every derive it is meant to help. It matches macro calls by name (`unit`/`qty`
+/// every derive it is meant to help. It matches macro calls by name (`unit`/`qty`/`vqty`
 /// as the last path segment), rewrites them wherever they occur in the item,
 /// including nested inside other generics, and takes no arguments.
+/// `vqty!` is supplied by whippyalgebra and requires a dependency on that crate.
 #[proc_macro_attribute]
 pub fn expand_units(attr: TokenStream, item: TokenStream) -> TokenStream {
     expand_units_macro::expand(attr.into(), item.into()).into()

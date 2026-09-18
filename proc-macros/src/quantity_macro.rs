@@ -6,7 +6,8 @@ use syn::{Expr, Type};
 use whippyunits_core::{calculate_unit_conversion_factors, get_unit_info, Dimension, UnitExpr};
 
 use crate::utils::shared_utils::{
-    const_exp, generate_unit_documentation_for_expr, validate_known_units,
+    concrete_unit_type, const_exp, generate_unit_documentation_for_expr, validate_known_units,
+    whippyunits_path,
 };
 
 /// Input for the quantity macro
@@ -108,6 +109,10 @@ impl QuantityMacroInput {
             return self.expand_with_conversion_factors();
         };
 
+        if !crate::utils::catalog::entry_enabled(unit_info, None) {
+            return self.expand_without_declarator(unit_info);
+        }
+
         // Generate trait name using shared logic from whippyunits-core
         let full_trait_name = whippyunits_core::generate_declarator_trait_name(
             unit_info.system,
@@ -139,6 +144,58 @@ impl QuantityMacroInput {
             {
                 use whippyunits::default_declarators::#trait_ident;
                 (#value_expr).#method_ident()
+            }
+        }
+    }
+
+    /// Preserve the inferred storage type of the optional extension methods.
+    /// Storage-affine units return f64 even for an i32 input; nonstorage units
+    /// retain f64/i32/i64. Emit just the requested conversion when its catalog
+    /// family is absent, instead of requiring every unit's declarator trait.
+    fn expand_without_declarator(&self, unit_info: &whippyunits_core::Unit) -> TokenStream {
+        let wu = whippyunits_path();
+        let unit_type = concrete_unit_type(unit_info.exponents, unit_info.scale);
+        let cf = unit_info.conversion_factor;
+        let af = unit_info.affine_offset;
+        let storage_affine = cf == 1.0 && af != 0.0;
+        let storage_types: &[&str] = if storage_affine {
+            &["f64", "i32"]
+        } else {
+            &["f64", "i32", "i64"]
+        };
+        let implementations = storage_types.iter().map(|storage| {
+            let input_type = syn::Ident::new(storage, proc_macro2::Span::call_site());
+            let output_type = if storage_affine {
+                quote!(f64)
+            } else {
+                quote!(#input_type)
+            };
+            let value = if storage_affine {
+                quote!((self as f64) + #af)
+            } else if af == 0.0 {
+                // Do not add a redundant zero: it would change negative zero.
+                quote!((self as f64) * #cf)
+            } else {
+                quote!((self as f64) * #cf + #af)
+            };
+            quote! {
+                impl __WhippyUnitConstructor for #input_type {
+                    type Storage = #output_type;
+                    fn __whippy_quantity(self) -> #wu::quantity::Quantity<#unit_type, Self::Storage> {
+                        #wu::quantity::Quantity::new((#value) as #output_type)
+                    }
+                }
+            }
+        });
+        let value_expr = &self.value;
+        quote! {
+            {
+                trait __WhippyUnitConstructor {
+                    type Storage;
+                    fn __whippy_quantity(self) -> #wu::quantity::Quantity<#unit_type, Self::Storage>;
+                }
+                #(#implementations)*
+                (#value_expr).__whippy_quantity()
             }
         }
     }

@@ -1,0 +1,44 @@
+name: Unit catalogs
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  catalog-features:
+    name: Catalog (${{ matrix.features || 'none' }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        features:
+          - ""
+          - literals
+          - units-dynamics
+          - units-dynamics,literals
+          - units-si-dynamics
+          - units-si-dynamics,literals
+          - units-dynamics-conversions
+          - units-dynamics-conversions,literals
+          - units-dynamics-conversions,units-dynamics
+          - units-dynamics-conversions,units-thermal
+          - units-electrical
+          - units-thermal
+          - units-chemical
+          - units-photometric
+          - all-units,literals
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Test public catalog API
+        run: cargo test --locked -p whippyunits --test catalog_features --no-default-features --features "${{ matrix.features }}"
+      - name: Run declarator example
+        run: cargo run --locked -p whippyunits --example declarators --no-default-features --features "std ${{ matrix.features }}"
+      - name: Test catalog generation
+        run: cargo test --locked -p whippyunits-proc-macros --lib --no-default-features --features "${{ matrix.features }}"

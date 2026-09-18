@@ -4,8 +4,12 @@
 //! is an unstable feature (along with being incomplete), this polyfill exists to
 //! allow a small subset of those operations on stable.
 //!
-//! Because dimensional analysis usually has small dimension exponents we constrain
-//! this polyfill to working with input integers in the range -200 to 200.
+//! The default `wide-exponents` feature supports inputs from -200 through 200.
+//! Without it, inputs are limited to -32 through 32, reducing the generated
+//! bridge between const-generic numbers and typenum. Both dimension and scale
+//! exponents use this range; intermediate results must fit it to be reused.
+//! Addition and subtraction can produce outputs up to twice the input limit.
+//! The public number and quantity type shapes are identical in either profile.
 
 /// Const generic with type level math operations.
 ///
@@ -14,9 +18,58 @@
 /// - Subtraction: `<A as Sub<B>>::Output`
 /// - Negation: `<X as Neg>::Output`
 ///
-/// The operations are limited to inputs in the range -200 to 200.
+/// Arithmetic inputs are limited to -32 through 32, or -200 through 200 with
+/// the default `wide-exponents` feature. Addition/subtraction outputs can reach
+/// twice that range, but outputs outside the input range cannot participate in
+/// another arithmetic operation, equality check, or halving operation.
+/// This bound covers scale exponents as well as physical dimension exponents.
 ///
 /// The [`Num`] trait can be used to constrain a generic to only this type.
+///
+/// Inputs just beyond either supported boundary have no arithmetic implementation:
+///
+/// ```compile_fail
+/// use whippyunits_core::num::N;
+/// #[cfg(feature = "wide-exponents")]
+/// const OUTSIDE: i16 = 201;
+/// #[cfg(not(feature = "wide-exponents"))]
+/// const OUTSIDE: i16 = 33;
+/// let _ = N::<OUTSIDE> + N::<0>;
+/// ```
+///
+/// ```compile_fail
+/// use whippyunits_core::num::N;
+/// #[cfg(feature = "wide-exponents")]
+/// const OUTSIDE: i16 = -201;
+/// #[cfg(not(feature = "wide-exponents"))]
+/// const OUTSIDE: i16 = -33;
+/// let _ = N::<OUTSIDE> - N::<0>;
+/// ```
+///
+/// The doubled output range permits one operation at the boundary, but does not
+/// make the resulting number a valid input to the next operation:
+///
+/// ```compile_fail
+/// use whippyunits_core::num::N;
+/// #[cfg(feature = "wide-exponents")]
+/// const LIMIT: i16 = 200;
+/// #[cfg(not(feature = "wide-exponents"))]
+/// const LIMIT: i16 = 32;
+/// let sum = N::<LIMIT> + N::<LIMIT>;
+/// let _ = sum + N::<0>;
+/// ```
+///
+/// Type-level equality has the same input bound:
+///
+/// ```compile_fail
+/// use whippyunits_core::num::{N, NumEq};
+/// #[cfg(feature = "wide-exponents")]
+/// const OUTSIDE: i16 = 201;
+/// #[cfg(not(feature = "wide-exponents"))]
+/// const OUTSIDE: i16 = 33;
+/// fn equal<T: NumEq<T>>() {}
+/// equal::<N<OUTSIDE>>();
+/// ```
 pub struct N<const X: i16>;
 
 /// Higher order type of [`N`] numbers.
@@ -78,6 +131,75 @@ mod stable {
         };
     }
 
+    __link_num_to_typenum! {
+        -32 => typenum::N32,
+        -31 => typenum::N31,
+        -30 => typenum::N30,
+        -29 => typenum::N29,
+        -28 => typenum::N28,
+        -27 => typenum::N27,
+        -26 => typenum::N26,
+        -25 => typenum::N25,
+        -24 => typenum::N24,
+        -23 => typenum::N23,
+        -22 => typenum::N22,
+        -21 => typenum::N21,
+        -20 => typenum::N20,
+        -19 => typenum::N19,
+        -18 => typenum::N18,
+        -17 => typenum::N17,
+        -16 => typenum::N16,
+        -15 => typenum::N15,
+        -14 => typenum::N14,
+        -13 => typenum::N13,
+        -12 => typenum::N12,
+        -11 => typenum::N11,
+        -10 => typenum::N10,
+        -9 => typenum::N9,
+        -8 => typenum::N8,
+        -7 => typenum::N7,
+        -6 => typenum::N6,
+        -5 => typenum::N5,
+        -4 => typenum::N4,
+        -3 => typenum::N3,
+        -2 => typenum::N2,
+        -1 => typenum::N1,
+        0 => typenum::Z0,
+        1 => typenum::P1,
+        2 => typenum::P2,
+        3 => typenum::P3,
+        4 => typenum::P4,
+        5 => typenum::P5,
+        6 => typenum::P6,
+        7 => typenum::P7,
+        8 => typenum::P8,
+        9 => typenum::P9,
+        10 => typenum::P10,
+        11 => typenum::P11,
+        12 => typenum::P12,
+        13 => typenum::P13,
+        14 => typenum::P14,
+        15 => typenum::P15,
+        16 => typenum::P16,
+        17 => typenum::P17,
+        18 => typenum::P18,
+        19 => typenum::P19,
+        20 => typenum::P20,
+        21 => typenum::P21,
+        22 => typenum::P22,
+        23 => typenum::P23,
+        24 => typenum::P24,
+        25 => typenum::P25,
+        26 => typenum::P26,
+        27 => typenum::P27,
+        28 => typenum::P28,
+        29 => typenum::P29,
+        30 => typenum::P30,
+        31 => typenum::P31,
+        32 => typenum::P32,
+    }
+
+    #[cfg(feature = "wide-exponents")]
     __link_num_to_typenum! {
         -200 => typenum::N200,
         -199 => typenum::N199,
@@ -247,71 +369,6 @@ mod stable {
         -35 => typenum::N35,
         -34 => typenum::N34,
         -33 => typenum::N33,
-        -32 => typenum::N32,
-        -31 => typenum::N31,
-        -30 => typenum::N30,
-        -29 => typenum::N29,
-        -28 => typenum::N28,
-        -27 => typenum::N27,
-        -26 => typenum::N26,
-        -25 => typenum::N25,
-        -24 => typenum::N24,
-        -23 => typenum::N23,
-        -22 => typenum::N22,
-        -21 => typenum::N21,
-        -20 => typenum::N20,
-        -19 => typenum::N19,
-        -18 => typenum::N18,
-        -17 => typenum::N17,
-        -16 => typenum::N16,
-        -15 => typenum::N15,
-        -14 => typenum::N14,
-        -13 => typenum::N13,
-        -12 => typenum::N12,
-        -11 => typenum::N11,
-        -10 => typenum::N10,
-        -9 => typenum::N9,
-        -8 => typenum::N8,
-        -7 => typenum::N7,
-        -6 => typenum::N6,
-        -5 => typenum::N5,
-        -4 => typenum::N4,
-        -3 => typenum::N3,
-        -2 => typenum::N2,
-        -1 => typenum::N1,
-        0 => typenum::Z0,
-        1 => typenum::P1,
-        2 => typenum::P2,
-        3 => typenum::P3,
-        4 => typenum::P4,
-        5 => typenum::P5,
-        6 => typenum::P6,
-        7 => typenum::P7,
-        8 => typenum::P8,
-        9 => typenum::P9,
-        10 => typenum::P10,
-        11 => typenum::P11,
-        12 => typenum::P12,
-        13 => typenum::P13,
-        14 => typenum::P14,
-        15 => typenum::P15,
-        16 => typenum::P16,
-        17 => typenum::P17,
-        18 => typenum::P18,
-        19 => typenum::P19,
-        20 => typenum::P20,
-        21 => typenum::P21,
-        22 => typenum::P22,
-        23 => typenum::P23,
-        24 => typenum::P24,
-        25 => typenum::P25,
-        26 => typenum::P26,
-        27 => typenum::P27,
-        28 => typenum::P28,
-        29 => typenum::P29,
-        30 => typenum::P30,
-        31 => typenum::P31,
-        32 => typenum::P32,
         33 => typenum::P33,
         34 => typenum::P34,
         35 => typenum::P35,
@@ -482,6 +539,139 @@ mod stable {
         200 => typenum::P200,
     }
 
+    __link_typenum_to_num! {
+        typenum::N64 => -64,
+        typenum::N63 => -63,
+        typenum::N62 => -62,
+        typenum::N61 => -61,
+        typenum::N60 => -60,
+        typenum::N59 => -59,
+        typenum::N58 => -58,
+        typenum::N57 => -57,
+        typenum::N56 => -56,
+        typenum::N55 => -55,
+        typenum::N54 => -54,
+        typenum::N53 => -53,
+        typenum::N52 => -52,
+        typenum::N51 => -51,
+        typenum::N50 => -50,
+        typenum::N49 => -49,
+        typenum::N48 => -48,
+        typenum::N47 => -47,
+        typenum::N46 => -46,
+        typenum::N45 => -45,
+        typenum::N44 => -44,
+        typenum::N43 => -43,
+        typenum::N42 => -42,
+        typenum::N41 => -41,
+        typenum::N40 => -40,
+        typenum::N39 => -39,
+        typenum::N38 => -38,
+        typenum::N37 => -37,
+        typenum::N36 => -36,
+        typenum::N35 => -35,
+        typenum::N34 => -34,
+        typenum::N33 => -33,
+        typenum::N32 => -32,
+        typenum::N31 => -31,
+        typenum::N30 => -30,
+        typenum::N29 => -29,
+        typenum::N28 => -28,
+        typenum::N27 => -27,
+        typenum::N26 => -26,
+        typenum::N25 => -25,
+        typenum::N24 => -24,
+        typenum::N23 => -23,
+        typenum::N22 => -22,
+        typenum::N21 => -21,
+        typenum::N20 => -20,
+        typenum::N19 => -19,
+        typenum::N18 => -18,
+        typenum::N17 => -17,
+        typenum::N16 => -16,
+        typenum::N15 => -15,
+        typenum::N14 => -14,
+        typenum::N13 => -13,
+        typenum::N12 => -12,
+        typenum::N11 => -11,
+        typenum::N10 => -10,
+        typenum::N9 => -9,
+        typenum::N8 => -8,
+        typenum::N7 => -7,
+        typenum::N6 => -6,
+        typenum::N5 => -5,
+        typenum::N4 => -4,
+        typenum::N3 => -3,
+        typenum::N2 => -2,
+        typenum::N1 => -1,
+        typenum::Z0 => 0,
+        typenum::P1 => 1,
+        typenum::P2 => 2,
+        typenum::P3 => 3,
+        typenum::P4 => 4,
+        typenum::P5 => 5,
+        typenum::P6 => 6,
+        typenum::P7 => 7,
+        typenum::P8 => 8,
+        typenum::P9 => 9,
+        typenum::P10 => 10,
+        typenum::P11 => 11,
+        typenum::P12 => 12,
+        typenum::P13 => 13,
+        typenum::P14 => 14,
+        typenum::P15 => 15,
+        typenum::P16 => 16,
+        typenum::P17 => 17,
+        typenum::P18 => 18,
+        typenum::P19 => 19,
+        typenum::P20 => 20,
+        typenum::P21 => 21,
+        typenum::P22 => 22,
+        typenum::P23 => 23,
+        typenum::P24 => 24,
+        typenum::P25 => 25,
+        typenum::P26 => 26,
+        typenum::P27 => 27,
+        typenum::P28 => 28,
+        typenum::P29 => 29,
+        typenum::P30 => 30,
+        typenum::P31 => 31,
+        typenum::P32 => 32,
+        typenum::P33 => 33,
+        typenum::P34 => 34,
+        typenum::P35 => 35,
+        typenum::P36 => 36,
+        typenum::P37 => 37,
+        typenum::P38 => 38,
+        typenum::P39 => 39,
+        typenum::P40 => 40,
+        typenum::P41 => 41,
+        typenum::P42 => 42,
+        typenum::P43 => 43,
+        typenum::P44 => 44,
+        typenum::P45 => 45,
+        typenum::P46 => 46,
+        typenum::P47 => 47,
+        typenum::P48 => 48,
+        typenum::P49 => 49,
+        typenum::P50 => 50,
+        typenum::P51 => 51,
+        typenum::P52 => 52,
+        typenum::P53 => 53,
+        typenum::P54 => 54,
+        typenum::P55 => 55,
+        typenum::P56 => 56,
+        typenum::P57 => 57,
+        typenum::P58 => 58,
+        typenum::P59 => 59,
+        typenum::P60 => 60,
+        typenum::P61 => 61,
+        typenum::P62 => 62,
+        typenum::P63 => 63,
+        typenum::P64 => 64,
+    }
+
+    #[cfg(feature = "wide-exponents")]
     __link_typenum_to_num! {
         typenum::N400 => -400,
         typenum::N399 => -399,
@@ -819,135 +1009,6 @@ mod stable {
         typenum::N67 => -67,
         typenum::N66 => -66,
         typenum::N65 => -65,
-        typenum::N64 => -64,
-        typenum::N63 => -63,
-        typenum::N62 => -62,
-        typenum::N61 => -61,
-        typenum::N60 => -60,
-        typenum::N59 => -59,
-        typenum::N58 => -58,
-        typenum::N57 => -57,
-        typenum::N56 => -56,
-        typenum::N55 => -55,
-        typenum::N54 => -54,
-        typenum::N53 => -53,
-        typenum::N52 => -52,
-        typenum::N51 => -51,
-        typenum::N50 => -50,
-        typenum::N49 => -49,
-        typenum::N48 => -48,
-        typenum::N47 => -47,
-        typenum::N46 => -46,
-        typenum::N45 => -45,
-        typenum::N44 => -44,
-        typenum::N43 => -43,
-        typenum::N42 => -42,
-        typenum::N41 => -41,
-        typenum::N40 => -40,
-        typenum::N39 => -39,
-        typenum::N38 => -38,
-        typenum::N37 => -37,
-        typenum::N36 => -36,
-        typenum::N35 => -35,
-        typenum::N34 => -34,
-        typenum::N33 => -33,
-        typenum::N32 => -32,
-        typenum::N31 => -31,
-        typenum::N30 => -30,
-        typenum::N29 => -29,
-        typenum::N28 => -28,
-        typenum::N27 => -27,
-        typenum::N26 => -26,
-        typenum::N25 => -25,
-        typenum::N24 => -24,
-        typenum::N23 => -23,
-        typenum::N22 => -22,
-        typenum::N21 => -21,
-        typenum::N20 => -20,
-        typenum::N19 => -19,
-        typenum::N18 => -18,
-        typenum::N17 => -17,
-        typenum::N16 => -16,
-        typenum::N15 => -15,
-        typenum::N14 => -14,
-        typenum::N13 => -13,
-        typenum::N12 => -12,
-        typenum::N11 => -11,
-        typenum::N10 => -10,
-        typenum::N9 => -9,
-        typenum::N8 => -8,
-        typenum::N7 => -7,
-        typenum::N6 => -6,
-        typenum::N5 => -5,
-        typenum::N4 => -4,
-        typenum::N3 => -3,
-        typenum::N2 => -2,
-        typenum::N1 => -1,
-        typenum::Z0 => 0,
-        typenum::P1 => 1,
-        typenum::P2 => 2,
-        typenum::P3 => 3,
-        typenum::P4 => 4,
-        typenum::P5 => 5,
-        typenum::P6 => 6,
-        typenum::P7 => 7,
-        typenum::P8 => 8,
-        typenum::P9 => 9,
-        typenum::P10 => 10,
-        typenum::P11 => 11,
-        typenum::P12 => 12,
-        typenum::P13 => 13,
-        typenum::P14 => 14,
-        typenum::P15 => 15,
-        typenum::P16 => 16,
-        typenum::P17 => 17,
-        typenum::P18 => 18,
-        typenum::P19 => 19,
-        typenum::P20 => 20,
-        typenum::P21 => 21,
-        typenum::P22 => 22,
-        typenum::P23 => 23,
-        typenum::P24 => 24,
-        typenum::P25 => 25,
-        typenum::P26 => 26,
-        typenum::P27 => 27,
-        typenum::P28 => 28,
-        typenum::P29 => 29,
-        typenum::P30 => 30,
-        typenum::P31 => 31,
-        typenum::P32 => 32,
-        typenum::P33 => 33,
-        typenum::P34 => 34,
-        typenum::P35 => 35,
-        typenum::P36 => 36,
-        typenum::P37 => 37,
-        typenum::P38 => 38,
-        typenum::P39 => 39,
-        typenum::P40 => 40,
-        typenum::P41 => 41,
-        typenum::P42 => 42,
-        typenum::P43 => 43,
-        typenum::P44 => 44,
-        typenum::P45 => 45,
-        typenum::P46 => 46,
-        typenum::P47 => 47,
-        typenum::P48 => 48,
-        typenum::P49 => 49,
-        typenum::P50 => 50,
-        typenum::P51 => 51,
-        typenum::P52 => 52,
-        typenum::P53 => 53,
-        typenum::P54 => 54,
-        typenum::P55 => 55,
-        typenum::P56 => 56,
-        typenum::P57 => 57,
-        typenum::P58 => 58,
-        typenum::P59 => 59,
-        typenum::P60 => 60,
-        typenum::P61 => 61,
-        typenum::P62 => 62,
-        typenum::P63 => 63,
-        typenum::P64 => 64,
         typenum::P65 => 65,
         typenum::P66 => 66,
         typenum::P67 => 67,
@@ -1377,6 +1438,14 @@ where
 /// [`Output`](Halve::Output) is `N<X/2>` when `X` is even. When `X` is odd there
 /// is simply no impl, so a bound `N<X>: Halve` doubles as a compile-time witness
 /// that `X` is even — the exact precondition for a unit square root.
+///
+/// Odd exponents remain invalid in either range profile:
+///
+/// ```compile_fail
+/// use whippyunits_core::num::{Halve, N};
+/// fn halve<T: Halve>() {}
+/// halve::<N<3>>();
+/// ```
 pub trait Halve {
     /// Half of the numeral (`N<X/2>`); only exists when `X` is even.
     type Output;
@@ -1422,6 +1491,11 @@ mod tests {
 
     use super::*;
 
+    #[cfg(feature = "wide-exponents")]
+    const LIMIT: i16 = 200;
+    #[cfg(not(feature = "wide-exponents"))]
+    const LIMIT: i16 = 32;
+
     #[test]
     fn can_add_const_numbers() {
         fn assert<A: Add<B, Output = O>, B, O>() {}
@@ -1441,8 +1515,8 @@ mod tests {
         assert::<N<2>, N<-1>, N<1>>();
 
         // Stable range boundary checks
-        assert::<N<200>, N<200>, N<400>>();
-        assert::<N<-200>, N<-200>, N<-400>>();
+        assert::<N<LIMIT>, N<LIMIT>, N<{ 2 * LIMIT }>>();
+        assert::<N<{ -LIMIT }>, N<{ -LIMIT }>, N<{ -2 * LIMIT }>>();
     }
 
     #[test]
@@ -1464,8 +1538,8 @@ mod tests {
         assert::<N<2>, N<-1>, N<3>>();
 
         // Stable range boundary checks
-        assert::<N<200>, N<-200>, N<400>>();
-        assert::<N<-200>, N<200>, N<-400>>();
+        assert::<N<LIMIT>, N<{ -LIMIT }>, N<{ 2 * LIMIT }>>();
+        assert::<N<{ -LIMIT }>, N<LIMIT>, N<{ -2 * LIMIT }>>();
     }
 
     #[test]
@@ -1475,8 +1549,8 @@ mod tests {
         assert::<N<-1>, N<1>>();
         assert::<N<0>, N<0>>();
         assert::<N<1>, N<-1>>();
-        assert::<N<200>, N<-200>>();
-        assert::<N<-200>, N<200>>();
+        assert::<N<LIMIT>, N<{ -LIMIT }>>();
+        assert::<N<{ -LIMIT }>, N<LIMIT>>();
     }
 
     #[test]
@@ -1488,8 +1562,23 @@ mod tests {
         assert::<N<-5>, N<-5>, typenum::B1>();
         assert::<N<3>, N<4>, typenum::B0>();
         assert::<N<-1>, N<1>, typenum::B0>();
-        assert::<N<200>, N<200>, typenum::B1>();
-        assert::<N<200>, N<-200>, typenum::B0>();
+        assert::<N<LIMIT>, N<LIMIT>, typenum::B1>();
+        assert::<N<LIMIT>, N<{ -LIMIT }>, typenum::B0>();
+    }
+
+    #[test]
+    fn can_halve_even_exponents_at_both_boundaries() {
+        fn assert<A: Halve<Output = O>, O>() {}
+
+        assert::<N<0>, N<0>>();
+        assert::<N<LIMIT>, N<{ LIMIT / 2 }>>();
+        assert::<N<{ -LIMIT }>, N<{ -LIMIT / 2 }>>();
+    }
+
+    #[test]
+    fn boundary_results_can_be_reused_when_they_remain_in_range() {
+        let _: N<LIMIT> = (N::<LIMIT> + N::<{ -LIMIT }>) + N::<LIMIT>;
+        let _: N<{ -LIMIT }> = (N::<{ -LIMIT }> - N::<{ -LIMIT }>) - N::<LIMIT>;
     }
 
     #[test]

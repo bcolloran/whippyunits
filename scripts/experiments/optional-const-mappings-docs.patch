@@ -1,0 +1,122 @@
+--- a/whippyalgebra/src/lib.rs
++++ b/whippyalgebra/src/lib.rs
+@@ -39,18 +39,27 @@
+ //!
+ //! - [nalgebra](https://docs.rs/nalgebra) (enabled by default)
+ //!
+-//! Backends are feature-gated; disable the `nalgebra` feature to depend only on
+-//! the backend-agnostic unit machinery:
++//! Backends are feature-gated; disable default features and enable
++//! `standalone-indexing` to depend only on the backend-agnostic unit machinery:
+ //!
+ //! ```toml
+ //! [dependencies]
+-//! whippyalgebra = { version = "0.1.1", default-features = false, features = ["std"] }
+-//! ```
++//! whippyalgebra = { version = "0.1.1", default-features = false, features = ["std", "standalone-indexing"] }
++//! ```
++//!
++//! Every build needs an index bridge: `nalgebra` supplies its own, while
++//! `standalone-indexing` enables typenum's full const-generic bridge for
++//! backend-free builds. Both features are enabled by default. Reduced nalgebra
++//! builds can omit `standalone-indexing`; another dependency can enable it
++//! again through Cargo feature unification.
+ //!
+ //! # `no_std`
+ //!
+ //! Like [whippyunits](https://docs.rs/whippyunits), this crate is `#![no_std]`
+-//! when its default `std` feature is turned off. The features are additive:
++//! when its default `std` feature is turned off. Choosing `nalgebra` or
++//! `standalone-indexing` is independent of choosing `std` or `alloc`, and
++//! either index bridge works without allocation. The allocation features are
++//! additive:
+ //!
+ //! - **`std`** (default) — full standard library. Adds nalgebra's
+ //!   `matrixmultiply` fast path and the `std`-only matrix exponential
+--- a/whippyalgebra/src/index.rs
++++ b/whippyalgebra/src/index.rs
+@@ -12,9 +12,10 @@
+ //! const-generic bridge that produces it is keyed on a single `Const`: with
+ //! the `nalgebra` feature it is `nalgebra::Const<N>` (bridged via nalgebra's
+ //! `ToTypenum`), so the one `Const` a user names for sizing is the same one they
+-//! name for indexing; without a backend it falls back to typenum's `Const`. Only
+-//! the list operations ([`ElemAt`], [`Take`], [`Drop`]) are ours, since they
+-//! walk our unit cons-list; each step peels one node and decrements the index by
++//! name for indexing; backend-free builds enable `standalone-indexing` to use
++//! typenum's `Const`. Only the list operations ([`ElemAt`], [`Take`], [`Drop`])
++//! are ours, since they walk our unit cons-list; each step peels one node and
++//! decrements the index by
+ //! one (`Sub1`), bottoming out at [`UTerm`] (zero).
+ //!
+ //! Indexing or slicing out of range is a compile error: [`ElemAt`] is only
+@@ -37,8 +38,8 @@
+ /// feature it is `nalgebra::Const<N>`, whose associated
+ /// [`Nat`](ShapeIndex::Nat) is `<nalgebra::Const<N> as ToTypenum>::Typenum` —
+ /// the same `typenum::U{N}` typenum's own bridge would produce, so a single
+-/// `Const` (nalgebra's) serves both matrix sizing and list indexing. Without a
+-/// backend it falls back to typenum's `Const<N>`/`ToUInt`.
++/// `Const` (nalgebra's) serves both matrix sizing and list indexing. Backend-free
++/// builds enable `standalone-indexing` to use typenum's `Const<N>`/`ToUInt`.
+ ///
+ /// The crate routes every const-generic index/size through it (via the [`Nat`]
+ /// alias) so that the one obligation the type-nat encoding leaks reports as
+@@ -89,8 +90,9 @@
+     type Nat = <::nalgebra::Const<N> as ::nalgebra::ToTypenum>::Typenum;
+ }
+ 
+-// Backend-agnostic fallback: typenum's own const-generic bridge, so the core
+-// list machinery still compiles with no backend feature enabled.
++// Backend-agnostic fallback: standalone-indexing enables typenum's own
++// const-generic bridge. The enclosing module requires either that feature or
++// nalgebra, so the bridge is available whenever this fallback is compiled.
+ #[cfg(not(feature = "nalgebra"))]
+ #[diagnostic::do_not_recommend]
+ impl<T: typenum::ToUInt> ShapeIndex for T
+@@ -107,7 +109,7 @@
+ #[cfg(feature = "nalgebra")]
+ pub type Nat<const N: usize> = <::nalgebra::Const<N> as ShapeIndex>::Nat;
+ /// The type-level natural a const size/index `N` maps to (backend-agnostic
+-/// fallback, via typenum's `Const`).
++/// fallback enabled by `standalone-indexing`, via typenum's `Const`).
+ #[cfg(not(feature = "nalgebra"))]
+ pub type Nat<const N: usize> = <typenum::Const<N> as ShapeIndex>::Nat;
+ 
+--- a/whippyalgebra/Cargo.toml
++++ b/whippyalgebra/Cargo.toml
+@@ -29,9 +29,9 @@
+ # the inner matrix) is unaffected.
+ alloc = ["whippyunits/alloc", "nalgebra?/alloc"]
+ # The nalgebra backend adapter (`MixedUnitMatrix`, `UnitVector`, …) and the
+-# `state_space` example. Disable it to depend only on the backend-agnostic unit
+-# machinery (`dims`, `index`, `entry`) while a different linear-algebra backend
+-# adapter is used.
++# `state_space` example. For backend-agnostic unit machinery (`dims`, `index`,
++# `entry`), disable default features and enable standalone-indexing while a
++# different linear-algebra backend adapter is used.
+ nalgebra = ["dep:nalgebra"]
+ # Keep typenum's full const-generic index bridge for backend-free consumers.
+ # Nalgebra supplies its own bridge and does not need this mapping catalog.
+--- a/whippyalgebra/CHANGELOG.md
++++ b/whippyalgebra/CHANGELOG.md
+@@ -4,6 +4,21 @@
+ 
+ The format is based on [Keep a Changelog](https://keepachangelog.com),
+ and this project adheres to [Semantic Versioning](https://semver.org/).
++
++## [Unreleased]
++
++### Changed
++
++- Added the default-enabled `standalone-indexing` feature for typenum's full
++  const-generic index bridge. Reduced nalgebra builds can omit this feature to
++  avoid compiling the bridge they do not use. Default builds retain their
++  existing behavior, and backend-free builds retain their existing indexing
++  API and supported index domain when `standalone-indexing` is enabled.
++- **Migration for backend-free builds:** with `default-features = false`, add
++  `standalone-indexing` to the feature list, alongside `std` or `alloc` if needed.
++  Bare no-default builds and builds enabling only `std` or `alloc` now report a
++  configuration error. Every build must enable `nalgebra` or
++  `standalone-indexing`; either bridge supports `no_std` without allocation.
+ 
+ ## [0.1.1]
+ 

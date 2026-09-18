@@ -11,7 +11,10 @@ categories = ["science", "mathematics"]
 readme = "README.md"
 
 [features]
-default = ["std", "nalgebra"]
+nightly-gca = ["whippyunits/nightly-gca"]
+# Extend arithmetic inputs from +/-32 to +/-200 without changing quantity types.
+wide-exponents = ["whippyunits/wide-exponents"]
+default = ["std", "nalgebra", "all-units", "literals", "wide-exponents"]
 # Standard library support. On by default; turning it off makes the crate
 # `#![no_std]`. `std` is additive over `alloc`: it enables everything `alloc`
 # does, plus std-only niceties in the dependency tree (e.g. nalgebra's
@@ -31,6 +34,17 @@ alloc = ["whippyunits/alloc", "nalgebra?/alloc"]
 # machinery (`dims`, `index`, `entry`) while a different linear-algebra backend
 # adapter is used.
 nalgebra = ["dep:nalgebra"]
+
+# Forward the optional unit catalogs without forcing them on minimal builds.
+all-units = ["whippyunits/all-units"]
+units-dynamics = ["whippyunits/units-dynamics"]
+units-si-dynamics = ["whippyunits/units-si-dynamics"]
+units-dynamics-conversions = ["whippyunits/units-dynamics-conversions"]
+units-electrical = ["whippyunits/units-electrical"]
+units-thermal = ["whippyunits/units-thermal"]
+units-chemical = ["whippyunits/units-chemical"]
+units-photometric = ["whippyunits/units-photometric"]
+literals = ["whippyunits/literals"]
 
 [dependencies]
 whippyunits = { path = "..", version = "0.3.0", default-features = false }

@@ -1,0 +1,154 @@
+{
+  "scope": "check after selected package clean; unrelated dependencies warm; incremental off; jobs=1",
+  "rss_scope": "GNU time maximum single-process RSS including children; KiB, not aggregate RSS",
+  "variants": [
+    {
+      "label": "control",
+      "tree": "/tmp/whippyunits-typenum-experiments/prepared/control",
+      "sha256": "7ff1c8e9df48c1559b5bc316e6b41e52303be113a61ccce9a2ebf39e7fdb6173"
+    },
+    {
+      "label": "mapping",
+      "tree": "/tmp/whippyunits-typenum-experiments/prepared/mapping",
+      "sha256": "25712b06969f9667ef414e5069895c291fa49d0124d491486c6d2bfb2e0854c4"
+    },
+    {
+      "label": "direct",
+      "tree": "/tmp/whippyunits-typenum-experiments/prepared/direct",
+      "sha256": "af90cb419426edb5c4d6cf4dc4c64183ae3bdb31a0ac7dbfb9c93b8f9850ab10"
+    }
+  ],
+  "command": [
+    "cargo",
+    "check",
+    "--offline",
+    "--locked",
+    "--manifest-path",
+    "probe/Cargo.toml",
+    "-p",
+    "dynamics_probe",
+    "-j1"
+  ],
+  "clean_command": [
+    "cargo",
+    "clean",
+    "--offline",
+    "--manifest-path",
+    "probe/Cargo.toml",
+    "-p",
+    "dynamics_probe"
+  ],
+  "reset_before_warmup_command": [
+    "cargo",
+    "clean",
+    "--offline",
+    "--manifest-path",
+    "probe/Cargo.toml",
+    "-p",
+    "typenum",
+    "-p",
+    "whippyunits-core",
+    "-p",
+    "whippyunits-proc-macros",
+    "-p",
+    "whippyunits",
+    "-p",
+    "whippyalgebra",
+    "-p",
+    "nalgebra",
+    "-p",
+    "simba",
+    "-p",
+    "dynamics_probe"
+  ],
+  "consumer_after": false,
+  "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)",
+  "samples": [
+    {
+      "variant": "control",
+      "cycle": 0,
+      "seconds": 0.16277817499940284,
+      "max_rss_kib": 112824,
+      "user_seconds": 0.09,
+      "system_seconds": 0.07
+    },
+    {
+      "variant": "mapping",
+      "cycle": 0,
+      "seconds": 0.17564126499928534,
+      "max_rss_kib": 112268,
+      "user_seconds": 0.1,
+      "system_seconds": 0.07
+    },
+    {
+      "variant": "direct",
+      "cycle": 0,
+      "seconds": 0.18219964500167407,
+      "max_rss_kib": 115012,
+      "user_seconds": 0.1,
+      "system_seconds": 0.07
+    },
+    {
+      "variant": "direct",
+      "cycle": 1,
+      "seconds": 0.1620521350123454,
+      "max_rss_kib": 115488,
+      "user_seconds": 0.09,
+      "system_seconds": 0.06
+    },
+    {
+      "variant": "mapping",
+      "cycle": 1,
+      "seconds": 0.17749859500327148,
+      "max_rss_kib": 112620,
+      "user_seconds": 0.11,
+      "system_seconds": 0.06
+    },
+    {
+      "variant": "control",
+      "cycle": 1,
+      "seconds": 0.17930857499595731,
+      "max_rss_kib": 113004,
+      "user_seconds": 0.1,
+      "system_seconds": 0.06
+    },
+    {
+      "variant": "control",
+      "cycle": 2,
+      "seconds": 0.17186657502315938,
+      "max_rss_kib": 112580,
+      "user_seconds": 0.1,
+      "system_seconds": 0.06
+    },
+    {
+      "variant": "mapping",
+      "cycle": 2,
+      "seconds": 0.16550232502049766,
+      "max_rss_kib": 112812,
+      "user_seconds": 0.09,
+      "system_seconds": 0.06
+    },
+    {
+      "variant": "direct",
+      "cycle": 2,
+      "seconds": 0.18970541600720026,
+      "max_rss_kib": 115372,
+      "user_seconds": 0.11,
+      "system_seconds": 0.07
+    }
+  ],
+  "medians": {
+    "control": {
+      "seconds": 0.17186657502315938,
+      "max_rss_kib": 112824
+    },
+    "mapping": {
+      "seconds": 0.17564126499928534,
+      "max_rss_kib": 112620
+    },
+    "direct": {
+      "seconds": 0.18219964500167407,
+      "max_rss_kib": 115372
+    }
+  }
+}

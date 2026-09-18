@@ -1,0 +1,237 @@
+{
+  "scope": "check after selected package clean; unrelated dependencies warm; incremental off; jobs=1",
+  "rss_scope": "GNU time maximum single-process RSS including children; KiB, not aggregate RSS",
+  "variants": [
+    {
+      "label": "full",
+      "tree": "/tmp/whippyunits-typenum-experiments/vendor/full",
+      "sha256": "fb411dc09c501f45fd5f9932db2488c5d97cbdea162df606a567e2c1e9c1caa0"
+    },
+    {
+      "label": "constants",
+      "tree": "/tmp/whippyunits-typenum-experiments/vendor/constants",
+      "sha256": "a317b37a29c7648f39eaa3c12b13dc70f36566aa8318f78341e37021049e8ae9"
+    },
+    {
+      "label": "modules",
+      "tree": "/tmp/whippyunits-typenum-experiments/vendor/modules",
+      "sha256": "2d3d7e5d67e6a8a475c70c5e3800700a2bc02bdb7e583bca9673e74dbbaa8802"
+    },
+    {
+      "label": "slim",
+      "tree": "/tmp/whippyunits-typenum-experiments/vendor/slim",
+      "sha256": "55cfa0436a29f7cd6cd5c5ac6853d52ca46f8c6f9e60d80cef9dd6aae27888a2"
+    }
+  ],
+  "command": [
+    "cargo",
+    "check",
+    "--offline",
+    "--locked",
+    "--manifest-path",
+    "probe/Cargo.toml",
+    "-p",
+    "typenum",
+    "-j1"
+  ],
+  "clean_command": [
+    "cargo",
+    "clean",
+    "--offline",
+    "--manifest-path",
+    "probe/Cargo.toml",
+    "-p",
+    "typenum"
+  ],
+  "reset_before_warmup_command": [
+    "cargo",
+    "clean",
+    "--offline",
+    "--manifest-path",
+    "probe/Cargo.toml",
+    "-p",
+    "typenum"
+  ],
+  "consumer_after": false,
+  "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)",
+  "samples": [
+    {
+      "variant": "full",
+      "cycle": 0,
+      "seconds": 0.5000594349985477,
+      "max_rss_kib": 142696,
+      "user_seconds": 0.39,
+      "system_seconds": 0.1
+    },
+    {
+      "variant": "constants",
+      "cycle": 0,
+      "seconds": 0.40240089199505746,
+      "max_rss_kib": 128152,
+      "user_seconds": 0.3,
+      "system_seconds": 0.09
+    },
+    {
+      "variant": "modules",
+      "cycle": 0,
+      "seconds": 0.4670149539888371,
+      "max_rss_kib": 131460,
+      "user_seconds": 0.35,
+      "system_seconds": 0.1
+    },
+    {
+      "variant": "slim",
+      "cycle": 0,
+      "seconds": 0.3256811689934693,
+      "max_rss_kib": 117508,
+      "user_seconds": 0.24,
+      "system_seconds": 0.07
+    },
+    {
+      "variant": "slim",
+      "cycle": 1,
+      "seconds": 0.30570954899303615,
+      "max_rss_kib": 118108,
+      "user_seconds": 0.22,
+      "system_seconds": 0.08
+    },
+    {
+      "variant": "modules",
+      "cycle": 1,
+      "seconds": 0.44819531397661194,
+      "max_rss_kib": 131388,
+      "user_seconds": 0.34,
+      "system_seconds": 0.1
+    },
+    {
+      "variant": "constants",
+      "cycle": 1,
+      "seconds": 0.41359931201441213,
+      "max_rss_kib": 128516,
+      "user_seconds": 0.31,
+      "system_seconds": 0.1
+    },
+    {
+      "variant": "full",
+      "cycle": 1,
+      "seconds": 0.5128478149999864,
+      "max_rss_kib": 142628,
+      "user_seconds": 0.42,
+      "system_seconds": 0.08
+    },
+    {
+      "variant": "full",
+      "cycle": 2,
+      "seconds": 0.5002968549961224,
+      "max_rss_kib": 141844,
+      "user_seconds": 0.4,
+      "system_seconds": 0.09
+    },
+    {
+      "variant": "constants",
+      "cycle": 2,
+      "seconds": 0.4005841020261869,
+      "max_rss_kib": 128416,
+      "user_seconds": 0.3,
+      "system_seconds": 0.08
+    },
+    {
+      "variant": "modules",
+      "cycle": 2,
+      "seconds": 0.41411571300704964,
+      "max_rss_kib": 131992,
+      "user_seconds": 0.32,
+      "system_seconds": 0.09
+    },
+    {
+      "variant": "slim",
+      "cycle": 2,
+      "seconds": 0.3041827589913737,
+      "max_rss_kib": 117644,
+      "user_seconds": 0.22,
+      "system_seconds": 0.07
+    },
+    {
+      "variant": "slim",
+      "cycle": 3,
+      "seconds": 0.3319909900019411,
+      "max_rss_kib": 118268,
+      "user_seconds": 0.24,
+      "system_seconds": 0.08
+    },
+    {
+      "variant": "modules",
+      "cycle": 3,
+      "seconds": 0.41982830199413,
+      "max_rss_kib": 130920,
+      "user_seconds": 0.32,
+      "system_seconds": 0.09
+    },
+    {
+      "variant": "constants",
+      "cycle": 3,
+      "seconds": 0.4049470119934995,
+      "max_rss_kib": 128100,
+      "user_seconds": 0.31,
+      "system_seconds": 0.09
+    },
+    {
+      "variant": "full",
+      "cycle": 3,
+      "seconds": 0.47987261501839384,
+      "max_rss_kib": 142712,
+      "user_seconds": 0.37,
+      "system_seconds": 0.1
+    },
+    {
+      "variant": "full",
+      "cycle": 4,
+      "seconds": 0.5016781450249255,
+      "max_rss_kib": 142024,
+      "user_seconds": 0.4,
+      "system_seconds": 0.1
+    },
+    {
+      "variant": "constants",
+      "cycle": 4,
+      "seconds": 0.40604479200555943,
+      "max_rss_kib": 128416,
+      "user_seconds": 0.3,
+      "system_seconds": 0.09
+    },
+    {
+      "variant": "modules",
+      "cycle": 4,
+      "seconds": 0.4273249430116266,
+      "max_rss_kib": 132096,
+      "user_seconds": 0.33,
+      "system_seconds": 0.08
+    },
+    {
+      "variant": "slim",
+      "cycle": 4,
+      "seconds": 0.38077090101432987,
+      "max_rss_kib": 117880,
+      "user_seconds": 0.28,
+      "system_seconds": 0.09
+    }
+  ],
+  "medians": {
+    "full": {
+      "seconds": 0.5002968549961224,
+      "max_rss_kib": 142628
+    },
+    "constants": {
+      "seconds": 0.4049470119934995,
+      "max_rss_kib": 128416
+    },
+    "modules": {
+      "seconds": 0.4273249430116266,
+      "max_rss_kib": 131460
+    },
+    "slim": {
+      "seconds": 0.3256811689934693,
+      "max_rss_kib": 117880
+    }
+  }
+}

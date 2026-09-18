@@ -1,0 +1,1346 @@
+{
+  "scope": "production integration correctness; no performance claim",
+  "repo": "/tmp/whippyunits-cga/snapshots/baseline",
+  "toolchain": "nightly-2026-09-13",
+  "native": false,
+  "rustc_command": [
+    "rustc",
+    "-Vv"
+  ],
+  "rustc": "rustc 1.100.0-nightly (809936eac 2026-09-12)\nbinary: rustc\ncommit-hash: 809936eac66c547a5127ce1da805f0d3a6789b98\ncommit-date: 2026-09-12\nhost: x86_64-unknown-linux-gnu\nrelease: 1.100.0-nightly\nLLVM version: 23.1.1\n",
+  "environment": {
+    "RUSTUP_TOOLCHAIN": "nightly-2026-09-13",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_TARGET_DIR": "/tmp/whippyunits-cga/integration-target"
+  },
+  "source_sha256": {
+    "Cargo.lock": "f1c201a8ace75c09cc6bc7d3395b410c952da4e244e90ceeefc9d4efd3a43fbb",
+    "Cargo.toml": "71cc297585ec0218509e8f2f56f8a9cff825d26f52b816f61588b0bfe0d5f957",
+    "proc-macros/Cargo.toml": "24e3fbb4223d3f8c90edf082cb0ae1937cc604c8617f380733da616ee7dbd926",
+    "proc-macros/src/catalog_snapshot.rs": "79ef4043dc4a654f37a98c4ca39527d7032ea8cdb8a796871bcd54cd12be7f69",
+    "proc-macros/src/compute_unit_dimensions_macro.rs": "5220b12ef279b0a79365a462dbf7038b7fb9f1044af14e512f4cfb4f31ff8b07",
+    "proc-macros/src/define_generic_dimension_macro.rs": "4d8b981f666c833862becca9ea07d4d2e04c79ba64c833bdd6e524c34a735129",
+    "proc-macros/src/define_literals_macro.rs": "22c722c09ddcfe90622592afb6679b6b13f35081ebaf5404614a8d765eec90a1",
+    "proc-macros/src/define_local_quantity_macro.rs": "65631e02b38aa2e38d8560013220f8ada9b973629a588e4a6bb76bcb0f4c4b53",
+    "proc-macros/src/define_unit_declarators_macro.rs": "07859fe95d2e1641f13708595d3f3078da6562229fc61e5eb8ff01b8eccf0279",
+    "proc-macros/src/expand_units_macro.rs": "fe2a51f5087c2651404c7f80f297644fd9394e483a5cb548428cad35095761af",
+    "proc-macros/src/generate_all_dimensionless_cross_type_macro.rs": "06467ca9024314690db59073b3e437f36628d7fb0e49810913d0140fda266fae",
+    "proc-macros/src/generate_all_radian_erasures_macro.rs": "945d8c33655f2364f01e317f6d8a83b65f54920a9ff993181608368fbfbc7338",
+    "proc-macros/src/generate_default_declarators_macro.rs": "20e267ebcca9adce955b510a5f5bae48e919994a1a3143e70be88a13e11cb28c",
+    "proc-macros/src/generate_literals_module_macro.rs": "15afd8ee5830c4d1d413cc50401ef414ecdc4790aa59faa45413b5e9387c45fc",
+    "proc-macros/src/generate_local_unit_literals_macro.rs": "c0b95f9ba62ae49e2a55efa0b4dfd7a2586b0d773c6940bc4e391a63dffb0e93",
+    "proc-macros/src/lib.rs": "0d81af965116c50ec8d78dfac72963c71c44e761ffe5d2ab0569ba290c07439a",
+    "proc-macros/src/local_unit_type_macro.rs": "4717165784adf4c4673fd6a5a272574e3372192574b966970388f5dd3a84508d",
+    "proc-macros/src/pow_lookup_macro.rs": "54e30e68a7c554d399d90e11ff30b90cef504028b338ea7e225af89ea6a9514b",
+    "proc-macros/src/quantity_macro.rs": "52a8ad839043456e0cf90dadadd1676f65a8c703bcee874aef370466c533c284",
+    "proc-macros/src/unit_macro.rs": "11b3857be2e3de981457eee621e016bcf391c74e1fd3b8efc97aa0943f007c26",
+    "proc-macros/src/utils/catalog.rs": "bfe8870afdf7b0800ef43c174258c4c02036241be7ec21276ce2d8f47951ac38",
+    "proc-macros/src/utils/culit.rs": "621518c5bfe4ceca0d2cacd38fa1e8a7677ac103d212fd96e9a6da82f9bddce8",
+    "proc-macros/src/utils/dimension_suggestions.rs": "e02cc0d52177a1aec2a4b9ff58f6dcb6adcf6986472b55b1697a58779d6055a8",
+    "proc-macros/src/utils/lift_trace.rs": "0ec086f25a0a51a530deada3ac09d52dbc1a68f24ee60ab825cc14a06f3b663b",
+    "proc-macros/src/utils/literal_macros.rs": "62e9cb6e8a8e43102b6a3d9df7ab50b8ee25508100bb9a9a88cd8ba75f3eb863",
+    "proc-macros/src/utils/scale_suggestions.rs": "bb1fb68b31ac209316b8ad734266ab326e9ca16f4263ba4ceaf64049e6aafff0",
+    "proc-macros/src/utils/shared_utils.rs": "7accaf0bc8c7ac6aea88ec64dae736907c72d5937dd4036d5dd4994c5b260ffb",
+    "proc-macros/src/utils/unit_suggestions.rs": "ee19880c2d8bc463b1f3a9456231306d9c41932146494642cf5ad298627a1b5a",
+    "proc-macros/src/value_macro.rs": "061fab2c1ab323dbd891fe7db13b2656f30ae5b1cbb154fe88c5d650a4fdb8db",
+    "rust-toolchain.toml": "a3df22577d8e9301f6bab43672f9da894bf3b81d2f3dbfda6f13373fc21704a8",
+    "src/alloc.rs": "0ad8dc5a545c1fc6b28ed212a56e6663056f2f9f69a9ad51a3532963f24891be",
+    "src/api.rs": "6dd8a8c6ee5c431933b2a315d66f25b49c4209782aa43ad592b5d3788756b265",
+    "src/arithmetic.rs": "c69c26877c918663267a36caaac7d015e7d5d5a4b1886761c281aca26aa57d09",
+    "src/arithmetic_quantity_types.rs": "502aa2c99ec1dd8d7a85157cdc6d2112396d8408d87028ca8ef57e13332671ff",
+    "src/default_declarators.rs": "b5c1d09447cc02d291211eda7a249cae46fa310f0510ab40d7f2a8ce8057036b",
+    "src/dimension_traits.rs": "a23853c985bc5a19448bcc63c88581599c6a6616cd8aef9cb7f7ba096ee57d17",
+    "src/generated/default_declarators/chemical.rs": "ea37924b4b0e1d71a3ef147c14ca91aba58a3cfebc95495483f4394b7a60e7d8",
+    "src/generated/default_declarators/dynamics.rs": "b725f7c667562e3817c77e557d5e670b372cd9beaf0c26e0a9730d37c71df443",
+    "src/generated/default_declarators/dynamics_conversions.rs": "27af5e09f6eddcf530d17a65380680a95b8362dc23cc6e1a16936868a397f8f7",
+    "src/generated/default_declarators/dynamics_electrical.rs": "13810d385932ce5375496db78f4fb94e05af2841f8fdab89cadd5da50efb5916",
+    "src/generated/default_declarators/dynamics_photometric.rs": "a9420a120b6a690836042b19314d2feaac95a702ea46999644fa410c377c79d0",
+    "src/generated/default_declarators/electrical.rs": "b2487d43e01614c0db03343044f8e678cba9fcd47c901e304c03d12ee96d6d71",
+    "src/generated/default_declarators/mod.rs": "32b98fbd5c80385ae6d6e13ec349a766afe9f94e3a4fc5b677c00e7e52cf0213",
+    "src/generated/default_declarators/photometric.rs": "2bba069d2b75ac2bd68e8df0bb8a091937bb75499becfc90c6008fddec0c5669",
+    "src/generated/default_declarators/si_dynamics.rs": "d3c1ce74552e482dedffdfc7c6e0684c7e413c47cc6808bffbace579c5b38324",
+    "src/generated/default_declarators/thermal.rs": "41cc40f5524b07344647d4886cde30d4e0334d7f924f14a2f4c24b96be19a28e",
+    "src/lib.rs": "efcdd46e68e8ce9b5053b19d29529b8cd1ee0d8d0f04afce76ecd6b0b17d4f9d",
+    "src/print/display_traits.rs": "e8c5e89365dc0d41fee4f6efb2c94d9d4d606f037d57a2363bd7e3130417a4a0",
+    "src/print/format_specifiers.rs": "ead22b87b4b18db8597510cc1d472df173f4d1aef0f914cc37113a39f42ffdf1",
+    "src/print/mod.rs": "e5b429fec1a9a2435c5f4809cbc8dc71cc4eace702a13c71bce891fc6d5a5f7e",
+    "src/print/name_lookup.rs": "e54f5b95e6ddf2dc84b0129bf0eeee820a92de177c53876ce57ad3cc16aa0ae5",
+    "src/print/prettyprint.rs": "2006cd826fc30ecba8fbfef2946dadb68bff54d1fa799fd220358b135501faa5",
+    "src/print/unit_literal_generator.rs": "0a5369a83a198e4cb492a6049f0bc2b812b7ca0a4f6555fad73e60077475e02e",
+    "src/print/utils.rs": "1d0b2fb8ffaccd562e6baafba288090f765325d30da1fc7b8b4efb5d8b7ed518",
+    "src/quantity.rs": "5f69a4164915105dcff450fc68e673bd4afe9cae9968e2e2f6197e7e9e47da2f",
+    "src/rescale_macro.rs": "b70050bfbd4f4524873e93216aa2d99394afb8ab63660d0df827bb54c606d8ef",
+    "src/scale_conversion.rs": "ad50995b07c91872186414e79f2471916974fc4b62154c92f4a6b71903fa417b",
+    "src/serialization.rs": "e60e7e3d2178f9e91e7017d86cb753d0d30b31cbfb3ed6e28e53c853f82f43e5",
+    "src/unit.rs": "1df1164a7950cd50fd18df1d68462b9e4541cf49ffa7db33b46f0c1a50b29e7b",
+    "whippyalgebra/Cargo.toml": "405c0a9415cde24ac936f61cea8851ed0f61360ade6c5d8d5b81b382b9439a52",
+    "whippyalgebra/src/alloc.rs": "4b59aa5bc207f6f1c8aeef7149f3d0e7b0ec02e8a80d4d64aab5aa448f6d90e3",
+    "whippyalgebra/src/dims.rs": "0b9ca3fb3f78d535e2b73ba9eacdb8aab77bf1d4cc226a6ad7f78ea471cc8589",
+    "whippyalgebra/src/entry.rs": "1ba21ba201e891df820035ad3e0499e8ea65e740675216b70c24cb4c6ba59c32",
+    "whippyalgebra/src/index.rs": "82387c071a2759c6d83c5c735a2180c7f6379f924e9c2a892d240d2a211aeb35",
+    "whippyalgebra/src/lib.rs": "72af82acda224c82642cfd4d5dfe70eca7be81fc07d830b8301bf666cf464488",
+    "whippyalgebra/src/nalgebra/linalg/bidiagonal.rs": "4d314935278dd5b1a314074e8835c85248f2fe925f116649c9af21eecaf360e5",
+    "whippyalgebra/src/nalgebra/linalg/cholesky.rs": "3bda77fdb5f190b6c9ac576cff3b3ff6d91866ba1cb1fd01c2dc80439e052825",
+    "whippyalgebra/src/nalgebra/linalg/col_piv_qr.rs": "c7eae95e13011ff6f7b5312eb14a6ad1c87cc0ca92cc1e5cb38f1dc75c612bf7",
+    "whippyalgebra/src/nalgebra/linalg/determinant.rs": "c701cdf34d72d9bd6f3186b5edcf62db3c535a3b4490108a14abe9994542cfcb",
+    "whippyalgebra/src/nalgebra/linalg/eigen.rs": "846d2a3ba7e67a26226f5b15f1601a1250ec78922ea92beb31e2338b86bd11e2",
+    "whippyalgebra/src/nalgebra/linalg/full_piv_lu.rs": "6d2af17f5e92c2e61f4207a0ff690853a7cb59f57b163b69baafbac9a54272c0",
+    "whippyalgebra/src/nalgebra/linalg/generalized_bidiagonal.rs": "fb9df4674a06b6b5ccd7e3394ac711ee94afac3d7c5c55f6ad3d02d585dc13e6",
+    "whippyalgebra/src/nalgebra/linalg/generalized_col_piv_qr.rs": "ed1535fc2dcb1adfe30d085fc871e977cfc529a704ae4f7ee8c57cb92685167e",
+    "whippyalgebra/src/nalgebra/linalg/generalized_qr.rs": "93e426acfa98a1a484f725645bbd0cec39156b55cba025c71f382b774d52fd74",
+    "whippyalgebra/src/nalgebra/linalg/generalized_svd.rs": "dd1a24922a71b66365323c5c2f07ac79d2339e2b75e302e3c2a906eb7875a67a",
+    "whippyalgebra/src/nalgebra/linalg/hessenberg.rs": "571a306ca20577d56755c6e2875b8059d14ee962803d0dfc1a93dcf6ef23c3d1",
+    "whippyalgebra/src/nalgebra/linalg/inverse.rs": "8b584d4c473a0deff14243515a285ab5efd8dbe349fcd5b606f5ab510c400573",
+    "whippyalgebra/src/nalgebra/linalg/lu.rs": "56f22d2f9468d4fd5dcc60aa9e2b634c097d9c314957765f5213024f11c9c830",
+    "whippyalgebra/src/nalgebra/linalg/mod.rs": "820d6bc628b6e4083a41e9a17a73f740a452f495f001733b32ceca703ea144d0",
+    "whippyalgebra/src/nalgebra/linalg/qr.rs": "463952de48026ab71a1b876a2d0fee63b0c60a18bd50a61c68d696ea8f0a371f",
+    "whippyalgebra/src/nalgebra/linalg/schur.rs": "b00f4338fdabc576406422b27a006cb32b9469c366eb28ed523e65070af7df0a",
+    "whippyalgebra/src/nalgebra/linalg/solve.rs": "b2d5db4ccc80a1993422f1c99d497ee97dc361b43bdaa63c6e933227d7c6b166",
+    "whippyalgebra/src/nalgebra/linalg/svd.rs": "c6db423eebb74a5f172e193fbc0bca72a9af2653ca652807c15bc0b8ed21eb5f",
+    "whippyalgebra/src/nalgebra/linalg/symmetric_eigen.rs": "4d202ae49671ed73f71caf245fcb6c3fc3f87f01bccbb8bb65b4c7bbeb91259b",
+    "whippyalgebra/src/nalgebra/linalg/symmetric_tridiagonal.rs": "7d738ea31aa2eb9156679fe71244925d62165dc6b959395098454b52a23112f2",
+    "whippyalgebra/src/nalgebra/linalg/udu.rs": "cedef93107b804784392384d7b8e628a989cc93bef439ea68526ec7417318a1d",
+    "whippyalgebra/src/nalgebra/macros.rs": "c9251d91ceb216a26c77f0dcd93ab1cd1e9367e0c42a32af6f3f78ef9b53167a",
+    "whippyalgebra/src/nalgebra/matrix/construction.rs": "23a051ecd54124bce43abb4c1f39216d059d7d39ff6b13e7ba7ea92f9aedc6ed",
+    "whippyalgebra/src/nalgebra/matrix/display.rs": "c164b3597b88a2bcebe58297333a939ca4b192eb81dd0808a2cd7313468467b1",
+    "whippyalgebra/src/nalgebra/matrix/mod.rs": "aab2962110db9808ff52dccf2db20736248854ab9209c0591fc4b5e4ab4cbd5f",
+    "whippyalgebra/src/nalgebra/matrix/ops.rs": "4d831f55220fba8065b924cda4e611800af44809499f7d1ee038041e21b44fda",
+    "whippyalgebra/src/nalgebra/mod.rs": "e17d3aa0262c48d1ac466966afff56461e8b63b25430f176c067d1b88cc255a9",
+    "whippyalgebra/src/nalgebra/reduce.rs": "7bcb3fc315f56d635d3d4c07f0858abe059fa2e7efb27cc65b80515e15be1145",
+    "whippyalgebra/src/nalgebra/uniform/construction.rs": "27c16e5250a853035c48cebed1deb9b6443e65c0eb7e037c562bae89670791f5",
+    "whippyalgebra/src/nalgebra/uniform/mod.rs": "aad26389e683004b2e7eb1c925cad202a9d15322617bcfb60b9cb8c26f2bf937",
+    "whippyalgebra/src/nalgebra/uniform/ops.rs": "750c26e8e0251ad411462a47863eda8c63bc5c90c30c23e9267adc106dc18aaf",
+    "whippyalgebra/src/uniformity.rs": "e2710923e49f545561fdad8ae99cc08dfa46ce24c55b42c6453a9d957bb9d743",
+    "whippyalgebra-macros/Cargo.toml": "3efa699db4fad4f4a28062bae459c998876724042609e43621e814bf71adfee4",
+    "whippyalgebra-macros/src/lib.rs": "35ed47c60f976b0cfe6e256a7e050bf0b301bdcdc71a51966e125b185485809c",
+    "whippyunits-core/Cargo.toml": "da4bb131990f3ba3c775218b17d413bf06b7db364b0d20deae7cb502361ff285",
+    "whippyunits-core/src/bin/conversion_factor_linter.rs": "2598aeb1a4ecf73bdc630071541fc8c6a0e8b6fd396194505726ac7036365d78",
+    "whippyunits-core/src/bin/symbol_linter.rs": "15f08390bd5cfc9b91a589c01857298e0ff5b25bdce1bdfd2e54c87b9302ece9",
+    "whippyunits-core/src/dimension_exponents.rs": "4864743e2ea0df98dd1e8fd761ab5d9c460243d4ae7981b09cd65ae25f1b959f",
+    "whippyunits-core/src/dimensions.rs": "866636355d7454e49dc2499de96a58feb447ff7deed87d6e216930e161f61d88",
+    "whippyunits-core/src/lib.rs": "5bd3183d699fd00b0c3ea36e9a042c8918591ff2464e14b1409fda5af9773de7",
+    "whippyunits-core/src/num.rs": "8fa9b62335c7a07a31d1f3c3e0d192ed34814462cc0e7b9fef8e703184d8cb22",
+    "whippyunits-core/src/parser.rs": "f128c8b188ace6ead494e458c3f7a076110399466b0eaf742a7bff14024100d0",
+    "whippyunits-core/src/prefix.rs": "f5cef80aae903ed14356e473037a2362463f38fef261b5f4b8383a6316f64f90",
+    "whippyunits-core/src/scale_exponents.rs": "50af24ac802f8f08e3c8af3d28f2654dc5f3a0b5bc3f2f76ae32ca1af5914ae8",
+    "whippyunits-core/src/storage_unit.rs": "63a763a32f7bc4e6c6c822d48208d1ced2c28f270a7b73150bd1875d6a1c9345",
+    "whippyunits-core/src/units.rs": "4b37208f4923d0fe23bda13280c39b9986b3cb6fc05b6a8a8f7c547e617f1c78"
+  },
+  "probe_sha256": {
+    "acceptance.rs": "2a2f30045228090588bb1cc27d5c55934861bbc89c1c80a80183d9249dc8e3b5",
+    "generic_and_roots.rs": "170af56eb43fbe5a2e930e04b12b907d0d8d6a84424bea53cfe914411caaac7f",
+    "odd_dimension_bound.rs": "7bafa6626ff9bf701a529e20b6ad3fb638106c542d67808e8681516d0409f302",
+    "odd_scale_bound.rs": "4bcaca054abe218e0c267b6ba59c9e21da281377a958cde747797e14d4ee088e",
+    "odd_cholesky.rs": "d2fa7e1103378b5d02efd054402dad003cb59772d21d9b18a9a65abfd5570b4a",
+    "wrong_dimensions.rs": "32764d83c7efc7ba0bdeb3b63f38c71dfad5721c7fc53a0748ce8f28b4557770",
+    "wrong_gauge.rs": "89b1befcdcfdfa8890552dd971694cbdc252feddfc9e7989ce596c6fb6692510",
+    "wrong_brand.rs": "f5cda872f51bba745e15af46a0abe431b00e2f2c513ade94605e73b95e2dcf96"
+  },
+  "manifest_sha256": "eb617ad900e04b03a38557c2b6b4a1c1c1abea63b1d3184c9f85d958d6f19952",
+  "baseline_lock_sha256": "4c9a03d480157877e0d39fb8e4c9d9267a570839c9990cee168d3975deee6d8c",
+  "consumer_lock_sha256": "af470fc0ee6f98a5c4be3fc03cc5e6e20ba31f77b7a662f3dbe78c02e0b64db0",
+  "lock_adjustment": "add only dynamics_probe edges to existing typenum and whippyunits-core",
+  "planned_cases": [
+    "acceptance",
+    "generic_and_roots",
+    "odd_dimension_bound",
+    "odd_scale_bound",
+    "odd_cholesky",
+    "wrong_dimensions",
+    "wrong_gauge",
+    "wrong_brand"
+  ],
+  "status": "complete",
+  "all_passed": true,
+  "checks": [
+    {
+      "name": "acceptance",
+      "expected": "success",
+      "command": [
+        "cargo",
+        "run",
+        "--offline",
+        "--locked",
+        "-j2",
+        "--manifest-path",
+        "/tmp/whippyunits-cga/integration-baseline/consumer/Cargo.toml",
+        "--bin",
+        "acceptance",
+        "--message-format=json"
+      ],
+      "cwd": "/tmp/whippyunits-cga/integration-baseline/consumer",
+      "status": 0,
+      "passed": true,
+      "allowed_error_codes": [],
+      "actual_error_codes": [],
+      "required_diagnostic_patterns": [],
+      "diagnostics": [],
+      "compiler_crash": false,
+      "unclassified_error": false,
+      "log": "/tmp/whippyunits-cga/integration-baseline/acceptance.log"
+    },
+    {
+      "name": "generic_and_roots",
+      "expected": "success",
+      "command": [
+        "cargo",
+        "run",
+        "--offline",
+        "--locked",
+        "-j2",
+        "--manifest-path",
+        "/tmp/whippyunits-cga/integration-baseline/consumer/Cargo.toml",
+        "--bin",
+        "generic_and_roots",
+        "--message-format=json"
+      ],
+      "cwd": "/tmp/whippyunits-cga/integration-baseline/consumer",
+      "status": 0,
+      "passed": true,
+      "allowed_error_codes": [],
+      "actual_error_codes": [],
+      "required_diagnostic_patterns": [],
+      "diagnostics": [],
+      "compiler_crash": false,
+      "unclassified_error": false,
+      "log": "/tmp/whippyunits-cga/integration-baseline/generic_and_roots.log"
+    },
+    {
+      "name": "odd_dimension_bound",
+      "expected": "rejection",
+      "command": [
+        "cargo",
+        "check",
+        "--offline",
+        "--locked",
+        "-j2",
+        "--manifest-path",
+        "/tmp/whippyunits-cga/integration-baseline/consumer/Cargo.toml",
+        "--bin",
+        "odd_dimension_bound",
+        "--message-format=json"
+      ],
+      "cwd": "/tmp/whippyunits-cga/integration-baseline/consumer",
+      "status": 101,
+      "passed": true,
+      "allowed_error_codes": [
+        "E0277"
+      ],
+      "actual_error_codes": [
+        "E0277"
+      ],
+      "required_diagnostic_patterns": [
+        "UnitSqrt|Halve|PartialDiv"
+      ],
+      "diagnostics": [
+        {
+          "rendered": "error[E0277]: the trait bound `whippyunits_core::num::N<1>: whippyunits_core::num::Halve` is not satisfied\n    --> src/bin/odd_dimension_bound.rs:5:20\n     |\n   5 |     require_root::<unit!(m)>();\n     |                    ^^^^^^^^ the trait `whippyunits_core::num::Halve` is not implemented for `whippyunits_core::num::N<1>`\n     |\nhelp: the trait `whippyunits_core::num::Halve` is conditionally implemented for `whippyunits_core::num::N<X>`\n    --> /tmp/whippyunits-cga/snapshots/baseline/whippyunits-core/src/num.rs:1454:1\n     |\n1454 | / impl<const X: i16> Halve for N<X>\n1455 | | where\n1456 | |     N<X>: __AsTypenum,\n1457 | |     <N<X> as __AsTypenum>::Repr: typenum::PartialDiv<typenum::P2>,\n     | |                                  -------------------------------- unsatisfied requirement introduced here: `<N<_> as __AsTypenum>::Repr: PartialDiv<PInt<UInt<_, B0>>>`\n1458 | |     <<N<X> as __AsTypenum>::Repr as typenum::PartialDiv<typenum::P2>>::Output: __IntoNum,\n     | |________________________________________________________________________________---------^\n     |                                                                                  |\n     |                                                                                  unsatisfied requirement introduced here: `<<N<_> as __AsTypenum>::Repr as PartialDiv<_>>::Output: __IntoNum`\n     = note: required for `Unit<Scale, Dimension<_M, _L<1>>>` to implement `UnitSqrt`\nnote: required by a bound in `require_root`\n    --> src/bin/odd_dimension_bound.rs:2:20\n     |\n   2 | fn require_root<U: UnitSqrt>() {}\n     |                    ^^^^^^^^ required by this bound in `require_root`\n     = note: the full name for the type has been written to '/tmp/whippyunits-cga/integration-target/debug/build/dynamics_probe/083c15120fa64356/out/odd_dimension_bound-083c15120fa64356.long-type-10105471212710546773.txt'\n     = note: consider using `--verbose` to print the full type name to the console\n\n",
+          "$message_type": "diagnostic",
+          "children": [
+            {
+              "children": [],
+              "code": null,
+              "level": "help",
+              "message": "the trait `whippyunits_core::num::Halve` is conditionally implemented for `whippyunits_core::num::N<X>`",
+              "rendered": null,
+              "spans": [
+                {
+                  "byte_end": 44258,
+                  "byte_start": 44226,
+                  "column_end": 66,
+                  "column_start": 34,
+                  "expansion": null,
+                  "file_name": "/tmp/whippyunits-cga/snapshots/baseline/whippyunits-core/src/num.rs",
+                  "is_primary": false,
+                  "label": "unsatisfied requirement introduced here: `<N<_> as __AsTypenum>::Repr: PartialDiv<PInt<UInt<_, B0>>>`",
+                  "line_end": 1457,
+                  "line_start": 1457,
+                  "suggested_replacement": null,
+                  "suggestion_applicability": null,
+                  "text": [
+                    {
+                      "highlight_end": 66,
+                      "highlight_start": 34,
+                      "text": "    <N<X> as __AsTypenum>::Repr: typenum::PartialDiv<typenum::P2>,"
+                    }
+                  ]
+                },
+                {
+                  "byte_end": 44348,
+                  "byte_start": 44339,
+                  "column_end": 89,
+                  "column_start": 80,
+                  "expansion": null,
+                  "file_name": "/tmp/whippyunits-cga/snapshots/baseline/whippyunits-core/src/num.rs",
+                  "is_primary": false,
+                  "label": "unsatisfied requirement introduced here: `<<N<_> as __AsTypenum>::Repr as PartialDiv<_>>::Output: __IntoNum`",
+                  "line_end": 1458,
+                  "line_start": 1458,
+                  "suggested_replacement": null,
+                  "suggestion_applicability": null,
+                  "text": [
+                    {
+                      "highlight_end": 89,
+                      "highlight_start": 80,
+                      "text": "    <<N<X> as __AsTypenum>::Repr as typenum::PartialDiv<typenum::P2>>::Output: __IntoNum,"
+                    }
+                  ]
+                },
+                {
+                  "byte_end": 44349,
+                  "byte_start": 44130,
+                  "column_end": 90,
+                  "column_start": 1,
+                  "expansion": null,
+                  "file_name": "/tmp/whippyunits-cga/snapshots/baseline/whippyunits-core/src/num.rs",
+                  "is_primary": true,
+                  "label": null,
+                  "line_end": 1458,
+                  "line_start": 1454,
+                  "suggested_replacement": null,
+                  "suggestion_applicability": null,
+                  "text": [
+                    {
+                      "highlight_end": 34,
+                      "highlight_start": 1,
+                      "text": "impl<const X: i16> Halve for N<X>"
+                    },
+                    {
+                      "highlight_end": 6,
+                      "highlight_start": 1,
+                      "text": "where"
+                    },
+                    {
+                      "highlight_end": 23,
+                      "highlight_start": 1,
+                      "text": "    N<X>: __AsTypenum,"
+                    },
+                    {
+                      "highlight_end": 67,
+                      "highlight_start": 1,
+                      "text": "    <N<X> as __AsTypenum>::Repr: typenum::PartialDiv<typenum::P2>,"
+                    },
+                    {
+                      "highlight_end": 90,
+                      "highlight_start": 1,
+                      "text": "    <<N<X> as __AsTypenum>::Repr as typenum::PartialDiv<typenum::P2>>::Output: __IntoNum,"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "children": [],
+              "code": null,
+              "level": "note",
+              "message": "required for `Unit<Scale, Dimension<_M, _L<1>>>` to implement `UnitSqrt`",
+              "rendered": null,
+              "spans": []
+            },
+            {
+              "children": [],
+              "code": null,
+              "level": "note",
+              "message": "required by a bound in `require_root`",
+              "rendered": null,
+              "spans": [
+                {
+                  "byte_end": 62,
+                  "byte_start": 54,
+                  "column_end": 28,
+                  "column_start": 20,
+                  "expansion": null,
+                  "file_name": "src/bin/odd_dimension_bound.rs",
+                  "is_primary": true,
+                  "label": "required by this bound in `require_root`",
+                  "line_end": 2,
+                  "line_start": 2,
+                  "suggested_replacement": null,
+                  "suggestion_applicability": null,
+                  "text": [
+                    {
+                      "highlight_end": 28,
+                      "highlight_start": 20,
+                      "text": "fn require_root<U: UnitSqrt>() {}"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "children": [],
+              "code": null,
+              "level": "note",
+              "message": "the full name for the type has been written to '/tmp/whippyunits-cga/integration-target/debug/build/dynamics_probe/083c15120fa64356/out/odd_dimension_bound-083c15120fa64356.long-type-10105471212710546773.txt'",
+              "rendered": null,
+              "spans": []
+            },
+            {
+              "children": [],
+              "code": null,
+              "level": "note",
+              "message": "consider using `--verbose` to print the full type name to the console",
+              "rendered": null,
+              "spans": []
+            }
+          ],
+          "level": "error",
+          "message": "the trait bound `whippyunits_core::num::N<1>: whippyunits_core::num::Halve` is not satisfied",
+          "spans": [
+            {
+              "byte_end": 190,
+              "byte_start": 182,
+              "column_end": 28,
+              "column_start": 20,
+              "expansion": null,
+              "file_name": "src/bin/odd_dimension_bound.rs",
+              "is_primary": true,
+              "label": "the trait `whippyunits_core::num::Halve` is not implemented for `whippyunits_core::num::N<1>`",
+              "line_end": 5,
+              "line_start": 5,
+              "suggested_replacement": null,
+              "suggestion_applicability": null,
+              "text": [
+                {
+                  "highlight_end": 28,
+                  "highlight_start": 20,
+                  "text": "    require_root::<unit!(m)>();"
+                }
+              ]
+            }
+          ],
+          "code": {
+            "code": "E0277",
+            "explanation": "You tried to use a type which doesn't implement some trait in a place which\nexpected that trait.\n\nErroneous code example:\n\n```compile_fail,E0277\n// here we declare the Foo trait with a bar method\ntrait Foo {\n    fn bar(&self);\n}\n\n// we now declare a function which takes an object implementing the Foo trait\nfn some_func<T: Foo>(foo: T) {\n    foo.bar();\n}\n\nfn main() {\n    // we now call the method with the i32 type, which doesn't implement\n    // the Foo trait\n    some_func(5i32); // error: the trait bound `i32 : Foo` is not satisfied\n}\n```\n\nIn order to fix this error, verify that the type you're using does implement\nthe trait. Example:\n\n```\ntrait Foo {\n    fn bar(&self);\n}\n\n// we implement the trait on the i32 type\nimpl Foo for i32 {\n    fn bar(&self) {}\n}\n\nfn some_func<T: Foo>(foo: T) {\n    foo.bar(); // we can now use this method since i32 implements the\n               // Foo trait\n}\n\nfn main() {\n    some_func(5i32); // ok!\n}\n```\n\nOr in a generic context, an erroneous code example would look like:\n\n```compile_fail,E0277\nfn some_func<T>(foo: T) {\n    println!(\"{:?}\", foo); // error: the trait `core::fmt::Debug` is not\n                           //        implemented for the type `T`\n}\n\nfn main() {\n    // We now call the method with the i32 type,\n    // which *does* implement the Debug trait.\n    some_func(5i32);\n}\n```\n\nNote that the error here is in the definition of the generic function. Although\nwe only call it with a parameter that does implement `Debug`, the compiler\nstill rejects the function. It must work with all possible input types. In\norder to make this example compile, we need to restrict the generic type we're\naccepting:\n\n```\nuse std::fmt;\n\n// Restrict the input type to types that implement Debug.\nfn some_func<T: fmt::Debug>(foo: T) {\n    println!(\"{:?}\", foo);\n}\n\nfn main() {\n    // Calling the method is still fine, as i32 implements Debug.\n    some_func(5i32);\n\n    // This would fail to compile now:\n    // struct WithoutDebug;\n    // some_func(WithoutDebug);\n}\n```\n\nRust only looks at the signature of the called function, as such it must\nalready specify all requirements that will be used for every type parameter.\n"
+          }
+        }
+      ],
+      "compiler_crash": false,
+      "unclassified_error": false,
+      "log": "/tmp/whippyunits-cga/integration-baseline/odd_dimension_bound.log"
+    },
+    {
+      "name": "odd_scale_bound",
+      "expected": "rejection",
+      "command": [
+        "cargo",
+        "check",
+        "--offline",
+        "--locked",
+        "-j2",
+        "--manifest-path",
+        "/tmp/whippyunits-cga/integration-baseline/consumer/Cargo.toml",
+        "--bin",
+        "odd_scale_bound",
+        "--message-format=json"
+      ],
+      "cwd": "/tmp/whippyunits-cga/integration-baseline/consumer",
+      "status": 101,
+      "passed": true,
+      "allowed_error_codes": [
+        "E0277"
+      ],
+      "actual_error_codes": [
+        "E0277"
+      ],
+      "required_diagnostic_patterns": [
+        "UnitSqrt|Halve|PartialDiv"
+      ],
+      "diagnostics": [
+        {
+          "rendered": "error[E0277]: the trait bound `whippyunits_core::num::N<-3>: whippyunits_core::num::Halve` is not satisfied\n    --> src/bin/odd_scale_bound.rs:5:20\n     |\n   5 |     require_root::<unit!(mm * m)>();\n     |                    ^^^^^^^^^^^^^ the trait `whippyunits_core::num::Halve` is not implemented for `whippyunits_core::num::N<-3>`\n     |\nhelp: the trait `whippyunits_core::num::Halve` is conditionally implemented for `whippyunits_core::num::N<X>`\n    --> /tmp/whippyunits-cga/snapshots/baseline/whippyunits-core/src/num.rs:1454:1\n     |\n1454 | / impl<const X: i16> Halve for N<X>\n1455 | | where\n1456 | |     N<X>: __AsTypenum,\n1457 | |     <N<X> as __AsTypenum>::Repr: typenum::PartialDiv<typenum::P2>,\n     | |                                  -------------------------------- unsatisfied requirement introduced here: `<N<_> as __AsTypenum>::Repr: PartialDiv<PInt<UInt<_, B0>>>`\n1458 | |     <<N<X> as __AsTypenum>::Repr as typenum::PartialDiv<typenum::P2>>::Output: __IntoNum,\n     | |________________________________________________________________________________---------^\n     |                                                                                  |\n     |                                                                                  unsatisfied requirement introduced here: `<<N<_> as __AsTypenum>::Repr as PartialDiv<_>>::Output: __IntoNum`\n     = note: required for `Unit<Scale<_2<-3>, _3, _5<-3>>, Dimension<_M, _L<2>>>` to implement `UnitSqrt`\nnote: required by a bound in `require_root`\n    --> src/bin/odd_scale_bound.rs:2:20\n     |\n   2 | fn require_root<U: UnitSqrt>() {}\n     |                    ^^^^^^^^ required by this bound in `require_root`\n     = note: the full name for the type has been written to '/tmp/whippyunits-cga/integration-target/debug/build/dynamics_probe/fd29a66a5274e324/out/odd_scale_bound-fd29a66a5274e324.long-type-2400035681858559034.txt'\n     = note: consider using `--verbose` to print the full type name to the console\n\n",
+          "$message_type": "diagnostic",
+          "children": [
+            {
+              "children": [],
+              "code": null,
+              "level": "help",
+              "message": "the trait `whippyunits_core::num::Halve` is conditionally implemented for `whippyunits_core::num::N<X>`",
+              "rendered": null,
+              "spans": [
+                {
+                  "byte_end": 44258,
+                  "byte_start": 44226,
+                  "column_end": 66,
+                  "column_start": 34,
+                  "expansion": null,
+                  "file_name": "/tmp/whippyunits-cga/snapshots/baseline/whippyunits-core/src/num.rs",
+                  "is_primary": false,
+                  "label": "unsatisfied requirement introduced here: `<N<_> as __AsTypenum>::Repr: PartialDiv<PInt<UInt<_, B0>>>`",
+                  "line_end": 1457,
+                  "line_start": 1457,
+                  "suggested_replacement": null,
+                  "suggestion_applicability": null,
+                  "text": [
+                    {
+                      "highlight_end": 66,
+                      "highlight_start": 34,
+                      "text": "    <N<X> as __AsTypenum>::Repr: typenum::PartialDiv<typenum::P2>,"
+                    }
+                  ]
+                },
+                {
+                  "byte_end": 44348,
+                  "byte_start": 44339,
+                  "column_end": 89,
+                  "column_start": 80,
+                  "expansion": null,
+                  "file_name": "/tmp/whippyunits-cga/snapshots/baseline/whippyunits-core/src/num.rs",
+                  "is_primary": false,
+                  "label": "unsatisfied requirement introduced here: `<<N<_> as __AsTypenum>::Repr as PartialDiv<_>>::Output: __IntoNum`",
+                  "line_end": 1458,
+                  "line_start": 1458,
+                  "suggested_replacement": null,
+                  "suggestion_applicability": null,
+                  "text": [
+                    {
+                      "highlight_end": 89,
+                      "highlight_start": 80,
+                      "text": "    <<N<X> as __AsTypenum>::Repr as typenum::PartialDiv<typenum::P2>>::Output: __IntoNum,"
+                    }
+                  ]
+                },
+                {
+                  "byte_end": 44349,
+                  "byte_start": 44130,
+                  "column_end": 90,
+                  "column_start": 1,
+                  "expansion": null,
+                  "file_name": "/tmp/whippyunits-cga/snapshots/baseline/whippyunits-core/src/num.rs",
+                  "is_primary": true,
+                  "label": null,
+                  "line_end": 1458,
+                  "line_start": 1454,
+                  "suggested_replacement": null,
+                  "suggestion_applicability": null,
+                  "text": [
+                    {
+                      "highlight_end": 34,
+                      "highlight_start": 1,
+                      "text": "impl<const X: i16> Halve for N<X>"
+                    },
+                    {
+                      "highlight_end": 6,
+                      "highlight_start": 1,
+                      "text": "where"
+                    },
+                    {
+                      "highlight_end": 23,
+                      "highlight_start": 1,
+                      "text": "    N<X>: __AsTypenum,"
+                    },
+                    {
+                      "highlight_end": 67,
+                      "highlight_start": 1,
+                      "text": "    <N<X> as __AsTypenum>::Repr: typenum::PartialDiv<typenum::P2>,"
+                    },
+                    {
+                      "highlight_end": 90,
+                      "highlight_start": 1,
+                      "text": "    <<N<X> as __AsTypenum>::Repr as typenum::PartialDiv<typenum::P2>>::Output: __IntoNum,"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "children": [],
+              "code": null,
+              "level": "note",
+              "message": "required for `Unit<Scale<_2<-3>, _3, _5<-3>>, Dimension<_M, _L<2>>>` to implement `UnitSqrt`",
+              "rendered": null,
+              "spans": []
+            },
+            {
+              "children": [],
+              "code": null,
+              "level": "note",
+              "message": "required by a bound in `require_root`",
+              "rendered": null,
+              "spans": [
+                {
+                  "byte_end": 62,
+                  "byte_start": 54,
+                  "column_end": 28,
+                  "column_start": 20,
+                  "expansion": null,
+                  "file_name": "src/bin/odd_scale_bound.rs",
+                  "is_primary": true,
+                  "label": "required by this bound in `require_root`",
+                  "line_end": 2,
+                  "line_start": 2,
+                  "suggested_replacement": null,
+                  "suggestion_applicability": null,
+                  "text": [
+                    {
+                      "highlight_end": 28,
+                      "highlight_start": 20,
+                      "text": "fn require_root<U: UnitSqrt>() {}"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "children": [],
+              "code": null,
+              "level": "note",
+              "message": "the full name for the type has been written to '/tmp/whippyunits-cga/integration-target/debug/build/dynamics_probe/fd29a66a5274e324/out/odd_scale_bound-fd29a66a5274e324.long-type-2400035681858559034.txt'",
+              "rendered": null,
+              "spans": []
+            },
+            {
+              "children": [],
+              "code": null,
+              "level": "note",
+              "message": "consider using `--verbose` to print the full type name to the console",
+              "rendered": null,
+              "spans": []
+            }
+          ],
+          "level": "error",
+          "message": "the trait bound `whippyunits_core::num::N<-3>: whippyunits_core::num::Halve` is not satisfied",
+          "spans": [
+            {
+              "byte_end": 195,
+              "byte_start": 182,
+              "column_end": 33,
+              "column_start": 20,
+              "expansion": null,
+              "file_name": "src/bin/odd_scale_bound.rs",
+              "is_primary": true,
+              "label": "the trait `whippyunits_core::num::Halve` is not implemented for `whippyunits_core::num::N<-3>`",
+              "line_end": 5,
+              "line_start": 5,
+              "suggested_replacement": null,
+              "suggestion_applicability": null,
+              "text": [
+                {
+                  "highlight_end": 33,
+                  "highlight_start": 20,
+                  "text": "    require_root::<unit!(mm * m)>();"
+                }
+              ]
+            }
+          ],
+          "code": {
+            "code": "E0277",
+            "explanation": "You tried to use a type which doesn't implement some trait in a place which\nexpected that trait.\n\nErroneous code example:\n\n```compile_fail,E0277\n// here we declare the Foo trait with a bar method\ntrait Foo {\n    fn bar(&self);\n}\n\n// we now declare a function which takes an object implementing the Foo trait\nfn some_func<T: Foo>(foo: T) {\n    foo.bar();\n}\n\nfn main() {\n    // we now call the method with the i32 type, which doesn't implement\n    // the Foo trait\n    some_func(5i32); // error: the trait bound `i32 : Foo` is not satisfied\n}\n```\n\nIn order to fix this error, verify that the type you're using does implement\nthe trait. Example:\n\n```\ntrait Foo {\n    fn bar(&self);\n}\n\n// we implement the trait on the i32 type\nimpl Foo for i32 {\n    fn bar(&self) {}\n}\n\nfn some_func<T: Foo>(foo: T) {\n    foo.bar(); // we can now use this method since i32 implements the\n               // Foo trait\n}\n\nfn main() {\n    some_func(5i32); // ok!\n}\n```\n\nOr in a generic context, an erroneous code example would look like:\n\n```compile_fail,E0277\nfn some_func<T>(foo: T) {\n    println!(\"{:?}\", foo); // error: the trait `core::fmt::Debug` is not\n                           //        implemented for the type `T`\n}\n\nfn main() {\n    // We now call the method with the i32 type,\n    // which *does* implement the Debug trait.\n    some_func(5i32);\n}\n```\n\nNote that the error here is in the definition of the generic function. Although\nwe only call it with a parameter that does implement `Debug`, the compiler\nstill rejects the function. It must work with all possible input types. In\norder to make this example compile, we need to restrict the generic type we're\naccepting:\n\n```\nuse std::fmt;\n\n// Restrict the input type to types that implement Debug.\nfn some_func<T: fmt::Debug>(foo: T) {\n    println!(\"{:?}\", foo);\n}\n\nfn main() {\n    // Calling the method is still fine, as i32 implements Debug.\n    some_func(5i32);\n\n    // This would fail to compile now:\n    // struct WithoutDebug;\n    // some_func(WithoutDebug);\n}\n```\n\nRust only looks at the signature of the called function, as such it must\nalready specify all requirements that will be used for every type parameter.\n"
+          }
+        }
+      ],
+      "compiler_crash": false,
+      "unclassified_error": false,
+      "log": "/tmp/whippyunits-cga/integration-baseline/odd_scale_bound.log"
+    },
+    {
+      "name": "odd_cholesky",
+      "expected": "rejection",
+      "command": [
+        "cargo",
+        "check",
+        "--offline",
+        "--locked",
+        "-j2",
+        "--manifest-path",
+        "/tmp/whippyunits-cga/integration-baseline/consumer/Cargo.toml",
+        "--bin",
+        "odd_cholesky",
+        "--message-format=json"
+      ],
+      "cwd": "/tmp/whippyunits-cga/integration-baseline/consumer",
+      "status": 101,
+      "passed": true,
+      "allowed_error_codes": [
+        "E0277"
+      ],
+      "actual_error_codes": [
+        "E0277"
+      ],
+      "required_diagnostic_patterns": [
+        "UnitSqrt|Halve|PartialDiv",
+        "cholesky"
+      ],
+      "diagnostics": [
+        {
+          "rendered": "error[E0277]: the trait bound `whippyunits_core::num::N<1>: whippyunits_core::num::Halve` is not satisfied\n    --> src/bin/odd_cholesky.rs:6:20\n     |\n   6 |     let _ = matrix.cholesky();\n     |                    ^^^^^^^^ the trait `whippyunits_core::num::Halve` is not implemented for `whippyunits_core::num::N<1>`\n     |\nhelp: the trait `whippyunits_core::num::Halve` is conditionally implemented for `whippyunits_core::num::N<X>`\n    --> /tmp/whippyunits-cga/snapshots/baseline/whippyunits-core/src/num.rs:1454:1\n     |\n1454 | / impl<const X: i16> Halve for N<X>\n1455 | | where\n1456 | |     N<X>: __AsTypenum,\n1457 | |     <N<X> as __AsTypenum>::Repr: typenum::PartialDiv<typenum::P2>,\n     | |                                  -------------------------------- unsatisfied requirement introduced here: `<N<_> as __AsTypenum>::Repr: PartialDiv<PInt<UInt<_, B0>>>`\n1458 | |     <<N<X> as __AsTypenum>::Repr as typenum::PartialDiv<typenum::P2>>::Output: __IntoNum,\n     | |________________________________________________________________________________---------^\n     |                                                                                  |\n     |                                                                                  unsatisfied requirement introduced here: `<<N<_> as __AsTypenum>::Repr as PartialDiv<_>>::Output: __IntoNum`\n     = note: required for `whippyalgebra::Unit<whippyunits::quantity::Scale, Dimension<_M, _L<1>>>` to implement `UnitSqrt`\nnote: required by a bound in `whippyalgebra::nalgebra::linalg::cholesky::<impl UniformUnitMatrix<U, Matrix<T, D, D, S>, Brand>>::cholesky`\n    --> /tmp/whippyunits-cga/snapshots/baseline/whippyalgebra/src/nalgebra/linalg/cholesky.rs:140:12\n     |\n 138 |     pub fn cholesky(self) -> Option<UniformCholesky<U, T, D, Brand>>\n     |            -------- required by a bound in this associated function\n 139 |     where\n 140 |         U: UnitSqrt,\n     |            ^^^^^^^^ required by this bound in `whippyalgebra::nalgebra::linalg::cholesky::<impl UniformUnitMatrix<U, Matrix<T, D, D, S>, Brand>>::cholesky`\n     = note: the full name for the type has been written to '/tmp/whippyunits-cga/integration-target/debug/build/dynamics_probe/f0b9ea442394a67c/out/odd_cholesky-f0b9ea442394a67c.long-type-1272756600978226687.txt'\n     = note: consider using `--verbose` to print the full type name to the console\n\n",
+          "$message_type": "diagnostic",
+          "children": [
+            {
+              "children": [],
+              "code": null,
+              "level": "help",
+              "message": "the trait `whippyunits_core::num::Halve` is conditionally implemented for `whippyunits_core::num::N<X>`",
+              "rendered": null,
+              "spans": [
+                {
+                  "byte_end": 44258,
+                  "byte_start": 44226,
+                  "column_end": 66,
+                  "column_start": 34,
+                  "expansion": null,
+                  "file_name": "/tmp/whippyunits-cga/snapshots/baseline/whippyunits-core/src/num.rs",
+                  "is_primary": false,
+                  "label": "unsatisfied requirement introduced here: `<N<_> as __AsTypenum>::Repr: PartialDiv<PInt<UInt<_, B0>>>`",
+                  "line_end": 1457,
+                  "line_start": 1457,
+                  "suggested_replacement": null,
+                  "suggestion_applicability": null,
+                  "text": [
+                    {
+                      "highlight_end": 66,
+                      "highlight_start": 34,
+                      "text": "    <N<X> as __AsTypenum>::Repr: typenum::PartialDiv<typenum::P2>,"
+                    }
+                  ]
+                },
+                {
+                  "byte_end": 44348,
+                  "byte_start": 44339,
+                  "column_end": 89,
+                  "column_start": 80,
+                  "expansion": null,
+                  "file_name": "/tmp/whippyunits-cga/snapshots/baseline/whippyunits-core/src/num.rs",
+                  "is_primary": false,
+                  "label": "unsatisfied requirement introduced here: `<<N<_> as __AsTypenum>::Repr as PartialDiv<_>>::Output: __IntoNum`",
+                  "line_end": 1458,
+                  "line_start": 1458,
+                  "suggested_replacement": null,
+                  "suggestion_applicability": null,
+                  "text": [
+                    {
+                      "highlight_end": 89,
+                      "highlight_start": 80,
+                      "text": "    <<N<X> as __AsTypenum>::Repr as typenum::PartialDiv<typenum::P2>>::Output: __IntoNum,"
+                    }
+                  ]
+                },
+                {
+                  "byte_end": 44349,
+                  "byte_start": 44130,
+                  "column_end": 90,
+                  "column_start": 1,
+                  "expansion": null,
+                  "file_name": "/tmp/whippyunits-cga/snapshots/baseline/whippyunits-core/src/num.rs",
+                  "is_primary": true,
+                  "label": null,
+                  "line_end": 1458,
+                  "line_start": 1454,
+                  "suggested_replacement": null,
+                  "suggestion_applicability": null,
+                  "text": [
+                    {
+                      "highlight_end": 34,
+                      "highlight_start": 1,
+                      "text": "impl<const X: i16> Halve for N<X>"
+                    },
+                    {
+                      "highlight_end": 6,
+                      "highlight_start": 1,
+                      "text": "where"
+                    },
+                    {
+                      "highlight_end": 23,
+                      "highlight_start": 1,
+                      "text": "    N<X>: __AsTypenum,"
+                    },
+                    {
+                      "highlight_end": 67,
+                      "highlight_start": 1,
+                      "text": "    <N<X> as __AsTypenum>::Repr: typenum::PartialDiv<typenum::P2>,"
+                    },
+                    {
+                      "highlight_end": 90,
+                      "highlight_start": 1,
+                      "text": "    <<N<X> as __AsTypenum>::Repr as typenum::PartialDiv<typenum::P2>>::Output: __IntoNum,"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "children": [],
+              "code": null,
+              "level": "note",
+              "message": "required for `whippyalgebra::Unit<whippyunits::quantity::Scale, Dimension<_M, _L<1>>>` to implement `UnitSqrt`",
+              "rendered": null,
+              "spans": []
+            },
+            {
+              "children": [],
+              "code": null,
+              "level": "note",
+              "message": "required by a bound in `whippyalgebra::nalgebra::linalg::cholesky::<impl UniformUnitMatrix<U, Matrix<T, D, D, S>, Brand>>::cholesky`",
+              "rendered": null,
+              "spans": [
+                {
+                  "byte_end": 6226,
+                  "byte_start": 6218,
+                  "column_end": 20,
+                  "column_start": 12,
+                  "expansion": null,
+                  "file_name": "/tmp/whippyunits-cga/snapshots/baseline/whippyalgebra/src/nalgebra/linalg/cholesky.rs",
+                  "is_primary": false,
+                  "label": "required by a bound in this associated function",
+                  "line_end": 138,
+                  "line_start": 138,
+                  "suggested_replacement": null,
+                  "suggestion_applicability": null,
+                  "text": [
+                    {
+                      "highlight_end": 20,
+                      "highlight_start": 12,
+                      "text": "    pub fn cholesky(self) -> Option<UniformCholesky<U, T, D, Brand>>"
+                    }
+                  ]
+                },
+                {
+                  "byte_end": 6305,
+                  "byte_start": 6297,
+                  "column_end": 20,
+                  "column_start": 12,
+                  "expansion": null,
+                  "file_name": "/tmp/whippyunits-cga/snapshots/baseline/whippyalgebra/src/nalgebra/linalg/cholesky.rs",
+                  "is_primary": true,
+                  "label": "required by this bound in `whippyalgebra::nalgebra::linalg::cholesky::<impl UniformUnitMatrix<U, Matrix<T, D, D, S>, Brand>>::cholesky`",
+                  "line_end": 140,
+                  "line_start": 140,
+                  "suggested_replacement": null,
+                  "suggestion_applicability": null,
+                  "text": [
+                    {
+                      "highlight_end": 20,
+                      "highlight_start": 12,
+                      "text": "        U: UnitSqrt,"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "children": [],
+              "code": null,
+              "level": "note",
+              "message": "the full name for the type has been written to '/tmp/whippyunits-cga/integration-target/debug/build/dynamics_probe/f0b9ea442394a67c/out/odd_cholesky-f0b9ea442394a67c.long-type-1272756600978226687.txt'",
+              "rendered": null,
+              "spans": []
+            },
+            {
+              "children": [],
+              "code": null,
+              "level": "note",
+              "message": "consider using `--verbose` to print the full type name to the console",
+              "rendered": null,
+              "spans": []
+            }
+          ],
+          "level": "error",
+          "message": "the trait bound `whippyunits_core::num::N<1>: whippyunits_core::num::Halve` is not satisfied",
+          "spans": [
+            {
+              "byte_end": 247,
+              "byte_start": 239,
+              "column_end": 28,
+              "column_start": 20,
+              "expansion": null,
+              "file_name": "src/bin/odd_cholesky.rs",
+              "is_primary": true,
+              "label": "the trait `whippyunits_core::num::Halve` is not implemented for `whippyunits_core::num::N<1>`",
+              "line_end": 6,
+              "line_start": 6,
+              "suggested_replacement": null,
+              "suggestion_applicability": null,
+              "text": [
+                {
+                  "highlight_end": 28,
+                  "highlight_start": 20,
+                  "text": "    let _ = matrix.cholesky();"
+                }
+              ]
+            }
+          ],
+          "code": {
+            "code": "E0277",
+            "explanation": "You tried to use a type which doesn't implement some trait in a place which\nexpected that trait.\n\nErroneous code example:\n\n```compile_fail,E0277\n// here we declare the Foo trait with a bar method\ntrait Foo {\n    fn bar(&self);\n}\n\n// we now declare a function which takes an object implementing the Foo trait\nfn some_func<T: Foo>(foo: T) {\n    foo.bar();\n}\n\nfn main() {\n    // we now call the method with the i32 type, which doesn't implement\n    // the Foo trait\n    some_func(5i32); // error: the trait bound `i32 : Foo` is not satisfied\n}\n```\n\nIn order to fix this error, verify that the type you're using does implement\nthe trait. Example:\n\n```\ntrait Foo {\n    fn bar(&self);\n}\n\n// we implement the trait on the i32 type\nimpl Foo for i32 {\n    fn bar(&self) {}\n}\n\nfn some_func<T: Foo>(foo: T) {\n    foo.bar(); // we can now use this method since i32 implements the\n               // Foo trait\n}\n\nfn main() {\n    some_func(5i32); // ok!\n}\n```\n\nOr in a generic context, an erroneous code example would look like:\n\n```compile_fail,E0277\nfn some_func<T>(foo: T) {\n    println!(\"{:?}\", foo); // error: the trait `core::fmt::Debug` is not\n                           //        implemented for the type `T`\n}\n\nfn main() {\n    // We now call the method with the i32 type,\n    // which *does* implement the Debug trait.\n    some_func(5i32);\n}\n```\n\nNote that the error here is in the definition of the generic function. Although\nwe only call it with a parameter that does implement `Debug`, the compiler\nstill rejects the function. It must work with all possible input types. In\norder to make this example compile, we need to restrict the generic type we're\naccepting:\n\n```\nuse std::fmt;\n\n// Restrict the input type to types that implement Debug.\nfn some_func<T: fmt::Debug>(foo: T) {\n    println!(\"{:?}\", foo);\n}\n\nfn main() {\n    // Calling the method is still fine, as i32 implements Debug.\n    some_func(5i32);\n\n    // This would fail to compile now:\n    // struct WithoutDebug;\n    // some_func(WithoutDebug);\n}\n```\n\nRust only looks at the signature of the called function, as such it must\nalready specify all requirements that will be used for every type parameter.\n"
+          }
+        }
+      ],
+      "compiler_crash": false,
+      "unclassified_error": false,
+      "log": "/tmp/whippyunits-cga/integration-baseline/odd_cholesky.log"
+    },
+    {
+      "name": "wrong_dimensions",
+      "expected": "rejection",
+      "command": [
+        "cargo",
+        "check",
+        "--offline",
+        "--locked",
+        "-j2",
+        "--manifest-path",
+        "/tmp/whippyunits-cga/integration-baseline/consumer/Cargo.toml",
+        "--bin",
+        "wrong_dimensions",
+        "--message-format=json"
+      ],
+      "cwd": "/tmp/whippyunits-cga/integration-baseline/consumer",
+      "status": 101,
+      "passed": true,
+      "allowed_error_codes": [
+        "E0308"
+      ],
+      "actual_error_codes": [
+        "E0308"
+      ],
+      "required_diagnostic_patterns": [
+        "mismatched types"
+      ],
+      "diagnostics": [
+        {
+          "rendered": "error[E0308]: mismatched types\n --> src/bin/wrong_dimensions.rs:3:22\n  |\n3 |     let _: qty!(m) = quantity!(1.0, s);\n  |            -------   ^^^^^^^^^^^^^^^^^ expected `1`, found `0`\n  |            |\n  |            expected due to this\n  |\n  = note: expected struct `Quantity<Unit<_, Dimension<_, _L<1>, _T<0>, _, _, _, _, _>>>`\n             found struct `Quantity<Unit<_, Dimension<_, _L<0>, _T<1>, _, _, _, _, _>>>`\n  = note: this error originates in the macro `quantity` (in Nightly builds, run with -Z macro-backtrace for more info)\n\n",
+          "$message_type": "diagnostic",
+          "children": [
+            {
+              "children": [],
+              "code": null,
+              "level": "note",
+              "message": "expected struct `Quantity<Unit<_, Dimension<_, _L<1>, _T<0>, _, _, _, _, _>>>`\n   found struct `Quantity<Unit<_, Dimension<_, _L<0>, _T<1>, _, _, _, _, _>>>`",
+              "rendered": null,
+              "spans": []
+            }
+          ],
+          "level": "error",
+          "message": "mismatched types",
+          "spans": [
+            {
+              "byte_end": 84,
+              "byte_start": 67,
+              "column_end": 39,
+              "column_start": 22,
+              "expansion": {
+                "def_site_span": {
+                  "byte_end": 9943,
+                  "byte_start": 9888,
+                  "column_end": 56,
+                  "column_start": 1,
+                  "expansion": null,
+                  "file_name": "/tmp/whippyunits-cga/snapshots/baseline/proc-macros/src/lib.rs",
+                  "is_primary": false,
+                  "label": null,
+                  "line_end": 259,
+                  "line_start": 259,
+                  "suggested_replacement": null,
+                  "suggestion_applicability": null,
+                  "text": [
+                    {
+                      "highlight_end": 56,
+                      "highlight_start": 1,
+                      "text": "pub fn proc_quantity(input: TokenStream) -> TokenStream {"
+                    }
+                  ]
+                },
+                "macro_decl_name": "quantity!",
+                "span": {
+                  "byte_end": 84,
+                  "byte_start": 67,
+                  "column_end": 39,
+                  "column_start": 22,
+                  "expansion": null,
+                  "file_name": "src/bin/wrong_dimensions.rs",
+                  "is_primary": false,
+                  "label": null,
+                  "line_end": 3,
+                  "line_start": 3,
+                  "suggested_replacement": null,
+                  "suggestion_applicability": null,
+                  "text": [
+                    {
+                      "highlight_end": 39,
+                      "highlight_start": 22,
+                      "text": "    let _: qty!(m) = quantity!(1.0, s);"
+                    }
+                  ]
+                }
+              },
+              "file_name": "src/bin/wrong_dimensions.rs",
+              "is_primary": true,
+              "label": "expected `1`, found `0`",
+              "line_end": 3,
+              "line_start": 3,
+              "suggested_replacement": null,
+              "suggestion_applicability": null,
+              "text": [
+                {
+                  "highlight_end": 39,
+                  "highlight_start": 22,
+                  "text": "    let _: qty!(m) = quantity!(1.0, s);"
+                }
+              ]
+            },
+            {
+              "byte_end": 64,
+              "byte_start": 57,
+              "column_end": 19,
+              "column_start": 12,
+              "expansion": {
+                "def_site_span": {
+                  "byte_end": 5238,
+                  "byte_start": 5188,
+                  "column_end": 51,
+                  "column_start": 1,
+                  "expansion": null,
+                  "file_name": "/tmp/whippyunits-cga/snapshots/baseline/proc-macros/src/lib.rs",
+                  "is_primary": false,
+                  "label": null,
+                  "line_end": 136,
+                  "line_start": 136,
+                  "suggested_replacement": null,
+                  "suggestion_applicability": null,
+                  "text": [
+                    {
+                      "highlight_end": 51,
+                      "highlight_start": 1,
+                      "text": "pub fn proc_qty(input: TokenStream) -> TokenStream {"
+                    }
+                  ]
+                },
+                "macro_decl_name": "qty!",
+                "span": {
+                  "byte_end": 64,
+                  "byte_start": 57,
+                  "column_end": 19,
+                  "column_start": 12,
+                  "expansion": null,
+                  "file_name": "src/bin/wrong_dimensions.rs",
+                  "is_primary": false,
+                  "label": null,
+                  "line_end": 3,
+                  "line_start": 3,
+                  "suggested_replacement": null,
+                  "suggestion_applicability": null,
+                  "text": [
+                    {
+                      "highlight_end": 19,
+                      "highlight_start": 12,
+                      "text": "    let _: qty!(m) = quantity!(1.0, s);"
+                    }
+                  ]
+                }
+              },
+              "file_name": "src/bin/wrong_dimensions.rs",
+              "is_primary": false,
+              "label": "expected due to this",
+              "line_end": 3,
+              "line_start": 3,
+              "suggested_replacement": null,
+              "suggestion_applicability": null,
+              "text": [
+                {
+                  "highlight_end": 19,
+                  "highlight_start": 12,
+                  "text": "    let _: qty!(m) = quantity!(1.0, s);"
+                }
+              ]
+            }
+          ],
+          "code": {
+            "code": "E0308",
+            "explanation": "Expected type did not match the received type.\n\nErroneous code examples:\n\n```compile_fail,E0308\nfn plus_one(x: i32) -> i32 {\n    x + 1\n}\n\nplus_one(\"Not a number\");\n//       ^^^^^^^^^^^^^^ expected `i32`, found `&str`\n\nif \"Not a bool\" {\n// ^^^^^^^^^^^^ expected `bool`, found `&str`\n}\n\nlet x: f32 = \"Not a float\";\n//     ---   ^^^^^^^^^^^^^ expected `f32`, found `&str`\n//     |\n//     expected due to this\n```\n\nThis error occurs when an expression was used in a place where the compiler\nexpected an expression of a different type. It can occur in several cases, the\nmost common being when calling a function and passing an argument which has a\ndifferent type than the matching type in the function declaration.\n"
+          }
+        }
+      ],
+      "compiler_crash": false,
+      "unclassified_error": false,
+      "log": "/tmp/whippyunits-cga/integration-baseline/wrong_dimensions.log"
+    },
+    {
+      "name": "wrong_gauge",
+      "expected": "rejection",
+      "command": [
+        "cargo",
+        "check",
+        "--offline",
+        "--locked",
+        "-j2",
+        "--manifest-path",
+        "/tmp/whippyunits-cga/integration-baseline/consumer/Cargo.toml",
+        "--bin",
+        "wrong_gauge",
+        "--message-format=json"
+      ],
+      "cwd": "/tmp/whippyunits-cga/integration-baseline/consumer",
+      "status": 101,
+      "passed": true,
+      "allowed_error_codes": [
+        "E0277"
+      ],
+      "actual_error_codes": [
+        "E0277"
+      ],
+      "required_diagnostic_patterns": [
+        "gauge|GaugeReproduces"
+      ],
+      "diagnostics": [
+        {
+          "rendered": "error[E0277]: the gauge tag does not reproduce the uniform block's entry unit\n   --> src/bin/wrong_gauge.rs:7:20\n    |\n  7 |     let _ = matrix.gauge::<dims![m, m], dims![m]>();\n    |                    ^^^^^ this row/column gauge is inconsistent with the block's unit\n    |\n    = help: the trait `GaugeReproduces<whippyalgebra::Unit<whippyunits::quantity::Scale, Dimension<_M, _L<1>, _T<-1>>>>` is not implemented for `whippyalgebra::Unit<whippyunits::quantity::Scale, Dimension>`\n    = note: A uniform block carries a single entry unit `U`. Placing it as a mixed block over `<RowDims, ColDims>` requires both lists to be uniform and their entry-unit quotient to equal `U`: `Uniform(RowDims) / Uniform(ColDims) == U`.\n    = note: Fix: choose row/column dimension lists whose quotient is the block's unit \u2014 any common scale shared by both is free, and that is the gauge.\nnote: required by a bound in `uniform::construction::<impl UniformUnitMatrix<U, Matrix<T, R, C, S>, Brand>>::gauge`\n   --> /tmp/whippyunits-cga/snapshots/baseline/whippyalgebra/src/nalgebra/uniform/construction.rs:377:54\n    |\n370 |     pub fn gauge<RowDims, ColDims>(\n    |            ----- required by a bound in this associated function\n...\n377 |         DivUnit<Uniform<RowDims>, Uniform<ColDims>>: GaugeReproduces<U>,\n    |                                                      ^^^^^^^^^^^^^^^^^^ required by this bound in `uniform::construction::<impl UniformUnitMatrix<U, Matrix<T, R, C, S>, Brand>>::gauge`\n\n",
+          "$message_type": "diagnostic",
+          "children": [
+            {
+              "children": [],
+              "code": null,
+              "level": "help",
+              "message": "the trait `GaugeReproduces<whippyalgebra::Unit<whippyunits::quantity::Scale, Dimension<_M, _L<1>, _T<-1>>>>` is not implemented for `whippyalgebra::Unit<whippyunits::quantity::Scale, Dimension>`",
+              "rendered": null,
+              "spans": []
+            },
+            {
+              "children": [],
+              "code": null,
+              "level": "note",
+              "message": "A uniform block carries a single entry unit `U`. Placing it as a mixed block over `<RowDims, ColDims>` requires both lists to be uniform and their entry-unit quotient to equal `U`: `Uniform(RowDims) / Uniform(ColDims) == U`.",
+              "rendered": null,
+              "spans": []
+            },
+            {
+              "children": [],
+              "code": null,
+              "level": "note",
+              "message": "Fix: choose row/column dimension lists whose quotient is the block's unit \u2014 any common scale shared by both is free, and that is the gauge.",
+              "rendered": null,
+              "spans": []
+            },
+            {
+              "children": [],
+              "code": null,
+              "level": "note",
+              "message": "required by a bound in `uniform::construction::<impl UniformUnitMatrix<U, Matrix<T, R, C, S>, Brand>>::gauge`",
+              "rendered": null,
+              "spans": [
+                {
+                  "byte_end": 15154,
+                  "byte_start": 15149,
+                  "column_end": 17,
+                  "column_start": 12,
+                  "expansion": null,
+                  "file_name": "/tmp/whippyunits-cga/snapshots/baseline/whippyalgebra/src/nalgebra/uniform/construction.rs",
+                  "is_primary": false,
+                  "label": "required by a bound in this associated function",
+                  "line_end": 370,
+                  "line_start": 370,
+                  "suggested_replacement": null,
+                  "suggestion_applicability": null,
+                  "text": [
+                    {
+                      "highlight_end": 17,
+                      "highlight_start": 12,
+                      "text": "    pub fn gauge<RowDims, ColDims>("
+                    }
+                  ]
+                },
+                {
+                  "byte_end": 15490,
+                  "byte_start": 15472,
+                  "column_end": 72,
+                  "column_start": 54,
+                  "expansion": null,
+                  "file_name": "/tmp/whippyunits-cga/snapshots/baseline/whippyalgebra/src/nalgebra/uniform/construction.rs",
+                  "is_primary": true,
+                  "label": "required by this bound in `uniform::construction::<impl UniformUnitMatrix<U, Matrix<T, R, C, S>, Brand>>::gauge`",
+                  "line_end": 377,
+                  "line_start": 377,
+                  "suggested_replacement": null,
+                  "suggestion_applicability": null,
+                  "text": [
+                    {
+                      "highlight_end": 72,
+                      "highlight_start": 54,
+                      "text": "        DivUnit<Uniform<RowDims>, Uniform<ColDims>>: GaugeReproduces<U>,"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "level": "error",
+          "message": "the gauge tag does not reproduce the uniform block's entry unit",
+          "spans": [
+            {
+              "byte_end": 278,
+              "byte_start": 273,
+              "column_end": 25,
+              "column_start": 20,
+              "expansion": null,
+              "file_name": "src/bin/wrong_gauge.rs",
+              "is_primary": true,
+              "label": "this row/column gauge is inconsistent with the block's unit",
+              "line_end": 7,
+              "line_start": 7,
+              "suggested_replacement": null,
+              "suggestion_applicability": null,
+              "text": [
+                {
+                  "highlight_end": 25,
+                  "highlight_start": 20,
+                  "text": "    let _ = matrix.gauge::<dims![m, m], dims![m]>();"
+                }
+              ]
+            }
+          ],
+          "code": {
+            "code": "E0277",
+            "explanation": "You tried to use a type which doesn't implement some trait in a place which\nexpected that trait.\n\nErroneous code example:\n\n```compile_fail,E0277\n// here we declare the Foo trait with a bar method\ntrait Foo {\n    fn bar(&self);\n}\n\n// we now declare a function which takes an object implementing the Foo trait\nfn some_func<T: Foo>(foo: T) {\n    foo.bar();\n}\n\nfn main() {\n    // we now call the method with the i32 type, which doesn't implement\n    // the Foo trait\n    some_func(5i32); // error: the trait bound `i32 : Foo` is not satisfied\n}\n```\n\nIn order to fix this error, verify that the type you're using does implement\nthe trait. Example:\n\n```\ntrait Foo {\n    fn bar(&self);\n}\n\n// we implement the trait on the i32 type\nimpl Foo for i32 {\n    fn bar(&self) {}\n}\n\nfn some_func<T: Foo>(foo: T) {\n    foo.bar(); // we can now use this method since i32 implements the\n               // Foo trait\n}\n\nfn main() {\n    some_func(5i32); // ok!\n}\n```\n\nOr in a generic context, an erroneous code example would look like:\n\n```compile_fail,E0277\nfn some_func<T>(foo: T) {\n    println!(\"{:?}\", foo); // error: the trait `core::fmt::Debug` is not\n                           //        implemented for the type `T`\n}\n\nfn main() {\n    // We now call the method with the i32 type,\n    // which *does* implement the Debug trait.\n    some_func(5i32);\n}\n```\n\nNote that the error here is in the definition of the generic function. Although\nwe only call it with a parameter that does implement `Debug`, the compiler\nstill rejects the function. It must work with all possible input types. In\norder to make this example compile, we need to restrict the generic type we're\naccepting:\n\n```\nuse std::fmt;\n\n// Restrict the input type to types that implement Debug.\nfn some_func<T: fmt::Debug>(foo: T) {\n    println!(\"{:?}\", foo);\n}\n\nfn main() {\n    // Calling the method is still fine, as i32 implements Debug.\n    some_func(5i32);\n\n    // This would fail to compile now:\n    // struct WithoutDebug;\n    // some_func(WithoutDebug);\n}\n```\n\nRust only looks at the signature of the called function, as such it must\nalready specify all requirements that will be used for every type parameter.\n"
+          }
+        }
+      ],
+      "compiler_crash": false,
+      "unclassified_error": false,
+      "log": "/tmp/whippyunits-cga/integration-baseline/wrong_gauge.log"
+    },
+    {
+      "name": "wrong_brand",
+      "expected": "rejection",
+      "command": [
+        "cargo",
+        "check",
+        "--offline",
+        "--locked",
+        "-j2",
+        "--manifest-path",
+        "/tmp/whippyunits-cga/integration-baseline/consumer/Cargo.toml",
+        "--bin",
+        "wrong_brand",
+        "--message-format=json"
+      ],
+      "cwd": "/tmp/whippyunits-cga/integration-baseline/consumer",
+      "status": 101,
+      "passed": true,
+      "allowed_error_codes": [
+        "E0308"
+      ],
+      "actual_error_codes": [
+        "E0308"
+      ],
+      "required_diagnostic_patterns": [
+        "mismatched types",
+        "FrameA",
+        "FrameB"
+      ],
+      "diagnostics": [
+        {
+          "rendered": "error[E0308]: mismatched types\n --> src/bin/wrong_brand.rs:9:39\n  |\n9 |     let _: qty!(m / s, f64, FrameB) = matrix.get::<0, 0>();\n  |            ------------------------   ^^^^^^^^^^^^^^^^^^^^ expected `Quantity<Unit<Scale, _>, f64, FrameB>`, found `Quantity<Unit<Scale, _>, f64, FrameA>`\n  |            |\n  |            expected due to this\n  |\n  = note: expected struct `Quantity<_, _, FrameB>`\n             found struct `Quantity<_, _, FrameA>`\n\n",
+          "$message_type": "diagnostic",
+          "children": [
+            {
+              "children": [],
+              "code": null,
+              "level": "note",
+              "message": "expected struct `Quantity<_, _, FrameB>`\n   found struct `Quantity<_, _, FrameA>`",
+              "rendered": null,
+              "spans": []
+            }
+          ],
+          "level": "error",
+          "message": "mismatched types",
+          "spans": [
+            {
+              "byte_end": 334,
+              "byte_start": 314,
+              "column_end": 59,
+              "column_start": 39,
+              "expansion": null,
+              "file_name": "src/bin/wrong_brand.rs",
+              "is_primary": true,
+              "label": "expected `Quantity<Unit<Scale, _>, f64, FrameB>`, found `Quantity<Unit<Scale, _>, f64, FrameA>`",
+              "line_end": 9,
+              "line_start": 9,
+              "suggested_replacement": null,
+              "suggestion_applicability": null,
+              "text": [
+                {
+                  "highlight_end": 59,
+                  "highlight_start": 39,
+                  "text": "    let _: qty!(m / s, f64, FrameB) = matrix.get::<0, 0>();"
+                }
+              ]
+            },
+            {
+              "byte_end": 311,
+              "byte_start": 287,
+              "column_end": 36,
+              "column_start": 12,
+              "expansion": {
+                "def_site_span": {
+                  "byte_end": 5238,
+                  "byte_start": 5188,
+                  "column_end": 51,
+                  "column_start": 1,
+                  "expansion": null,
+                  "file_name": "/tmp/whippyunits-cga/snapshots/baseline/proc-macros/src/lib.rs",
+                  "is_primary": false,
+                  "label": null,
+                  "line_end": 136,
+                  "line_start": 136,
+                  "suggested_replacement": null,
+                  "suggestion_applicability": null,
+                  "text": [
+                    {
+                      "highlight_end": 51,
+                      "highlight_start": 1,
+                      "text": "pub fn proc_qty(input: TokenStream) -> TokenStream {"
+                    }
+                  ]
+                },
+                "macro_decl_name": "qty!",
+                "span": {
+                  "byte_end": 311,
+                  "byte_start": 287,
+                  "column_end": 36,
+                  "column_start": 12,
+                  "expansion": null,
+                  "file_name": "src/bin/wrong_brand.rs",
+                  "is_primary": false,
+                  "label": null,
+                  "line_end": 9,
+                  "line_start": 9,
+                  "suggested_replacement": null,
+                  "suggestion_applicability": null,
+                  "text": [
+                    {
+                      "highlight_end": 36,
+                      "highlight_start": 12,
+                      "text": "    let _: qty!(m / s, f64, FrameB) = matrix.get::<0, 0>();"
+                    }
+                  ]
+                }
+              },
+              "file_name": "src/bin/wrong_brand.rs",
+              "is_primary": false,
+              "label": "expected due to this",
+              "line_end": 9,
+              "line_start": 9,
+              "suggested_replacement": null,
+              "suggestion_applicability": null,
+              "text": [
+                {
+                  "highlight_end": 36,
+                  "highlight_start": 12,
+                  "text": "    let _: qty!(m / s, f64, FrameB) = matrix.get::<0, 0>();"
+                }
+              ]
+            }
+          ],
+          "code": {
+            "code": "E0308",
+            "explanation": "Expected type did not match the received type.\n\nErroneous code examples:\n\n```compile_fail,E0308\nfn plus_one(x: i32) -> i32 {\n    x + 1\n}\n\nplus_one(\"Not a number\");\n//       ^^^^^^^^^^^^^^ expected `i32`, found `&str`\n\nif \"Not a bool\" {\n// ^^^^^^^^^^^^ expected `bool`, found `&str`\n}\n\nlet x: f32 = \"Not a float\";\n//     ---   ^^^^^^^^^^^^^ expected `f32`, found `&str`\n//     |\n//     expected due to this\n```\n\nThis error occurs when an expression was used in a place where the compiler\nexpected an expression of a different type. It can occur in several cases, the\nmost common being when calling a function and passing an argument which has a\ndifferent type than the matching type in the function declaration.\n"
+          }
+        }
+      ],
+      "compiler_crash": false,
+      "unclassified_error": false,
+      "log": "/tmp/whippyunits-cga/integration-baseline/wrong_brand.log"
+    }
+  ],
+  "source_unchanged": true,
+  "consumer_lock_unchanged": true
+}

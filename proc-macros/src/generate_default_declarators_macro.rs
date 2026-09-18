@@ -148,7 +148,11 @@ impl DefaultDeclaratorsInput {
         // Filter units by type
         let filtered_units: Vec<_> = units
             .iter()
-            .filter(|unit| Self::classify_unit(unit) == unit_type && is_valid_identifier(unit.name))
+            .filter(|unit| {
+                Self::classify_unit(unit) == unit_type
+                    && is_valid_identifier(unit.name)
+                    && crate::utils::catalog::entry_enabled(unit, None)
+            })
             .collect();
 
         if filtered_units.is_empty() {
@@ -292,6 +296,9 @@ impl DefaultDeclaratorsInput {
         use whippyunits_core::{Dimension, System};
 
         for dimension in Dimension::ALL {
+            if !crate::utils::catalog::dimension_enabled(&dimension.exponents) {
+                continue;
+            }
             // Get all metric units for this dimension
             let metric_units: Vec<_> = dimension
                 .units
@@ -363,12 +370,17 @@ impl DefaultDeclaratorsInput {
                 let base_scale_name_ident = syn::parse_str::<Ident>(&base_scale_name).unwrap();
                 let base_fn_name_ident = syn::parse_str::<Ident>(&base_fn_name).unwrap();
 
-                scale_definitions.push(quote! {
-                    (#base_scale_name_ident, #base_fn_name_ident, #base_p2, #base_p3, #base_p5, #base_pi)
-                });
+                if crate::utils::catalog::entry_enabled(unit, None) {
+                    scale_definitions.push(quote! {
+                        (#base_scale_name_ident, #base_fn_name_ident, #base_p2, #base_p3, #base_p5, #base_pi)
+                    });
+                }
 
                 // Generate all the prefixed units
                 for prefix in SiPrefix::ALL {
+                    if !crate::utils::catalog::entry_enabled(unit, Some(prefix)) {
+                        continue;
+                    }
                     // For type names, use the unit name as-is (it's already singular)
                     let scale_name = generate_scale_name(prefix.name(), unit.name);
                     // For function names, use the plural form
@@ -381,12 +393,7 @@ impl DefaultDeclaratorsInput {
                         (total_scale, 0i16, total_scale, 0i16)
                     } else {
                         // Other units have 0 inherent scale factor
-                        (
-                            prefix.factor_log10(),
-                            0i16,
-                            prefix.factor_log10(),
-                            0i16,
-                        )
+                        (prefix.factor_log10(), 0i16, prefix.factor_log10(), 0i16)
                     };
 
                     let scale_name_ident = syn::parse_str::<Ident>(&scale_name).unwrap();
@@ -411,12 +418,17 @@ impl DefaultDeclaratorsInput {
                     let fn_name = whippyunits_core::make_plural(unit.name);
                     let fn_name_ident = syn::parse_str::<Ident>(&fn_name).unwrap();
 
-                    scale_definitions.push(quote! {
-                        (#scale_name_ident, #fn_name_ident, #p2, #p3, #p5, #pi)
-                    });
+                    if crate::utils::catalog::entry_enabled(unit, None) {
+                        scale_definitions.push(quote! {
+                            (#scale_name_ident, #fn_name_ident, #p2, #p3, #p5, #pi)
+                        });
+                    }
 
                     // Generate prefixed versions of this compound unit
                     for prefix_info in SiPrefix::ALL {
+                        if !crate::utils::catalog::entry_enabled(unit, Some(prefix_info)) {
+                            continue;
+                        }
                         let prefixed_p2 = p2 + prefix_info.factor_log10();
                         let prefixed_p3 = p3;
                         let prefixed_p5 = p5 + prefix_info.factor_log10();
@@ -510,8 +522,11 @@ impl DefaultDeclaratorsInput {
         let mut system_units = Vec::new();
 
         for dimension in Dimension::ALL {
+            if !crate::utils::catalog::dimension_enabled(&dimension.exponents) {
+                continue;
+            }
             for unit in dimension.units {
-                if unit.system == system {
+                if unit.system == system && crate::utils::catalog::entry_enabled(unit, None) {
                     system_units.push((dimension, unit));
                 }
             }
@@ -522,8 +537,8 @@ impl DefaultDeclaratorsInput {
         }
 
         // Group units by their dimension name (not exponents)
-        let mut grouped_units: std::collections::HashMap<_, Vec<_>> =
-            std::collections::HashMap::new();
+        let mut grouped_units: std::collections::BTreeMap<_, Vec<_>> =
+            std::collections::BTreeMap::new();
         for (dimension, unit) in system_units {
             grouped_units
                 .entry(dimension.name)
@@ -744,6 +759,80 @@ impl DefaultDeclaratorsInput {
     }
 
     /// Generate a storage quantity trait expansion
+    // Full Rust bodies are needed only when exporting checked-in catalogs.
+    // Consumer builds keep the original compact procedural-macro emitter.
+    #[cfg(test)]
+    fn generate_storage_quantity_expansion(
+        &self,
+        mass_exp: i16,
+        length_exp: i16,
+        time_exp: i16,
+        current_exp: i16,
+        temperature_exp: i16,
+        amount_exp: i16,
+        luminosity_exp: i16,
+        angle_exp: i16,
+        trait_ident: &Ident,
+        scale_definitions: &[TokenStream],
+    ) -> TokenStream {
+        let trait_name = trait_ident;
+        let rows: Vec<syn::ExprTuple> = scale_definitions
+            .iter()
+            .map(|tokens| syn::parse2(tokens.clone()).expect("generated declarator tuple"))
+            .collect();
+        let scale_name: Vec<_> = rows.iter().map(|row| &row.elems[0]).collect();
+        let fn_name: Vec<_> = rows.iter().map(|row| &row.elems[1]).collect();
+        let scale_p2: Vec<_> = rows.iter().map(|row| &row.elems[2]).collect();
+        let scale_p3: Vec<_> = rows.iter().map(|row| &row.elems[3]).collect();
+        let scale_p5: Vec<_> = rows.iter().map(|row| &row.elems[4]).collect();
+        let scale_pi: Vec<_> = rows.iter().map(|row| &row.elems[5]).collect();
+        let scale_docs: Vec<_> = scale_name.iter().map(|name| {
+            if matches!(name, syn::Expr::Path(path) if path.path.is_ident("Tick")) {
+                quote!(#[doc = "A fixed 60 Hz tick: exactly 1/60 of an SI second, not an arbitrary clock tick."])
+            } else {
+                TokenStream::new()
+            }
+        }).collect();
+        quote! {
+        // Generate the trait definition (generic over storage type)
+        pub trait #trait_name<T = f64> {
+            #(
+                #scale_docs
+                fn #fn_name(self) -> #scale_name<T>;
+            )*
+        }
+
+        // Generate the type definitions (generic with f64 default)
+        #(
+            #scale_docs
+            pub type #scale_name<T = f64> = Quantity<
+                Unit<Scale<_2<#scale_p2>, _3<#scale_p3>, _5<#scale_p5>, _Pi<#scale_pi>>,
+                Dimension<_M<#mass_exp>, _L<#length_exp>, _T<#time_exp>, _I<#current_exp>, _Θ<#temperature_exp>, _N<#amount_exp>, _J<#luminosity_exp>, _A<#angle_exp>>>,
+                T,
+            >;
+        )*
+
+        // Generate default extension trait implementation (uses default f64)
+        impl #trait_name for f64 {
+            #(
+                fn #fn_name(self) -> #scale_name {
+                    Quantity::<Unit<Scale<_2<#scale_p2>, _3<#scale_p3>, _5<#scale_p5>, _Pi<#scale_pi>>, Dimension<_M<#mass_exp>, _L<#length_exp>, _T<#time_exp>, _I<#current_exp>, _Θ<#temperature_exp>, _N<#amount_exp>, _J<#luminosity_exp>, _A<#angle_exp>>>, f64>::new(self)
+                }
+            )*
+        }
+
+        // Generate extension trait implementations for i32
+        impl #trait_name<i32> for i32 {
+            #(
+                fn #fn_name(self) -> #scale_name<i32> {
+                    Quantity::<Unit<Scale<_2<#scale_p2>, _3<#scale_p3>, _5<#scale_p5>, _Pi<#scale_pi>>, Dimension<_M<#mass_exp>, _L<#length_exp>, _T<#time_exp>, _I<#current_exp>, _Θ<#temperature_exp>, _N<#amount_exp>, _J<#luminosity_exp>, _A<#angle_exp>>>, i32>::new(self)
+                }
+            )*
+        }
+        }
+    }
+
+    #[cfg(not(test))]
     fn generate_storage_quantity_expansion(
         &self,
         mass_exp: i16,
@@ -774,6 +863,87 @@ impl DefaultDeclaratorsInput {
     }
 
     /// Generate a non-storage quantity trait expansion
+    // Full Rust bodies are needed only when exporting checked-in catalogs.
+    // Consumer builds keep the original compact procedural-macro emitter.
+    #[cfg(test)]
+    fn generate_nonstorage_quantity_expansion(
+        &self,
+        mass_exp: i16,
+        length_exp: i16,
+        time_exp: i16,
+        current_exp: i16,
+        temperature_exp: i16,
+        amount_exp: i16,
+        luminosity_exp: i16,
+        angle_exp: i16,
+        trait_ident: &Ident,
+        scale_definitions: &[TokenStream],
+    ) -> TokenStream {
+        let trait_name = trait_ident;
+        let rows: Vec<syn::ExprTuple> = scale_definitions
+            .iter()
+            .map(|tokens| syn::parse2(tokens.clone()).expect("generated declarator tuple"))
+            .collect();
+        let fn_name: Vec<_> = rows.iter().map(|row| &row.elems[0]).collect();
+        let conversion_factor: Vec<_> = rows.iter().map(|row| &row.elems[1]).collect();
+        let scale_p2: Vec<_> = rows.iter().map(|row| &row.elems[2]).collect();
+        let scale_p3: Vec<_> = rows.iter().map(|row| &row.elems[3]).collect();
+        let scale_p5: Vec<_> = rows.iter().map(|row| &row.elems[4]).collect();
+        let scale_pi: Vec<_> = rows.iter().map(|row| &row.elems[5]).collect();
+        quote! {
+        // Generate the trait definition (generic over storage type)
+        pub trait #trait_name<T = f64> {
+            #(
+                fn #fn_name(self) -> Quantity<
+                    Unit<Scale<_2<#scale_p2>, _3<#scale_p3>, _5<#scale_p5>, _Pi<#scale_pi>>,
+                    Dimension<_M<#mass_exp>, _L<#length_exp>, _T<#time_exp>, _I<#current_exp>, _Θ<#temperature_exp>, _N<#amount_exp>, _J<#luminosity_exp>, _A<#angle_exp>>>,
+                    T,
+                >;
+            )*
+        }
+
+        // Generate extension trait implementations for f64 (default)
+        impl #trait_name<f64> for f64 {
+            #(
+                fn #fn_name(self) -> Quantity<
+                    Unit<Scale<_2<#scale_p2>, _3<#scale_p3>, _5<#scale_p5>, _Pi<#scale_pi>>,
+                    Dimension<_M<#mass_exp>, _L<#length_exp>, _T<#time_exp>, _I<#current_exp>, _Θ<#temperature_exp>, _N<#amount_exp>, _J<#luminosity_exp>, _A<#angle_exp>>>,
+                    f64,
+                > {
+                    Quantity::<Unit<Scale<_2<#scale_p2>, _3<#scale_p3>, _5<#scale_p5>, _Pi<#scale_pi>>, Dimension<_M<#mass_exp>, _L<#length_exp>, _T<#time_exp>, _I<#current_exp>, _Θ<#temperature_exp>, _N<#amount_exp>, _J<#luminosity_exp>, _A<#angle_exp>>>, f64>::new(self * #conversion_factor)
+                }
+            )*
+        }
+
+        // Generate extension trait implementations for i32
+        impl #trait_name<i32> for i32 {
+            #(
+                fn #fn_name(self) -> Quantity<
+                    Unit<Scale<_2<#scale_p2>, _3<#scale_p3>, _5<#scale_p5>, _Pi<#scale_pi>>,
+                    Dimension<_M<#mass_exp>, _L<#length_exp>, _T<#time_exp>, _I<#current_exp>, _Θ<#temperature_exp>, _N<#amount_exp>, _J<#luminosity_exp>, _A<#angle_exp>>>,
+                    i32,
+                > {
+                    Quantity::<Unit<Scale<_2<#scale_p2>, _3<#scale_p3>, _5<#scale_p5>, _Pi<#scale_pi>>, Dimension<_M<#mass_exp>, _L<#length_exp>, _T<#time_exp>, _I<#current_exp>, _Θ<#temperature_exp>, _N<#amount_exp>, _J<#luminosity_exp>, _A<#angle_exp>>>, i32>::new((self as f64 * #conversion_factor) as i32)
+                }
+            )*
+        }
+
+        // Generate extension trait implementations for i64
+        impl #trait_name<i64> for i64 {
+            #(
+                fn #fn_name(self) -> Quantity<
+                    Unit<Scale<_2<#scale_p2>, _3<#scale_p3>, _5<#scale_p5>, _Pi<#scale_pi>>,
+                    Dimension<_M<#mass_exp>, _L<#length_exp>, _T<#time_exp>, _I<#current_exp>, _Θ<#temperature_exp>, _N<#amount_exp>, _J<#luminosity_exp>, _A<#angle_exp>>>,
+                    i64,
+                > {
+                    Quantity::<Unit<Scale<_2<#scale_p2>, _3<#scale_p3>, _5<#scale_p5>, _Pi<#scale_pi>>, Dimension<_M<#mass_exp>, _L<#length_exp>, _T<#time_exp>, _I<#current_exp>, _Θ<#temperature_exp>, _N<#amount_exp>, _J<#luminosity_exp>, _A<#angle_exp>>>, i64>::new((self as f64 * #conversion_factor) as i64)
+                }
+            )*
+        }
+        }
+    }
+
+    #[cfg(not(test))]
     fn generate_nonstorage_quantity_expansion(
         &self,
         mass_exp: i16,
@@ -804,6 +974,66 @@ impl DefaultDeclaratorsInput {
     }
 
     /// Generate a storage affine quantity trait expansion
+    // Full Rust bodies are needed only when exporting checked-in catalogs.
+    // Consumer builds keep the original compact procedural-macro emitter.
+    #[cfg(test)]
+    fn generate_storage_affine_quantity_expansion(
+        &self,
+        _mass_exp: i16,
+        _length_exp: i16,
+        _time_exp: i16,
+        _current_exp: i16,
+        _temperature_exp: i16,
+        _amount_exp: i16,
+        _luminosity_exp: i16,
+        _angle_exp: i16,
+        trait_ident: &Ident,
+        storage_scale_ident: &Ident,
+        scale_definitions: &[TokenStream],
+    ) -> TokenStream {
+        let trait_name = trait_ident;
+        let storage_scale = storage_scale_ident;
+        let rows: Vec<syn::ExprTuple> = scale_definitions
+            .iter()
+            .map(|tokens| syn::parse2(tokens.clone()).expect("generated declarator tuple"))
+            .collect();
+        let scale_name: Vec<_> = rows.iter().map(|row| &row.elems[0]).collect();
+        let fn_name: Vec<_> = rows.iter().map(|row| &row.elems[1]).collect();
+        let offset: Vec<_> = rows.iter().map(|row| &row.elems[2]).collect();
+        quote! {
+        // Generate the trait definition
+        pub trait #trait_name {
+            #(
+                fn #fn_name(self) -> #scale_name;
+            )*
+        }
+
+        // Generate the type definitions (all stored in the same scale)
+        #(
+            pub type #scale_name = #storage_scale;
+        )*
+
+        // Generate extension trait implementations for f64
+        impl #trait_name for f64 {
+            #(
+                fn #fn_name(self) -> #scale_name {
+                    #storage_scale::new(self + #offset)
+                }
+            )*
+        }
+
+        // Generate extension trait implementations for i32
+        impl #trait_name for i32 {
+            #(
+                fn #fn_name(self) -> #scale_name {
+                    #storage_scale::new((self as f64) + #offset)
+                }
+            )*
+        }
+        }
+    }
+
+    #[cfg(not(test))]
     fn generate_storage_affine_quantity_expansion(
         &self,
         mass_exp: i16,
@@ -836,6 +1066,88 @@ impl DefaultDeclaratorsInput {
     }
 
     /// Generate a non-storage affine quantity trait expansion
+    // Full Rust bodies are needed only when exporting checked-in catalogs.
+    // Consumer builds keep the original compact procedural-macro emitter.
+    #[cfg(test)]
+    fn generate_nonstorage_affine_quantity_expansion(
+        &self,
+        mass_exp: i16,
+        length_exp: i16,
+        time_exp: i16,
+        current_exp: i16,
+        temperature_exp: i16,
+        amount_exp: i16,
+        luminosity_exp: i16,
+        angle_exp: i16,
+        trait_ident: &Ident,
+        scale_definitions: &[TokenStream],
+    ) -> TokenStream {
+        let trait_name = trait_ident;
+        let rows: Vec<syn::ExprTuple> = scale_definitions
+            .iter()
+            .map(|tokens| syn::parse2(tokens.clone()).expect("generated declarator tuple"))
+            .collect();
+        let fn_name: Vec<_> = rows.iter().map(|row| &row.elems[0]).collect();
+        let conversion_factor: Vec<_> = rows.iter().map(|row| &row.elems[1]).collect();
+        let affine_offset: Vec<_> = rows.iter().map(|row| &row.elems[2]).collect();
+        let scale_p2: Vec<_> = rows.iter().map(|row| &row.elems[3]).collect();
+        let scale_p3: Vec<_> = rows.iter().map(|row| &row.elems[4]).collect();
+        let scale_p5: Vec<_> = rows.iter().map(|row| &row.elems[5]).collect();
+        let scale_pi: Vec<_> = rows.iter().map(|row| &row.elems[6]).collect();
+        quote! {
+        // Generate the trait definition (generic over storage type)
+        pub trait #trait_name<T = f64> {
+            #(
+                fn #fn_name(self) -> Quantity<
+                    Unit<Scale<_2<#scale_p2>, _3<#scale_p3>, _5<#scale_p5>, _Pi<#scale_pi>>,
+                    Dimension<_M<#mass_exp>, _L<#length_exp>, _T<#time_exp>, _I<#current_exp>, _Θ<#temperature_exp>, _N<#amount_exp>, _J<#luminosity_exp>, _A<#angle_exp>>>,
+                    T,
+                >;
+            )*
+        }
+
+        // Generate extension trait implementations for f64 (default)
+        impl #trait_name<f64> for f64 {
+            #(
+                fn #fn_name(self) -> Quantity<
+                    Unit<Scale<_2<#scale_p2>, _3<#scale_p3>, _5<#scale_p5>, _Pi<#scale_pi>>,
+                    Dimension<_M<#mass_exp>, _L<#length_exp>, _T<#time_exp>, _I<#current_exp>, _Θ<#temperature_exp>, _N<#amount_exp>, _J<#luminosity_exp>, _A<#angle_exp>>>,
+                    f64,
+                > {
+                    Quantity::<Unit<Scale<_2<#scale_p2>, _3<#scale_p3>, _5<#scale_p5>, _Pi<#scale_pi>>, Dimension<_M<#mass_exp>, _L<#length_exp>, _T<#time_exp>, _I<#current_exp>, _Θ<#temperature_exp>, _N<#amount_exp>, _J<#luminosity_exp>, _A<#angle_exp>>>, f64>::new(self * #conversion_factor + #affine_offset)
+                }
+            )*
+        }
+
+        // Generate extension trait implementations for i32
+        impl #trait_name<i32> for i32 {
+            #(
+                fn #fn_name(self) -> Quantity<
+                    Unit<Scale<_2<#scale_p2>, _3<#scale_p3>, _5<#scale_p5>, _Pi<#scale_pi>>,
+                    Dimension<_M<#mass_exp>, _L<#length_exp>, _T<#time_exp>, _I<#current_exp>, _Θ<#temperature_exp>, _N<#amount_exp>, _J<#luminosity_exp>, _A<#angle_exp>>>,
+                    i32,
+                > {
+                    Quantity::<Unit<Scale<_2<#scale_p2>, _3<#scale_p3>, _5<#scale_p5>, _Pi<#scale_pi>>, Dimension<_M<#mass_exp>, _L<#length_exp>, _T<#time_exp>, _I<#current_exp>, _Θ<#temperature_exp>, _N<#amount_exp>, _J<#luminosity_exp>, _A<#angle_exp>>>, i32>::new((self as f64 * #conversion_factor + #affine_offset) as i32)
+                }
+            )*
+        }
+
+        // Generate extension trait implementations for i64
+        impl #trait_name<i64> for i64 {
+            #(
+                fn #fn_name(self) -> Quantity<
+                    Unit<Scale<_2<#scale_p2>, _3<#scale_p3>, _5<#scale_p5>, _Pi<#scale_pi>>,
+                    Dimension<_M<#mass_exp>, _L<#length_exp>, _T<#time_exp>, _I<#current_exp>, _Θ<#temperature_exp>, _N<#amount_exp>, _J<#luminosity_exp>, _A<#angle_exp>>>,
+                    i64,
+                > {
+                    Quantity::<Unit<Scale<_2<#scale_p2>, _3<#scale_p3>, _5<#scale_p5>, _Pi<#scale_pi>>, Dimension<_M<#mass_exp>, _L<#length_exp>, _T<#time_exp>, _I<#current_exp>, _Θ<#temperature_exp>, _N<#amount_exp>, _J<#luminosity_exp>, _A<#angle_exp>>>, i64>::new((self as f64 * #conversion_factor + #affine_offset) as i64)
+                }
+            )*
+        }
+        }
+    }
+
+    #[cfg(not(test))]
     fn generate_nonstorage_affine_quantity_expansion(
         &self,
         mass_exp: i16,
@@ -939,7 +1251,6 @@ impl DefaultDeclaratorsInput {
                     crate::quantity::Quantity::<crate::quantity::Unit<crate::quantity::Scale<crate::quantity::_2<#p2>, crate::quantity::_3<#p3>, crate::quantity::_5<#p5>, crate::quantity::_Pi<#pi>>, crate::quantity::Dimension<crate::quantity::_M<#mass_exp>, crate::quantity::_L<#length_exp>, crate::quantity::_T<#time_exp>, crate::quantity::_I<#current_exp>, crate::quantity::_Θ<#temperature_exp>, crate::quantity::_N<#amount_exp>, crate::quantity::_J<#luminosity_exp>, crate::quantity::_A<#angle_exp>>>, i64>::new((self as f64 * #conversion_factor) as i64)
                 }
             });
-
         }
 
         quote! {
@@ -961,3 +1272,7 @@ impl DefaultDeclaratorsInput {
         }
     }
 }
+
+#[cfg(test)]
+#[path = "catalog_snapshot.rs"]
+mod catalog_snapshot;

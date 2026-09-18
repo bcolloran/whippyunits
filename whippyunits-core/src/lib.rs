@@ -20,7 +20,10 @@ use alloc::string::ToString;
 
 pub mod dimension_exponents;
 mod dimensions;
+#[cfg(not(feature = "nightly-gca"))]
 pub mod num;
+#[cfg(feature = "nightly-gca")]
+pub use whippyunits_num as num;
 pub mod parser;
 mod prefix;
 pub mod scale_exponents;

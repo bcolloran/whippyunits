@@ -1,0 +1,76 @@
+error[E0277]: the trait bound `i8: From<Quantity<Unit<Scale, Dimension<_M, _L, _T, _I, _Θ, _N, _J, _A<1>>>, i8>>` is not satisfied
+ --> tests/angular_erasure_ui/unsupported_storage.rs:5:23
+  |
+5 |     let _: i8 = angle.into();
+  |                       ^^^^ the trait `From<Quantity<Unit<Scale, Dimension<_M, _L, _T, _I, _Θ, _N, _J, _A<1>>>, i8>>` is not implemented for `i8`
+  |
+  = help: `i8` implements trait `From<T>`:
+            From<Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension>, f32>>
+            From<Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension>, i128>>
+            From<Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension>, i16>>
+            From<Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension>, i32>>
+            From<Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension>, i64>>
+            From<Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension>, i8>>
+            From<Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension>, isize>>
+            From<Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension>, u128>>
+            From<Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension>, u16>>
+            From<Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension>, u32>>
+            From<Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension>, u64>>
+            From<Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension>, u8>>
+            From<Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension>, usize>>
+            From<Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension>>>
+            From<bool>
+  = note: required for `Quantity<Unit<Scale, Dimension<_M, _L, _T, _I, _Θ, _N, _J, _A<1>>>, i8>` to implement `Into<i8>`
+
+error[E0277]: the trait bound `Quantity<Unit<Scale, Dimension<_M, _L<1>>>, i8>: From<Quantity<Unit<Scale, Dimension<_M, _L<1>, _T, _I, _Θ, _N, _J, _A<1>>>, i8>>` is not satisfied
+ --> tests/angular_erasure_ui/unsupported_storage.rs:8:35
+  |
+8 |     let _: qty!(m, i8) = compound.into();
+  |                                   ^^^^ unsatisfied trait bound
+  |
+  = help: the trait `From<Quantity<Unit<Scale, Dimension<_M, _L<1>, _T, _I, _Θ, _N, _J, _A<1>>>, i8>>` is not implemented for `Quantity<Unit<Scale, Dimension<_M, _L<1>>>, i8>`
+  = help: the following other types implement trait `From<T>`:
+            `Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension<_M<MASS_EXPONENT>, _L<LENGTH_EXPONENT>, _T<TIME_EXPONENT>, _I<CURRENT_EXPONENT>, _Θ<TEMPERATURE_EXPONENT>, _N<AMOUNT_EXPONENT>, _J<LUMINOSITY_EXPONENT>>>, f32>` implements `From<Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension<_M<MASS_EXPONENT>, _L<LENGTH_EXPONENT>, _T<TIME_EXPONENT>, _I<CURRENT_EXPONENT>, _Θ<TEMPERATURE_EXPONENT>, _N<AMOUNT_EXPONENT>, _J<LUMINOSITY_EXPONENT>, _A<ERASE_ANGLE_EXPONENT>>>, f32>>`
+            `Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension<_M<MASS_EXPONENT>, _L<LENGTH_EXPONENT>, _T<TIME_EXPONENT>, _I<CURRENT_EXPONENT>, _Θ<TEMPERATURE_EXPONENT>, _N<AMOUNT_EXPONENT>, _J<LUMINOSITY_EXPONENT>>>, i128>` implements `From<Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension<_M<MASS_EXPONENT>, _L<LENGTH_EXPONENT>, _T<TIME_EXPONENT>, _I<CURRENT_EXPONENT>, _Θ<TEMPERATURE_EXPONENT>, _N<AMOUNT_EXPONENT>, _J<LUMINOSITY_EXPONENT>, _A<ERASE_ANGLE_EXPONENT>>>, i128>>`
+            `Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension<_M<MASS_EXPONENT>, _L<LENGTH_EXPONENT>, _T<TIME_EXPONENT>, _I<CURRENT_EXPONENT>, _Θ<TEMPERATURE_EXPONENT>, _N<AMOUNT_EXPONENT>, _J<LUMINOSITY_EXPONENT>>>, i16>` implements `From<Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension<_M<MASS_EXPONENT>, _L<LENGTH_EXPONENT>, _T<TIME_EXPONENT>, _I<CURRENT_EXPONENT>, _Θ<TEMPERATURE_EXPONENT>, _N<AMOUNT_EXPONENT>, _J<LUMINOSITY_EXPONENT>, _A<ERASE_ANGLE_EXPONENT>>>, i16>>`
+            `Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension<_M<MASS_EXPONENT>, _L<LENGTH_EXPONENT>, _T<TIME_EXPONENT>, _I<CURRENT_EXPONENT>, _Θ<TEMPERATURE_EXPONENT>, _N<AMOUNT_EXPONENT>, _J<LUMINOSITY_EXPONENT>>>, i32>` implements `From<Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension<_M<MASS_EXPONENT>, _L<LENGTH_EXPONENT>, _T<TIME_EXPONENT>, _I<CURRENT_EXPONENT>, _Θ<TEMPERATURE_EXPONENT>, _N<AMOUNT_EXPONENT>, _J<LUMINOSITY_EXPONENT>, _A<ERASE_ANGLE_EXPONENT>>>, i32>>`
+            `Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension<_M<MASS_EXPONENT>, _L<LENGTH_EXPONENT>, _T<TIME_EXPONENT>, _I<CURRENT_EXPONENT>, _Θ<TEMPERATURE_EXPONENT>, _N<AMOUNT_EXPONENT>, _J<LUMINOSITY_EXPONENT>>>, i64>` implements `From<Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension<_M<MASS_EXPONENT>, _L<LENGTH_EXPONENT>, _T<TIME_EXPONENT>, _I<CURRENT_EXPONENT>, _Θ<TEMPERATURE_EXPONENT>, _N<AMOUNT_EXPONENT>, _J<LUMINOSITY_EXPONENT>, _A<ERASE_ANGLE_EXPONENT>>>, i64>>`
+            `Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension<_M<MASS_EXPONENT>, _L<LENGTH_EXPONENT>, _T<TIME_EXPONENT>, _I<CURRENT_EXPONENT>, _Θ<TEMPERATURE_EXPONENT>, _N<AMOUNT_EXPONENT>, _J<LUMINOSITY_EXPONENT>>>, isize>` implements `From<Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension<_M<MASS_EXPONENT>, _L<LENGTH_EXPONENT>, _T<TIME_EXPONENT>, _I<CURRENT_EXPONENT>, _Θ<TEMPERATURE_EXPONENT>, _N<AMOUNT_EXPONENT>, _J<LUMINOSITY_EXPONENT>, _A<ERASE_ANGLE_EXPONENT>>>, isize>>`
+            `Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension<_M<MASS_EXPONENT>, _L<LENGTH_EXPONENT>, _T<TIME_EXPONENT>, _I<CURRENT_EXPONENT>, _Θ<TEMPERATURE_EXPONENT>, _N<AMOUNT_EXPONENT>, _J<LUMINOSITY_EXPONENT>>>>` implements `From<Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension<_M<MASS_EXPONENT>, _L<LENGTH_EXPONENT>, _T<TIME_EXPONENT>, _I<CURRENT_EXPONENT>, _Θ<TEMPERATURE_EXPONENT>, _N<AMOUNT_EXPONENT>, _J<LUMINOSITY_EXPONENT>, _A<ERASE_ANGLE_EXPONENT>>>>>`
+  = note: required for `Quantity<Unit<Scale, Dimension<_M, _L<1>, _T, _I, _Θ, _N, _J, _A<1>>>, i8>` to implement `Into<Quantity<Unit<Scale, Dimension<_M, _L<1>>>, i8>>`
+
+error[E0277]: the trait bound `f64: From<Quantity<Unit<Scale, Dimension<_M, _L, _T, _I, _Θ, _N, _J, _A<1>>>, i16>>` is not satisfied
+  --> tests/angular_erasure_ui/unsupported_storage.rs:11:29
+   |
+11 |     let _: f64 = cross_type.into();
+   |                             ^^^^ the trait `From<Quantity<Unit<Scale, Dimension<_M, _L, _T, _I, _Θ, _N, _J, _A<1>>>, i16>>` is not implemented for `f64`
+   |
+   = help: `f64` implements trait `From<T>`:
+             From<Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension<_M, _L, _T, _I, _Θ, _N, _J, _A<ERASE_ANGLE_EXPONENT>>>, f32>>
+             From<Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension<_M, _L, _T, _I, _Θ, _N, _J, _A<ERASE_ANGLE_EXPONENT>>>, i32>>
+             From<Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension<_M, _L, _T, _I, _Θ, _N, _J, _A<ERASE_ANGLE_EXPONENT>>>, i64>>
+             From<Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension<_M, _L, _T, _I, _Θ, _N, _J, _A<ERASE_ANGLE_EXPONENT>>>>>
+             From<Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension>, f32>>
+             From<Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension>, i128>>
+             From<Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension>, i16>>
+             From<Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension>, i32>>
+             From<Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension>, i64>>
+             From<Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension>, i8>>
+             From<Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension>, isize>>
+             From<Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension>, u128>>
+             From<Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension>, u16>>
+             From<Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension>, u32>>
+             From<Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension>, u64>>
+             From<Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension>, u8>>
+             From<Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension>, usize>>
+             From<Quantity<Unit<Scale<_2<SCALE_P2>, _3<SCALE_P3>, _5<SCALE_P5>, _Pi<SCALE_PI>>, Dimension>>>
+             From<bool>
+             From<f16>
+             From<f32>
+             From<i16>
+             From<i32>
+             From<i8>
+             From<u16>
+             From<u32>
+             From<u8>
+   = note: required for `Quantity<Unit<Scale, Dimension<_M, _L, _T, _I, _Θ, _N, _J, _A<1>>>, i16>` to implement `Into<f64>`

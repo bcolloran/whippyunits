@@ -264,6 +264,9 @@ macro_rules! __uniform_unit_matrix_row {
 /// The matrix types take the entry *unit*, not a `Quantity` type, because the
 /// storage type lives in the nalgebra matrix.
 ///
+/// On a generic item with derives, place `#[whippyunits::expand_units]` above
+/// `#[derive(...)]` so the derives can inspect the expanded vector types.
+///
 /// ```
 /// use whippyalgebra::dims;
 /// use whippyalgebra::nalgebra::{MixedUnitMatrix, SVector, UniformUnitMatrix, vqty};
@@ -288,8 +291,7 @@ macro_rules! __uniform_unit_matrix_row {
 /// # let _ = expansions::<f64>;
 /// ```
 #[macro_export]
-#[doc(hidden)]
-macro_rules! __wa_na_vqty {
+macro_rules! vqty {
     // Internal: a munched unit expression followed by its storage type. The
     // `@uniform` tag keeps the internal arms unambiguous with the public ones
     // below (never write it directly).
@@ -302,12 +304,12 @@ macro_rules! __wa_na_vqty {
     // Internal: a munched unit expression with no storage type, which defaults
     // to the caller's `T`.
     (@uniform $count:expr; [$($u:tt)+]) => {
-        $crate::__wa_na_vqty!(@uniform $count; [$($u)+], T)
+        $crate::vqty!(@uniform $count; [$($u)+], T)
     };
     // Internal: munch one more token into the unit-expression accumulator. Unit
     // expressions never contain commas, so the first comma ends the unit.
     (@uniform $count:expr; [$($u:tt)*] $head:tt $($rest:tt)*) => {
-        $crate::__wa_na_vqty!(@uniform $count; [$($u)* $head] $($rest)*)
+        $crate::vqty!(@uniform $count; [$($u)* $head] $($rest)*)
     };
     // Internal: a per-entry unit list and its storage type. The length check
     // lives in the shape's const argument, so a count that disagrees with the
@@ -319,26 +321,25 @@ macro_rules! __wa_na_vqty {
             $crate::nalgebra::__backend::SVector<
                 $storage,
                 {
-                    ::core::assert!(
-                        <$crate::dims![$($units)+] as $crate::DimList>::LEN == $count,
-                        "vqty!: the count does not match the number of units in the list",
-                    );
-                    $count
+                    $crate::nalgebra::__vqty_count(
+                        $count,
+                        <$crate::dims![$($units)+] as $crate::DimList>::LEN,
+                    )
                 },
             >,
         >
     };
     // Public: per-entry units, with a storage type.
     ($count:expr, [$($units:tt)+], $storage:ty $(,)?) => {
-        $crate::__wa_na_vqty!(@list $count; [$($units)+]; $storage)
+        $crate::vqty!(@list $count; [$($units)+]; $storage)
     };
     // Public: per-entry units, storage defaulting to the caller's `T`.
     ($count:expr, [$($units:tt)+] $(,)?) => {
-        $crate::__wa_na_vqty!(@list $count; [$($units)+]; T)
+        $crate::vqty!(@list $count; [$($units)+]; T)
     };
     // Public: one shared unit, with or without a storage type.
     ($count:expr, $($unit:tt)+) => {
-        $crate::__wa_na_vqty!(@uniform $count; [] $($unit)+)
+        $crate::vqty!(@uniform $count; [] $($unit)+)
     };
 }
 

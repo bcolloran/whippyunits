@@ -2,7 +2,7 @@ use proc_macro2::{Span, TokenStream};
 use quote::quote;
 /// Shared utilities for proc macros
 use syn::Ident;
-use whippyunits_core::{Dimension, SiPrefix, UnitExpr, get_unit_info};
+use whippyunits_core::{get_unit_info, Dimension, SiPrefix, UnitExpr};
 
 /// Resolves the path prefix by which the invoking crate refers to
 /// `whippyunits`, so generated code works both downstream and within the
@@ -52,6 +52,34 @@ pub fn const_exp(value: i16) -> TokenStream {
     }
 }
 
+/// Emit a concrete unit type without expanding another macro or referring to
+/// the optional declarator catalog. Hover aliases use this when their catalog
+/// family is disabled; their documentation stays attached to the original span.
+pub fn concrete_unit_type(
+    dimensions: whippyunits_core::dimension_exponents::DynDimensionExponents,
+    scales: whippyunits_core::scale_exponents::ScaleExponents,
+) -> TokenStream {
+    let wu = whippyunits_path();
+    let [mass, length, time, current, temperature, amount, luminosity, angle] =
+        dimensions.0.map(const_exp);
+    let [p2, p3, p5, pi] = scales.0.map(const_exp);
+    quote! {
+        #wu::quantity::Unit<
+            #wu::quantity::Scale<#wu::quantity::_2<#p2>, #wu::quantity::_3<#p3>, #wu::quantity::_5<#p5>, #wu::quantity::_Pi<#pi>>,
+            #wu::quantity::Dimension<#wu::quantity::_M<#mass>, #wu::quantity::_L<#length>, #wu::quantity::_T<#time>, #wu::quantity::_I<#current>, #wu::quantity::_Θ<#temperature>, #wu::quantity::_N<#amount>, #wu::quantity::_J<#luminosity>, #wu::quantity::_A<#angle>>
+        >
+    }
+}
+
+fn concrete_quantity_type(
+    dimensions: whippyunits_core::dimension_exponents::DynDimensionExponents,
+    scales: whippyunits_core::scale_exponents::ScaleExponents,
+) -> TokenStream {
+    let wu = whippyunits_path();
+    let unit_type = concrete_unit_type(dimensions, scales);
+    quote!(#wu::quantity::Quantity<#unit_type, f64>)
+}
+
 /// Check if a unit name can be parsed as a valid Rust identifier
 /// This filters out units with unicode characters or other invalid identifier characters
 pub fn is_valid_identifier(name: &str) -> bool {
@@ -79,6 +107,20 @@ pub fn get_declarator_type_for_unit(unit_name: &str) -> Option<TokenStream> {
     // Skip dimensionless units - they don't have corresponding default declarator types
     if unit_name == "dimensionless" {
         return None;
+    }
+
+    if let Some(unit) = get_unit_info(unit_name) {
+        if !crate::utils::catalog::broad_dimension_enabled(&unit.exponents)
+            && !crate::utils::catalog::identifier_enabled(unit_name)
+        {
+            let expression = syn::parse_str::<UnitExpr>(unit_name).ok()?;
+            let evaluated =
+                expression.evaluate_with_mode(whippyunits_core::EvaluationMode::Tolerant);
+            return Some(concrete_quantity_type(
+                evaluated.dimension_exponents,
+                evaluated.scale_exponents,
+            ));
+        }
     }
 
     let wu = whippyunits_path();
@@ -140,6 +182,10 @@ pub fn get_declarator_type_for_exponents(
         return None;
     }
 
+    if !crate::utils::catalog::scale_enabled(&dimension_exponents, scale_exponents) {
+        return Some(concrete_quantity_type(dimension_exponents, scale_exponents));
+    }
+
     let wu = whippyunits_path();
 
     // Find the dimension that matches these exponents
@@ -150,7 +196,7 @@ pub fn get_declarator_type_for_exponents(
     // Look for a unit in this dimension that matches the scale exponents
     // We need to find a unit that has the same scale exponents
     for unit in matching_dimension.units {
-        if unit.scale == scale_exponents {
+        if unit.scale == scale_exponents && crate::utils::catalog::entry_enabled(unit, None) {
             // Found a matching unit - generate type name using same logic as default declarators
             let type_name = if unit.system == System::Metric {
                 // For metric units, use the same logic as generate_default_declarators_macro
@@ -190,6 +236,9 @@ pub fn get_declarator_type_for_exponents(
                 .iter()
                 .find(|p| p.factor_log10() == scale_diff)
             {
+                if !crate::utils::catalog::entry_enabled(base_unit, Some(prefix)) {
+                    continue;
+                }
                 // Generate prefixed type name using same logic as generate_default_declarators_macro
                 let type_name = generate_scale_name(prefix.name(), base_unit.name);
 
@@ -201,6 +250,9 @@ pub fn get_declarator_type_for_exponents(
         }
     }
 
+    if !crate::utils::catalog::broad_dimension_enabled(&dimension_exponents) {
+        return Some(concrete_quantity_type(dimension_exponents, scale_exponents));
+    }
     None
 }
 

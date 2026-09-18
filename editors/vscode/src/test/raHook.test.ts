@@ -5,7 +5,7 @@ import * as vscode from "vscode";
 import { Formatter } from "../formatter";
 import { RUST_ANALYZER_ID, RustAnalyzerHook } from "../raHook";
 import { Rewriter } from "../rewrite";
-import { DEFAULT_SETTINGS, EXTENSION_ROOT, HOVER_ENERGY, RAW_LENGTH, fakeLog, tick } from "./fixtures";
+import { DEFAULT_SETTINGS, EXTENSION_ROOT, HOVER_ENERGY, RAW_LENGTH, fakeDocument, fakeLog, tick } from "./fixtures";
 import { __setExtension } from "./vscodeStub";
 
 // Loose types: these fakes only need the shape the hook touches
@@ -53,7 +53,7 @@ test("hooks the live client, rewrites hovers, re-hooks after a restart, restores
   assert.equal(hook.state, "hooked");
   assert.notEqual(first.middleware.provideHover, first.originalHover);
   assert.equal(first.provider.refreshes, 1, "asks for fresh inlay hints once hooked");
-  const hover = await first.middleware.provideHover({}, {}, {}, () => null);
+  const hover = await first.middleware.provideHover(fakeDocument("let x = 1;"), new vscode.Position(0, 0), {}, () => null);
   assert.match(hover.contents[0].value, /Quantity<J, f64>/);
 
   // Restart: rust-analyzer disposes the client (api.client becomes undefined) and later creates a new one

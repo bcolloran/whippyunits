@@ -1,0 +1,29 @@
+name: Exponent ranges
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  exponent-features:
+    name: Exponents (${{ matrix.features || 'reduced' }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        features: ["", "wide-exponents"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Test numeral boundaries
+        run: cargo test --locked -p whippyunits-core --lib --no-default-features --features "${{ matrix.features }}" num::tests
+      - name: Test rejected exponent operations
+        run: cargo test --locked -p whippyunits-core --doc --no-default-features --features "${{ matrix.features }}" num::
+      - name: Test public quantity arithmetic
+        run: cargo test --locked -p whippyunits --test exponent_features --no-default-features --features "${{ matrix.features }}"

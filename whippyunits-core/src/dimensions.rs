@@ -325,6 +325,7 @@ impl Dimension<crate::dimension_exponents!([0, 0, 1, 0, 0, 0, 0, 0])> {
         symbol: "T",
         units: &[
             Unit::SECOND,
+            Unit::TICK,
             Unit::MINUTE,
             Unit::HOUR,
             Unit::DAY,

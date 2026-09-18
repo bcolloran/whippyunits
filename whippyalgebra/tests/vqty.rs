@@ -10,6 +10,59 @@ use whippyalgebra::nalgebra::{
 };
 use whippyunits::{qty, quantity, unit};
 
+use num_traits::NumCast;
+
+// Each form must be expanded before derives inspect a generic field type.
+// The qualified paths also exercise both public locations of the macro.
+#[whippyunits::expand_units]
+#[derive(Default, Clone, Copy, Debug, PartialEq)]
+struct DerivedQuantities<T: Copy + NumCast + PartialEq + std::fmt::Debug + 'static> {
+    mass: qty!(kg, T),
+    velocity: vqty!(2, m / s, T),
+    masses: vqty!(2, kg),
+    state: vqty!(2, [m / s, kg], T),
+    default_state: vqty!(2, [m / s, kg]),
+    nested: Option<whippyalgebra::nalgebra::vqty!(2, km / h, T,)>,
+    root_path: whippyalgebra::vqty!(2, m / s, T),
+}
+
+#[whippyunits::expand_units]
+#[derive(Clone, Copy, Debug, PartialEq)]
+struct ConstLength<T, const N: usize> {
+    velocity: vqty!(N, m / s, T),
+}
+
+#[test]
+fn derives_work_with_vector_type_macros() {
+    let rest = DerivedQuantities::<f64>::default();
+    let moving = DerivedQuantities {
+        velocity: uniform_unit_matrix![m / s;
+            [quantity!(1.0, m / s)], [quantity!(2.0, m / s)],
+        ],
+        state: mixed_unit_matrix![dims![m / s, kg], dims![1];
+            [quantity!(3.0, m / s)], [quantity!(4.0, kg)],
+        ],
+        ..rest
+    };
+    let copied = moving;
+    assert_eq!(copied, moving);
+    assert_ne!(moving, rest);
+    assert!(format!("{copied:?}").starts_with("DerivedQuantities {"));
+    assert_eq!(moving.velocity.get(1, 0).unsafe_value, 2.0);
+    assert_eq!(moving.state.get::<1, 0>().unsafe_value, 4.0);
+
+    // Attribute expansion and standalone expansion must agree exactly.
+    let _: vqty!(2, kg, f64) = moving.masses;
+    let _: vqty!(2, [m / s, kg], f64) = moving.default_state;
+    let _: Option<vqty!(2, km / h, f64)> = moving.nested;
+    let _: vqty!(2, m / s, f64) = moving.root_path;
+
+    let generic_length = ConstLength {
+        velocity: moving.velocity,
+    };
+    assert_eq!(generic_length, generic_length.clone());
+}
+
 // Each function compiles only if the `vqty!` type and the hand-written type are
 // the same type.
 

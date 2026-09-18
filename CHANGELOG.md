@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- Reproducible CGA and quantity-trait compiler/editor experiments with recorded adoption decisions in `docs/cga-experiment-log.md`. The quantity-trait candidate is preserved as a patch after a measured stable-compiler regression.
+- Experimental `nightly-gca` exponent backend on pinned `nightly-2026-09-13`, isolated from unit metadata. Stable remains the default; see `docs/cga-experiment-log.md` for validation, compiler workarounds and editor limitations.
+
+- `units-dynamics-conversions`: a lean dynamics constructor catalog with degrees and fixed 1/60-second ticks, forwarded by `whippyalgebra`. Conversion scales remain supported with default features disabled.
+- Reproducible typenum-pruning, explicit-arithmetic and four-axis performance experiments, with compiler/editor measurements and adoption decisions in `docs/typenum-dynamics-experiments.md`.
 - **editors/vscode**: A VS Code extension that rewrites whippyunits types in rust-analyzer hovers, inlay hints and diagnostics by hooking into the rust-analyzer extension's language client — no proxy binary to install, and it works in dev containers. The formatting runs through a WebAssembly build of the lsp-proxy formatting code (`editors/vscode/formatter-wasm`)
 - A `.devcontainer` for this repository that builds and installs the extension
 - `#[expand_units]`: an attribute that expands `unit!`/`qty!` type macros inside an item ahead of its `#[derive]`s, so the built-in derives work on *generic* structs and enums that spell their unit types inline (rustc otherwise rejects those with "`derive` cannot be used on items with type macros"). Must be written above the derives it is meant to help

@@ -1,0 +1,250 @@
+{
+  "scope": "fresh server, warm Cargo artifacts; direct LSP without editor/formatter",
+  "profiles": [
+    {
+      "label": "baseline",
+      "dependency_path": "/tmp/whippyunits-experiments/06-combined-check/baseline",
+      "features": [
+        "std",
+        "units-dynamics"
+      ],
+      "default_features": false,
+      "source_sha256": "be30ad58e18fd314be8f6eca49cfbe7637294e1b7f26fb21852b9f407b495b0b"
+    },
+    {
+      "label": "candidate",
+      "dependency_path": "/tmp/whippyunits-experiments/06-combined-check/candidate",
+      "features": [
+        "std",
+        "units-si-dynamics"
+      ],
+      "default_features": false,
+      "source_sha256": "0f8f62c7f2d1624c81e48a274f07477c70c2535d2ad98bdaefedaee3cae2ebe4"
+    }
+  ],
+  "server_version": "rust-analyzer 0.3.3049-standalone",
+  "rustc_version": "rustc 1.98.1 (48a229cea 2026-09-01)",
+  "import_style": "glob",
+  "receiver": "variable",
+  "timed_completion_method": "meters",
+  "required_completions": [
+    "meters",
+    "kilograms",
+    "seconds",
+    "radians",
+    "hertzs",
+    "newtons",
+    "joules",
+    "newton_meters",
+    "watts",
+    "pascals"
+  ],
+  "allow_missing_completion": [
+    "baseline"
+  ],
+  "cargo_warmup": true,
+  "cache_priming": true,
+  "runs": 3,
+  "repeated_requests": 5,
+  "summary": {
+    "baseline": {
+      "valid_runs": 3,
+      "ready_seconds_median": 28.90844708199438,
+      "completion_missing_runs": 3,
+      "hover_valid_runs": 3,
+      "hover_first_ms_median": 158.37283500877675,
+      "hover_repeated_ms_median": 0.3978400054620579,
+      "completion_valid_runs": 0,
+      "completion_first_ms_median": null,
+      "completion_repeated_ms_median": null
+    },
+    "candidate": {
+      "valid_runs": 3,
+      "ready_seconds_median": 3.1799964449892286,
+      "completion_missing_runs": 0,
+      "hover_valid_runs": 3,
+      "hover_first_ms_median": 29.232771004899405,
+      "hover_repeated_ms_median": 0.3482799947960302,
+      "completion_valid_runs": 3,
+      "completion_first_ms_median": 573.3973069873173,
+      "completion_repeated_ms_median": 12.866231001680717
+    }
+  },
+  "raw_results": "/tmp/whippyunits-experiments/06-combined-ra/results.json",
+  "samples": [
+    {
+      "profile": "baseline",
+      "cycle": 1,
+      "valid": true,
+      "ready_seconds": 29.47426864899171,
+      "request_ms": {
+        "hover": [
+          157.17609399871435,
+          0.4528900026343763,
+          0.32997000380419195,
+          0.36237000313121825,
+          0.3991699923062697,
+          0.3978400054620579
+        ],
+        "completion": []
+      },
+      "completion_status": "missing",
+      "missing_completion_names": [
+        "meters",
+        "kilograms",
+        "seconds",
+        "radians",
+        "hertzs",
+        "newtons",
+        "joules",
+        "newton_meters",
+        "watts",
+        "pascals"
+      ],
+      "primary_completion_valid": false
+    },
+    {
+      "profile": "candidate",
+      "cycle": 1,
+      "valid": true,
+      "ready_seconds": 3.1799964449892286,
+      "request_ms": {
+        "hover": [
+          29.232771004899405,
+          0.3784500004258007,
+          0.2999900025315583,
+          0.28005000785924494,
+          0.27351999597158283,
+          0.29596999229397625
+        ],
+        "completion": [
+          573.3973069873173,
+          22.330260995659046,
+          10.960109997540712,
+          9.373320994200185,
+          10.819420000188984,
+          11.62765099434182
+        ]
+      },
+      "completion_status": "verified",
+      "missing_completion_names": [],
+      "primary_completion_valid": true
+    },
+    {
+      "profile": "candidate",
+      "cycle": 2,
+      "valid": true,
+      "ready_seconds": 3.1252869729942176,
+      "request_ms": {
+        "hover": [
+          28.430921011022292,
+          0.43690999154932797,
+          0.2870799944503233,
+          0.3482799947960302,
+          0.33368000003974885,
+          0.2948399924207479
+        ],
+        "completion": [
+          555.136996001238,
+          20.60842099308502,
+          12.866231001680717,
+          14.97758000914473,
+          13.86860100319609,
+          14.583589989342727
+        ]
+      },
+      "completion_status": "verified",
+      "missing_completion_names": [],
+      "primary_completion_valid": true
+    },
+    {
+      "profile": "baseline",
+      "cycle": 2,
+      "valid": true,
+      "ready_seconds": 28.70095889600634,
+      "request_ms": {
+        "hover": [
+          163.73582399683073,
+          0.4863499925704673,
+          0.33504101156722754,
+          0.3505200002109632,
+          0.35879999632015824,
+          0.5420800007414073
+        ],
+        "completion": []
+      },
+      "completion_status": "missing",
+      "missing_completion_names": [
+        "meters",
+        "kilograms",
+        "seconds",
+        "radians",
+        "hertzs",
+        "newtons",
+        "joules",
+        "newton_meters",
+        "watts",
+        "pascals"
+      ],
+      "primary_completion_valid": false
+    },
+    {
+      "profile": "baseline",
+      "cycle": 3,
+      "valid": true,
+      "ready_seconds": 28.90844708199438,
+      "request_ms": {
+        "hover": [
+          158.37283500877675,
+          0.5619200092041865,
+          0.3472399985184893,
+          0.3708000003825873,
+          0.44257000263314694,
+          0.5663799965986982
+        ],
+        "completion": []
+      },
+      "completion_status": "missing",
+      "missing_completion_names": [
+        "meters",
+        "kilograms",
+        "seconds",
+        "radians",
+        "hertzs",
+        "newtons",
+        "joules",
+        "newton_meters",
+        "watts",
+        "pascals"
+      ],
+      "primary_completion_valid": false
+    },
+    {
+      "profile": "candidate",
+      "cycle": 3,
+      "valid": true,
+      "ready_seconds": 3.392587880996871,
+      "request_ms": {
+        "hover": [
+          38.41322100197431,
+          0.6577599997399375,
+          0.4038299957755953,
+          0.4128299915464595,
+          0.3799400001298636,
+          0.3782599960686639
+        ],
+        "completion": [
+          656.017768997117,
+          17.578789993422106,
+          14.705970999784768,
+          11.584050007513724,
+          10.94086999364663,
+          10.864800002309494
+        ]
+      },
+      "completion_status": "verified",
+      "missing_completion_names": [],
+      "primary_completion_valid": true
+    }
+  ]
+}

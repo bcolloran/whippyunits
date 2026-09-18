@@ -435,6 +435,19 @@ impl Unit<crate::dimension_exponents!([0, 0, 1, 0, 0, 0, 0, 0])> {
         system: System::Metric,
     };
 
+    /// A fixed 60 Hz simulation tick: exactly 1/60 of an SI second.
+    ///
+    /// This unit does not represent an arbitrary clock or simulation tick rate.
+    pub const TICK: Self = Self {
+        name: "tick",
+        symbols: &["tick"],
+        scale: ScaleExponents([-2, -1, -1, 0]),
+        conversion_factor: IDENTITY,
+        affine_offset: NONE,
+        exponents: TypeDimensionExponents::new(),
+        system: System::Metric,
+    };
+
     pub const MINUTE: Self = Self {
         name: "minute",
         symbols: &["min"],
@@ -1197,6 +1210,18 @@ impl Unit<crate::dimension_exponents!([0, 0, 0, 0, 0, 0, 0, 0])> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn tick_is_exactly_a_fixed_sixtieth_of_a_second() {
+        assert_eq!(Unit::TICK.scale, ScaleExponents([-2, -1, -1, 0]));
+        assert_eq!(
+            Unit::TICK.scale,
+            ScaleExponents::_10(-1).mul(ScaleExponents::_6(-1))
+        );
+        assert_eq!(Unit::TICK.conversion_factor, 1.0);
+        assert_eq!(Unit::TICK.affine_offset, 0.0);
+        assert_eq!(crate::get_unit_info("tick"), Some(&Unit::TICK.erase()));
+    }
 
     #[test]
     fn can_get_prefix_and_unit_from_multiple_string() {

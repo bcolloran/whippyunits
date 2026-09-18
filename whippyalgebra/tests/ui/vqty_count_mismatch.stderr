@@ -4,4 +4,4 @@ error[E0080]: evaluation panicked: vqty!: the count does not match the number of
 8 | type Bad = vqty!(3, [m / s, kg], f64);
   |            ^^^^^^^^^^^^^^^^^^^^^^^^^^ evaluation of `Bad::{constant#0}` failed here
   |
-  = note: this error originates in the macro `$crate::panic::panic_2021` which comes from the expansion of the macro `vqty` (in Nightly builds, run with -Z macro-backtrace for more info)
+  = note: this error originates in the macro `$crate::vqty` which comes from the expansion of the macro `vqty` (in Nightly builds, run with -Z macro-backtrace for more info)

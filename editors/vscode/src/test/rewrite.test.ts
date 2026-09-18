@@ -3,8 +3,18 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import * as vscode from "vscode";
 import { Formatter } from "../formatter";
-import { Rewriter } from "../rewrite";
-import { DEFAULT_SETTINGS, EXTENSION_ROOT, HOVER_ENERGY, RAW_LENGTH } from "./fixtures";
+import { Rewriter, macroUnitExpr, replaceUnknownUnitLabels } from "../rewrite";
+import {
+  DEFAULT_SETTINGS,
+  EXTENSION_ROOT,
+  FIELD_HOVER,
+  FIELD_LINE,
+  HOVER_ENERGY,
+  RAW_LENGTH,
+  VECTOR_FIELD_HOVER,
+  VECTOR_FIELD_LINE,
+  fakeDocument,
+} from "./fixtures";
 
 const formatter = Formatter.load(EXTENSION_ROOT, DEFAULT_SETTINGS);
 
@@ -112,4 +122,56 @@ test("diagnostics: copies keep the prototype and extra fields; originals stay un
   assert.match(rewritten.message, /expected Quantity<m, f64>/);
   assert.equal(original.message, message);
   assert.equal(untouched, plain);
+});
+
+test("hover on a qty! field: the declared type's {const} exponent is recovered from the source line", () => {
+  const rewriter = new Rewriter(formatter, { ...DEFAULT_SETTINGS });
+  const markdown = new vscode.MarkdownString(FIELD_HOVER);
+
+  rewriter.hover(new vscode.Hover([markdown]), fakeDocument(FIELD_LINE), new vscode.Position(30, 8));
+
+  assert.match(markdown.value, /```rust\npub vel32: Quantity<\(m·s⁻¹\), f32>\n```/);
+  assert.doesNotMatch(markdown.value, /ˀ|Helper/);
+});
+
+test("hover on a qty! field without a document context keeps the honest unknown exponent", () => {
+  const rewriter = new Rewriter(formatter, { ...DEFAULT_SETTINGS });
+  const markdown = new vscode.MarkdownString(FIELD_HOVER);
+
+  rewriter.hover(new vscode.Hover([markdown]));
+
+  assert.match(markdown.value, /```rust\npub vel32: Quantity<\(m·sˀ\), f32>\n```/);
+});
+
+test("hover: a line without qty! leaves an unknown exponent alone", () => {
+  const rewriter = new Rewriter(formatter, { ...DEFAULT_SETTINGS });
+  const markdown = new vscode.MarkdownString(FIELD_HOVER);
+
+  rewriter.hover(new vscode.Hover([markdown]), fakeDocument("    pub vel32: Velocity<f32>,"), new vscode.Position(0, 0));
+
+  assert.match(markdown.value, /m·sˀ/);
+});
+
+test("hover on a vqty! field: label, nalgebra alias and the unit-matrix trace all resolve", () => {
+  const rewriter = new Rewriter(formatter, { ...DEFAULT_SETTINGS });
+  const markdown = new vscode.MarkdownString(VECTOR_FIELD_HOVER);
+
+  rewriter.hover(new vscode.Hover([markdown]), fakeDocument(VECTOR_FIELD_LINE), new vscode.Position(35, 8));
+
+  assert.match(markdown.value, /```rust\npub acc: UniformUnitMatrix<\(m·s⁻²\), Vector2<T>>\n```/);
+  assert.match(markdown.value, /```text\n\[\(m·s⁻²\)\]\n\[\(m·s⁻²\)\]\n```/);
+  assert.doesNotMatch(markdown.value, /ˀ|Helper|ArrayStorage/);
+});
+
+test("macroUnitExpr and replaceUnknownUnitLabels", () => {
+  assert.equal(macroUnitExpr("    pub v: qty!(m / s, f32),"), "m / s");
+  assert.equal(macroUnitExpr("let x: whippyunits::qty!( m ) = y;"), "m");
+  assert.equal(macroUnitExpr("    pub acc: vqty!(2, m / s ^ 2, T),"), "m / s ^ 2");
+  assert.equal(macroUnitExpr("    pub acc: vqty!(2, [m, s], T),"), undefined, "per-entry unit lists have no single unit");
+  assert.equal(macroUnitExpr("no macro here"), undefined);
+  assert.equal(macroUnitExpr("qty!(unbalanced"), undefined);
+  assert.equal(
+    replaceUnknownUnitLabels("a: Quantity<(m·sˀ), f32>, [(m·sˀ)], b: Quantity<m, f64>, c: sˀ", "(m·s⁻¹)"),
+    "a: Quantity<(m·s⁻¹), f32>, [(m·s⁻¹)], b: Quantity<m, f64>, c: (m·s⁻¹)",
+  );
 });

@@ -1,0 +1,10 @@
+error[E0432]: unresolved imports `whippyunits::default_declarators::Degree`, `whippyunits::default_declarators::Gram`, `whippyunits::default_declarators::Liter`, `whippyunits::default_declarators::Millimeter`, `whippyunits::default_declarators::Minute`
+ --> tests/catalog_ui/absent_noncoherent.rs:1:40
+  |
+1 | use whippyunits::default_declarators::{Degree, Gram, Liter, Millimeter, Minute};
+  |                                        ^^^^^^  ^^^^  ^^^^^  ^^^^^^^^^^  ^^^^^^ no `Minute` in `default_declarators`
+  |                                        |       |     |      |
+  |                                        |       |     |      no `Millimeter` in `default_declarators`
+  |                                        |       |     no `Liter` in `default_declarators`
+  |                                        |       no `Gram` in `default_declarators`
+  |                                        no `Degree` in `default_declarators`

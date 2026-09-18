@@ -1,0 +1,540 @@
+{
+  "compiler": "rustc 1.100.0-nightly (809936eac 2026-09-12)\nbinary: rustc\ncommit-hash: 809936eac66c547a5127ce1da805f0d3a6789b98\ncommit-date: 2026-09-12\nhost: x86_64-unknown-linux-gnu\nrelease: 1.100.0-nightly\nLLVM version: 23.1.1\n",
+  "scope": "isolated correctness probes; no timing claim",
+  "commands": [
+    {
+      "name": "build_typenum",
+      "command": [
+        "rustc",
+        "+nightly-2026-09-13",
+        "--crate-name",
+        "typenum",
+        "--crate-type",
+        "rlib",
+        "--edition=2018",
+        "/home/bc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/typenum-1.20.1/src/lib.rs",
+        "-o",
+        "/tmp/whippyunits-cga/probes/libtypenum.rlib"
+      ],
+      "cwd": "/tmp/whippyunits-cga/probes",
+      "expected": "success",
+      "patterns": [],
+      "exit_code": 0,
+      "allowed_error_codes": [],
+      "actual_error_codes": [],
+      "unclassified_error": false,
+      "compiler_crash": false,
+      "passed": true,
+      "log": "/tmp/whippyunits-cga/probes/build_typenum.log",
+      "diagnostic": ""
+    },
+    {
+      "name": "build_native_backend",
+      "command": [
+        "rustc",
+        "+nightly-2026-09-13",
+        "--edition=2024",
+        "--crate-name",
+        "cga_probe",
+        "--crate-type",
+        "rlib",
+        "/tmp/whippyunits-macro-compile-time/scripts/experiments/cga/probes/backend.rs",
+        "-L",
+        "dependency=/tmp/whippyunits-cga/probes",
+        "--extern",
+        "typenum=/tmp/whippyunits-cga/probes/libtypenum.rlib",
+        "-o",
+        "/tmp/whippyunits-cga/probes/libcga_probe.rlib"
+      ],
+      "cwd": "/tmp/whippyunits-cga/probes",
+      "expected": "success",
+      "patterns": [],
+      "exit_code": 0,
+      "allowed_error_codes": [],
+      "actual_error_codes": [],
+      "unclassified_error": false,
+      "compiler_crash": false,
+      "passed": true,
+      "log": "/tmp/whippyunits-cga/probes/build_native_backend.log",
+      "diagnostic": ""
+    },
+    {
+      "name": "positive",
+      "command": [
+        "rustc",
+        "+nightly-2026-09-13",
+        "--edition=2024",
+        "-C",
+        "overflow-checks=yes",
+        "/tmp/whippyunits-macro-compile-time/scripts/experiments/cga/probes/positive.rs",
+        "-L",
+        "dependency=/tmp/whippyunits-cga/probes",
+        "--extern",
+        "typenum=/tmp/whippyunits-cga/probes/libtypenum.rlib",
+        "--extern",
+        "cga_probe=/tmp/whippyunits-cga/probes/libcga_probe.rlib",
+        "-o",
+        "/tmp/whippyunits-cga/probes/positive"
+      ],
+      "cwd": "/tmp/whippyunits-cga/probes",
+      "expected": "success",
+      "patterns": [],
+      "exit_code": 0,
+      "allowed_error_codes": [],
+      "actual_error_codes": [],
+      "unclassified_error": false,
+      "compiler_crash": false,
+      "passed": true,
+      "log": "/tmp/whippyunits-cga/probes/positive.log",
+      "execution": {
+        "command": [
+          "/tmp/whippyunits-cga/probes/positive"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "diagnostic": ""
+    },
+    {
+      "name": "odd_number_bound",
+      "command": [
+        "rustc",
+        "+nightly-2026-09-13",
+        "--edition=2024",
+        "-C",
+        "overflow-checks=yes",
+        "/tmp/whippyunits-cga/probes/odd_number_bound.rs",
+        "-L",
+        "dependency=/tmp/whippyunits-cga/probes",
+        "--extern",
+        "typenum=/tmp/whippyunits-cga/probes/libtypenum.rlib",
+        "--extern",
+        "cga_probe=/tmp/whippyunits-cga/probes/libcga_probe.rlib",
+        "-o",
+        "/tmp/whippyunits-cga/probes/odd_number_bound"
+      ],
+      "cwd": "/tmp/whippyunits-cga/probes",
+      "expected": "rejection",
+      "patterns": [
+        "Bool<false>.*True|True.*Bool<false>"
+      ],
+      "exit_code": 1,
+      "allowed_error_codes": [
+        "E0277"
+      ],
+      "actual_error_codes": [
+        "E0277"
+      ],
+      "unclassified_error": false,
+      "compiler_crash": false,
+      "passed": true,
+      "log": "/tmp/whippyunits-cga/probes/odd_number_bound.log",
+      "diagnostic": "error[E0277]: the trait bound `cga_probe::Bool<false>: True` is not satisfied\n  --> /tmp/whippyunits-cga/probes/odd_number_bound.rs:1:75\n   |\n 1 | use cga_probe::{N,Halve}; fn witness<T: Halve>() {} fn main() { witness::<N<3>>(); }\n   |                                                                           ^^^^ the trait `True` is not implemented for `cga_probe::Bool<false>`\n   |\nhelp: the trait `True` is implemented for `cga_probe::Bool<true>`\n  --> /tmp/whippyunits-macro-compile-time/scripts/experiments/cga/probes/backend.rs:37:1\n   |\n37 | impl True for Bool<true> {}\n   | ^^^^^^^^^^^^^^^^^^^^^^^^\n   = note: required for `N<3>` to implement `Halve`\nnote: required by a bound in `witness`\n  --> /tmp/whippyunits-cga/probes/odd_number_bound.rs:1:41\n   |\n 1 | use cga_probe::{N,Halve}; fn witness<T: Halve>() {} fn main() { witness::<N<3>>(); }\n   |                                         ^^^^^ required by this bound in `witness`\n\nerror: aborting due to 1 previous error\n\nFor more information about this error, try `rustc --explain E0277`.\n"
+    },
+    {
+      "name": "negative_odd_bound",
+      "command": [
+        "rustc",
+        "+nightly-2026-09-13",
+        "--edition=2024",
+        "-C",
+        "overflow-checks=yes",
+        "/tmp/whippyunits-cga/probes/negative_odd_bound.rs",
+        "-L",
+        "dependency=/tmp/whippyunits-cga/probes",
+        "--extern",
+        "typenum=/tmp/whippyunits-cga/probes/libtypenum.rlib",
+        "--extern",
+        "cga_probe=/tmp/whippyunits-cga/probes/libcga_probe.rlib",
+        "-o",
+        "/tmp/whippyunits-cga/probes/negative_odd_bound"
+      ],
+      "cwd": "/tmp/whippyunits-cga/probes",
+      "expected": "rejection",
+      "patterns": [
+        "Bool<false>.*True|True.*Bool<false>"
+      ],
+      "exit_code": 1,
+      "allowed_error_codes": [
+        "E0277"
+      ],
+      "actual_error_codes": [
+        "E0277"
+      ],
+      "unclassified_error": false,
+      "compiler_crash": false,
+      "passed": true,
+      "log": "/tmp/whippyunits-cga/probes/negative_odd_bound.log",
+      "diagnostic": "error[E0277]: the trait bound `cga_probe::Bool<false>: True` is not satisfied\n  --> /tmp/whippyunits-cga/probes/negative_odd_bound.rs:1:75\n   |\n 1 | use cga_probe::{N,Halve}; fn witness<T: Halve>() {} fn main() { witness::<N<-3>>(); }\n   |                                                                           ^^^^^ the trait `True` is not implemented for `cga_probe::Bool<false>`\n   |\nhelp: the trait `True` is implemented for `cga_probe::Bool<true>`\n  --> /tmp/whippyunits-macro-compile-time/scripts/experiments/cga/probes/backend.rs:37:1\n   |\n37 | impl True for Bool<true> {}\n   | ^^^^^^^^^^^^^^^^^^^^^^^^\n   = note: required for `N<-3>` to implement `Halve`\nnote: required by a bound in `witness`\n  --> /tmp/whippyunits-cga/probes/negative_odd_bound.rs:1:41\n   |\n 1 | use cga_probe::{N,Halve}; fn witness<T: Halve>() {} fn main() { witness::<N<-3>>(); }\n   |                                         ^^^^^ required by this bound in `witness`\n\nerror: aborting due to 1 previous error\n\nFor more information about this error, try `rustc --explain E0277`.\n"
+    },
+    {
+      "name": "odd_dimension_bound",
+      "command": [
+        "rustc",
+        "+nightly-2026-09-13",
+        "--edition=2024",
+        "-C",
+        "overflow-checks=yes",
+        "/tmp/whippyunits-cga/probes/odd_dimension_bound.rs",
+        "-L",
+        "dependency=/tmp/whippyunits-cga/probes",
+        "--extern",
+        "typenum=/tmp/whippyunits-cga/probes/libtypenum.rlib",
+        "--extern",
+        "cga_probe=/tmp/whippyunits-cga/probes/libcga_probe.rlib",
+        "-o",
+        "/tmp/whippyunits-cga/probes/odd_dimension_bound"
+      ],
+      "cwd": "/tmp/whippyunits-cga/probes",
+      "expected": "rejection",
+      "patterns": [
+        "Bool<false>.*True|True.*Bool<false>"
+      ],
+      "exit_code": 1,
+      "allowed_error_codes": [
+        "E0277"
+      ],
+      "actual_error_codes": [
+        "E0277"
+      ],
+      "unclassified_error": false,
+      "compiler_crash": false,
+      "passed": true,
+      "log": "/tmp/whippyunits-cga/probes/odd_dimension_bound.log",
+      "diagnostic": "error[E0277]: the trait bound `cga_probe::Bool<false>: True` is not satisfied\n   --> /tmp/whippyunits-cga/probes/odd_dimension_bound.rs:1:64\n    |\n  1 | use cga_probe::{Unit,witness_root}; fn main() { witness_root::<Unit<1,0>>(); }\n    |                                                                ^^^^^^^^^ the trait `True` is not implemented for `cga_probe::Bool<false>`\n    |\nhelp: the trait `True` is implemented for `cga_probe::Bool<true>`\n   --> /tmp/whippyunits-macro-compile-time/scripts/experiments/cga/probes/backend.rs:37:1\n    |\n 37 | impl True for Bool<true> {}\n    | ^^^^^^^^^^^^^^^^^^^^^^^^\n    = note: required for `N<1>` to implement `Halve`\n    = note: required for `Unit<1, 0>` to implement `UnitSqrt`\nnote: required by a bound in `witness_root`\n   --> /tmp/whippyunits-macro-compile-time/scripts/experiments/cga/probes/backend.rs:101:24\n    |\n101 | pub fn witness_root<U: UnitSqrt>() {}\n    |                        ^^^^^^^^ required by this bound in `witness_root`\n\nerror: aborting due to 1 previous error\n\nFor more information about this error, try `rustc --explain E0277`.\n"
+    },
+    {
+      "name": "odd_scale_bound",
+      "command": [
+        "rustc",
+        "+nightly-2026-09-13",
+        "--edition=2024",
+        "-C",
+        "overflow-checks=yes",
+        "/tmp/whippyunits-cga/probes/odd_scale_bound.rs",
+        "-L",
+        "dependency=/tmp/whippyunits-cga/probes",
+        "--extern",
+        "typenum=/tmp/whippyunits-cga/probes/libtypenum.rlib",
+        "--extern",
+        "cga_probe=/tmp/whippyunits-cga/probes/libcga_probe.rlib",
+        "-o",
+        "/tmp/whippyunits-cga/probes/odd_scale_bound"
+      ],
+      "cwd": "/tmp/whippyunits-cga/probes",
+      "expected": "rejection",
+      "patterns": [
+        "Bool<false>.*True|True.*Bool<false>"
+      ],
+      "exit_code": 1,
+      "allowed_error_codes": [
+        "E0277"
+      ],
+      "actual_error_codes": [
+        "E0277"
+      ],
+      "unclassified_error": false,
+      "compiler_crash": false,
+      "passed": true,
+      "log": "/tmp/whippyunits-cga/probes/odd_scale_bound.log",
+      "diagnostic": "error[E0277]: the trait bound `cga_probe::Bool<false>: True` is not satisfied\n   --> /tmp/whippyunits-cga/probes/odd_scale_bound.rs:1:64\n    |\n  1 | use cga_probe::{Unit,witness_root}; fn main() { witness_root::<Unit<2,-3>>(); }\n    |                                                                ^^^^^^^^^^ the trait `True` is not implemented for `cga_probe::Bool<false>`\n    |\nhelp: the trait `True` is implemented for `cga_probe::Bool<true>`\n   --> /tmp/whippyunits-macro-compile-time/scripts/experiments/cga/probes/backend.rs:37:1\n    |\n 37 | impl True for Bool<true> {}\n    | ^^^^^^^^^^^^^^^^^^^^^^^^\n    = note: required for `N<-3>` to implement `Halve`\n    = note: required for `Unit<2, -3>` to implement `UnitSqrt`\nnote: required by a bound in `witness_root`\n   --> /tmp/whippyunits-macro-compile-time/scripts/experiments/cga/probes/backend.rs:101:24\n    |\n101 | pub fn witness_root<U: UnitSqrt>() {}\n    |                        ^^^^^^^^ required by this bound in `witness_root`\n\nerror: aborting due to 1 previous error\n\nFor more information about this error, try `rustc --explain E0277`.\n"
+    },
+    {
+      "name": "add_overflow",
+      "command": [
+        "rustc",
+        "+nightly-2026-09-13",
+        "--edition=2024",
+        "-C",
+        "overflow-checks=yes",
+        "/tmp/whippyunits-cga/probes/add_overflow.rs",
+        "-L",
+        "dependency=/tmp/whippyunits-cga/probes",
+        "--extern",
+        "typenum=/tmp/whippyunits-cga/probes/libtypenum.rlib",
+        "--extern",
+        "cga_probe=/tmp/whippyunits-cga/probes/libcga_probe.rlib",
+        "-o",
+        "/tmp/whippyunits-cga/probes/add_overflow"
+      ],
+      "cwd": "/tmp/whippyunits-cga/probes",
+      "expected": "rejection",
+      "patterns": [
+        "E0080",
+        "overflow"
+      ],
+      "exit_code": 1,
+      "allowed_error_codes": [
+        "E0080"
+      ],
+      "actual_error_codes": [
+        "E0080"
+      ],
+      "unclassified_error": false,
+      "compiler_crash": false,
+      "passed": true,
+      "log": "/tmp/whippyunits-cga/probes/add_overflow.log",
+      "diagnostic": "error[E0080]: attempt to compute `i16::MAX + 1_i16`, which would overflow\n  --> /tmp/whippyunits-macro-compile-time/scripts/experiments/cga/probes/backend.rs:15:50\n   |\n15 | pub const ADD<const A: i16, const B: i16>: i16 = A + B;\n   |                                                  ^^^^^ evaluation of `cga_probe::ADD::<i16::MAX, 1>` failed here\n\nerror: aborting due to 1 previous error\n\nFor more information about this error, try `rustc --explain E0080`.\n"
+    },
+    {
+      "name": "subtract_overflow",
+      "command": [
+        "rustc",
+        "+nightly-2026-09-13",
+        "--edition=2024",
+        "-C",
+        "overflow-checks=yes",
+        "/tmp/whippyunits-cga/probes/subtract_overflow.rs",
+        "-L",
+        "dependency=/tmp/whippyunits-cga/probes",
+        "--extern",
+        "typenum=/tmp/whippyunits-cga/probes/libtypenum.rlib",
+        "--extern",
+        "cga_probe=/tmp/whippyunits-cga/probes/libcga_probe.rlib",
+        "-o",
+        "/tmp/whippyunits-cga/probes/subtract_overflow"
+      ],
+      "cwd": "/tmp/whippyunits-cga/probes",
+      "expected": "rejection",
+      "patterns": [
+        "E0080",
+        "overflow"
+      ],
+      "exit_code": 1,
+      "allowed_error_codes": [
+        "E0080"
+      ],
+      "actual_error_codes": [
+        "E0080"
+      ],
+      "unclassified_error": false,
+      "compiler_crash": false,
+      "passed": true,
+      "log": "/tmp/whippyunits-cga/probes/subtract_overflow.log",
+      "diagnostic": "error[E0080]: attempt to compute `i16::MIN - 1_i16`, which would overflow\n  --> /tmp/whippyunits-macro-compile-time/scripts/experiments/cga/probes/backend.rs:16:50\n   |\n16 | pub const SUB<const A: i16, const B: i16>: i16 = A - B;\n   |                                                  ^^^^^ evaluation of `cga_probe::SUB::<i16::MIN, 1>` failed here\n\nerror: aborting due to 1 previous error\n\nFor more information about this error, try `rustc --explain E0080`.\n"
+    },
+    {
+      "name": "negate_overflow",
+      "command": [
+        "rustc",
+        "+nightly-2026-09-13",
+        "--edition=2024",
+        "-C",
+        "overflow-checks=yes",
+        "/tmp/whippyunits-cga/probes/negate_overflow.rs",
+        "-L",
+        "dependency=/tmp/whippyunits-cga/probes",
+        "--extern",
+        "typenum=/tmp/whippyunits-cga/probes/libtypenum.rlib",
+        "--extern",
+        "cga_probe=/tmp/whippyunits-cga/probes/libcga_probe.rlib",
+        "-o",
+        "/tmp/whippyunits-cga/probes/negate_overflow"
+      ],
+      "cwd": "/tmp/whippyunits-cga/probes",
+      "expected": "rejection",
+      "patterns": [
+        "E0080",
+        "overflow"
+      ],
+      "exit_code": 1,
+      "allowed_error_codes": [
+        "E0080"
+      ],
+      "actual_error_codes": [
+        "E0080"
+      ],
+      "unclassified_error": false,
+      "compiler_crash": false,
+      "passed": true,
+      "log": "/tmp/whippyunits-cga/probes/negate_overflow.log",
+      "diagnostic": "error[E0080]: attempt to negate `i16::MIN`, which would overflow\n  --> /tmp/whippyunits-macro-compile-time/scripts/experiments/cga/probes/backend.rs:17:36\n   |\n17 | pub const NEG<const A: i16>: i16 = -A;\n   |                                    ^^ evaluation of `cga_probe::NEG::<i16::MIN>` failed here\n\nerror: aborting due to 1 previous error\n\nFor more information about this error, try `rustc --explain E0080`.\n"
+    },
+    {
+      "name": "wrong_canonical_output",
+      "command": [
+        "rustc",
+        "+nightly-2026-09-13",
+        "--edition=2024",
+        "-C",
+        "overflow-checks=yes",
+        "/tmp/whippyunits-cga/probes/wrong_canonical_output.rs",
+        "-L",
+        "dependency=/tmp/whippyunits-cga/probes",
+        "--extern",
+        "typenum=/tmp/whippyunits-cga/probes/libtypenum.rlib",
+        "--extern",
+        "cga_probe=/tmp/whippyunits-cga/probes/libcga_probe.rlib",
+        "-o",
+        "/tmp/whippyunits-cga/probes/wrong_canonical_output"
+      ],
+      "cwd": "/tmp/whippyunits-cga/probes",
+      "expected": "rejection",
+      "patterns": [
+        "E0308",
+        "5.*6|6.*5"
+      ],
+      "exit_code": 1,
+      "allowed_error_codes": [
+        "E0308"
+      ],
+      "actual_error_codes": [
+        "E0308"
+      ],
+      "unclassified_error": false,
+      "compiler_crash": false,
+      "passed": true,
+      "log": "/tmp/whippyunits-cga/probes/wrong_canonical_output.log",
+      "diagnostic": "error[E0308]: mismatched types\n --> /tmp/whippyunits-cga/probes/wrong_canonical_output.rs:1:45\n  |\n1 | use cga_probe::N; fn main() { let _: N<6> = N::<2> + N::<3>; }\n  |                                      ----   ^^^^^^^^^^^^^^^ expected `6`, found `5`\n  |                                      |\n  |                                      expected due to this\n  |\n  = note: expected struct `N<6>`\n             found struct `N<5>`\n\nerror: aborting due to 1 previous error\n\nFor more information about this error, try `rustc --explain E0308`.\n"
+    },
+    {
+      "name": "wrong_equality_dispatch",
+      "command": [
+        "rustc",
+        "+nightly-2026-09-13",
+        "--edition=2024",
+        "-C",
+        "overflow-checks=yes",
+        "/tmp/whippyunits-cga/probes/wrong_equality_dispatch.rs",
+        "-L",
+        "dependency=/tmp/whippyunits-cga/probes",
+        "--extern",
+        "typenum=/tmp/whippyunits-cga/probes/libtypenum.rlib",
+        "--extern",
+        "cga_probe=/tmp/whippyunits-cga/probes/libcga_probe.rlib",
+        "-o",
+        "/tmp/whippyunits-cga/probes/wrong_equality_dispatch"
+      ],
+      "cwd": "/tmp/whippyunits-cga/probes",
+      "expected": "rejection",
+      "patterns": [
+        "E0308",
+        "Uniform",
+        "Mixed"
+      ],
+      "exit_code": 1,
+      "allowed_error_codes": [
+        "E0308"
+      ],
+      "actual_error_codes": [
+        "E0308"
+      ],
+      "unclassified_error": false,
+      "compiler_crash": false,
+      "passed": true,
+      "log": "/tmp/whippyunits-cga/probes/wrong_equality_dispatch.log",
+      "diagnostic": "error[E0308]: mismatched types\n --> /tmp/whippyunits-cga/probes/wrong_equality_dispatch.rs:1:98\n  |\n1 | ...{ let _: std::marker::PhantomData<Uniform> = std::marker::PhantomData::<<Unit<1,0> as AutoReduce<Unit<2,0>>>::Output>; }\n  |             ---------------------------------   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `PhantomData<Uniform>`, found `PhantomData<Mixed>`\n  |             |\n  |             expected due to this\n  |\n  = note: expected struct `PhantomData<Uniform>`\n             found struct `PhantomData<Mixed>`\n\nerror: aborting due to 1 previous error\n\nFor more information about this error, try `rustc --explain E0308`.\n"
+    },
+    {
+      "name": "generic_zero_identity",
+      "command": [
+        "rustc",
+        "+nightly-2026-09-13",
+        "--edition=2024",
+        "-C",
+        "overflow-checks=yes",
+        "/tmp/whippyunits-cga/probes/generic_zero_identity.rs",
+        "-L",
+        "dependency=/tmp/whippyunits-cga/probes",
+        "--extern",
+        "typenum=/tmp/whippyunits-cga/probes/libtypenum.rlib",
+        "--extern",
+        "cga_probe=/tmp/whippyunits-cga/probes/libcga_probe.rlib",
+        "-o",
+        "/tmp/whippyunits-cga/probes/generic_zero_identity"
+      ],
+      "cwd": "/tmp/whippyunits-cga/probes",
+      "expected": "rejection",
+      "patterns": [
+        "E0284|E0308",
+        "N<A>"
+      ],
+      "exit_code": 1,
+      "allowed_error_codes": [
+        "E0284",
+        "E0308"
+      ],
+      "actual_error_codes": [
+        "E0284"
+      ],
+      "unclassified_error": false,
+      "compiler_crash": false,
+      "passed": true,
+      "log": "/tmp/whippyunits-cga/probes/generic_zero_identity.log",
+      "diagnostic": "error[E0284]: type annotations needed: cannot satisfy `<N<A> as Add<N<0>>>::Output == N<A>`\n --> /tmp/whippyunits-cga/probes/generic_zero_identity.rs:1:62\n  |\n1 | use cga_probe::N; fn zero<const A: i16>(a: N<A>) -> N<A> { a + N::<0> } fn main() {}\n  |                                                              ^ cannot satisfy `<N<A> as Add<N<0>>>::Output == N<A>`\n\nerror: aborting due to 1 previous error\n\nFor more information about this error, try `rustc --explain E0284`.\n"
+    },
+    {
+      "name": "overflow_bound_only",
+      "command": [
+        "rustc",
+        "+nightly-2026-09-13",
+        "--edition=2024",
+        "/tmp/whippyunits-cga/probes/overflow_bound_only.rs",
+        "-L",
+        "dependency=/tmp/whippyunits-cga/probes",
+        "--extern",
+        "typenum=/tmp/whippyunits-cga/probes/libtypenum.rlib",
+        "--extern",
+        "cga_probe=/tmp/whippyunits-cga/probes/libcga_probe.rlib",
+        "-o",
+        "/tmp/whippyunits-cga/probes/overflow_bound_only"
+      ],
+      "cwd": "/tmp/whippyunits-cga/probes",
+      "expected": "success",
+      "patterns": [],
+      "exit_code": 0,
+      "allowed_error_codes": [],
+      "actual_error_codes": [],
+      "unclassified_error": false,
+      "compiler_crash": false,
+      "passed": true,
+      "log": "/tmp/whippyunits-cga/probes/overflow_bound_only.log",
+      "execution": {
+        "command": [
+          "/tmp/whippyunits-cga/probes/overflow_bound_only"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "diagnostic": ""
+    }
+  ],
+  "typenum_source": "/home/bc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/typenum-1.20.1",
+  "typenum_sources_sha256": {
+    "src/array.rs": "e7112e04302b9df5491e69fdf3a2b765de18f3d7cf098702051c79e8a1e978f2",
+    "src/bit.rs": "1d2a81b9dcc3fbaaad0df29e5cbd4595b02fdc3efbc08ec35932ea521ac6619c",
+    "src/gen/consts.rs": "9aa17739639f2e3f516cd9136e05beb19492491431df71a1e2aa4e3ec78e176c",
+    "src/gen/generic_const_mappings.rs": "891e3a1917e39eebd1306765158c26c4ff2d9a85b197844100638591ec6658fb",
+    "src/gen/op.rs": "b91eadcee885bc0ab929b64492f7b04641cde71ddf8e9aa455d324f1723c61de",
+    "src/gen.rs": "77e44de90067aa126d3697e514c8641af67eb9c509399bb6fcb551071d7e64ea",
+    "src/int.rs": "62412ed76dfd63e76e5e0252ee950914629443d4023a1031c511191588d95694",
+    "src/lib.rs": "0cf99cbd6f5597dd42618d603e1f453f6484e01e8f6e72d328ca5206191bc9f3",
+    "src/marker_traits.rs": "5a58d16edc16853b4b793a6b46068d926911273aa9dc57fd9dc64df77986b7dd",
+    "src/operator_aliases.rs": "4666925ecdd4321e28d9654bad61e34defdba7fc1e8fa7b033b2283e4b542b93",
+    "src/private.rs": "c7008d1cd4215e0fc58897ea885058879e0c700a2fe0be46784f20d612753a48",
+    "src/tuple.rs": "b2a3d3906a446e5ce96a9da6da511c256475084cc78205c97c11caf7634db57f",
+    "src/type_operators.rs": "c3ea12ffc00d1d438db095d48abae94af9dd46adf0b25c90871c1c4d6f15ae7b",
+    "src/uint.rs": "525f229da5bd7cbef775b478821b5422497ed3eea319b712fee137a6ad84dd40",
+    "tests/generated.rs": "3034ec2bce8abe6c70d1d0aa87bec56f6c5f95db16dde365377973f7d8f3911d"
+  },
+  "probe_sources_sha256": {
+    "backend.rs": "697348a78120255689cde89f8c434fdb1df9a5818fd1e7c9d3fe065c3e06b700",
+    "positive.rs": "e5547686a2c8457b34e5b1c96138a31a08460af1ea09fafa18a6371f7042c35b"
+  },
+  "generated_sources_sha256": {
+    "odd_number_bound.rs": "c9b22d7ba6271d3ed3e2184815589b9f91111f276c0c5bff7a37a124e8527aec",
+    "negative_odd_bound.rs": "b91626e94e0ff1a393437e824dbdfdc95d87975ec89cf3e462e90eebbbaddc3b",
+    "odd_dimension_bound.rs": "2196a8fa6ac454a5a186183c0651e875fc4901692ab0506cb836031e8e3c3f3b",
+    "odd_scale_bound.rs": "1afb847937a4a566da26cab442e00d32b1a62affbb3af0be56b4128c55c1f67a",
+    "add_overflow.rs": "6b19fcc4f434a2498e7b6080d63b91525345e89f2ba1fdf5c56f95aba0dd5d54",
+    "subtract_overflow.rs": "9f856e73dbba3860b533a89d301e95165a26f9355f26405474076e8f71fb519e",
+    "negate_overflow.rs": "89b2777a89c103a7d7eaa4467e0909aeb53421186502656a15b9be71ce98eac2",
+    "wrong_canonical_output.rs": "5661c942ac2ffcf515c1d26bf64f01bb6a8de8e453861ec7006b3a1f831cb2ea",
+    "wrong_equality_dispatch.rs": "fe3edac7b9e8abf86e2647af0697dde345141ac4934a4e414a3908db531a909e",
+    "generic_zero_identity.rs": "9d26da4649af46aa6146f26bd54c77ecbd1522fdd067085d581b7bb3c6e8848d",
+    "overflow_bound_only.rs": "f830424179b23ac5d6072deb5878989745f79f74e31cbd769dc8771444fdade2"
+  },
+  "passed": true
+}

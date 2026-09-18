@@ -59,9 +59,20 @@ pub use uniform::{UniformUnitMatrix, rescale_uniform_matrix};
 pub use crate::{
     __wa_na_block_matrix as block_matrix, __wa_na_gauge as gauge,
     __wa_na_mixed_unit_matrix as mixed_unit_matrix, __wa_na_unblock_matrix as unblock_matrix,
-    __wa_na_uniform_unit_matrix as uniform_unit_matrix, __wa_na_vqty as vqty,
-    __wa_na_zeros as zeros,
+    __wa_na_uniform_unit_matrix as uniform_unit_matrix, __wa_na_zeros as zeros, vqty,
 };
+
+// A function call keeps the shape assertion out of the field's syntax tree
+// when `expand_units` expands vqty! ahead of generic derives.
+#[doc(hidden)]
+#[track_caller]
+pub const fn __vqty_count(count: usize, units: usize) -> usize {
+    assert!(
+        count == units,
+        "vqty!: the count does not match the number of units in the list",
+    );
+    count
+}
 
 // The `where`-clause–writing attributes. See the module-level "Generic-code
 // attributes" section for what they do and why they come from the adapter. Each

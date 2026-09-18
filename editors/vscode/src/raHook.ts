@@ -133,7 +133,7 @@ export class RustAnalyzerHook implements vscode.Disposable {
       const hover = await (originals.provideHover
         ? originals.provideHover(document, position, token, next)
         : next(document, position, token));
-      return rewriter.hover(hover);
+      return rewriter.hover(hover, document, position);
     };
 
     middleware.provideInlayHints = async (document, range, token, next) => {

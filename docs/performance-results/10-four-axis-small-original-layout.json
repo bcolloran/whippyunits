@@ -1,0 +1,241 @@
+{
+  "scope": "both",
+  "stress": false,
+  "incremental": false,
+  "dependencies": "warm",
+  "fixed_fixture_path": "/tmp/whippyunits-four-axis-measure/active",
+  "shared_target": "/tmp/whippyunits-four-axis-measure/benchmark-target",
+  "toolchain": "1.98.1",
+  "base_commit": "b45de40f08f9b65277cf4a4a924f3afb7e0cd86d",
+  "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: x86_64-unknown-linux-gnu\nrelease: 1.98.1\nLLVM version: 22.1.8\n",
+  "inherited_environment": {
+    "RUSTFLAGS": null,
+    "CARGO_ENCODED_RUSTFLAGS": null,
+    "RUSTC_WRAPPER": null,
+    "RUSTC_WORKSPACE_WRAPPER": null,
+    "CARGO_BUILD_JOBS": null
+  },
+  "rss_method": "GNU time %M maximum process RSS, Linux KiB; not concurrent process-tree sum",
+  "samples": [
+    {
+      "rep": 0,
+      "variant": "eight",
+      "scope": "engine-consumer",
+      "seconds": 0.2344104369985871,
+      "peak_single_process_rss_kib": 116944
+    },
+    {
+      "rep": 0,
+      "variant": "eight",
+      "scope": "consumer",
+      "seconds": 0.12700134300393984,
+      "peak_single_process_rss_kib": 99160
+    },
+    {
+      "rep": 0,
+      "variant": "four",
+      "scope": "engine-consumer",
+      "seconds": 0.20780264597851783,
+      "peak_single_process_rss_kib": 116616
+    },
+    {
+      "rep": 0,
+      "variant": "four",
+      "scope": "consumer",
+      "seconds": 0.13047008399735205,
+      "peak_single_process_rss_kib": 98420
+    },
+    {
+      "rep": 1,
+      "variant": "four",
+      "scope": "engine-consumer",
+      "seconds": 0.2079624260077253,
+      "peak_single_process_rss_kib": 116536
+    },
+    {
+      "rep": 1,
+      "variant": "four",
+      "scope": "consumer",
+      "seconds": 0.13836879399605095,
+      "peak_single_process_rss_kib": 98284
+    },
+    {
+      "rep": 1,
+      "variant": "eight",
+      "scope": "engine-consumer",
+      "seconds": 0.22441925699240528,
+      "peak_single_process_rss_kib": 117652
+    },
+    {
+      "rep": 1,
+      "variant": "eight",
+      "scope": "consumer",
+      "seconds": 0.12575379299232736,
+      "peak_single_process_rss_kib": 99652
+    },
+    {
+      "rep": 2,
+      "variant": "eight",
+      "scope": "engine-consumer",
+      "seconds": 0.2221895870170556,
+      "peak_single_process_rss_kib": 117268
+    },
+    {
+      "rep": 2,
+      "variant": "eight",
+      "scope": "consumer",
+      "seconds": 0.12549902399769053,
+      "peak_single_process_rss_kib": 99488
+    },
+    {
+      "rep": 2,
+      "variant": "four",
+      "scope": "engine-consumer",
+      "seconds": 0.19645987599506043,
+      "peak_single_process_rss_kib": 116864
+    },
+    {
+      "rep": 2,
+      "variant": "four",
+      "scope": "consumer",
+      "seconds": 0.11329054299858399,
+      "peak_single_process_rss_kib": 98656
+    },
+    {
+      "rep": 3,
+      "variant": "four",
+      "scope": "engine-consumer",
+      "seconds": 0.20168508600909263,
+      "peak_single_process_rss_kib": 116728
+    },
+    {
+      "rep": 3,
+      "variant": "four",
+      "scope": "consumer",
+      "seconds": 0.12174789400887676,
+      "peak_single_process_rss_kib": 98180
+    },
+    {
+      "rep": 3,
+      "variant": "eight",
+      "scope": "engine-consumer",
+      "seconds": 0.19634715499705635,
+      "peak_single_process_rss_kib": 118072
+    },
+    {
+      "rep": 3,
+      "variant": "eight",
+      "scope": "consumer",
+      "seconds": 0.11513717399793677,
+      "peak_single_process_rss_kib": 99700
+    },
+    {
+      "rep": 4,
+      "variant": "eight",
+      "scope": "engine-consumer",
+      "seconds": 0.2072443859942723,
+      "peak_single_process_rss_kib": 117976
+    },
+    {
+      "rep": 4,
+      "variant": "eight",
+      "scope": "consumer",
+      "seconds": 0.12146536298678257,
+      "peak_single_process_rss_kib": 99488
+    },
+    {
+      "rep": 4,
+      "variant": "four",
+      "scope": "engine-consumer",
+      "seconds": 0.2109977359941695,
+      "peak_single_process_rss_kib": 116796
+    },
+    {
+      "rep": 4,
+      "variant": "four",
+      "scope": "consumer",
+      "seconds": 0.11644376401090994,
+      "peak_single_process_rss_kib": 98572
+    },
+    {
+      "rep": 5,
+      "variant": "four",
+      "scope": "engine-consumer",
+      "seconds": 0.2011113160115201,
+      "peak_single_process_rss_kib": 116516
+    },
+    {
+      "rep": 5,
+      "variant": "four",
+      "scope": "consumer",
+      "seconds": 0.11213035401306115,
+      "peak_single_process_rss_kib": 98732
+    },
+    {
+      "rep": 5,
+      "variant": "eight",
+      "scope": "engine-consumer",
+      "seconds": 0.20657678600400686,
+      "peak_single_process_rss_kib": 117628
+    },
+    {
+      "rep": 5,
+      "variant": "eight",
+      "scope": "consumer",
+      "seconds": 0.1379860140150413,
+      "peak_single_process_rss_kib": 99488
+    },
+    {
+      "rep": 6,
+      "variant": "eight",
+      "scope": "engine-consumer",
+      "seconds": 0.21229450701503083,
+      "peak_single_process_rss_kib": 118056
+    },
+    {
+      "rep": 6,
+      "variant": "eight",
+      "scope": "consumer",
+      "seconds": 0.12477659399155527,
+      "peak_single_process_rss_kib": 99696
+    },
+    {
+      "rep": 6,
+      "variant": "four",
+      "scope": "engine-consumer",
+      "seconds": 0.19328983599552885,
+      "peak_single_process_rss_kib": 116956
+    },
+    {
+      "rep": 6,
+      "variant": "four",
+      "scope": "consumer",
+      "seconds": 0.11574087300687097,
+      "peak_single_process_rss_kib": 98964
+    }
+  ],
+  "summaries": {
+    "engine-consumer": {
+      "medians_seconds": {
+        "eight": 0.21229450701503083,
+        "four": 0.20168508600909263
+      },
+      "medians_peak_single_process_rss_kib": {
+        "eight": 117652,
+        "four": 116728
+      },
+      "candidate_reduction_percent": 4.997501421545037
+    },
+    "consumer": {
+      "medians_seconds": {
+        "eight": 0.12549902399769053,
+        "four": 0.11644376401090994
+      },
+      "medians_peak_single_process_rss_kib": {
+        "eight": 99488,
+        "four": 98572
+      },
+      "candidate_reduction_percent": 7.215402716555963
+    }
+  }
+}

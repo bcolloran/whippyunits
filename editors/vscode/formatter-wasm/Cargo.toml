@@ -15,3 +15,9 @@ crate-type = ["cdylib", "rlib"]
 wasm-bindgen = "0.2"
 # The proxy's formatting library without its binary-only dependencies (tokio etc.)
 whippyunits-lsp-proxy = { path = "../../../lsp-proxy", default-features = false }
+# For computing a type straight from a `qty!(…)` invocation's arguments
+# Formatting needs alloc and the core unit metadata, not generated catalogs.
+whippyunits = { path = "../../..", default-features = false, features = ["alloc"] }
+whippyunits-core = { path = "../../../whippyunits-core", default-features = false }
+syn = { version = "2.0", features = ["full", "parsing", "printing"] }
+quote = "1.0"

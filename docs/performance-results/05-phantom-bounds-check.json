@@ -1,0 +1,102 @@
+{
+  "baseline": "9748b3c",
+  "candidate_head": "9748b3c5b2aa3f0f17b3d8f82fb1d5fedaf92d23",
+  "candidate_diff": " src/quantity.rs | 39 +++++++++++++++++++++------------------\n 1 file changed, 21 insertions(+), 18 deletions(-)\n",
+  "commands": {
+    "baseline": [
+      "cargo",
+      "check",
+      "--offline",
+      "--locked",
+      "-p",
+      "whippyunits",
+      "--lib",
+      "--no-default-features",
+      "--features",
+      "std,units-si-dynamics"
+    ],
+    "candidate": [
+      "cargo",
+      "check",
+      "--offline",
+      "--locked",
+      "-p",
+      "whippyunits",
+      "--lib",
+      "--no-default-features",
+      "--features",
+      "std,units-si-dynamics"
+    ]
+  },
+  "clean_command": [
+    "cargo",
+    "clean",
+    "--offline",
+    "-p",
+    "whippyunits-core",
+    "-p",
+    "whippyunits-proc-macros",
+    "-p",
+    "whippyunits"
+  ],
+  "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)",
+  "scope": "core, proc-macro and root library check; warm third-party dependencies; incremental disabled",
+  "scratch": "/tmp/whippyunits-experiments/05-phantom-bounds-check",
+  "samples": [
+    {
+      "variant": "baseline",
+      "cycle": 0,
+      "seconds": 2.1558303240017267
+    },
+    {
+      "variant": "candidate",
+      "cycle": 0,
+      "seconds": 2.155901434001862
+    },
+    {
+      "variant": "candidate",
+      "cycle": 1,
+      "seconds": 2.1512646839983063
+    },
+    {
+      "variant": "baseline",
+      "cycle": 1,
+      "seconds": 2.1432386439992115
+    },
+    {
+      "variant": "baseline",
+      "cycle": 2,
+      "seconds": 2.2500318170059472
+    },
+    {
+      "variant": "candidate",
+      "cycle": 2,
+      "seconds": 2.224574437001138
+    },
+    {
+      "variant": "candidate",
+      "cycle": 3,
+      "seconds": 2.143204213003628
+    },
+    {
+      "variant": "baseline",
+      "cycle": 3,
+      "seconds": 2.167490234991419
+    },
+    {
+      "variant": "baseline",
+      "cycle": 4,
+      "seconds": 2.138880913000321
+    },
+    {
+      "variant": "candidate",
+      "cycle": 4,
+      "seconds": 2.148734684000374
+    }
+  ],
+  "medians_seconds": {
+    "baseline": 2.1558303240017267,
+    "candidate": 2.1512646839983063
+  },
+  "reduction_percent": 0.21178104568756462
+}

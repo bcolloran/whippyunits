@@ -95,7 +95,8 @@ Click it for the menu: toggle rewriting, switch between compact (`Quantity<m, f6
 ## How it works, and what can break
 
 - The rust-analyzer extension exports its `vscode-languageclient` client, and that library consults `client.middleware` on every request. This extension wraps rust-analyzer's `provideHover`, `provideInlayHints`, `resolveInlayHint` and `handleDiagnostics` middleware, calling the originals first and rewriting what they return. When rust-analyzer restarts it creates a new client; the extension notices and re-hooks.
-- The rewriting is done by the `lsp-proxy` crate's formatting code compiled to WebAssembly ([`formatter-wasm/`](formatter-wasm)), so hovers look the same as with the proxy or the `whippyunits-pretty` CLI. It is textual: it recognises `Quantity<Scale<...>, Dimension<...>, T>` in rust-analyzer's output and has no access to rust-analyzer's type information.
+- The rewriting is done by the `lsp-proxy` crate's formatting code compiled to WebAssembly ([`formatter-wasm/`](formatter-wasm)), so hovers look the same as with the proxy or the `whippyunits-pretty` CLI. It is textual: it recognises `Quantity<Unit<Scale<...>, Dimension<...>>, T>` in rust-analyzer's output and has no access to rust-analyzer's type information.
+- Hovering a struct *field* declared with `qty!(…)` is a special case: rust-analyzer shows the declared type, which is `qty!`'s `<Helper<…> as GetSecondGeneric>::Type` projection with negative exponents rendered as `{const}`. The formatter strips the projection, and the extension recovers the exponents by parsing the `qty!(…)` on the hovered line — so the hover reads `Quantity<(m·s⁻¹), f32>` rather than `_T<{const}>`.
 - rust-analyzer marks the exported `client` as an unstable API. If a rust-analyzer update removes or changes it, this extension shows `⚠` in the status bar and rust-analyzer's output is left as-is — nothing else is affected.
 
 ## Development

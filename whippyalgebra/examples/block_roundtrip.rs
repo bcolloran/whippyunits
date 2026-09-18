@@ -6,14 +6,43 @@
 //! each block has a fixed unit.
 //!
 //!
-use whippyalgebra::dims;
 use whippyalgebra::nalgebra::{
     MixedUnitMatrix, SMatrix, block_matrix, gauge, mixed_unit_matrix, unblock_matrix,
 };
+use whippyalgebra::{dims, vqty};
 use whippyunits::quantity;
 
 type M3 = SMatrix<f64, 3, 3>;
 type Mixed3 = MixedUnitMatrix<dims![m, m, s], dims![s, s, K], M3>;
+
+use std::fmt::Debug;
+
+use num_traits::NumCast;
+use whippyunits::qty;
+
+#[whippyunits::expand_units]
+#[derive(Default, Clone, Copy, Debug)]
+struct Inner<T: Default + Clone + Copy + Debug + NumCast> {
+    pub force: qty!(kg * m / s ^ 2, T),
+}
+
+#[whippyunits::expand_units]
+#[derive(Default, Clone, Copy, Debug)]
+struct Test<T: Default + Clone + Copy + Debug + NumCast + PartialEq + 'static> {
+    pub plain_number: T,
+    pub inner: Inner<T>,
+    pub vel: qty!(m / s, T),
+    pub vel32: qty!(m / s, f32),
+    pub acc: vqty!(2, m / s ^ 2, T),
+}
+
+struct TestNoGeneric {
+    pub plain_number: f32,
+    pub vel: qty!(m / s),
+    pub vel32: qty!(m / s, f32),
+}
+
+// struct TestTup<T: Default + Clone + Copy + Debug + NumCast>(qty!(m / s, T),vqty!(2, kg*m^s / s, T), vqty!(3, N, T));
 
 fn main() {
     // A mixed 3x3 over rows [m, m, s] and columns [s, s, K]: entry (i, j) has

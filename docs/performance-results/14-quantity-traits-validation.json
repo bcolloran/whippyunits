@@ -1,0 +1,116 @@
+{
+  "scope": "Correctness validation, not timed performance",
+  "stable_toolchain": "1.98.1",
+  "stable_tests": [
+    "test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+    "test result: ok. 36 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+    "test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+    "test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+  ],
+  "stable_examples": "all root examples pass; including generic and rescale inference",
+  "stable_commands": [
+    "cargo +1.98.1 test --offline --locked -p whippyunits --lib --test arithmetic_tests --test custom_storage_types --test unit_trait_arithmetic -j2",
+    "cargo +1.98.1 check --offline --locked -p whippyunits --examples -j2"
+  ],
+  "stable_negative": [
+    {
+      "case": "brand_mul",
+      "command": [
+        "cargo",
+        "+1.98.1",
+        "check",
+        "--offline",
+        "--manifest-path",
+        "/tmp/whippyunits-cga/quantity-traits-probe/Cargo.toml",
+        "-j2"
+      ],
+      "returncode": 101,
+      "rejected_by_operator_bound": true
+    },
+    {
+      "case": "brand_div",
+      "command": [
+        "cargo",
+        "+1.98.1",
+        "check",
+        "--offline",
+        "--manifest-path",
+        "/tmp/whippyunits-cga/quantity-traits-probe/Cargo.toml",
+        "-j2"
+      ],
+      "returncode": 101,
+      "rejected_by_operator_bound": true
+    },
+    {
+      "case": "storage_mul",
+      "command": [
+        "cargo",
+        "+1.98.1",
+        "check",
+        "--offline",
+        "--manifest-path",
+        "/tmp/whippyunits-cga/quantity-traits-probe/Cargo.toml",
+        "-j2"
+      ],
+      "returncode": 101,
+      "rejected_by_operator_bound": true
+    },
+    {
+      "case": "storage_div",
+      "command": [
+        "cargo",
+        "+1.98.1",
+        "check",
+        "--offline",
+        "--manifest-path",
+        "/tmp/whippyunits-cga/quantity-traits-probe/Cargo.toml",
+        "-j2"
+      ],
+      "returncode": 101,
+      "rejected_by_operator_bound": true
+    }
+  ],
+  "native": {
+    "purpose": "native quantity Unit-trait delegation correctness; no timing claim",
+    "repo": "/tmp/whippyunits-cga/snapshots/cga-traits",
+    "base": "/tmp/whippyunits-cga/snapshots/cga-v1",
+    "command": [
+      "cargo",
+      "+nightly-2026-09-13",
+      "test",
+      "--offline",
+      "--locked",
+      "-p",
+      "whippyunits",
+      "--features",
+      "nightly-gca",
+      "--lib",
+      "--test",
+      "arithmetic_tests",
+      "--test",
+      "custom_storage_types",
+      "--test",
+      "unit_trait_arithmetic",
+      "-j2"
+    ],
+    "environment": {
+      "CARGO_TARGET_DIR": "/tmp/whippyunits-cga/quantity-traits-native-target"
+    },
+    "exit_code": 0,
+    "results": [
+      "ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+      "ok. 36 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+      "ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+      "ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+    ],
+    "all_passed": true,
+    "log": "/tmp/whippyunits-cga/quantity-traits-native-validation.log",
+    "log_sha256": "4ccc5bcfb0e38a940910079d57c6062d70e4952cf90a860b772cb3628a2dfb28",
+    "rustc": "rustc 1.100.0-nightly (809936eac 2026-09-12)\nbinary: rustc\ncommit-hash: 809936eac66c547a5127ce1da805f0d3a6789b98\ncommit-date: 2026-09-12\nhost: x86_64-unknown-linux-gnu\nrelease: 1.100.0-nightly\nLLVM version: 23.1.1\n",
+    "changed_files": [
+      "src/api.rs",
+      "tests/unit_trait_arithmetic.rs"
+    ]
+  },
+  "adoption_status": "Not adopted: stable dependency-chain median +3.0%, all three samples slower than paired baseline. Preserved as scripts/experiments/cga/quantity-traits.patch."
+}

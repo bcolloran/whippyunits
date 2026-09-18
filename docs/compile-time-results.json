@@ -1,0 +1,136 @@
+{
+  "toolchain": "rustc 1.98.1 (48a229cea 2026-09-01)",
+  "profile": "dev, incremental=false",
+  "measurement": "root rustc total; dependency compilation excluded",
+  "command": "RUSTC_BOOTSTRAP=1 cargo rustc --offline -p whippyunits --lib [feature arguments] -- -Ztime-passes",
+  "method": "Three forced library recompilations per variant, sequentially, without CPU pinning. std and serde enabled in every variant. Sources touched to force recompilation; no code content changed between runs.",
+  "baseline": "Pre-optimization audit snapshot including the earlier vqty changes; baseline unit catalogs were unconditional.",
+  "implementation_commit": "607ab59702f43178180729b795d5518597865be4",
+  "variants": {
+    "baseline": {
+      "features": [
+        "std",
+        "serde"
+      ],
+      "median_seconds": 9.268,
+      "runs": [
+        {
+          "compiler_seconds": 9.083,
+          "cargo_wall_seconds": 13.858,
+          "expansion_seconds": 0.584,
+          "type_check_seconds": 2.754,
+          "mir_borrow_check_seconds": 0.878
+        },
+        {
+          "compiler_seconds": 9.268,
+          "cargo_wall_seconds": 9.357,
+          "expansion_seconds": 0.576,
+          "type_check_seconds": 2.833,
+          "mir_borrow_check_seconds": 0.888
+        },
+        {
+          "compiler_seconds": 9.434,
+          "cargo_wall_seconds": 9.527,
+          "expansion_seconds": 0.595,
+          "type_check_seconds": 2.895,
+          "mir_borrow_check_seconds": 0.919
+        }
+      ]
+    },
+    "full": {
+      "features": [
+        "std",
+        "serde",
+        "all-units",
+        "literals"
+      ],
+      "median_seconds": 8.049,
+      "runs": [
+        {
+          "compiler_seconds": 8.023,
+          "cargo_wall_seconds": 9.794,
+          "expansion_seconds": 0.48,
+          "type_check_seconds": 2.018,
+          "mir_borrow_check_seconds": 0.79
+        },
+        {
+          "compiler_seconds": 8.244,
+          "cargo_wall_seconds": 8.354,
+          "expansion_seconds": 0.492,
+          "type_check_seconds": 2.079,
+          "mir_borrow_check_seconds": 0.778
+        },
+        {
+          "compiler_seconds": 8.049,
+          "cargo_wall_seconds": 8.176,
+          "expansion_seconds": 0.577,
+          "type_check_seconds": 1.95,
+          "mir_borrow_check_seconds": 0.762
+        }
+      ]
+    },
+    "dynamics-literals": {
+      "features": [
+        "std",
+        "serde",
+        "units-dynamics",
+        "literals"
+      ],
+      "median_seconds": 6.567,
+      "runs": [
+        {
+          "compiler_seconds": 6.567,
+          "cargo_wall_seconds": 8.407,
+          "expansion_seconds": 0.33,
+          "type_check_seconds": 1.592,
+          "mir_borrow_check_seconds": 0.653
+        },
+        {
+          "compiler_seconds": 6.435,
+          "cargo_wall_seconds": 6.536,
+          "expansion_seconds": 0.319,
+          "type_check_seconds": 1.591,
+          "mir_borrow_check_seconds": 0.641
+        },
+        {
+          "compiler_seconds": 6.638,
+          "cargo_wall_seconds": 6.738,
+          "expansion_seconds": 0.325,
+          "type_check_seconds": 1.698,
+          "mir_borrow_check_seconds": 0.685
+        }
+      ]
+    },
+    "dynamics": {
+      "features": [
+        "std",
+        "serde",
+        "units-dynamics"
+      ],
+      "median_seconds": 5.905,
+      "runs": [
+        {
+          "compiler_seconds": 5.905,
+          "cargo_wall_seconds": 7.806,
+          "expansion_seconds": 0.194,
+          "type_check_seconds": 1.565,
+          "mir_borrow_check_seconds": 0.624
+        },
+        {
+          "compiler_seconds": 5.757,
+          "cargo_wall_seconds": 5.862,
+          "expansion_seconds": 0.191,
+          "type_check_seconds": 1.523,
+          "mir_borrow_check_seconds": 0.602
+        },
+        {
+          "compiler_seconds": 6.248,
+          "cargo_wall_seconds": 6.353,
+          "expansion_seconds": 0.202,
+          "type_check_seconds": 1.653,
+          "mir_borrow_check_seconds": 0.648
+        }
+      ]
+    }
+  }
+}

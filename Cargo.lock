@@ -1237,13 +1237,18 @@ dependencies = [
  "proc-macro2",
  "syn 2.0.108",
  "typenum",
+ "whippyunits-num",
 ]
 
 [[package]]
 name = "whippyunits-formatter-wasm"
 version = "0.3.0"
 dependencies = [
+ "quote",
+ "syn 2.0.108",
  "wasm-bindgen",
+ "whippyunits",
+ "whippyunits-core",
  "whippyunits-lsp-proxy",
 ]
 
@@ -1264,6 +1269,13 @@ dependencies = [
  "tokio",
  "whippyunits",
  "whippyunits-core",
+]
+
+[[package]]
+name = "whippyunits-num"
+version = "0.3.0"
+dependencies = [
+ "typenum",
 ]
 
 [[package]]

@@ -6,6 +6,8 @@
 //! extension does the surgery on VS Code's hover/inlay-hint objects itself.
 
 use wasm_bindgen::prelude::*;
+use whippyunits::print::prettyprint::pretty_print_quantity_type;
+use whippyunits_core::UnitExpr;
 use whippyunits_lsp_proxy::{
     hover_processor::HoverProcessor,
     inlay_hint_processor::InlayHintProcessor,
@@ -20,6 +22,7 @@ pub struct Formatter {
     inlay: InlayHintProcessor,
     text: UnitFormatter,
     text_config: DisplayConfig,
+    verbose: bool,
 }
 
 #[wasm_bindgen]
@@ -48,6 +51,7 @@ impl Formatter {
             inlay: InlayHintProcessor::with_config(inlay_config),
             text: UnitFormatter::new(),
             text_config,
+            verbose,
         }
     }
 
@@ -71,6 +75,31 @@ impl Formatter {
     /// `Quantity<mm, i32>`, used as the hint's double-click text edit.
     pub fn unit_macro_annotation(&self, pretty_type: &str) -> String {
         self.inlay.unit_macro_annotation(pretty_type)
+    }
+
+    /// The label the formatter prints for a unit expression as written in a
+    /// `qty!`/`vqty!` invocation (`m / s` → `(m·s⁻¹)`, `kg * m / s ^ 2` → `N`),
+    /// parsed with the same parser the macros use. `undefined` if it doesn't parse
+    /// or doesn't resolve.
+    ///
+    /// rust-analyzer's hover on a struct field shows the *declared* type, in which
+    /// negative exponents appear only as `{const}`; the source line still has the
+    /// unit expression, so the extension can recover the label from it.
+    pub fn unit_label(&self, unit_expr: &str) -> Option<String> {
+        let unit: UnitExpr = syn::parse_str(unit_expr).ok()?;
+        let result = unit.evaluate();
+        // Render through the same path as an inline `Quantity<LABEL, f64>` so the
+        // label matches what the formatter prints, then strip the wrapper.
+        let pretty = pretty_print_quantity_type(
+            result.dimension_exponents,
+            result.scale_exponents,
+            "f64",
+            self.verbose,
+            false,
+            None,
+        );
+        let label = pretty.strip_prefix("Quantity<")?.strip_suffix(", f64>")?;
+        (label != "?").then(|| label.to_string())
     }
 }
 

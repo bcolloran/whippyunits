@@ -1,0 +1,7 @@
+error[E0432]: unresolved import `whippyunits::default_declarators::Ampere`
+ --> tests/catalog_ui/absent_electrical.rs:1:5
+  |
+1 | use whippyunits::default_declarators::Ampere;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^------
+  |                                       |
+  |                                       no `Ampere` in `default_declarators`

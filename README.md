@@ -434,7 +434,7 @@ See `lsp-proxy/README.md` for setup instructions.
 
 ## Requirements
 
-WhippyUnits works on **stable Rust**, using a typenum-based polyfill for compile-time dimensional arithmetic. Dimension and scale exponents are limited to the range -200 to 200.
+WhippyUnits works on **stable Rust**, using a typenum-based polyfill for compile-time dimensional arithmetic. Arithmetic accepts dimension and scale exponents from -200 through 200 by default. Disabling default features reduces this input range to -32 through 32; enable `wide-exponents` to retain the wider range independently of the unit catalogs.
 
 ## Feature Flags
 
@@ -443,6 +443,105 @@ WhippyUnits works on **stable Rust**, using a typenum-based polyfill for compile
 | `std`   | Yes     | Enables standard library support (implies `alloc`) |
 | `alloc` | Yes     | Enables `Display`/`Debug` impls on `Quantity` (requires a global allocator) |
 | `serde` | Yes     | Enables serde `Serialize`/`Deserialize` impls, `from_json!`/`from_string!` macros, and the `.fmt()` display method (implies `alloc`) |
+| `all-units` | Yes | Enables every generated unit catalog below |
+| `units-dynamics` | Via `all-units` | Mass, length, time, angle, and their derived units, including force, energy, power, pressure, and density |
+| `units-si-dynamics` | No | Coherent SI dynamics constructors and aliases only: kg, m, s, rad, Hz, N, J, Nm, W, Pa |
+| `units-dynamics-conversions` | No | The coherent dynamics catalog plus degrees and fixed 60 Hz ticks |
+| `units-electrical` | Via `all-units` | Electrical and magnetic units; includes dynamics |
+| `units-thermal` | Via `all-units` | Temperature units, including affine conversions; includes dynamics |
+| `units-chemical` | Via `all-units` | Amount-of-substance units; includes dynamics |
+| `units-photometric` | Via `all-units` | Luminous intensity and illuminance units; includes dynamics |
+| `literals` | Yes | Generates custom literal suffix macros for the selected catalogs |
+| `wide-exponents` | Yes | Extends dimension and scale arithmetic inputs from -32…32 to -200…200 |
+| `nightly-gca` | No | Experimental native exponent arithmetic on `nightly-2026-09-13`; preserves the stable backend when disabled |
+
+To compile only the dynamics catalog:
+
+```toml
+whippyunits = { version = "0.3", default-features = false, features = ["std", "units-dynamics"] }
+```
+
+Add `"literals"` if you use suffixes such as `1.0m` with `#[culit::culit(...)]`,
+and `"serde"` if you need serialization. Constructors such as `.meters()` and
+`.newtons()` remain available without `literals`.
+
+For just coherent SI dynamics, replace `"units-dynamics"` with
+`"units-si-dynamics"`. This removes convenience catalogs for other prefixes,
+grams, minutes, degrees, liters, and non-SI units. Kilograms remain available;
+`kg` is the coherent SI mass unit. Compound units such as velocity and density
+remain expressible with `qty!` and `quantity!`. The complete expression DSL
+also continues to accept omitted units, including `mm` and electrical units.
+This option trims generated declarations; it does not change quantity types
+or disable conversions. Catalog features are additive: enabling the broader
+`units-dynamics` or `all-units` restores their larger catalogs. `whippyalgebra`
+forwards `units-si-dynamics` too.
+
+For dynamics with degrees and a fixed 60 Hz time step, use
+`features = ["std", "units-dynamics-conversions"]` with `default-features = false`.
+This adds only `Degree`/`.degrees()` and `Tick`/`.ticks()` to the ten coherent
+constructors. **One `tick` always means exactly 1/60 of an SI second**; it does
+not mean an arbitrary clock tick or a configurable simulation step. The DSL
+spellings are `tick` and `deg` (or `degree`); for example,
+`value!(quantity!(60.0, tick), s)` is `1.0`, and `m / tick ^ 2` converts to
+`m / s ^ 2` normally. Add `literals` for suffixes such as `60.0tick` and `360.0deg`.
+The profile does not add other prefixes, minutes, imperial units, or electrical
+and temperature constructors. Those units remain usable through the DSL.
+`whippyalgebra` forwards this profile too. Catalog features combine additively,
+so a dependency requesting a broader catalog still enables it.
+
+This configuration uses the reduced exponent bridge. Add `"wide-exponents"`
+if intermediate dimension or scale exponents exceed 32 in magnitude. This is
+independent of catalog selection: all eight dimension axes and the public
+quantity type remain unchanged, and every unit name remains available in the
+expression DSL. Very small or large prefixes and powers of prefixed units can
+need the wider arithmetic range even when physical dimension powers are small.
+
+Addition and subtraction of exponents can produce values twice the input
+limit (64 or 400). An output outside the input range can be represented, but
+cannot be reused in arithmetic, type-level equality, or square roots.
+Choose a range that accommodates every intermediate exponent, including
+matrix products and determinants; the final unit alone is insufficient.
+`whippyalgebra` forwards `wide-exponents` as well. As with other Cargo features,
+any dependency enabling the wide bridge expands the range for the shared
+crate; it never changes existing quantity types.
+
+The experimental `nightly-gca` feature selects native exponent arithmetic on
+`nightly-2026-09-13`. It keeps the same quantity/unit representation and the
+degree/tick conversion machinery, while allowing checked i16 arithmetic beyond
+the finite stable bridge. With this backend, `wide-exponents` has no effect on
+arithmetic. Overflow rejects when an output is evaluated; a bare arithmetic
+trait bound does not itself prove the output is representable. Exact square
+roots still require even physical and scale exponents at the trait bound.
+Numeric rescaling retains its existing lookup ranges; larger valid exponents
+do not imply arbitrary-scale conversion support.
+
+Enable `nightly-gca` alongside the catalog and runtime features you need;
+`whippyalgebra` forwards it. It is opt-in, requires the pinned nightly for the
+whole consumer build (including when using `--all-features`), and currently
+retains typenum booleans and nalgebra's
+independent typenum use. The tested rust-analyzer 0.3.3049 cannot yet infer
+its computed exponents in hovers, so keep this disabled for normal editor use.
+See the [experiment log](docs/cga-experiment-log.md)
+for validation, limitations and measured results.
+
+Catalog features control generated aliases, constructor methods, and literal
+suffixes, including custom declarator namespaces. The `unit!`, `qty!`,
+`quantity!`, and `value!` expression macros keep the complete unit vocabulary
+with any feature set. The underlying eight-dimensional types and default brand
+are unchanged. With no catalog features, use those expression macros directly.
+
+`whippyalgebra` forwards the same catalog features. For a dynamics-only algebra
+build, use `default-features = false` and enable `std`, `nalgebra`, and
+`units-dynamics` there as well. Cargo combines features requested by dependencies;
+another dependency enabling `all-units` restores the full catalog. Savings apply
+when the library is compiled; ordinary application edits can reuse its cached
+build.
+
+Measured results, retained experiments, and remaining hypotheses are tracked in
+[the performance experiment log](docs/performance-experiments.md). Fixed default
+catalogs are checked-in Rust; see [regeneration instructions](docs/default-catalog-generation.md)
+when changing unit metadata or constructor templates.
+
 
 ## `no_std` and `no_alloc` Support
 
