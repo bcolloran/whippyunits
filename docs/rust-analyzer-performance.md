@@ -1,5 +1,24 @@
 Rust-analyzer follow-up, 2026-09-17.
 
+The latest combined experiments compare `6196218` with `4494b79`, selecting
+`std,units-dynamics` before and `std,units-si-dynamics` after, with defaults off.
+Three interleaved fresh-server runs per snapshot measured indexing at **28.908 s
+→ 3.180 s**, and first inferred velocity hover at **158.373 ms → 29.233 ms**.
+All ten coherent constructor completions were verified in every final run;
+all ten were missing in the baseline. Final first `meters()` completion cost
+573 ms, with repeated requests at a median 12.9 ms. Missing baseline completions
+are excluded, so no completion speedup ratio is claimed.
+
+These are direct LSP measurements with warm Cargo artifacts, cache priming on,
+and no competing compilation. They exclude VS Code, the formatter extension,
+and the larger algebra workspace. See [the full experiment log](performance-experiments.md)
+and [raw samples](performance-results/06-combined-rust-analyzer.json). The
+checked-in probe is `scripts/measure_rust_analyzer.py`; it requires successful
+unit-method text edits and correct inferred length/time hover types.
+
+The earlier catalog-only experiment below predates compact rational tables,
+the optional exponent bridge, coherent catalogs, and pre-generated constructors.
+
 Reducing the generated catalogs improved indexing in a direct language-server
 experiment. It did not materially improve a simple scalar hover once the server
 was ready. Compiler benchmarks alone would not have established that distinction.
@@ -29,8 +48,9 @@ of this measurement.
 The completion probe returned native floating-point methods but did not return
 the expected unit-constructor methods in either configuration. Those timings
 therefore do not establish a unit-completion improvement and are excluded from
-the table. This headless completion behavior remains unresolved; it should be
-investigated with a trace of the actual editor request before drawing conclusions.
+the table. The subsequent probe found parsing failures in nested catalog macro
+expansions containing negative exponents. Pre-generated textual constructors
+restore the tested methods. See [the expansion diagnostics](performance-results/04-completion-diagnosis.json).
 
 Raw startup and hover samples are in
 [rust-analyzer-results.json](rust-analyzer-results.json). The local probe,
@@ -52,11 +72,12 @@ macros, or quantity serialization. Their own LSP serialization dependencies
 remain unchanged. This does not remove electrical or thermal unit names from
 formatted output.
 
-After the change, workspace metadata with the following feature selection
-resolves only `alloc`, `std`, and `units-dynamics` on whippyunits:
+The current workspace metadata with the following feature selection resolves
+only `alloc`, `std`, and `units-si-dynamics` on whippyunits, with neither
+`all-units` nor `wide-exponents` accidentally enabled:
 
 ```text
-whippyunits/std,whippyunits/units-dynamics,whippyalgebra/std,whippyalgebra/nalgebra,whippyalgebra/units-dynamics
+whippyunits/std,whippyunits/units-si-dynamics,whippyalgebra/std,whippyalgebra/nalgebra,whippyalgebra/units-si-dynamics
 ```
 
 The proxy's 40 library tests passed without default features, and the formatter
@@ -71,16 +92,17 @@ corresponding rust-analyzer settings are:
   "rust-analyzer.cargo.noDefaultFeatures": true,
   "rust-analyzer.cargo.features": [
     "whippyunits/std",
-    "whippyunits/units-dynamics",
+    "whippyunits/units-si-dynamics",
     "whippyalgebra/std",
     "whippyalgebra/nalgebra",
-    "whippyalgebra/units-dynamics"
+    "whippyalgebra/units-si-dynamics"
   ]
 }
 ```
 
 Add the relevant catalog features when editing tests/examples that use those
-catalogs. For development of the complete library, the full configuration is
+catalogs. Add `whippyunits/wide-exponents` if intermediate physical or scale
+exponents exceed 32 in magnitude. For development of the complete library, the full configuration is
 still useful; a separate consumer project gives a cleaner model of a downstream
 dynamics application's reduced feature graph. Merely opening a member manifest
 does not guarantee isolation from its Cargo workspace. The optimization branch

@@ -1,5 +1,9 @@
 Macro and trait audit of the current working tree, 2026-09-17.
 
+The subsequent implementation experiments and measured results are tracked in
+[performance-experiments.md](performance-experiments.md), including reduced
+exponent bridges, coherent SI catalogs, and pre-generated default constructors.
+
 The strongest trait replacement is angular erasure: hundreds of implementations
 can become a few const-generic implementations constrained by a small marker
 trait. There are also substantial opportunities that need ordinary functions or

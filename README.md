@@ -503,6 +503,11 @@ another dependency enabling `all-units` restores the full catalog. Savings apply
 when the library is compiled; ordinary application edits can reuse its cached
 build.
 
+Measured results, retained experiments, and remaining hypotheses are tracked in
+[the performance experiment log](docs/performance-experiments.md). Fixed default
+catalogs are checked-in Rust; see [regeneration instructions](docs/default-catalog-generation.md)
+when changing unit metadata or constructor templates.
+
 
 ## `no_std` and `no_alloc` Support
 

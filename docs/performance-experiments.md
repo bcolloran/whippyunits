@@ -1,6 +1,34 @@
 Implementation experiments, starting from `6196218` on
 `perf/selectable-unit-catalogs`.
 
+The first five retained experiments are committed through `4494b79`. A direct
+comparison with the starting state measured **4.165 s → 2.118 s (49.2% lower)**
+for the three-crate rebuild/check described below. Both variants have warm
+third-party dependencies and no incremental compilation; the baseline selects
+the broad dynamics catalog, and the final profile selects coherent SI dynamics.
+This is a fresh comparison, not a sum of the individual percentage changes.
+See [combined samples](performance-results/06-combined-check.json).
+
+Three interleaved direct Rust Analyzer runs per snapshot measured the combined
+editor effect with warm Cargo artifacts, fresh server processes, cache priming
+enabled, and no competing compilation:
+
+| Measurement | Starting dynamics profile | Final coherent SI profile |
+| --- | ---: | ---: |
+| Indexing median | 28.908 s | 3.180 s (89.0% lower) |
+| First inferred velocity hover median | 158.373 ms | 29.233 ms (81.5% lower) |
+| Repeated hover median | 0.398 ms | 0.348 ms |
+| First usable meters completion median | Missing | 573.397 ms |
+| Repeated usable completion median | Missing | 12.866 ms |
+| Coherent constructors verified | 0/10 in every run | 10/10 in every run |
+
+No completion speedup ratio is claimed: the baseline failed to return the
+required methods, so those response times are excluded. These measurements
+cover a small scalar consumer through direct LSP, not the complete algebra
+workspace or the VS Code/formatter presentation layer. The first completion
+still costs about 0.57 s. See [samples and provenance](performance-results/06-combined-rust-analyzer.json)
+and [editor configuration](rust-analyzer-performance.md).
+
 Each experiment is checked for behavior compatibility and measured against the
 preceding retained state. Compiler checks, downstream checks, editor indexing,
 and runtime benchmarks are recorded separately. Small improvements may compound;
@@ -21,6 +49,13 @@ prototypes are documented in [mks-performance-hypotheses.md](mks-performance-hyp
 | Four-axis coherent representation | Queued | Isolated compatibility and performance prototype |
 | Separate branded representation | Queued | Adopt only if measurement justifies extra API machinery |
 | Hover scaffolding and incremental-build settings | Queued | Measure editor behavior, including documentation quality |
+
+Select the retained lean profile with `default-features = false` and
+`features = ["std", "units-si-dynamics"]`. For `whippyalgebra`, also enable
+`"nalgebra"`. Add `"wide-exponents"` if any intermediate dimension or scale
+exponent needs magnitude greater than 32. Existing default features still
+provide the full catalogs and wide bridge. These feature additions are on this
+branch; they are not a claim about an already published crate release.
 
 Production experiments use the performance worktree. The original checkout is
 left unchanged. Independent preparation happens in isolated copies; timings and

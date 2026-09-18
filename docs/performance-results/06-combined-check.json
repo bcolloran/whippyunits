@@ -1,0 +1,102 @@
+{
+  "baseline": "6196218",
+  "candidate_head": "4494b7972da98b1e6f059991dea15a17f095c91e",
+  "candidate_diff": "",
+  "commands": {
+    "baseline": [
+      "cargo",
+      "check",
+      "--offline",
+      "--locked",
+      "-p",
+      "whippyunits",
+      "--lib",
+      "--no-default-features",
+      "--features",
+      "std,units-dynamics"
+    ],
+    "candidate": [
+      "cargo",
+      "check",
+      "--offline",
+      "--locked",
+      "-p",
+      "whippyunits",
+      "--lib",
+      "--no-default-features",
+      "--features",
+      "std,units-si-dynamics"
+    ]
+  },
+  "clean_command": [
+    "cargo",
+    "clean",
+    "--offline",
+    "-p",
+    "whippyunits-core",
+    "-p",
+    "whippyunits-proc-macros",
+    "-p",
+    "whippyunits"
+  ],
+  "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)",
+  "scope": "core, proc-macro and root library check; warm third-party dependencies; incremental disabled",
+  "scratch": "/tmp/whippyunits-experiments/06-combined-check",
+  "samples": [
+    {
+      "variant": "baseline",
+      "cycle": 0,
+      "seconds": 4.216522556002019
+    },
+    {
+      "variant": "candidate",
+      "cycle": 0,
+      "seconds": 2.147629943996435
+    },
+    {
+      "variant": "candidate",
+      "cycle": 1,
+      "seconds": 2.129178922987194
+    },
+    {
+      "variant": "baseline",
+      "cycle": 1,
+      "seconds": 4.174861414998304
+    },
+    {
+      "variant": "baseline",
+      "cycle": 2,
+      "seconds": 4.078608041003463
+    },
+    {
+      "variant": "candidate",
+      "cycle": 2,
+      "seconds": 2.095097062003333
+    },
+    {
+      "variant": "candidate",
+      "cycle": 3,
+      "seconds": 2.1177764229942113
+    },
+    {
+      "variant": "baseline",
+      "cycle": 3,
+      "seconds": 4.161667994005256
+    },
+    {
+      "variant": "baseline",
+      "cycle": 4,
+      "seconds": 4.1652954739984125
+    },
+    {
+      "variant": "candidate",
+      "cycle": 4,
+      "seconds": 2.1126839829958044
+    }
+  ],
+  "medians_seconds": {
+    "baseline": 4.1652954739984125,
+    "candidate": 2.1177764229942113
+  },
+  "reduction_percent": 49.15663399597234
+}
