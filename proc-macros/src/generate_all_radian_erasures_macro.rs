@@ -1,7 +1,7 @@
 use proc_macro2::TokenStream;
 use quote::quote;
-use syn::parse::{Parse, ParseStream};
 use syn::Ident;
+use syn::parse::{Parse, ParseStream};
 
 /// Input for the generate_all_radian_erasures macro
 /// Usage: generate_all_radian_erasures!(max_exponent)
@@ -31,7 +31,8 @@ impl AllRadianErasuresInput {
             ("isize", "rescale_isize"),
         ];
 
-        // Generate exponents for radian to scalar (limited range)
+        // Only the marker is repeated per exponent. The conversion bodies are
+        // generic over the exponent and retain the numeric-type allowlists below.
         let scalar_exponents: Vec<i32> =
             (-max_exponent..=max_exponent).filter(|&x| x != 0).collect();
 
@@ -39,19 +40,14 @@ impl AllRadianErasuresInput {
 
         // Generate same-type conversions
         for (type_name, rescale_fn) in types_with_rescale {
-            for &exponent in &scalar_exponents {
-                let type_ident = syn::parse_str::<Ident>(type_name).unwrap();
-                let rescale_ident = syn::parse_str::<Ident>(rescale_fn).unwrap();
+            let type_ident = syn::parse_str::<Ident>(type_name).unwrap();
+            let rescale_ident = syn::parse_str::<Ident>(rescale_fn).unwrap();
 
-                let exponent_lit =
-                    syn::LitInt::new(&exponent.to_string(), proc_macro2::Span::call_site());
+            let expansion = quote! {
+                define_from_for_radians_with_scale!(ERASE_ANGLE_EXPONENT, #type_ident, #rescale_ident);
+            };
 
-                let expansion = quote! {
-                    define_from_for_radians_with_scale!(#exponent_lit, #type_ident, #rescale_ident);
-                };
-
-                scalar_expansions.push(expansion);
-            }
+            scalar_expansions.push(expansion);
         }
 
         // Generate cross-type conversions for common type pairs
@@ -69,49 +65,37 @@ impl AllRadianErasuresInput {
         ];
 
         for ((source_type, source_rescale), (target_type, _)) in cross_type_pairs {
-            for &exponent in &scalar_exponents {
-                let source_type_ident = syn::parse_str::<Ident>(source_type).unwrap();
-                let target_type_ident = syn::parse_str::<Ident>(target_type).unwrap();
-                let source_rescale_ident = syn::parse_str::<Ident>(source_rescale).unwrap();
+            let source_type_ident = syn::parse_str::<Ident>(source_type).unwrap();
+            let target_type_ident = syn::parse_str::<Ident>(target_type).unwrap();
+            let source_rescale_ident = syn::parse_str::<Ident>(source_rescale).unwrap();
 
-                let exponent_lit =
-                    syn::LitInt::new(&exponent.to_string(), proc_macro2::Span::call_site());
+            let expansion = quote! {
+                define_from_for_radians_with_scale_cross_type!(ERASE_ANGLE_EXPONENT, #source_type_ident, #target_type_ident, #source_rescale_ident);
+            };
 
-                let expansion = quote! {
-                    define_from_for_radians_with_scale_cross_type!(#exponent_lit, #source_type_ident, #target_type_ident, #source_rescale_ident);
-                };
-
-                scalar_expansions.push(expansion);
-            }
+            scalar_expansions.push(expansion);
         }
 
         // Generate radian to dimensionless quantity conversions
         let types = ["f32", "f64", "i16", "i32", "i64", "i128", "isize"];
 
-        // Generate exponents for radian to dimensionless (full range)
-        let dimensionless_exponents: Vec<i32> =
-            (-max_exponent..=max_exponent).filter(|&x| x != 0).collect();
-
-        let mut dimensionless_expansions = Vec::new();
-        for &exponent in &dimensionless_exponents {
-            let exponent_lit =
-                syn::LitInt::new(&exponent.to_string(), proc_macro2::Span::call_site());
-
-            let type_list = types
-                .iter()
-                .map(|&type_name| syn::parse_str::<Ident>(type_name).unwrap())
-                .collect::<Vec<_>>();
-
-            let expansion = quote! {
-                define_from_for_radians!(#exponent_lit, #(#type_list),*);
-            };
-
-            dimensionless_expansions.push(expansion);
-        }
+        let exponent_markers = scalar_exponents.iter().map(|exponent| {
+            let exponent = syn::LitInt::new(&exponent.to_string(), proc_macro2::Span::call_site());
+            quote! { impl NonzeroRadianExponent for _A<#exponent> {} }
+        });
+        let type_list = types
+            .iter()
+            .map(|type_name| syn::parse_str::<Ident>(type_name).unwrap())
+            .collect::<Vec<_>>();
 
         quote! {
+            // Private so downstream crates cannot extend the range. Excluding
+            // zero keeps scalar erasure separate from dimensionless conversions
+            // and compound erasure separate from the blanket From<T> for T.
+            trait NonzeroRadianExponent {}
+            #(#exponent_markers)*
             #(#scalar_expansions)*
-            #(#dimensionless_expansions)*
+            define_from_for_radians!(ERASE_ANGLE_EXPONENT, #(#type_list),*);
         }
     }
 }

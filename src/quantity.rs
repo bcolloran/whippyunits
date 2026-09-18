@@ -1212,7 +1212,7 @@ whippyunits_proc_macros::generate_all_dimensionless_cross_type!();
 // Cross-type conversion for radian quantities
 #[doc(hidden)]
 macro_rules! define_from_for_radians_with_scale_cross_type {
-    ($exponent:expr, $source_type:ty, $target_type:ty, $rescale_fn:ident) => {
+    ($exponent:ident, $source_type:ty, $target_type:ty, $rescale_fn:ident) => {
         /// Converts angular quantities between different numeric types in radian scale.
         ///
         /// Performs de-scaling before type conversion, ensuring all angular values are converted to radians.
@@ -1232,7 +1232,13 @@ macro_rules! define_from_for_radians_with_scale_cross_type {
         /// assert_eq!(sin_value, 1.0);
         /// # }
         /// ```
-        impl<const SCALE_P2: i16, const SCALE_P3: i16, const SCALE_P5: i16, const SCALE_PI: i16>
+        impl<
+                const $exponent: i16,
+                const SCALE_P2: i16,
+                const SCALE_P3: i16,
+                const SCALE_P5: i16,
+                const SCALE_PI: i16,
+            >
             From<
                 Quantity<
                     Unit<
@@ -1242,6 +1248,8 @@ macro_rules! define_from_for_radians_with_scale_cross_type {
                     $source_type,
                 >,
             > for $target_type
+        where
+            _A<$exponent>: NonzeroRadianExponent,
         {
             fn from(
                 other: Quantity<
@@ -1302,7 +1310,7 @@ macro_rules! define_from_for_radians_with_scale_cross_type {
 // Pure radian power to scalar with scale handling - handles both zero and non-zero scales
 #[doc(hidden)]
 macro_rules! define_from_for_radians_with_scale {
-    ($exponent:expr, $type:ty, $rescale_fn:ident) => {
+    ($exponent:ident, $type:ty, $rescale_fn:ident) => {
         /// Converts angular quantities to underlying numeric types in radian scale.
         ///
         /// Performs de-scaling before erasure, ensuring all angular values are converted to radians.
@@ -1326,7 +1334,13 @@ macro_rules! define_from_for_radians_with_scale {
         /// assert_eq!(sin_value, 1.0);
         /// # }
         /// ```
-        impl<const SCALE_P2: i16, const SCALE_P3: i16, const SCALE_P5: i16, const SCALE_PI: i16>
+        impl<
+                const $exponent: i16,
+                const SCALE_P2: i16,
+                const SCALE_P3: i16,
+                const SCALE_P5: i16,
+                const SCALE_PI: i16,
+            >
             From<
                 Quantity<
                     Unit<
@@ -1336,6 +1350,8 @@ macro_rules! define_from_for_radians_with_scale {
                     $type,
                 >,
             > for $type
+        where
+            _A<$exponent>: NonzeroRadianExponent,
         {
             fn from(
                 other: Quantity<
@@ -1378,11 +1394,12 @@ macro_rules! define_from_for_radians_with_scale {
 }
 
 // radians can be identified as dimensionless (all exponents are 0 except angle, angle scale radians)
-// trait resolution rules mean we have to manually template this out over different angle exponents...
+// A local marker restricts the generic angle exponent to the supported nonzero range,
+// keeping this conversion disjoint from core::convert::From<T> for T.
 
 #[doc(hidden)]
 macro_rules! define_from_for_radians {
-    ($exponent:expr, $($type:ty),+ $(,)?) => {
+    ($exponent:ident, $($type:ty),+ $(,)?) => {
         $(
             /// Erases angular components from compound units, preserving scale structure.
             /// Works for all scales, including non-radian angular units with residual scale structures.
@@ -1405,6 +1422,7 @@ macro_rules! define_from_for_radians {
             /// # }
             /// ```
             impl<
+                    const $exponent: i16,
                     const SCALE_P2: i16,
                     const SCALE_P3: i16,
                     const SCALE_P5: i16,
@@ -1429,6 +1447,8 @@ macro_rules! define_from_for_radians {
                     Dimension<_M<MASS_EXPONENT>, _L<LENGTH_EXPONENT>, _T<TIME_EXPONENT>, _I<CURRENT_EXPONENT>, _Θ<TEMPERATURE_EXPONENT>, _N<AMOUNT_EXPONENT>, _J<LUMINOSITY_EXPONENT>, _A<0>>>,
                     $type,
                 >
+            where
+                _A<$exponent>: NonzeroRadianExponent,
             {
                 fn from(
                     other: Quantity<
