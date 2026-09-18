@@ -374,7 +374,7 @@ pub struct Dimension<
 /// whose intermixture would be nonsensical even if dimensionally-coherent.  By default quantities do have
 /// a brand (of the unit type `()`), so custom-branded quantities will not interoperate with default-declared
 /// quantities unless explicitly converted.
-#[derive(Clone, PartialEq)]
+#[derive(PartialEq)]
 // A `Quantity` canonically erases to its storage type `T` at runtime: it holds
 // exactly one non-zero-sized field (the value) plus zero-sized phantom markers.
 // `#[repr(transparent)]` guarantees identical layout with `T` and enforces the
@@ -422,20 +422,23 @@ pub struct Quantity<U, T = f64, Brand = ()> {
     _phantom: core::marker::PhantomData<fn() -> (U, Brand)>,
 }
 
-impl<U, T, Brand> Copy for Quantity<U, T, Brand>
-where
-    U: Clone,
-    T: Copy,
-    Brand: Clone,
-{
+// Cloning copies only the storage value. The unit and brand are phantom and
+// need not implement Clone; deriving Clone would impose those extra bounds.
+impl<U, T: Clone, Brand> Clone for Quantity<U, T, Brand> {
+    #[inline]
+    fn clone(&self) -> Self {
+        Self {
+            unsafe_value: self.unsafe_value.clone(),
+            _phantom: core::marker::PhantomData,
+        }
+    }
 }
 
-// The remaining "core" traits follow `Copy` above in being blanket over the
-// phantom parameters: `_phantom` is a `PhantomData<fn() -> _>`, which satisfies
-// every one of these unconditionally, so only the storage type `T` carries a
-// real obligation. Deriving them instead would bound `U` and `Brand` needlessly
-// (and, for `Default`, incorrectly - the phantom parameters are never
-// constructed).
+impl<U, T: Copy, Brand> Copy for Quantity<U, T, Brand> {}
+
+// Default and Hash likewise depend only on the storage value. PartialEq stays
+// derived to preserve structural equality for constant patterns; its marker
+// bounds are also required by Eq's supertrait below.
 
 // A default quantity is a zero-valued quantity. This is unambiguous here because
 // zero is the additive identity of every *storage* unit: affine units (°C, °F)
@@ -497,14 +500,14 @@ unsafe impl<U, T: bytemuck::Zeroable, Brand> bytemuck::Zeroable for Quantity<U, 
 
 // SAFETY: with `T: Pod`, `Quantity` is `#[repr(transparent)]` over `T` with no
 // padding and no invalid bit patterns (the phantom markers are ZSTs). The
-// `Copy`/`'static` supertrait obligations of `Pod` are discharged by the bounds:
-// `U`/`Brand` are phantom and contribute no bytes, so only their `Clone`/`'static`
-// requirements (needed for `Quantity: Copy` and `Pod: 'static`) are imposed.
+// `T: Pod` supplies Copy and the storage's 'static lifetime. The phantom
+// parameters need only satisfy Pod's 'static supertrait; their Clone bounds
+// are unnecessary because Quantity's Clone and Copy ignore them.
 unsafe impl<U, T, Brand> bytemuck::Pod for Quantity<U, T, Brand>
 where
-    U: Clone + 'static,
+    U: 'static,
     T: bytemuck::Pod,
-    Brand: Clone + 'static,
+    Brand: 'static,
 {
 }
 

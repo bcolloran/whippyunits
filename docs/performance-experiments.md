@@ -13,7 +13,7 @@ prototypes are documented in [mks-performance-hypotheses.md](mks-performance-hyp
 | Optional narrow exponent bridge | Retained | Rebuild/check median 3.275 s → 3.008 s (8.2% lower); defaults preserve +/-200, reduced builds use +/-32 |
 | Coherent SI dynamics catalog | Retained | Rebuild/check median 3.007 s → 2.114 s (29.7% lower), broad dynamics vs coherent SI conveniences |
 | Pre-generated fixed catalogs | Retained for editor correctness | Revised checks effectively unchanged: SI 2.159 s → 2.162 s; broad dynamics 3.064 s → 3.079 s. All ten constructor completions verified |
-| Remove phantom trait bounds | Preparing | Clone/Copy/Pod cleanup; preserve derived equality and constant-pattern compatibility |
+| Remove phantom trait bounds | Retained as a bound cleanup | Rebuild/check 2.156 s → 2.151 s (0.2%, effectively unchanged); opaque markers now support Clone/Copy/Pod |
 | Simplify raw matrix element construction | Queued | Remove redundant twelve-exponent obligations |
 | Improve type-level unit powers | Queued | Preserve intermediate-domain behavior or document deliberate limits |
 | Separate arithmetic core from parsing | Queued | Measure host and target dependency costs separately |
@@ -118,3 +118,14 @@ checks pass. The integrated full library/integration suite passed all 145
 tests. Independent comparison verified that the four exported constructor
 templates preserve their original method bodies, numeric casts, and operation
 order. See [regeneration instructions](default-catalog-generation.md).
+
+The phantom-bound change manually implements `Clone` using only the stored
+value, makes `Copy` depend only on `T: Copy`, and removes the unnecessary marker
+`Clone` requirements from `Pod`. Layout and required `'static` bounds are
+unchanged. Derived `PartialEq` stays in place: replacing it with a manual
+implementation would lose Rust's structural equality marker used by constant
+patterns. Twenty integrated tests passed, including unconstrained markers,
+non-Copy storage, branded arithmetic, Pod views, and constant patterns; the
+five new cases also passed with default features disabled in isolation.
+The measured 0.2% difference is noise, not a demonstrated compile-time gain.
+See [raw measurements](performance-results/05-phantom-bounds-check.json).
